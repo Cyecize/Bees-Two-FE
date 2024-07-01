@@ -1,0 +1,4 @@
+build/
+**.html
+src/app/app-routing.path.ts
+src/app/shared/http/endpoints.ts
