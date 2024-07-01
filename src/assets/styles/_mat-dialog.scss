@@ -1,0 +1,46 @@
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/mixins";
+@import "variables";
+
+.custom-dialog-container {
+
+  padding: 0;
+  max-width: 1200px;
+  min-width: 600px;
+  z-index: 1200;
+
+  @media screen and (max-width: $screen-md) {
+    min-width: unset;
+  }
+
+  .dialog-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: $dark;
+    color: #fff;
+    width: 100%;
+    padding: 10px;
+    font-size: 1.5rem;
+
+    .dialog-title {
+      padding-left: 10px;
+      padding-right: 10px;
+      flex: 1;
+    }
+
+    .dialog-close {
+      cursor: pointer;
+      font-size: 2rem;
+    }
+  }
+
+  .dialog-content {
+    padding: 10px;
+  }
+}
+
+.cdk-overlay-container {
+  z-index: $zindexDialog;
+}
