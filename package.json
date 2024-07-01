@@ -9,7 +9,7 @@
     "test": "ng test",
     "lint": "gts lint",
     "clean": "gts clean",
-    "fix": "gts fix",
+    "fix": "gts fix"
   },
   "private": true,
   "dependencies": {
