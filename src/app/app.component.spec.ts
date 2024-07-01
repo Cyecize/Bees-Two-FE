@@ -14,7 +14,7 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have the 'eu-saas-bees-two-fe' title`, () => {
+  it("should have the 'eu-saas-bees-two-fe' title", () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
     expect(app.title).toEqual('eu-saas-bees-two-fe');
@@ -24,6 +24,8 @@ describe('AppComponent', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, eu-saas-bees-two-fe');
+    expect(compiled.querySelector('h1')?.textContent).toContain(
+      'Hello, eu-saas-bees-two-fe',
+    );
   });
 });
