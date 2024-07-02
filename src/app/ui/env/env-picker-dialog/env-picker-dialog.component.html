@@ -21,8 +21,21 @@
       <td>{{ env.env }}</td>
       <td>
         <div class="d-flex">
-          <div class="m-1"><button class="btn btn-success" (click)="selectEnv(env)">Select</button></div>
-          <div class="m-1"><button class="btn btn-info">View more</button></div>
+          <div class="m-1">
+            <button
+              *ngIf="currentEnv && currentEnv.id !== env.id"
+              class="btn btn-outline-success"
+              (click)="selectEnv(env)">
+              Select
+            </button>
+            <button
+              *ngIf="currentEnv && currentEnv.id === env.id"
+              class="btn btn-success"
+              disabled>Select</button>
+          </div>
+          <div class="m-1">
+            <button class="btn btn-outline-info" (click)="viewEnvDetails(env)">View more</button>
+          </div>
         </div>
       </td>
     </tr>

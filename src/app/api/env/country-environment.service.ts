@@ -1,11 +1,11 @@
-import {Injectable} from '@angular/core';
-import {CountryEnvironmentRepository} from './country-environment.repository';
-import {BehaviorSubject, firstValueFrom, Observable} from 'rxjs';
-import {CountryEnvironmentModel} from './country-environment.model';
-import {STORAGE_SELECTED_ENV_ID_NAME} from '../../shared/general.constants';
-import {ObjectUtils} from '../../shared/util/object-utils';
+import { Injectable } from '@angular/core';
+import { CountryEnvironmentRepository } from './country-environment.repository';
+import { BehaviorSubject, firstValueFrom, Observable } from 'rxjs';
+import { CountryEnvironmentModel } from './country-environment.model';
+import { STORAGE_SELECTED_ENV_ID_NAME } from '../../shared/general.constants';
+import { ObjectUtils } from '../../shared/util/object-utils';
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class CountryEnvironmentService {
   private selectedEnvSubject =
     new BehaviorSubject<CountryEnvironmentModel | null>(null);
