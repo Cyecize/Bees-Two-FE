@@ -57,7 +57,11 @@ export class DialogComponent implements OnInit, AfterViewInit {
         this.viewRef.createComponent(componentFactory);
       dataComponent.instance.payload = this.payload.contentPayload;
       dataComponent.instance.dialogRef = this.dialogRef;
-      dataComponent.instance.setTitle = (title) => (this.title = title);
+      dataComponent.instance.setTitle = (title) => {
+        setTimeout(() => {
+          this.title = title;
+        });
+      };
       dataComponent.instance.getIcon().subscribe((val) => (this.iconCls = val));
     });
   }

@@ -1,0 +1,31 @@
+<div>
+  <div *ngIf="currentEnv">
+    <p>Currently, you have selected <strong>{{ currentEnv.envName }}</strong></p>
+  </div>
+
+  <h2>Environments</h2>
+
+  <table class="table">
+    <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+      <th scope="col">ENV</th>
+      <th scope="col">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let env of envs">
+      <th scope="row">{{ env.id }}</th>
+      <td>{{ env.envName }}</td>
+      <td>{{ env.env }}</td>
+      <td>
+        <div class="d-flex">
+          <div class="m-1"><button class="btn btn-success" (click)="selectEnv(env)">Select</button></div>
+          <div class="m-1"><button class="btn btn-info">View more</button></div>
+        </div>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
