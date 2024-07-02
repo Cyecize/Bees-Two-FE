@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { DialogComponent } from './dialog.component';
 import { Observable } from 'rxjs';
 import { MatDialogRef } from '@angular/material/dialog';
+import { DialogComponentPayload } from './dialog.component.payload';
 
 @Component({
   template: '',
@@ -9,6 +10,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 export abstract class DialogContentBaseComponent<TData> {
   payload!: TData;
   dialogRef!: MatDialogRef<DialogComponent>;
+  setTitle!: (title: string) => void;
 
   close(result: any): void {
     this.dialogRef.close(result);

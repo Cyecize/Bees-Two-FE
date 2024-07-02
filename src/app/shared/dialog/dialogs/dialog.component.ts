@@ -19,7 +19,7 @@ import { NgIf } from '@angular/common';
   template: `
     <div class="dialog-header">
       <i *ngIf="iconCls" [class]="iconCls"></i>
-      <span class="dialog-title">{{ payload.title }}</span>
+      <span class="dialog-title">{{ title }}</span>
       <i class="dialog-close fa fa-times" (click)="dialogRef.close()"></i>
     </div>
     <div class="dialog-content">
@@ -34,6 +34,7 @@ export class DialogComponent implements OnInit, AfterViewInit {
 
   payload!: DialogComponentPayload;
   iconCls!: string;
+  title!: string;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: DialogComponentPayload,
@@ -41,6 +42,7 @@ export class DialogComponent implements OnInit, AfterViewInit {
     private cfr: ComponentFactoryResolver,
   ) {
     this.payload = data;
+    this.title = this.payload.title;
   }
 
   ngOnInit(): void {}
@@ -55,6 +57,7 @@ export class DialogComponent implements OnInit, AfterViewInit {
         this.viewRef.createComponent(componentFactory);
       dataComponent.instance.payload = this.payload.contentPayload;
       dataComponent.instance.dialogRef = this.dialogRef;
+      dataComponent.instance.setTitle = (title) => (this.title = title);
       dataComponent.instance.getIcon().subscribe((val) => (this.iconCls = val));
     });
   }
