@@ -1,18 +1,16 @@
-import {Component, OnInit} from '@angular/core';
-import {Routes} from '@angular/router';
-import {CountryEnvironmentService} from '../../api/env/country-environment.service';
-import {DialogService} from '../../shared/dialog/dialog.service';
-import {EnvPickerDialogComponent} from '../env/env-picker-dialog/env-picker-dialog.component';
-import {CountryEnvironmentModel} from "../../api/env/country-environment.model";
-import {NgIf} from "@angular/common";
-import {EnvViewerDialogComponent} from "../env/env-viewer-dialog/env-viewer-dialog.component";
+import { Component, OnInit } from '@angular/core';
+import { Routes } from '@angular/router';
+import { CountryEnvironmentService } from '../../api/env/country-environment.service';
+import { DialogService } from '../../shared/dialog/dialog.service';
+import { EnvPickerDialogComponent } from '../env/env-picker-dialog/env-picker-dialog.component';
+import { CountryEnvironmentModel } from '../../api/env/country-environment.model';
+import { NgIf } from '@angular/common';
+import { EnvViewerDialogComponent } from '../env/env-viewer-dialog/env-viewer-dialog.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [
-    NgIf
-  ],
+  imports: [NgIf],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
@@ -29,7 +27,7 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.envService.selectedEnv$.subscribe(value => {
+    this.envService.selectedEnv$.subscribe((value) => {
       if (value) {
         this.currentEnv = value;
       }

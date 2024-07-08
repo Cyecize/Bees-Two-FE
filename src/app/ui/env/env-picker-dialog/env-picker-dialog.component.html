@@ -23,7 +23,7 @@
         <div class="d-flex">
           <div class="m-1">
             <button
-              *ngIf="currentEnv && currentEnv.id !== env.id"
+              *ngIf="!currentEnv || (currentEnv && currentEnv.id !== env.id)"
               class="btn btn-outline-success"
               (click)="selectEnv(env)">
               Select
