@@ -1,0 +1,34 @@
+<div class="container mt-5">
+
+  <div class="row">
+    <div class="col-md-8">
+      <router-outlet></router-outlet>
+    </div>
+    <div class="col-md-4 col-md-4 sidebar-section rounded sidebar-background">
+      <section class="sidebar-item">
+        <h4>Promotions</h4>
+        <ul>
+          <li routerLinkActive="link-active">
+            <a [routerLink]="routes.SEARCH_PROMOS.toString()">Search</a>
+          </li>
+          <li routerLinkActive="link-active">
+            <a [routerLink]="routes.CREATE_PROMO.toString()">Add</a>
+          </li>
+        </ul>
+      </section>
+      <hr>
+      <section class="sidebar-item">
+        <h4>Deals</h4>
+        <ul>
+          <li routerLinkActive="link-active">
+            <a [routerLink]="routes.SEARCH_DEALS.toString()">Search</a>
+          </li>
+          <li routerLinkActive="link-active">
+            <a [routerLink]="routes.CREATE_DEAL.toString()">Add</a>
+          </li>
+        </ul>
+      </section>
+      <hr>
+    </div>
+  </div>
+</div>
