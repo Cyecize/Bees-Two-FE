@@ -15,7 +15,7 @@ export const promoRoutes: Routes = [
           ).then((value) => value.CHOOSE_OPTION_ALERT_ROUTES),
       },
       {
-        path: AppRoutingPath.SEARCH_PROMOS.path,
+        path: AppRoutingPath.SEARCH_PROMOS_V3.path,
         loadChildren: () =>
           import(
             './ui/promos/promotions/search-promotions/search-promotions.component'
