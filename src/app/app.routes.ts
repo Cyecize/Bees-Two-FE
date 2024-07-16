@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { AppRoutingPath } from './app-routing.path';
 import { PromosBaseComponent } from './ui/promos/promos-base/promos-base.component';
+import { RewardsBaseComponent } from './ui/rewards/rewards-base/rewards-base.component';
 
 export const promoRoutes: Routes = [
   {
@@ -46,6 +47,29 @@ export const promoRoutes: Routes = [
   },
 ];
 
+const rewardsRoutes: Routes = [
+  {
+    path: '',
+    component: RewardsBaseComponent,
+    children: [
+      {
+        path: '',
+        loadChildren: () =>
+          import(
+            './shared/components/choose-option-alert/choose-option-alert.component'
+          ).then((value) => value.CHOOSE_OPTION_ALERT_ROUTES),
+      },
+      {
+        path: AppRoutingPath.SEARCH_REWARDS_SETTINGS.path,
+        loadChildren: () =>
+          import('./ui/rewards/search-rewards/search-rewards.component').then(
+            (value) => value.SEARCH_REWARDS_ROUTES,
+          ),
+      },
+    ],
+  },
+];
+
 export const routes: Routes = [
   {
     path: AppRoutingPath.HOME.path,
@@ -55,6 +79,10 @@ export const routes: Routes = [
   {
     path: AppRoutingPath.PROMOS.path,
     children: promoRoutes,
+  },
+  {
+    path: AppRoutingPath.REWARDS.path,
+    children: rewardsRoutes,
   },
   {
     path: '**',

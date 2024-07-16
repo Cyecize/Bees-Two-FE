@@ -8,5 +8,7 @@ export class AppRoutingPath {
   public static readonly CREATE_PROMO = new RouteConfig('create-promos-v3', AppRoutingPath.PROMOS);
   public static readonly SEARCH_DEALS = new RouteConfig('search-deals', AppRoutingPath.PROMOS);
   public static readonly CREATE_DEAL = new RouteConfig('create-deal', AppRoutingPath.PROMOS);
+  public static readonly REWARDS = new RouteConfig('rewards', null);
+  public static readonly SEARCH_REWARDS_SETTINGS = new RouteConfig('search-settings', AppRoutingPath.REWARDS);
 
 }
