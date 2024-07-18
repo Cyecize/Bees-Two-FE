@@ -62,9 +62,9 @@ const rewardsRoutes: Routes = [
       {
         path: AppRoutingPath.SEARCH_REWARDS_SETTINGS.path,
         loadChildren: () =>
-          import('./ui/rewards/search-rewards/search-rewards.component').then(
-            (value) => value.SEARCH_REWARDS_ROUTES,
-          ),
+          import(
+            './ui/rewards/search-rewards-settings/search-rewards-settings.component'
+          ).then((value) => value.SEARCH_REWARDS_SETTINGS_ROUTES),
       },
     ],
   },

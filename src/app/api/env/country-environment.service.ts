@@ -24,6 +24,10 @@ export class CountryEnvironmentService {
     this.selectedEnvSubject.next(env);
   }
 
+  public getCurrentEnv(): CountryEnvironmentModel | null {
+    return this.selectedEnvSubject.getValue();
+  }
+
   private async init(): Promise<void> {
     const envId = localStorage.getItem(STORAGE_SELECTED_ENV_ID_NAME);
     if (ObjectUtils.isNil(envId)) {

@@ -1,0 +1,64 @@
+<div>
+  <div>
+    <h3>Rewards Settings</h3>
+  </div>
+
+  <div>
+    <h4>Environment</h4>
+    <div class="filters-header">
+      <div class="filter">
+        <app-select-search
+          formControlName="env"
+          placeholder="Choose environment"
+          [payload]="environments"
+          [currentDisplaySelection]="selectedEnv?.envName"
+          (selectionChange)="envSelected($event)"></app-select-search>
+      </div>
+    </div>
+  </div>
+
+  <div class="filters">
+    <div class="filters-header">
+      <div class="filter">
+        <app-select-search
+          formControlName="levels"
+          placeholder="Select level"
+          [payload]="levels"
+          (selectionChange)="levelSelected($event)"
+          [clearOnSelect]="true"></app-select-search>
+        <div *ngFor="let level of query.levels" class="d-flex justify-content-between">
+          <span>{{ level }}</span>
+          <span (click)="removeLevel(level)"><i class="fa-solid fa-x"></i></span>
+        </div>
+      </div>
+      <div class="filter">
+        <app-select-search
+          formControlName="tiers"
+          placeholder="Select Tier"
+          [payload]="tiers"
+          (selectionChange)="tierSelected($event)"
+          [clearOnSelect]="true"></app-select-search>
+        <div *ngFor="let tier of query.tiers" class="d-flex justify-content-between">
+          <span>{{ tier }}</span>
+          <span (click)="removeTier(tier)"><i class="fa-solid fa-x"></i></span>
+        </div>
+      </div>
+      <div class="filter">
+        <app-select-search
+          formControlName="settingType"
+          placeholder="Select Type"
+          [payload]="types"
+          (selectionChange)="typeSelected($event)"
+          [clearOnSelect]="true"></app-select-search>
+        <div *ngFor="let type of query.types" class="d-flex justify-content-between">
+          <span>{{ type }}</span>
+          <span (click)="removeType(type)"><i class="fa-solid fa-x"></i></span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <hr>
+  <div class="main">
+
+  </div>
+</div>

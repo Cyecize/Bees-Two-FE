@@ -1,0 +1,6 @@
+export enum BeesEntity {
+  ACCOUNT = 'ACCOUNT',
+  DEALS = 'DEALS',
+  PROMOTIONS = 'PROMOTIONS',
+  REWARDS_SETTINGS = 'REWARDS_SETTINGS',
+}

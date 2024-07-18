@@ -1,4 +1,4 @@
-import { PageRequest } from './page-request';
+import { PageRequest, PageRequestImpl } from './page-request';
 
 export interface Page<T> {
   content: T[];
@@ -10,7 +10,7 @@ export interface Page<T> {
 export class EmptyPage<T> implements Page<T> {
   content: T[] = [];
   totalElements = 0;
-  pageable: PageRequest = { pageNumber: 0, pageSize: 10 };
+  pageable: PageRequest = new PageRequestImpl(0, 10);
   totalPages = 0;
 }
 
@@ -27,7 +27,7 @@ export class PageImpl<T> implements Page<T> {
   }
 
   get pageable(): PageRequest {
-    return this.pageInfo || { pageNumber: 0, pageSize: this.content.length };
+    return this.pageInfo || new PageRequestImpl(0, this.content.length);
   }
 
   get totalPages(): number {

@@ -74,6 +74,7 @@ export class SelectSearchComponent implements OnInit, ControlValueAccessor {
 
   inputId!: string;
 
+  @Input()
   currentDisplaySelection?: string = '';
 
   constructor() {}
