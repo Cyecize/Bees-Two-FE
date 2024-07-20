@@ -23,8 +23,13 @@ import { RewardsSettingType } from '../../../api/rewards/settings/rewards-settin
 import { RewardsSettingsService } from '../../../api/rewards/settings/rewards-settings.service';
 import { CountryEnvironmentModel } from '../../../api/env/country-environment.model';
 import { CountryEnvironmentService } from '../../../api/env/country-environment.service';
-import { RewardsSettingsSearchResponse } from '../../../api/rewards/settings/rewards-settings-search.response';
+import {
+  RewardSetting,
+  RewardsSettingsSearchResponse,
+} from '../../../api/rewards/settings/rewards-settings-search.response';
 import { TooltipSpanComponent } from '../../../shared/components/tooltip-span/tooltip-span.component';
+import { DialogService } from '../../../shared/dialog/dialog.service';
+import { ShowRewardSettingDialogComponent } from '../show-reward-setting-dialog/show-reward-setting-dialog.component';
 
 @Component({
   selector: 'app-search-rewards',
@@ -56,6 +61,7 @@ export class SearchRewardsSettingsComponent implements OnInit {
   constructor(
     private rewardsSettingsService: RewardsSettingsService,
     private envService: CountryEnvironmentService,
+    private dialogService: DialogService,
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -127,6 +133,14 @@ export class SearchRewardsSettingsComponent implements OnInit {
 
   shortenStr(str: string): string {
     return str.substring(0, Math.min(str.length, 15));
+  }
+
+  openDetailsDialog(setting: RewardSetting): void {
+    this.dialogService.open(
+      ShowRewardSettingDialogComponent,
+      'Details',
+      setting,
+    );
   }
 
   private async reloadFilters(): Promise<void> {
