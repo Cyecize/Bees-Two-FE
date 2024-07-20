@@ -2,7 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { Routes } from '@angular/router';
 import { SelectSearchComponent } from '../../../shared/form-controls/select-search/select-search.component';
 import { InputComponent } from '../../../shared/form-controls/input/input.component';
-import { EmptyPage, Page, PageImpl } from '../../../shared/util/page';
+import {
+  EmptyPage,
+  EmptyPagination,
+  Page,
+  PageImpl,
+} from '../../../shared/util/page';
 import {
   SelectSearchItem,
   SelectSearchItemImpl,
@@ -10,20 +15,26 @@ import {
 import {
   RewardsSettingsSearchQuery,
   RewardsSettingsSearchQueryImpl,
-} from '../../../api/rewards/dto/rewards-settings-search.query';
-import { RewardsSettingLevel } from '../../../api/rewards/rewards-setting-level';
+} from '../../../api/rewards/settings/rewards-settings-search.query';
+import { RewardsSettingLevel } from '../../../api/rewards/settings/rewards-setting-level';
 import { NgForOf } from '@angular/common';
 import { RewardsTierLevel } from '../../../api/rewards/rewards-tier-level';
-import { RewardsSettingType } from '../../../api/rewards/rewards-setting-type';
-import { BeesResponse } from '../../../api/proxy/bees-response';
-import { RewardsSettingsService } from '../../../api/rewards/rewards-settings.service';
+import { RewardsSettingType } from '../../../api/rewards/settings/rewards-setting-type';
+import { RewardsSettingsService } from '../../../api/rewards/settings/rewards-settings.service';
 import { CountryEnvironmentModel } from '../../../api/env/country-environment.model';
 import { CountryEnvironmentService } from '../../../api/env/country-environment.service';
+import { RewardsSettingsSearchResponse } from '../../../api/rewards/settings/rewards-settings-search.response';
+import { TooltipSpanComponent } from '../../../shared/components/tooltip-span/tooltip-span.component';
 
 @Component({
   selector: 'app-search-rewards',
   standalone: true,
-  imports: [SelectSearchComponent, InputComponent, NgForOf],
+  imports: [
+    SelectSearchComponent,
+    InputComponent,
+    NgForOf,
+    TooltipSpanComponent,
+  ],
   templateUrl: './search-rewards-settings.component.html',
   styleUrl: './search-rewards-settings.component.scss',
 })
@@ -34,7 +45,10 @@ export class SearchRewardsSettingsComponent implements OnInit {
 
   query: RewardsSettingsSearchQuery = new RewardsSettingsSearchQueryImpl();
 
-  settings!: BeesResponse<any>;
+  searchResponse: RewardsSettingsSearchResponse = {
+    content: [],
+    pagination: new EmptyPagination(),
+  };
   environments: Page<SelectSearchItem<CountryEnvironmentModel>> =
     new EmptyPage();
   selectedEnv?: CountryEnvironmentModel;
@@ -111,6 +125,10 @@ export class SearchRewardsSettingsComponent implements OnInit {
     }
   }
 
+  shortenStr(str: string): string {
+    return str.substring(0, Math.min(str.length, 15));
+  }
+
   private async reloadFilters(): Promise<void> {
     this.levels = new PageImpl(
       Object.keys(RewardsSettingLevel)
@@ -140,8 +158,16 @@ export class SearchRewardsSettingsComponent implements OnInit {
         ),
     );
 
-    const data = await this.rewardsSettingsService.searchSettings(this.query, this.selectedEnv);
-    console.log(data.response);
+    const response = await this.rewardsSettingsService.searchSettings(
+      this.query,
+      this.selectedEnv,
+    );
+
+    if (response.response) {
+      this.searchResponse = response.response;
+    } else {
+      this.searchResponse = { content: [], pagination: new EmptyPagination() };
+    }
   }
 }
 

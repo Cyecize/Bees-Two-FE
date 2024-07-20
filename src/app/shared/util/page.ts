@@ -1,5 +1,19 @@
 import { PageRequest, PageRequestImpl } from './page-request';
 
+export interface Pagination {
+  page: number;
+  pageSize: number;
+  totalElements: number;
+  totalPages: number;
+}
+
+export class EmptyPagination implements Pagination {
+  page = 0;
+  pageSize = 1;
+  totalElements = 0;
+  totalPages = 1;
+}
+
 export interface Page<T> {
   content: T[];
   totalPages: number;

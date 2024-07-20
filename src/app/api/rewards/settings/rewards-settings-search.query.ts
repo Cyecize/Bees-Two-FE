@@ -1,6 +1,6 @@
-import { RewardsSettingLevel } from '../rewards-setting-level';
+import { RewardsSettingLevel } from './rewards-setting-level';
 import { RewardsTierLevel } from '../rewards-tier-level';
-import { RewardsSettingType } from '../rewards-setting-type';
+import { RewardsSettingType } from './rewards-setting-type';
 import {
   PageRequest,
   PageRequestImpl,

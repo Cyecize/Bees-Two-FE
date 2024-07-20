@@ -59,6 +59,34 @@
   </div>
   <hr>
   <div class="main">
-
+    <table class="table table-striped table-hover">
+      <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Tier / Level / Type</th>
+        <th scope="col">Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let setting of searchResponse.content">
+        <th scope="row">
+          <app-tooltip-span
+            [displayText]="shortenStr(setting.settingId)"
+            [tooltipText]="setting.settingId"></app-tooltip-span>
+        </th>
+        <td>
+          <strong>{{setting.tier}}</strong>
+          / {{setting.level}}
+          / <strong>{{setting.type}}</strong>
+        </td>
+        <td>
+         <div class="d-flex justify-content-around">
+           <button class="btn btn-warning">Edit</button>
+           <button class="btn btn-outline-success">View Details</button>
+         </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
   </div>
 </div>
