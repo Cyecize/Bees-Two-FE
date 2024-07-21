@@ -9,7 +9,7 @@
       <div class="filter">
         <app-select-search
           formControlName="env"
-          placeholder="Choose environment"
+          placeholder="Override Environment"
           [payload]="environments"
           [currentDisplaySelection]="selectedEnv?.envName"
           (selectionChange)="envSelected($event)"></app-select-search>
@@ -81,12 +81,15 @@
         </td>
         <td>
          <div class="d-flex justify-content-around">
-           <button class="btn btn-warning">Edit</button>
+           <a class="btn btn-warning" [routerLink]="getEditRoute(setting)" >Edit</a>
            <button class="btn btn-outline-success" (click)="openDetailsDialog(setting)">View Details</button>
          </div>
         </td>
       </tr>
       </tbody>
     </table>
+
+    <hr>
+    <app-pagination (pageChange)="pageChange($event)" [pagination]="searchResponse.pagination"></app-pagination>
   </div>
 </div>

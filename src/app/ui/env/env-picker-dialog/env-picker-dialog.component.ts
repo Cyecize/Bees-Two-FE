@@ -36,7 +36,7 @@ export class EnvPickerDialogComponent
       }
     });
 
-    this.envs = await firstValueFrom(this.envService.getAllEnvs());
+    this.envs = await this.envService.getEnvs();
   }
 
   getIcon(): Observable<string> {

@@ -11,12 +11,26 @@ export class CountryEnvironmentService {
     new BehaviorSubject<CountryEnvironmentModel | null>(null);
   selectedEnv$ = this.selectedEnvSubject.asObservable();
 
+  private allEnvs!: Promise<CountryEnvironmentModel[]>;
+
   constructor(private repository: CountryEnvironmentRepository) {
     this.init();
   }
 
-  public getAllEnvs(): Observable<CountryEnvironmentModel[]> {
-    return this.repository.getAllEnvs();
+  public getEnvs(): Promise<CountryEnvironmentModel[]> {
+    return this.allEnvs;
+  }
+
+  public async findById(
+    envId: number,
+  ): Promise<CountryEnvironmentModel | null> {
+    const allEnvs = await this.getEnvs();
+    const env = allEnvs.filter((env) => env.id === envId);
+    if (env.length === 1) {
+      return env[0];
+    }
+
+    return null;
   }
 
   public selectEnv(env: CountryEnvironmentModel): void {
@@ -29,13 +43,15 @@ export class CountryEnvironmentService {
   }
 
   private async init(): Promise<void> {
+    this.allEnvs = firstValueFrom(this.repository.getAllEnvs());
+
     const envId = localStorage.getItem(STORAGE_SELECTED_ENV_ID_NAME);
     if (ObjectUtils.isNil(envId)) {
       return;
     }
 
     try {
-      const envs = await firstValueFrom(this.getAllEnvs());
+      const envs = await this.getEnvs();
       const res = envs.filter((env) => env.id === Number(envId));
       if (res.length !== 1) {
         alert(

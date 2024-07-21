@@ -15,13 +15,13 @@ export class RewardsSettingsRepository {
 
   public searchSettings(
     query: RewardsSettingsSearchQuery,
-    env?: CountryEnvironmentModel,
+    envId?: number,
   ): Observable<BeesResponse<RewardsSettingsSearchResponse>> {
     return this.proxyService.makeRequest<RewardsSettingsSearchResponse>({
       endpoint: Endpoints.BEES_REWARDS_SETTINGS_V1,
       entity: BeesEntity.REWARDS_SETTINGS,
       method: RequestMethod.GET,
-      targetEnv: env?.id,
+      targetEnv: envId,
       queryParams: query.toBeesParams(),
     });
   }

@@ -59,12 +59,32 @@ const rewardsRoutes: Routes = [
             './shared/components/choose-option-alert/choose-option-alert.component'
           ).then((value) => value.CHOOSE_OPTION_ALERT_ROUTES),
       },
+    ],
+  },
+  {
+    path: AppRoutingPath.REWARDS_SETTINGS.path,
+    component: RewardsBaseComponent,
+    children: [
       {
         path: AppRoutingPath.SEARCH_REWARDS_SETTINGS.path,
         loadChildren: () =>
           import(
             './ui/rewards/search-rewards-settings/search-rewards-settings.component'
           ).then((value) => value.SEARCH_REWARDS_SETTINGS_ROUTES),
+      },
+      {
+        path: AppRoutingPath.EDIT_REWARDS_SETTINGS.path,
+        loadChildren: () =>
+          import(
+            './ui/rewards/rewards-settings-edit/rewards-settings-edit.component'
+          ).then((value) => value.EDIT_REWARDS_SETTINGS_ROUTES),
+      },
+      {
+        path: AppRoutingPath.CREATE_REWARDS_SETTINGS.path,
+        loadChildren: () =>
+          import(
+            './ui/rewards/rewards-settings-create/rewards-settings-create.component'
+          ).then((value) => value.CREATE_REWARDS_SETTINGS_ROUTES),
       },
     ],
   },

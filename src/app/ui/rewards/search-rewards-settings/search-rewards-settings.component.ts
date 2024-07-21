@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Routes } from '@angular/router';
+import { RouterLink, Routes } from '@angular/router';
 import { SelectSearchComponent } from '../../../shared/form-controls/select-search/select-search.component';
 import { InputComponent } from '../../../shared/form-controls/input/input.component';
 import {
@@ -30,6 +30,9 @@ import {
 import { TooltipSpanComponent } from '../../../shared/components/tooltip-span/tooltip-span.component';
 import { DialogService } from '../../../shared/dialog/dialog.service';
 import { ShowRewardSettingDialogComponent } from '../show-reward-setting-dialog/show-reward-setting-dialog.component';
+import { RouteUtils } from '../../../shared/routing/route-utils';
+import { AppRoutingPath } from '../../../app-routing.path';
+import { PaginationComponent } from '../../../shared/components/pagination/pagination.component';
 
 @Component({
   selector: 'app-search-rewards',
@@ -39,6 +42,8 @@ import { ShowRewardSettingDialogComponent } from '../show-reward-setting-dialog/
     InputComponent,
     NgForOf,
     TooltipSpanComponent,
+    RouterLink,
+    PaginationComponent,
   ],
   templateUrl: './search-rewards-settings.component.html',
   styleUrl: './search-rewards-settings.component.scss',
@@ -67,16 +72,16 @@ export class SearchRewardsSettingsComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.envService.selectedEnv$.subscribe((value) => {
       if (value) {
-        this.selectedEnv = undefined;
+        this.selectedEnv = value;
         this.reloadFilters();
       }
     });
 
-    this.envService.getAllEnvs().subscribe((value) => {
-      this.environments = new PageImpl(
-        value.map((env) => new SelectSearchItemImpl(env.envName, env.id, env)),
-      );
-    });
+    this.environments = new PageImpl(
+      (await this.envService.getEnvs()).map(
+        (env) => new SelectSearchItemImpl(env.envName, env.id, env),
+      ),
+    );
   }
 
   levelSelected(levelSelection: SelectSearchItem<RewardsSettingLevel>): void {
@@ -172,6 +177,16 @@ export class SearchRewardsSettingsComponent implements OnInit {
         ),
     );
 
+    this.query.page.page = 0;
+    await this.fetchData();
+  }
+
+  async pageChange(page: number): Promise<void> {
+    this.query.page.page = page;
+    await this.fetchData();
+  }
+
+  private async fetchData(): Promise<void> {
     const response = await this.rewardsSettingsService.searchSettings(
       this.query,
       this.selectedEnv,
@@ -182,6 +197,19 @@ export class SearchRewardsSettingsComponent implements OnInit {
     } else {
       this.searchResponse = { content: [], pagination: new EmptyPagination() };
     }
+  }
+
+  getEditRoute(setting: RewardSetting): string {
+    return RouteUtils.setPathParams(
+      AppRoutingPath.EDIT_REWARDS_SETTINGS.toString(),
+      [
+        setting.settingId,
+        setting.type,
+        setting.tier,
+        setting.level,
+        this.selectedEnv?.id,
+      ],
+    );
   }
 }
 
