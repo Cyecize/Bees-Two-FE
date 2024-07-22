@@ -27,6 +27,7 @@ import { BenefitsBannerFormComponent } from './benefits-banner-form/benefits-ban
 import { NgIf } from '@angular/common';
 import { RewardsSettingPayload } from '../../../api/rewards/settings/payloads/rewards-setting.payload';
 import { HubHeaderFormComponent } from './hub-header-form/hub-header-form.component';
+import { BeesBankFormComponent } from './bees-bank-form/bees-bank-form.component';
 
 export interface MetaForm {
   settingId: FormControl<string>;
@@ -46,6 +47,7 @@ export interface MetaForm {
     BenefitsBannerFormComponent,
     NgIf,
     HubHeaderFormComponent,
+    BeesBankFormComponent,
   ],
   templateUrl: './rewards-settings-form.component.html',
   styleUrl: './rewards-settings-form.component.scss',

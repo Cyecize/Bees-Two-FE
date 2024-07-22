@@ -42,5 +42,11 @@
       [existingSetting]="setting"
       [metaFormValid]="metaForm.valid"
       *ngIf="currentType === settingTypes.HUB_HEADER"></app-hub-header-form>
+
+    <app-bees-bank-form
+      (formSubmitted)="onFormSubmit($event)"
+      [existingSetting]="setting"
+      [metaFormValid]="metaForm.valid"
+      *ngIf="currentType === settingTypes.BEES_BANK"></app-bees-bank-form>
   </div>
 </div>

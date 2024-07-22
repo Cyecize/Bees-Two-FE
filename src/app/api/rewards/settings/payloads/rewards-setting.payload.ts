@@ -36,3 +36,18 @@ export interface RewardsSettingBenefitsBannerPayload
   //TODO: Define this
   benefitsBanner: any;
 }
+
+export interface ImageAndLink {
+  imageUrl: string;
+  linkUrl: string;
+}
+
+export interface BeesBankContainer {
+  web: ImageAndLink;
+  android: ImageAndLink;
+  ios: ImageAndLink;
+}
+
+export interface RewardsSettingBeesBankPayload extends RewardsSettingPayload {
+  beesBank: BeesBankContainer;
+}

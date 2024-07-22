@@ -2,6 +2,7 @@ import { Pagination } from '../../../shared/util/page';
 import { RewardsSettingType } from './enums/rewards-setting-type';
 import { RewardsSettingLevel } from './enums/rewards-setting-level';
 import { RewardsTierLevel } from '../rewards-tier-level';
+import { BeesBankContainer } from './payloads/rewards-setting.payload';
 
 export interface RewardsSettingsSearchResponse {
   content: RewardSetting[];
@@ -16,6 +17,7 @@ export interface RewardSetting {
   lastModified: string;
   benefitsBanner?: BenefitsBanner;
   hubHeader?: HubHeader;
+  beesBank?: BeesBank;
 }
 
 export interface BenefitsBanner {
@@ -50,4 +52,15 @@ export interface HubHeader {
 export interface HubHeaderImagePair {
   image: string;
   icon: string;
+}
+
+export interface BeesBank {
+  web: BeesBankImageUrlPair;
+  ios: BeesBankImageUrlPair;
+  android: BeesBankImageUrlPair;
+}
+
+export interface BeesBankImageUrlPair {
+  imageUrl: string;
+  linkUrl: string;
 }
