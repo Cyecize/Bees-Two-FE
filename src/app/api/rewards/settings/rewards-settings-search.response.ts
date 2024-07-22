@@ -15,6 +15,7 @@ export interface RewardSetting {
   tier: RewardsTierLevel;
   lastModified: string;
   benefitsBanner?: BenefitsBanner;
+  hubHeader?: HubHeader;
 }
 
 export interface BenefitsBanner {
@@ -38,4 +39,15 @@ export interface BenefitsBannerSectionItem {
   id: string;
   position: number;
   //TODO: More fields here
+}
+
+export interface HubHeader {
+  web: HubHeaderImagePair;
+  android: HubHeaderImagePair;
+  ios: HubHeaderImagePair;
+}
+
+export interface HubHeaderImagePair {
+  image: string;
+  icon: string;
 }

@@ -23,9 +23,10 @@ import {
   SelectOptionKey,
 } from '../../../shared/form-controls/select/select.option';
 import { RewardSetting } from '../../../api/rewards/settings/rewards-settings-search.response';
-import { BenefitsBannerFormComponent } from './hub-header-form/benefits-banner-form.component';
+import { BenefitsBannerFormComponent } from './benefits-banner-form/benefits-banner-form.component';
 import { NgIf } from '@angular/common';
 import { RewardsSettingPayload } from '../../../api/rewards/settings/payloads/rewards-setting.payload';
+import { HubHeaderFormComponent } from './hub-header-form/hub-header-form.component';
 
 export interface MetaForm {
   settingId: FormControl<string>;
@@ -44,6 +45,7 @@ export interface MetaForm {
     SelectComponent,
     BenefitsBannerFormComponent,
     NgIf,
+    HubHeaderFormComponent,
   ],
   templateUrl: './rewards-settings-form.component.html',
   styleUrl: './rewards-settings-form.component.scss',

@@ -36,5 +36,11 @@
       [existingSetting]="setting"
       [metaFormValid]="metaForm.valid"
       *ngIf="currentType === settingTypes.BENEFITS_BANNER"></app-benefits-banner-form>
+
+    <app-hub-header-form
+      (formSubmitted)="onFormSubmit($event)"
+      [existingSetting]="setting"
+      [metaFormValid]="metaForm.valid"
+      *ngIf="currentType === settingTypes.HUB_HEADER"></app-hub-header-form>
   </div>
 </div>
