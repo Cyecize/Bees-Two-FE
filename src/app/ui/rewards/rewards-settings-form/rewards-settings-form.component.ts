@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { SelectSearchComponent } from '../../../shared/form-controls/select-search/select-search.component';
 import { EmptyPage, Page, PageImpl } from '../../../shared/util/page';
 import {
@@ -13,8 +13,8 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { RewardsSettingType } from '../../../api/rewards/settings/rewards-setting-type';
-import { RewardsSettingLevel } from '../../../api/rewards/settings/rewards-setting-level';
+import { RewardsSettingType } from '../../../api/rewards/settings/enums/rewards-setting-type';
+import { RewardsSettingLevel } from '../../../api/rewards/settings/enums/rewards-setting-level';
 import { RewardsTierLevel } from '../../../api/rewards/rewards-tier-level';
 import { InputComponent } from '../../../shared/form-controls/input/input.component';
 import { SelectComponent } from '../../../shared/form-controls/select/select.component';
@@ -23,6 +23,9 @@ import {
   SelectOptionKey,
 } from '../../../shared/form-controls/select/select.option';
 import { RewardSetting } from '../../../api/rewards/settings/rewards-settings-search.response';
+import { BenefitsBannerFormComponent } from './hub-header-form/benefits-banner-form.component';
+import { NgIf } from '@angular/common';
+import { RewardsSettingPayload } from '../../../api/rewards/settings/payloads/rewards-setting.payload';
 
 export interface MetaForm {
   settingId: FormControl<string>;
@@ -39,6 +42,8 @@ export interface MetaForm {
     ReactiveFormsModule,
     InputComponent,
     SelectComponent,
+    BenefitsBannerFormComponent,
+    NgIf,
   ],
   templateUrl: './rewards-settings-form.component.html',
   styleUrl: './rewards-settings-form.component.scss',
@@ -56,16 +61,30 @@ export class RewardsSettingsFormComponent implements OnInit {
   levels: SelectOption[] = [];
 
   metaForm!: FormGroup<MetaForm>;
+  currentType = RewardsSettingType.DEFAULT_CONFIGURATION;
+  settingTypes = RewardsSettingType;
 
   @Input()
   set setting(value: RewardSetting) {
     this._setting = value;
-    this.metaForm.patchValue(this._setting);
+    if (this.metaForm) {
+      this.metaForm.patchValue(this._setting);
+    }
   }
+
+  get setting(): RewardSetting {
+    return this._setting;
+  }
+
+  @Output()
+  formSubmitted: EventEmitter<RewardsSettingPayload> =
+    new EventEmitter<RewardsSettingPayload>();
 
   constructor(private envService: CountryEnvironmentService) {}
 
   async ngOnInit(): Promise<void> {
+    this.createForm();
+
     this.tiers = Object.keys(RewardsTierLevel).map(
       (value) => new SelectOptionKey(value),
     );
@@ -89,26 +108,10 @@ export class RewardsSettingsFormComponent implements OnInit {
       ),
     );
 
-    this.metaForm = new FormGroup<MetaForm>({
-      settingId: new FormControl('', {
-        nonNullable: true,
-        validators: [Validators.required],
-      }),
-      type: new FormControl<RewardsSettingType>(
-        RewardsSettingType.DEFAULT_CONFIGURATION,
-        {
-          nonNullable: true,
-          validators: [Validators.required],
-        },
-      ),
-      level: new FormControl<RewardsSettingLevel>(RewardsSettingLevel.ZONE, {
-        nonNullable: true,
-        validators: [Validators.required],
-      }),
-      tier: new FormControl<RewardsTierLevel>(RewardsTierLevel.CLUB_B, {
-        nonNullable: true,
-        validators: [Validators.required],
-      }),
+    this.metaForm.valueChanges.subscribe((value) => {
+      if (value.type) {
+        this.currentType = value.type;
+      }
     });
 
     if (this.setting) {
@@ -124,4 +127,33 @@ export class RewardsSettingsFormComponent implements OnInit {
   }
 
   private reloadData(): void {}
+
+  private createForm(): void {
+    this.metaForm = new FormGroup<MetaForm>({
+      settingId: new FormControl('', {
+        nonNullable: true,
+        validators: [Validators.required],
+      }),
+      type: new FormControl<RewardsSettingType>(this.currentType, {
+        nonNullable: true,
+        validators: [Validators.required],
+      }),
+      level: new FormControl<RewardsSettingLevel>(RewardsSettingLevel.ZONE, {
+        nonNullable: true,
+        validators: [Validators.required],
+      }),
+      tier: new FormControl<RewardsTierLevel>(RewardsTierLevel.CLUB_B, {
+        nonNullable: true,
+        validators: [Validators.required],
+      }),
+    });
+
+    if (this.setting) {
+      this.metaForm.patchValue(this.setting);
+    }
+  }
+
+  onFormSubmit(value: RewardsSettingPayload): void {
+    this.formSubmitted.emit(value);
+  }
 }

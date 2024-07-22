@@ -16,10 +16,10 @@ import {
   RewardsSettingsSearchQuery,
   RewardsSettingsSearchQueryImpl,
 } from '../../../api/rewards/settings/rewards-settings-search.query';
-import { RewardsSettingLevel } from '../../../api/rewards/settings/rewards-setting-level';
+import { RewardsSettingLevel } from '../../../api/rewards/settings/enums/rewards-setting-level';
 import { NgForOf } from '@angular/common';
 import { RewardsTierLevel } from '../../../api/rewards/rewards-tier-level';
-import { RewardsSettingType } from '../../../api/rewards/settings/rewards-setting-type';
+import { RewardsSettingType } from '../../../api/rewards/settings/enums/rewards-setting-type';
 import { RewardsSettingsService } from '../../../api/rewards/settings/rewards-settings.service';
 import { CountryEnvironmentModel } from '../../../api/env/country-environment.model';
 import { CountryEnvironmentService } from '../../../api/env/country-environment.service';
@@ -203,10 +203,10 @@ export class SearchRewardsSettingsComponent implements OnInit {
     return RouteUtils.setPathParams(
       AppRoutingPath.EDIT_REWARDS_SETTINGS.toString(),
       [
-        setting.settingId,
-        setting.type,
-        setting.tier,
         setting.level,
+        setting.settingId,
+        setting.tier,
+        setting.type,
         this.selectedEnv?.id,
       ],
     );

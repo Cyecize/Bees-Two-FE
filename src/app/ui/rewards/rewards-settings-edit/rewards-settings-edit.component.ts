@@ -8,6 +8,7 @@ import { RouteNavigator } from '../../../shared/routing/route-navigator.service'
 import { AppRoutingPath } from '../../../app-routing.path';
 import { RewardSetting } from '../../../api/rewards/settings/rewards-settings-search.response';
 import { CountryEnvironmentModel } from '../../../api/env/country-environment.model';
+import { RewardsSettingPayload } from '../../../api/rewards/settings/payloads/rewards-setting.payload';
 
 @Component({
   selector: 'app-rewards-settings-edit',
@@ -56,6 +57,10 @@ export class RewardsSettingsEditComponent implements OnInit {
 
     this.settingEnv = env;
     this.settingToEdit = setting;
+  }
+
+  onFormSubmit(value: RewardsSettingPayload): void {
+    console.log(value);
   }
 }
 

@@ -1,0 +1,101 @@
+<form [formGroup]="form">
+  <h4>Benefits Banner</h4>
+
+  <div class="m-1 mt-3">
+    <app-input placeholder="BG Color" formControlName="bgColor"></app-input>
+  </div>
+
+  <div formGroupName="bgImage">
+    <h4>Background Image</h4>
+    <div class="m-1 mt-3">
+      <app-input placeholder="Mobile Img" formControlName="mobile"></app-input>
+    </div>
+
+    <div class="m-1 mt-3">
+      <app-input placeholder="Web Img" formControlName="web"></app-input>
+    </div>
+  </div>
+
+  <div formGroupName="header">
+    <h4>Header</h4>
+    <div class="m-1 mt-3">
+      <app-input placeholder="Icon" formControlName="icon"></app-input>
+    </div>
+
+    <div class="m-1 mt-3">
+      <app-input placeholder="Title" formControlName="title"></app-input>
+    </div>
+
+    <div class="m-1 mt-3">
+      <app-input placeholder="Text Color" formControlName="textColor"></app-input>
+    </div>
+  </div>
+
+  <div formGroupName="content">
+    <h4>Content</h4>
+
+    <div class="m-1 mt-3">
+      <app-input placeholder="Content BG Color" formControlName="bgColor"></app-input>
+    </div>
+
+    <div>
+      <h5>Sections</h5>
+      <button (click)="addSection('', '', '')">Add Section</button>
+    </div>
+    <div formArrayName="sections">
+      <div class="benefit-section" *ngFor="let section of sections.controls; let sectionInd = index"
+           [formGroupName]="sectionInd">
+        <p class="section-header">Section {{ sectionInd }}
+          (<strong style="cursor:pointer;" (click)="removeSection(sectionInd)">Remove</strong>)
+        </p>
+
+        <div class="m-1 mt-3">
+          <app-input placeholder="Section ID" formControlName="id"></app-input>
+        </div>
+        <div class="m-1 mt-3">
+          <app-input placeholder="Icon URL" formControlName="icon"></app-input>
+        </div>
+        <div class="m-1 mt-3">
+          <app-input placeholder="Title" formControlName="title"></app-input>
+        </div>
+        <div class="m-1 mt-3">
+          <app-input placeholder="Text Color" formControlName="textColor"></app-input>
+        </div>
+        <div class="m-1 mt-3">
+          <app-input type="number" placeholder="Position" formControlName="position"></app-input>
+        </div>
+
+        <h6>Items</h6>
+        <button (click)="addItem(sectionInd)">Add Item</button>
+        <div class="ms-4" formArrayName="items">
+          <div *ngFor="let item of getItems(sectionInd).controls; let itemInd = index" [formGroupName]="itemInd">
+            <span style="cursor:pointer;" (click)="removeItem(sectionInd, itemInd)">Remove</span>
+            <div class="m-1 mt-3">
+              <app-input placeholder="ID" formControlName="id"></app-input>
+            </div>
+            <div class="m-1 mt-3">
+              <app-input placeholder="Icon URL" formControlName="icon"></app-input>
+            </div>
+            <div class="m-1 mt-3">
+              <app-input placeholder="Text" formControlName="text"></app-input>
+            </div>
+            <div class="m-1 mt-3">
+              <app-input placeholder="Item Text Color" formControlName="textColor"></app-input>
+            </div>
+            <div class="m-1 mt-3">
+              <app-input type="number" placeholder="Position" formControlName="position"></app-input>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group mt-5 text-end">
+    <button
+      (click)="onFormSubmit()"
+      [disabled]="!form.valid || !metaFormValid"
+      class="btn btn-outline-dark">Save
+    </button>
+  </div>
+</form>

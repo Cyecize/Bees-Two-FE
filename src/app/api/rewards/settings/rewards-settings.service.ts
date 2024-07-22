@@ -12,8 +12,8 @@ import {
   RewardsSettingsSearchResponse,
 } from './rewards-settings-search.response';
 import { RewardsTierLevel } from '../rewards-tier-level';
-import { RewardsSettingLevel } from './rewards-setting-level';
-import { RewardsSettingType } from './rewards-setting-type';
+import { RewardsSettingLevel } from './enums/rewards-setting-level';
+import { RewardsSettingType } from './enums/rewards-setting-type';
 
 @Injectable({ providedIn: 'root' })
 export class RewardsSettingsService {
