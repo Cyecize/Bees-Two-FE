@@ -120,3 +120,19 @@ export interface RewardsRule {
 export interface RewardsSettingRulesPayload extends RewardsSettingPayload {
   rules: RewardsRule[];
 }
+
+export interface RewardsCategoryBrand {
+  brandId: string;
+  title: string;
+  image: string;
+}
+
+export interface RewardsCategory {
+  //TODO: Define all fields
+  categoryId: string;
+  brands: RewardsCategoryBrand[];
+}
+
+export interface RewardsSettingCategoriesPayload extends RewardsSettingPayload {
+  categories: RewardsCategory[];
+}

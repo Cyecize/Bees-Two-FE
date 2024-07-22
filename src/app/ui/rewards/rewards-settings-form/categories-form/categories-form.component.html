@@ -1,0 +1,82 @@
+<form [formGroup]="form">
+  <h4>Categories</h4>
+
+  <div formArrayName="categories">
+    <div *ngFor="let category of categories.controls; let categoryInd = index" [formGroupName]="categoryInd"
+         class="ms-4">
+      <p>Category {{ categoryInd + 1 }}
+        (<strong style="cursor:pointer;" (click)="removeCategory(categoryInd)">Remove</strong>)
+      </p>
+
+      <div class="m-1 mt-3">
+        <app-input placeholder="Category ID" formControlName="categoryId"></app-input>
+      </div>
+      <div class="m-1 mt-3">
+        <app-input placeholder="Category ID Web" formControlName="categoryIdWeb"></app-input>
+      </div>
+      <div class="m-1 mt-3">
+        <app-input placeholder="Store ID" formControlName="storeId"></app-input>
+      </div>
+      <div class="m-1 mt-3">
+        <app-input placeholder="Description" formControlName="description"></app-input>
+      </div>
+      <div class="m-1 mt-3">
+        <app-input placeholder="Button Label" formControlName="buttonLabel"></app-input>
+      </div>
+      <div class="m-1 mt-3">
+        <app-input placeholder="Button Name" formControlName="buttonName"></app-input>
+      </div>
+      <div class="m-1 mt-3">
+        <app-input placeholder="Image URL" formControlName="image"></app-input>
+      </div>
+      <div class="m-1 mt-3">
+        <app-input placeholder="Title" formControlName="title"></app-input>
+      </div>
+      <div class="m-1 mt-3">
+        <app-input placeholder="Title Club B" formControlName="titleClubB"></app-input>
+      </div>
+      <div class="m-1 mt-3">
+        <app-input placeholder="Subtitle" formControlName="subtitle"></app-input>
+      </div>
+      <div class="m-1 mt-3">
+        <app-input placeholder="Header Image URL" formControlName="headerImage"></app-input>
+      </div>
+      <div class="m-1 mt-3">
+        <app-input placeholder="Header Image Club B URL" formControlName="headerImageClubB"></app-input>
+      </div>
+      <div class="m-1 mt-3">
+        <app-input placeholder="Position" formControlName="position" type="number"></app-input>
+      </div>
+
+      <div formArrayName="brands">
+        <h5>Brands</h5>
+        <button (click)="addBrand(categoryInd)">Add Brand</button>
+        <div *ngFor="let brand of getBrands(categoryInd).controls; let brandInd = index" [formGroupName]="brandInd"
+             class="ms-4">
+          <div class="m-1 mt-3">
+            <app-input placeholder="Brand ID" formControlName="brandId"></app-input>
+          </div>
+          <div class="m-1 mt-3">
+            <app-input placeholder="Title" formControlName="title"></app-input>
+          </div>
+          <div class="m-1 mt-3">
+            <app-input placeholder="Image URL" formControlName="image"></app-input>
+            (<strong style="cursor:pointer;" (click)="removeBrand(categoryInd, brandInd)">Remove</strong>)
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="m-1 mt-3">
+    <button (click)="addCategory()" class="btn btn-outline-dark">Add Category</button>
+  </div>
+
+  <div class="form-group mt-5 text-end">
+    <button
+      (click)="onFormSubmit()"
+      [disabled]="!form.valid || !metaFormValid"
+      class="btn btn-outline-dark">Save
+    </button>
+  </div>
+</form>

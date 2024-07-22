@@ -22,6 +22,7 @@ export interface RewardSetting {
   enrollmentPage?: EnrollmentPage;
   termsAndConditions?: RewardsTermsAndConditions[];
   rules?: RewardsRule[];
+  categories: RewardsCategory[];
 }
 
 export interface BenefitsBanner {
@@ -119,4 +120,16 @@ export interface RewardsRule {
   amountSpent: number;
   points: number;
   lastModified: string;
+}
+
+export interface RewardsCategoryBrand {
+  brandId: string;
+  title: string;
+  image: string;
+}
+
+export interface RewardsCategory {
+  //TODO: Define all fields
+  categoryId: string;
+  brands: RewardsCategoryBrand[];
 }

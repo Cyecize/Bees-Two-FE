@@ -73,5 +73,11 @@
       [existingSetting]="setting"
       [metaFormValid]="metaForm.valid"
       *ngIf="currentType === settingTypes.RULES"></app-rules-form>
+
+    <app-categories-form
+      (formSubmitted)="onFormSubmit($event)"
+      [existingSetting]="setting"
+      [metaFormValid]="metaForm.valid"
+      *ngIf="currentType === settingTypes.CATEGORIES"></app-categories-form>
   </div>
 </div>
