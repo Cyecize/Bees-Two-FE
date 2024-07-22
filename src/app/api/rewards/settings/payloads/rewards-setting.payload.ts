@@ -1,5 +1,15 @@
 import { RewardsSettingCalculationType } from '../enums/rewards-setting-calculation-type';
 import { RewardsSettingEarnType } from '../enums/rewards-setting-earn-type';
+import {RewardsSettingLevel} from "../enums/rewards-setting-level";
+import {RewardsTierLevel} from "../../rewards-tier-level";
+import {RewardsSettingType} from "../enums/rewards-setting-type";
+
+export interface RewardsSettingMetaPayload {
+  settingId: string;
+  level: RewardsSettingLevel;
+  tier: RewardsTierLevel;
+  type: RewardsSettingType;
+}
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface RewardsSettingPayload {}

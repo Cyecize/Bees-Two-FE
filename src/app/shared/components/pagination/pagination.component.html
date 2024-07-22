@@ -10,7 +10,7 @@
     <li *ngFor="let page of getPageNumbers()"
         class="page-item"
         (click)="changePage(page)"
-        [ngClass]="{active: page === pagination?.page}">
+        [ngClass]="{active: page === pagination.page}">
       <span style="cursor:pointer;" class="page-link">{{page + 1}}</span>
     </li>
     <li class="page-item"

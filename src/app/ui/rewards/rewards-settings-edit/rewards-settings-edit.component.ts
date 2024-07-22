@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { RewardsSettingsFormComponent } from '../rewards-settings-form/rewards-settings-form.component';
+import {
+  RewardsSettingsFormComponent,
+  RewardsSettingsFormOutput
+} from '../rewards-settings-form/rewards-settings-form.component';
 import { ActivatedRoute, Routes } from '@angular/router';
 import { SelectSearchComponent } from '../../../shared/form-controls/select-search/select-search.component';
 import { RewardsSettingsService } from '../../../api/rewards/settings/rewards-settings.service';
@@ -59,7 +62,7 @@ export class RewardsSettingsEditComponent implements OnInit {
     this.settingToEdit = setting;
   }
 
-  onFormSubmit(value: RewardsSettingPayload): void {
+  onFormSubmit(value: RewardsSettingsFormOutput): void {
     console.log(value);
   }
 }

@@ -1,8 +1,9 @@
 <div>
-  <h3>Rewards Settings</h3>
+  <h3>Rewards Settings: Edit</h3>
 </div>
 
 <app-rewards-settings-form
   [setting]="settingToEdit"
   (formSubmitted)="onFormSubmit($event)"
+  [typesDisabled]="true"
   [selectedEnv]="settingEnv"></app-rewards-settings-form>

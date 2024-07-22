@@ -25,7 +25,10 @@ import {
 import { RewardSetting } from '../../../api/rewards/settings/rewards-settings-search.response';
 import { BenefitsBannerFormComponent } from './benefits-banner-form/benefits-banner-form.component';
 import { NgIf } from '@angular/common';
-import { RewardsSettingPayload } from '../../../api/rewards/settings/payloads/rewards-setting.payload';
+import {
+  RewardsSettingMetaPayload,
+  RewardsSettingPayload
+} from '../../../api/rewards/settings/payloads/rewards-setting.payload';
 import { HubHeaderFormComponent } from './hub-header-form/hub-header-form.component';
 import { BeesBankFormComponent } from './bees-bank-form/bees-bank-form.component';
 import { TogglesFormComponent } from './toggles-form/toggles-form.component';
@@ -35,6 +38,11 @@ export interface MetaForm {
   type: FormControl<RewardsSettingType>;
   level: FormControl<RewardsSettingLevel>;
   tier: FormControl<RewardsTierLevel>;
+}
+
+export interface RewardsSettingsFormOutput {
+  meta: RewardsSettingMetaPayload;
+  setting: RewardsSettingPayload;
 }
 
 @Component({
@@ -71,6 +79,9 @@ export class RewardsSettingsFormComponent implements OnInit {
   settingTypes = RewardsSettingType;
 
   @Input()
+  typesDisabled: boolean = false;
+
+  @Input()
   set setting(value: RewardSetting) {
     this._setting = value;
     if (this.metaForm) {
@@ -83,8 +94,8 @@ export class RewardsSettingsFormComponent implements OnInit {
   }
 
   @Output()
-  formSubmitted: EventEmitter<RewardsSettingPayload> =
-    new EventEmitter<RewardsSettingPayload>();
+  formSubmitted: EventEmitter<RewardsSettingsFormOutput> =
+    new EventEmitter<RewardsSettingsFormOutput>();
 
   constructor(private envService: CountryEnvironmentService) {}
 
@@ -160,6 +171,9 @@ export class RewardsSettingsFormComponent implements OnInit {
   }
 
   onFormSubmit(value: RewardsSettingPayload): void {
-    this.formSubmitted.emit(value);
+    this.formSubmitted.emit({
+      meta: this.metaForm.getRawValue(),
+      setting: value,
+    });
   }
 }
