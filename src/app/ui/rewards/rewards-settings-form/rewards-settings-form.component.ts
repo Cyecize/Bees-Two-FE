@@ -28,6 +28,7 @@ import { NgIf } from '@angular/common';
 import { RewardsSettingPayload } from '../../../api/rewards/settings/payloads/rewards-setting.payload';
 import { HubHeaderFormComponent } from './hub-header-form/hub-header-form.component';
 import { BeesBankFormComponent } from './bees-bank-form/bees-bank-form.component';
+import { TogglesFormComponent } from './toggles-form/toggles-form.component';
 
 export interface MetaForm {
   settingId: FormControl<string>;
@@ -48,6 +49,7 @@ export interface MetaForm {
     NgIf,
     HubHeaderFormComponent,
     BeesBankFormComponent,
+    TogglesFormComponent,
   ],
   templateUrl: './rewards-settings-form.component.html',
   styleUrl: './rewards-settings-form.component.scss',

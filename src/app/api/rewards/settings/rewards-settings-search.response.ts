@@ -18,6 +18,7 @@ export interface RewardSetting {
   benefitsBanner?: BenefitsBanner;
   hubHeader?: HubHeader;
   beesBank?: BeesBank;
+  toggles?: RewardsToggles;
 }
 
 export interface BenefitsBanner {
@@ -63,4 +64,14 @@ export interface BeesBank {
 export interface BeesBankImageUrlPair {
   imageUrl: string;
   linkUrl: string;
+}
+
+export interface RewardsToggles {
+  earningByItem?: boolean;
+  acceptItemsCountMultiplier?: boolean;
+  findItemBySku?: boolean;
+  includeItemVariantsForEarning?: boolean;
+  earningByRule?: boolean;
+  payWithPointsEnabled?: boolean;
+  pwpPartialRefund?: boolean;
 }

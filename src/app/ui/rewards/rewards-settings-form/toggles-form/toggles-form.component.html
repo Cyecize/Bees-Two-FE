@@ -1,0 +1,35 @@
+<form [formGroup]="form">
+  <h4>Toggles</h4>
+
+  <div class="m-1 mt-3" formGroupName="toggles">
+    <div class="m-1 mt-3">
+      <app-checkbox label="Earning By Item" formControlName="earningByItem"></app-checkbox>
+    </div>
+    <div class="m-1 mt-3">
+      <app-checkbox label="Accept Items Count Multiplier" formControlName="acceptItemsCountMultiplier"></app-checkbox>
+    </div>
+    <div class="m-1 mt-3">
+      <app-checkbox label="Find Item By SKU" formControlName="findItemBySku"></app-checkbox>
+    </div>
+    <div class="m-1 mt-3">
+      <app-checkbox label="Include Item Variants For Earning" formControlName="includeItemVariantsForEarning"></app-checkbox>
+    </div>
+    <div class="m-1 mt-3">
+      <app-checkbox label="Earning By Rule" formControlName="earningByRule"></app-checkbox>
+    </div>
+    <div class="m-1 mt-3">
+      <app-checkbox label="Pay with Points Enabled" formControlName="payWithPointsEnabled"></app-checkbox>
+    </div>
+    <div class="m-1 mt-3">
+      <app-checkbox label="PWP Partial Refund" formControlName="pwpPartialRefund"></app-checkbox>
+    </div>
+  </div>
+
+  <div class="form-group mt-5 text-end">
+    <button
+      (click)="onFormSubmit()"
+      [disabled]="!form.valid || !metaFormValid"
+      class="btn btn-outline-dark">Save
+    </button>
+  </div>
+</form>

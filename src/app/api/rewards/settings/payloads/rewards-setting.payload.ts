@@ -51,3 +51,17 @@ export interface BeesBankContainer {
 export interface RewardsSettingBeesBankPayload extends RewardsSettingPayload {
   beesBank: BeesBankContainer;
 }
+
+export interface TogglesContainer {
+  earningByItem: boolean | null;
+  acceptItemsCountMultiplier: boolean | null;
+  findItemBySku: boolean | null;
+  includeItemVariantsForEarning: boolean | null;
+  earningByRule: boolean | null;
+  payWithPointsEnabled: boolean | null;
+  pwpPartialRefund: boolean | null;
+}
+
+export interface RewardsSettingsTogglesPayload extends RewardsSettingPayload {
+  toggles: TogglesContainer;
+}

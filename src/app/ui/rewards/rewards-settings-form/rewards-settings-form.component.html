@@ -48,5 +48,11 @@
       [existingSetting]="setting"
       [metaFormValid]="metaForm.valid"
       *ngIf="currentType === settingTypes.BEES_BANK"></app-bees-bank-form>
+
+    <app-toggles-form
+      (formSubmitted)="onFormSubmit($event)"
+      [existingSetting]="setting"
+      [metaFormValid]="metaForm.valid"
+      *ngIf="currentType === settingTypes.TOGGLES"></app-toggles-form>
   </div>
 </div>
