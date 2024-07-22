@@ -67,5 +67,11 @@
       [existingSetting]="setting"
       [metaFormValid]="metaForm.valid"
       *ngIf="currentType === settingTypes.TERMS"></app-terms-and-conditions-form>
+
+    <app-rules-form
+      (formSubmitted)="onFormSubmit($event)"
+      [existingSetting]="setting"
+      [metaFormValid]="metaForm.valid"
+      *ngIf="currentType === settingTypes.RULES"></app-rules-form>
   </div>
 </div>

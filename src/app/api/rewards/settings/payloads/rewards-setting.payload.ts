@@ -98,3 +98,25 @@ export interface RewardsSettingTermsAndConditionsPayload
   extends RewardsSettingPayload {
   termsAndConditions: TermsAndConditionsContainer[];
 }
+
+export interface RewardRuleItem {
+  itemId: string;
+  vendorItemId: string;
+  vendorId: string;
+  lastModified?: string;
+}
+
+export interface RewardsRule {
+  ruleId: string;
+  categoryId: string;
+  description: string;
+  skus: string[];
+  items: RewardRuleItem[];
+  amountSpent: number;
+  points: number;
+  lastModified?: string;
+}
+
+export interface RewardsSettingRulesPayload extends RewardsSettingPayload {
+  rules: RewardsRule[];
+}

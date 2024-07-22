@@ -34,6 +34,7 @@ import { BeesBankFormComponent } from './bees-bank-form/bees-bank-form.component
 import { TogglesFormComponent } from './toggles-form/toggles-form.component';
 import { EnrollmentPageFormComponent } from './enrollment-page-form/enrollment-page-form.component';
 import { TermsAndConditionsFormComponent } from './terms-and-conditions-form/terms-and-conditions-form.component';
+import { RulesFormComponent } from './rules-form/rules-form.component';
 
 export interface MetaForm {
   settingId: FormControl<string>;
@@ -62,6 +63,7 @@ export interface RewardsSettingsFormOutput {
     TogglesFormComponent,
     EnrollmentPageFormComponent,
     TermsAndConditionsFormComponent,
+    RulesFormComponent,
   ],
   templateUrl: './rewards-settings-form.component.html',
   styleUrl: './rewards-settings-form.component.scss',

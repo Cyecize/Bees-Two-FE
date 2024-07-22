@@ -41,7 +41,7 @@ export class InputComponent implements OnInit, ControlValueAccessor {
   placeholder!: string;
 
   @Input()
-  formControlName!: string;
+  formControlName!: string | number;
 
   @Input({ required: false })
   errors: FieldError[] = [];

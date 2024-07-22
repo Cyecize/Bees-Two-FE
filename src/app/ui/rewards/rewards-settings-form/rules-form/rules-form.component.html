@@ -1,0 +1,70 @@
+<form [formGroup]="form">
+  <h4>Rules</h4>
+
+  <div formArrayName="rules">
+    <div *ngFor="let rule of rules.controls; let ruleInd = index" [formGroupName]="ruleInd" class="ms-4 rewards-rules">
+      <p>Rule {{ ruleInd + 1 }}
+        (<strong style="cursor:pointer;" (click)="removeRule(ruleInd)">Remove</strong>)
+      </p>
+
+      <div class="m-1 mt-3">
+        <app-input placeholder="Rule ID" formControlName="ruleId"></app-input>
+      </div>
+      <div class="m-1 mt-3">
+        <app-input placeholder="Category ID" formControlName="categoryId"></app-input>
+      </div>
+      <div class="m-1 mt-3">
+        <app-input placeholder="Description" formControlName="description"></app-input>
+      </div>
+      <div class="m-1 mt-3">
+        <app-input placeholder="Amount Spent" formControlName="amountSpent" type="number"></app-input>
+      </div>
+      <div class="m-1 mt-3">
+        <app-input placeholder="Points" formControlName="points" type="number"></app-input>
+      </div>
+
+      <div formArrayName="skus">
+        <h5>SKUs</h5>
+        <button (click)="addSku(ruleInd)">Add SKU</button>
+        <div class="group-shadow" *ngFor="let sku of getSkus(ruleInd).controls; let skuInd = index">
+          <div class="m-1 mt-3">
+            <app-input placeholder="SKU" [formControlName]="skuInd"></app-input>
+            (<strong style="cursor:pointer;" (click)="removeSku(ruleInd, skuInd)">Remove</strong>)
+          </div>
+        </div>
+        <button *ngIf="getSkus(ruleInd).controls.length > 1" (click)="addSku(ruleInd)">Add SKU</button>
+      </div>
+
+      <div formArrayName="items">
+        <h5>Items</h5>
+        <button (click)="addItem(ruleInd)">Add Item</button>
+        <div class="group-shadow"
+             *ngFor="let item of getItems(ruleInd).controls; let itemInd = index"
+             [formGroupName]="itemInd">
+          <p>Item {{ itemInd + 1 }}
+            (<strong style="cursor:pointer;" (click)="removeItem(ruleInd, itemInd)">Remove</strong>)
+          </p>
+
+          <div class="m-1 mt-3">
+            <app-input placeholder="Item ID" formControlName="itemId"></app-input>
+          </div>
+          <div class="m-1 mt-3">
+            <app-input placeholder="Vendor Item ID" formControlName="vendorItemId"></app-input>
+          </div>
+          <div class="m-1 mt-3">
+            <app-input placeholder="Vendor ID" formControlName="vendorId"></app-input>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="m-1 mt-3">
+    <button (click)="addRule()" class="btn btn-outline-dark">Add Rule</button>
+  </div>
+
+  <div class="form-group mt-5 text-end">
+    <button (click)="onFormSubmit()" [disabled]="!form.valid || !metaFormValid" class="btn btn-outline-dark">Save</button>
+  </div>
+</form>
