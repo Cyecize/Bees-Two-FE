@@ -36,6 +36,7 @@ import { EnrollmentPageFormComponent } from './enrollment-page-form/enrollment-p
 import { TermsAndConditionsFormComponent } from './terms-and-conditions-form/terms-and-conditions-form.component';
 import { RulesFormComponent } from './rules-form/rules-form.component';
 import { CategoriesFormComponent } from './categories-form/categories-form.component';
+import { FilterFormComponent } from './filter-form/filter-form.component';
 
 export interface MetaForm {
   settingId: FormControl<string>;
@@ -66,6 +67,7 @@ export interface RewardsSettingsFormOutput {
     TermsAndConditionsFormComponent,
     RulesFormComponent,
     CategoriesFormComponent,
+    FilterFormComponent,
   ],
   templateUrl: './rewards-settings-form.component.html',
   styleUrl: './rewards-settings-form.component.scss',

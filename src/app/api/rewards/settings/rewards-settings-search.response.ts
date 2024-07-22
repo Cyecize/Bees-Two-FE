@@ -22,7 +22,8 @@ export interface RewardSetting {
   enrollmentPage?: EnrollmentPage;
   termsAndConditions?: RewardsTermsAndConditions[];
   rules?: RewardsRule[];
-  categories: RewardsCategory[];
+  categories?: RewardsCategory[];
+  filter?: RewardsFilter;
 }
 
 export interface BenefitsBanner {
@@ -132,4 +133,21 @@ export interface RewardsCategory {
   //TODO: Define all fields
   categoryId: string;
   brands: RewardsCategoryBrand[];
+}
+
+export interface RewardsInclusion {
+  potential: string[];
+  segment: string[];
+  subsegment: string[];
+  vendorIds: string[];
+  groupIds: string[];
+}
+
+export interface RewardsExclusion {
+  groupIds: string[];
+}
+
+export interface RewardsFilter {
+  inclusion: RewardsInclusion;
+  exclusion: RewardsExclusion;
 }

@@ -1,0 +1,86 @@
+<form [formGroup]="form">
+  <h4>Filter</h4>
+
+  <div formGroupName="inclusion">
+    <h4>Inclusion</h4>
+
+    <div formArrayName="potential">
+      <h5>Potential</h5>
+      <button (click)="addPotential()">Add Potential</button>
+      <div *ngFor="let potential of potentialArray.controls; let potentialInd = index"
+           class="ms-4">
+        <div class="m-1 mt-3">
+          <app-input placeholder="Potential" [formControlName]="potentialInd"></app-input>
+          (<strong style="cursor:pointer;" (click)="removePotential(potentialInd)">Remove</strong>)
+        </div>
+      </div>
+    </div>
+
+    <div formArrayName="segment">
+      <h5>Segment</h5>
+      <button (click)="addSegment()">Add Segment</button>
+      <div *ngFor="let segment of segmentArray.controls; let segmentInd = index"
+           class="ms-4">
+        <div class="m-1 mt-3">
+          <app-input placeholder="Segment" [formControlName]="segmentInd"></app-input>
+          (<strong style="cursor:pointer;" (click)="removeSegment(segmentInd)">Remove</strong>)
+        </div>
+      </div>
+    </div>
+
+    <div formArrayName="subsegment">
+      <h5>Subsegment</h5>
+      <button (click)="addSubsegment()">Add Subsegment</button>
+      <div *ngFor="let subsegment of subsegmentArray.controls; let subsegmentInd = index" class="ms-4">
+        <div class="m-1 mt-3">
+          <app-input placeholder="Subsegment" [formControlName]="subsegmentInd"></app-input>
+          (<strong style="cursor:pointer;" (click)="removeSubsegment(subsegmentInd)">Remove</strong>)
+        </div>
+      </div>
+    </div>
+
+    <div formArrayName="vendorIds">
+      <h5>Vendor IDs</h5>
+      <button (click)="addVendorId()">Add Vendor ID</button>
+      <div *ngFor="let vendorId of vendorIdArray.controls; let vendorIdInd = index"
+           class="ms-4">
+        <div class="m-1 mt-3">
+          <app-input placeholder="Vendor ID" [formControlName]="vendorIdInd"></app-input>
+          (<strong style="cursor:pointer;" (click)="removeVendorId(vendorIdInd)">Remove</strong>)
+        </div>
+      </div>
+    </div>
+
+    <div formArrayName="groupIds">
+      <h5>Group IDs</h5>
+      <button (click)="addGroupId()">Add Group ID</button>
+      <div *ngFor="let groupId of groupIdArray.controls; let groupIdInd = index"
+           class="ms-4">
+        <div class="m-1 mt-3">
+          <app-input placeholder="Group ID" [formControlName]="groupIdInd"></app-input>
+          (<strong style="cursor:pointer;" (click)="removeGroupId(groupIdInd)">Remove</strong>)
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div formGroupName="exclusion">
+    <h4>Exclusion</h4>
+
+    <div formArrayName="groupIds">
+      <h5>Group IDs</h5>
+      <button (click)="addExclusionGroupId()">Add Exclusion Group ID</button>
+      <div *ngFor="let groupId of exclusionGroupIdArray.controls; let exclusionGroupIdInd = index" class="ms-4">
+        <div class="m-1 mt-3">
+          <app-input placeholder="Exclusion Group ID" [formControlName]="exclusionGroupIdInd"></app-input>
+          (<strong style="cursor:pointer;" (click)="removeExclusionGroupId(exclusionGroupIdInd)">Remove</strong>)
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group mt-5 text-end">
+    <button (click)="onFormSubmit()" [disabled]="!form.valid || !metaFormValid" class="btn btn-outline-dark">Save
+    </button>
+  </div>
+</form>

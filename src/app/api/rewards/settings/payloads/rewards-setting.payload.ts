@@ -136,3 +136,24 @@ export interface RewardsCategory {
 export interface RewardsSettingCategoriesPayload extends RewardsSettingPayload {
   categories: RewardsCategory[];
 }
+
+export interface RewardsInclusion {
+  potential: string[];
+  segment: string[];
+  subsegment: string[];
+  vendorIds: string[];
+  groupIds: string[];
+}
+
+export interface RewardsExclusion {
+  groupIds: string[];
+}
+
+export interface RewardsFilter {
+  inclusion: RewardsInclusion;
+  exclusion: RewardsExclusion;
+}
+
+export interface RewardsSettingFilterPayload extends RewardsSettingPayload {
+  filter: RewardsFilter;
+}
