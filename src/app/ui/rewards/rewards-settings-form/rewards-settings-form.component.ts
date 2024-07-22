@@ -10,6 +10,7 @@ import { CountryEnvironmentService } from '../../../api/env/country-environment.
 import {
   FormControl,
   FormGroup,
+  FormsModule,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
@@ -49,6 +50,8 @@ export interface MetaForm {
 export interface RewardsSettingsFormOutput {
   meta: RewardsSettingMetaPayload;
   setting: RewardsSettingPayload;
+  env?: CountryEnvironmentModel;
+  authTokenOverride?: string;
 }
 
 @Component({
@@ -70,6 +73,7 @@ export interface RewardsSettingsFormOutput {
     CategoriesFormComponent,
     FilterFormComponent,
     DefaultConfigurationFormComponent,
+    FormsModule,
   ],
   templateUrl: './rewards-settings-form.component.html',
   styleUrl: './rewards-settings-form.component.scss',
@@ -82,6 +86,8 @@ export class RewardsSettingsFormComponent implements OnInit {
 
   @Input()
   selectedEnv?: CountryEnvironmentModel;
+  overrideAuthToken = '';
+
   tiers: SelectOption[] = [];
   types: SelectOption[] = [];
   levels: SelectOption[] = [];
@@ -126,7 +132,7 @@ export class RewardsSettingsFormComponent implements OnInit {
 
     this.envService.selectedEnv$.subscribe((value) => {
       if (value) {
-        this.selectedEnv = undefined;
+        this.selectedEnv = value;
         this.reloadData();
       }
     });
@@ -186,6 +192,8 @@ export class RewardsSettingsFormComponent implements OnInit {
     this.formSubmitted.emit({
       meta: this.metaForm.getRawValue(),
       setting: value,
+      env: this.selectedEnv,
+      authTokenOverride: this.overrideAuthToken,
     });
   }
 }

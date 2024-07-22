@@ -4,6 +4,7 @@ import { BeesParamPayload } from './bees-param.payload';
 
 export interface ProxyRequestPayload {
   targetEnv?: number;
+  authTokenOverride?: string;
   entity: BeesEntity;
   endpoint: string;
   method?: RequestMethod;

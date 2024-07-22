@@ -11,7 +11,7 @@ import { RouteNavigator } from '../../../shared/routing/route-navigator.service'
 import { AppRoutingPath } from '../../../app-routing.path';
 import { RewardSetting } from '../../../api/rewards/settings/rewards-settings-search.response';
 import { CountryEnvironmentModel } from '../../../api/env/country-environment.model';
-import { RewardsSettingPayload } from '../../../api/rewards/settings/payloads/rewards-setting.payload';
+import { DialogService } from '../../../shared/dialog/dialog.service';
 
 @Component({
   selector: 'app-rewards-settings-edit',
@@ -29,6 +29,8 @@ export class RewardsSettingsEditComponent implements OnInit {
     private route: ActivatedRoute,
     private envService: CountryEnvironmentService,
     private nav: RouteNavigator,
+    private dialogService: DialogService,
+    private rewardsSettingsService: RewardsSettingsService,
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -63,7 +65,18 @@ export class RewardsSettingsEditComponent implements OnInit {
   }
 
   onFormSubmit(value: RewardsSettingsFormOutput): void {
-    console.log(value);
+    this.dialogService
+      .openConfirmDialog(
+        `You are about to execute and update to ${value?.env?.envName}`,
+      )
+      .subscribe(async (confirmed) => {
+        if (confirmed) {
+          const response = await this.rewardsSettingsService.upsert(value);
+          this.dialogService.openConfirmDialog(
+            `Operation completed with status ${response.statusCode}`,
+          );
+        }
+      });
   }
 }
 

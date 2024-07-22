@@ -22,8 +22,8 @@ export interface RewardsSettingDefaultConfigurationPayload
   calculationType: RewardsSettingCalculationType;
   freeGoodEnabled: boolean;
   earnType: RewardsSettingEarnType;
-  pricePerPoint: number;
-  pricePerPointEnabled: boolean;
+  pricePerPoint: number | null;
+  pricePerPointEnabled: boolean | null;
 }
 
 export interface ImageAndIcon {

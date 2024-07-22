@@ -1,13 +1,19 @@
 <div>
   <h4>Environment</h4>
-  <div class="filters-header">
-    <div class="filter">
+  <div>
+    <div>
       <app-select-search
         placeholder="Override Environment"
         [payload]="environments"
         [currentDisplaySelection]="selectedEnv?.envName"
         (selectionChange)="envSelected($event)"></app-select-search>
     </div>
+    <div class="mt-2">
+      <div>
+        <app-input
+          placeholder="Override Auth Token"
+          [(ngModel)]="overrideAuthToken"></app-input>
+      </div>
   </div>
 
   <hr>

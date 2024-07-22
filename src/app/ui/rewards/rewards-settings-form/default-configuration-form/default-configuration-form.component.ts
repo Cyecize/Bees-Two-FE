@@ -24,8 +24,8 @@ interface DefaultConfigurationForm {
   calculationType: FormControl<RewardsSettingCalculationType>;
   freeGoodEnabled: FormControl<boolean>;
   earnType: FormControl<RewardsSettingEarnType>;
-  pricePerPoint: FormControl<number>;
-  pricePerPointEnabled: FormControl<boolean>;
+  pricePerPoint: FormControl<number | null>;
+  pricePerPointEnabled: FormControl<boolean | null>;
 }
 
 @Component({
@@ -100,13 +100,13 @@ export class DefaultConfigurationFormComponent implements OnInit {
         nonNullable: true,
         validators: [Validators.required],
       }),
-      pricePerPoint: new FormControl(0, {
-        nonNullable: true,
-        validators: [Validators.required],
+      pricePerPoint: new FormControl(null, {
+        nonNullable: false,
+        validators: [],
       }),
-      pricePerPointEnabled: new FormControl(false, {
-        nonNullable: true,
-        validators: [Validators.required],
+      pricePerPointEnabled: new FormControl(null, {
+        nonNullable: false,
+        validators: [],
       }),
     });
 

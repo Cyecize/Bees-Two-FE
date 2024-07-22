@@ -14,6 +14,8 @@ import {
 import { RewardsTierLevel } from '../rewards-tier-level';
 import { RewardsSettingLevel } from './enums/rewards-setting-level';
 import { RewardsSettingType } from './enums/rewards-setting-type';
+import { RewardsSettingsFormOutput } from '../../../ui/rewards/rewards-settings-form/rewards-settings-form.component';
+import { ShowLoader } from '../../../shared/loader/show.loader.decorator';
 
 @Injectable({ providedIn: 'root' })
 export class RewardsSettingsService {
@@ -24,6 +26,20 @@ export class RewardsSettingsService {
     env?: CountryEnvironmentModel,
   ): Promise<BeesResponse<RewardsSettingsSearchResponse>> {
     return firstValueFrom(this.repository.searchSettings(query, env?.id));
+  }
+
+  @ShowLoader()
+  public async upsert(
+    formOutput: RewardsSettingsFormOutput,
+  ): Promise<BeesResponse<any>> {
+    return await firstValueFrom(
+      this.repository.upsertSetting(
+        formOutput.meta,
+        formOutput.setting,
+        formOutput.env?.id,
+        formOutput.authTokenOverride,
+      ),
+    );
   }
 
   public async findById(

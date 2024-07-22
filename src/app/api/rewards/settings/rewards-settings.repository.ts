@@ -4,10 +4,14 @@ import { Endpoints } from '../../../shared/http/endpoints';
 import { BeesEntity } from '../../proxy/bees-entity';
 import { RequestMethod } from '../../proxy/request-method';
 import { RewardsSettingsSearchQuery } from './rewards-settings-search.query';
-import { CountryEnvironmentModel } from '../../env/country-environment.model';
 import { BeesResponse } from '../../proxy/bees-response';
 import { Observable } from 'rxjs';
 import { RewardsSettingsSearchResponse } from './rewards-settings-search.response';
+import {
+  RewardsSettingMetaPayload,
+  RewardsSettingPayload,
+} from './payloads/rewards-setting.payload';
+import { RouteUtils } from '../../../shared/routing/route-utils';
 
 @Injectable({ providedIn: 'root' })
 export class RewardsSettingsRepository {
@@ -23,6 +27,29 @@ export class RewardsSettingsRepository {
       method: RequestMethod.GET,
       targetEnv: envId,
       queryParams: query.toBeesParams(),
+    });
+  }
+
+  public upsertSetting(
+    meta: RewardsSettingMetaPayload,
+    setting: RewardsSettingPayload,
+    envId?: number,
+    authTokenOverride?: string,
+  ): Observable<BeesResponse<any>> {
+    const url = RouteUtils.setPathParams(Endpoints.BEES_REWARDS_SETTING_V1, [
+      meta.settingId,
+      meta.type,
+      meta.level,
+      meta.tier,
+    ]);
+
+    return this.proxyService.makeRequest<any>({
+      endpoint: url,
+      entity: BeesEntity.REWARDS_SETTINGS,
+      method: RequestMethod.PUT,
+      targetEnv: envId,
+      data: setting,
+      authTokenOverride: authTokenOverride,
     });
   }
 }

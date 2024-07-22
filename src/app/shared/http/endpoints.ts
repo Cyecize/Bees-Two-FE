@@ -5,4 +5,5 @@ export class Endpoints {
 
   // Bees endpoints
   public static readonly BEES_REWARDS_SETTINGS_V1 = '/api/rewards-service/v1/settings';
+  public static readonly BEES_REWARDS_SETTING_V1 = '/api/rewards-service/v1/settings/:settingId/:type/:level/:tier';
 }
