@@ -3,6 +3,8 @@ import { RewardsSettingType } from './enums/rewards-setting-type';
 import { RewardsSettingLevel } from './enums/rewards-setting-level';
 import { RewardsTierLevel } from '../rewards-tier-level';
 import { BeesBankContainer } from './payloads/rewards-setting.payload';
+import { RewardsSettingCalculationType } from './enums/rewards-setting-calculation-type';
+import { RewardsSettingEarnType } from './enums/rewards-setting-earn-type';
 
 export interface RewardsSettingsSearchResponse {
   content: RewardSetting[];
@@ -24,6 +26,16 @@ export interface RewardSetting {
   rules?: RewardsRule[];
   categories?: RewardsCategory[];
   filter?: RewardsFilter;
+
+  // Default settings
+  initialBalance?: number;
+  redeemLimit?: number;
+  earnLimit?: number;
+  calculationType?: RewardsSettingCalculationType;
+  freeGoodEnabled?: boolean;
+  earnType?: RewardsSettingEarnType;
+  pricePerPoint?: number;
+  pricePerPointEnabled?: boolean;
 }
 
 export interface BenefitsBanner {

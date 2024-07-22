@@ -85,5 +85,11 @@
       [existingSetting]="setting"
       [metaFormValid]="metaForm.valid"
       *ngIf="currentType === settingTypes.FILTER"></app-filter-form>
+
+    <app-default-configuration-form
+      (formSubmitted)="onFormSubmit($event)"
+      [existingSetting]="setting"
+      [metaFormValid]="metaForm.valid"
+      *ngIf="currentType === settingTypes.DEFAULT_CONFIGURATION"></app-default-configuration-form>
   </div>
 </div>

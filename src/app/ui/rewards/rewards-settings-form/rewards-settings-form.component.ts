@@ -37,6 +37,7 @@ import { TermsAndConditionsFormComponent } from './terms-and-conditions-form/ter
 import { RulesFormComponent } from './rules-form/rules-form.component';
 import { CategoriesFormComponent } from './categories-form/categories-form.component';
 import { FilterFormComponent } from './filter-form/filter-form.component';
+import { DefaultConfigurationFormComponent } from './default-configuration-form/default-configuration-form.component';
 
 export interface MetaForm {
   settingId: FormControl<string>;
@@ -68,6 +69,7 @@ export interface RewardsSettingsFormOutput {
     RulesFormComponent,
     CategoriesFormComponent,
     FilterFormComponent,
+    DefaultConfigurationFormComponent,
   ],
   templateUrl: './rewards-settings-form.component.html',
   styleUrl: './rewards-settings-form.component.scss',
