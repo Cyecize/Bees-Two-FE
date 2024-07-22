@@ -20,6 +20,7 @@ export interface RewardSetting {
   beesBank?: BeesBank;
   toggles?: RewardsToggles;
   enrollmentPage?: EnrollmentPage;
+  termsAndConditions?: RewardsTermsAndConditions[];
 }
 
 export interface BenefitsBanner {
@@ -87,6 +88,16 @@ export interface EnrollmentPageContent {
   items: EnrollmentPageContentItem[];
 }
 
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface EnrollmentPageContentItem {
   //TODO: Define full object
+}
+
+export interface RewardsTermsAndConditions {
+  versionId: string;
+  documentDate: string;
+  startDate: string;
+  documentURL: string;
+  changeLog: string;
+  lastModified: string;
 }

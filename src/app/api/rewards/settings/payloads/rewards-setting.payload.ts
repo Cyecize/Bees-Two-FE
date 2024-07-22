@@ -84,3 +84,17 @@ export interface RewardsSettingEnrollmentPagePayload
   extends RewardsSettingPayload {
   enrollmentPage: EnrollmentPagePayloadContainer;
 }
+
+export interface TermsAndConditionsContainer {
+  versionId: string;
+  documentDate?: string;
+  startDate?: string;
+  documentURL: string;
+  changeLog: string;
+  lastModified?: string;
+}
+
+export interface RewardsSettingTermsAndConditionsPayload
+  extends RewardsSettingPayload {
+  termsAndConditions: TermsAndConditionsContainer[];
+}

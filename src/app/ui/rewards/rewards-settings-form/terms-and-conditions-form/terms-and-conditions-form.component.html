@@ -1,0 +1,42 @@
+<form [formGroup]="form">
+  <h4>Terms and Conditions</h4>
+
+  <div formArrayName="termsAndConditions">
+    <div *ngFor="let term of termsAndConditions.controls; let termInd = index" [formGroupName]="termInd" class="ms-4">
+      <p>Term {{ termInd + 1 }}
+        (<strong style="cursor:pointer;" (click)="removeTerm(termInd)">Remove</strong>)
+      </p>
+
+      <div class="m-1 mt-3">
+        <app-input placeholder="Version ID" formControlName="versionId"></app-input>
+      </div>
+      <div class="m-1 mt-3">
+        <app-input placeholder="Document Date" formControlName="documentDate"></app-input>
+      </div>
+      <div class="m-1 mt-3">
+        <app-input placeholder="Start Date" formControlName="startDate"></app-input>
+      </div>
+      <div class="m-1 mt-3">
+        <app-input placeholder="Document URL" formControlName="documentURL"></app-input>
+      </div>
+      <div class="m-1 mt-3">
+        <app-input placeholder="Change Log" formControlName="changeLog"></app-input>
+      </div>
+      <div class="m-1 mt-3">
+        <app-input placeholder="Last Modified" formControlName="lastModified"></app-input>
+      </div>
+    </div>
+  </div>
+
+  <div class="m-1 mt-3">
+    <button (click)="addTerm()" class="btn btn-outline-dark">Add Term</button>
+  </div>
+
+  <div class="form-group mt-5 text-end">
+    <button
+      (click)="onFormSubmit()"
+      [disabled]="!form.valid || !metaFormValid"
+      class="btn btn-outline-dark">Save
+    </button>
+  </div>
+</form>

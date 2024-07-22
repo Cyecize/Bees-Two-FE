@@ -61,5 +61,11 @@
       [existingSetting]="setting"
       [metaFormValid]="metaForm.valid"
       *ngIf="currentType === settingTypes.ENROLLMENT_PAGE"></app-enrollment-page-form>
+
+    <app-terms-and-conditions-form
+      (formSubmitted)="onFormSubmit($event)"
+      [existingSetting]="setting"
+      [metaFormValid]="metaForm.valid"
+      *ngIf="currentType === settingTypes.TERMS"></app-terms-and-conditions-form>
   </div>
 </div>
