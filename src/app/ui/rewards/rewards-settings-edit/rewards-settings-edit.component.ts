@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {
   RewardsSettingsFormComponent,
-  RewardsSettingsFormOutput
+  RewardsSettingsFormOutput,
 } from '../rewards-settings-form/rewards-settings-form.component';
 import { ActivatedRoute, Routes } from '@angular/router';
 import { SelectSearchComponent } from '../../../shared/form-controls/select-search/select-search.component';

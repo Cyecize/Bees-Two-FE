@@ -26,7 +26,7 @@
       </div>
       <div class="mt-2">
         <app-select *ngIf="!typesDisabled" [options]="types" placeholder="Type" formControlName="type"></app-select>
-        <p>Type: <strong>{{currentType}}</strong></p>
+        <p *ngIf="typesDisabled">Type: <strong>{{currentType}}</strong></p>
       </div>
     </form>
 

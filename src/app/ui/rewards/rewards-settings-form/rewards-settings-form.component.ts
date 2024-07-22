@@ -27,7 +27,7 @@ import { BenefitsBannerFormComponent } from './benefits-banner-form/benefits-ban
 import { NgIf } from '@angular/common';
 import {
   RewardsSettingMetaPayload,
-  RewardsSettingPayload
+  RewardsSettingPayload,
 } from '../../../api/rewards/settings/payloads/rewards-setting.payload';
 import { HubHeaderFormComponent } from './hub-header-form/hub-header-form.component';
 import { BeesBankFormComponent } from './bees-bank-form/bees-bank-form.component';
@@ -79,7 +79,7 @@ export class RewardsSettingsFormComponent implements OnInit {
   settingTypes = RewardsSettingType;
 
   @Input()
-  typesDisabled: boolean = false;
+  typesDisabled = false;
 
   @Input()
   set setting(value: RewardSetting) {
