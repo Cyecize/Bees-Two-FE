@@ -1,0 +1,106 @@
+<form [formGroup]="form">
+  <h4>Enrollment Page</h4>
+
+  <div class="m-1 mt-3">
+    <app-input placeholder="Title" formControlName="title"></app-input>
+  </div>
+
+  <div class="m-1 mt-3">
+    <app-input placeholder="Subtitle" formControlName="subtitle"></app-input>
+  </div>
+
+  <div class="m-1 mt-3">
+    <app-input placeholder="Background Color" formControlName="bgColor"></app-input>
+  </div>
+
+  <div class="m-1 mt-3">
+    <app-input placeholder="Title Text Color" formControlName="titleTextColor"></app-input>
+  </div>
+
+  <div class="m-1 mt-3">
+    <app-input placeholder="Subtitle Text Color" formControlName="subtitleTextColor"></app-input>
+  </div>
+
+  <div formGroupName="image">
+    <h4>Images</h4>
+    <div class="m-1 mt-3">
+      <app-input placeholder="iOS Image URL" formControlName="ios"></app-input>
+    </div>
+    <div class="m-1 mt-3">
+      <app-input placeholder="Android Image URL" formControlName="android"></app-input>
+    </div>
+    <div class="m-1 mt-3">
+      <app-input placeholder="Web Image URL" formControlName="web"></app-input>
+    </div>
+  </div>
+
+  <div formGroupName="content">
+    <h4>Content</h4>
+
+    <div class="m-1 mt-3">
+      <app-input placeholder="Content Background Color" formControlName="bgColor"></app-input>
+    </div>
+    <div class="m-1 mt-3">
+      <app-input placeholder="Title Text Color" formControlName="titleTextColor"></app-input>
+    </div>
+    <div class="m-1 mt-3">
+      <app-input placeholder="Description Text Color" formControlName="descriptionTextColor"></app-input>
+    </div>
+
+    <div>
+      <h5>Items</h5>
+      <button (click)="addItem()">Add Item</button>
+    </div>
+
+    <div formArrayName="items">
+      <div *ngFor="let item of items.controls; let itemInd = index" [formGroupName]="itemInd" class="ms-4">
+        <p>Item {{ itemInd + 1 }}
+          (<strong style="cursor:pointer;" (click)="removeItem(itemInd)">Remove</strong>)
+        </p>
+
+        <div class="m-1 mt-3">
+          <app-input placeholder="ID" formControlName="id"></app-input>
+        </div>
+        <div class="m-1 mt-3">
+          <app-input placeholder="Title" formControlName="title"></app-input>
+        </div>
+        <div class="m-1 mt-3">
+          <app-input placeholder="Description" formControlName="description"></app-input>
+        </div>
+        <div class="m-1 mt-3">
+          <app-input type="number" placeholder="Position" formControlName="position"></app-input>
+        </div>
+
+        <div formGroupName="icon">
+          <div class="m-1 mt-3">
+            <app-input placeholder="iOS Icon URL" formControlName="ios"></app-input>
+          </div>
+          <div class="m-1 mt-3">
+            <app-input placeholder="Android Icon URL" formControlName="android"></app-input>
+          </div>
+          <div class="m-1 mt-3">
+            <app-input placeholder="Web Icon URL" formControlName="web"></app-input>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div formGroupName="footer">
+    <h4>Footer</h4>
+    <div class="m-1 mt-3">
+      <app-input placeholder="Text Button" formControlName="textButton"></app-input>
+    </div>
+    <div class="m-1 mt-3">
+      <app-input placeholder="Button Style" formControlName="buttonStyle"></app-input>
+    </div>
+  </div>
+
+  <div class="form-group mt-5 text-end">
+    <button
+      (click)="onFormSubmit()"
+      [disabled]="!form.valid || !metaFormValid"
+      class="btn btn-outline-dark">Save
+    </button>
+  </div>
+</form>

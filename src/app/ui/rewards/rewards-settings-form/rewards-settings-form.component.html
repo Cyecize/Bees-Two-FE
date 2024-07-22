@@ -55,5 +55,11 @@
       [existingSetting]="setting"
       [metaFormValid]="metaForm.valid"
       *ngIf="currentType === settingTypes.TOGGLES"></app-toggles-form>
+
+    <app-enrollment-page-form
+      (formSubmitted)="onFormSubmit($event)"
+      [existingSetting]="setting"
+      [metaFormValid]="metaForm.valid"
+      *ngIf="currentType === settingTypes.ENROLLMENT_PAGE"></app-enrollment-page-form>
   </div>
 </div>

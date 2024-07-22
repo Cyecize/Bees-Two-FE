@@ -75,3 +75,12 @@ export interface TogglesContainer {
 export interface RewardsSettingsTogglesPayload extends RewardsSettingPayload {
   toggles: TogglesContainer;
 }
+
+export interface EnrollmentPagePayloadContainer {
+  content: any;
+}
+
+export interface RewardsSettingEnrollmentPagePayload
+  extends RewardsSettingPayload {
+  enrollmentPage: EnrollmentPagePayloadContainer;
+}

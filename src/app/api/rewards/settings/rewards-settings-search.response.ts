@@ -19,6 +19,7 @@ export interface RewardSetting {
   hubHeader?: HubHeader;
   beesBank?: BeesBank;
   toggles?: RewardsToggles;
+  enrollmentPage?: EnrollmentPage;
 }
 
 export interface BenefitsBanner {
@@ -74,4 +75,18 @@ export interface RewardsToggles {
   earningByRule?: boolean;
   payWithPointsEnabled?: boolean;
   pwpPartialRefund?: boolean;
+}
+
+export interface EnrollmentPage {
+  //TODO: Define full object
+  content: EnrollmentPageContent;
+}
+
+export interface EnrollmentPageContent {
+  //TODO: Define full object
+  items: EnrollmentPageContentItem[];
+}
+
+export interface EnrollmentPageContentItem {
+  //TODO: Define full object
 }

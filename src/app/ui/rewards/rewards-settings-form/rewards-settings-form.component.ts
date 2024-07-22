@@ -32,6 +32,7 @@ import {
 import { HubHeaderFormComponent } from './hub-header-form/hub-header-form.component';
 import { BeesBankFormComponent } from './bees-bank-form/bees-bank-form.component';
 import { TogglesFormComponent } from './toggles-form/toggles-form.component';
+import {EnrollmentPageFormComponent} from "./enrollment-page-form/enrollment-page-form.component";
 
 export interface MetaForm {
   settingId: FormControl<string>;
@@ -58,6 +59,7 @@ export interface RewardsSettingsFormOutput {
     HubHeaderFormComponent,
     BeesBankFormComponent,
     TogglesFormComponent,
+    EnrollmentPageFormComponent,
   ],
   templateUrl: './rewards-settings-form.component.html',
   styleUrl: './rewards-settings-form.component.scss',
