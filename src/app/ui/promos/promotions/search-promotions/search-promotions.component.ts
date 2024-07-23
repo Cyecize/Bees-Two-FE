@@ -1,14 +1,157 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Routes } from '@angular/router';
+import { NgForOf, NgIf } from '@angular/common';
+import { SelectSearchComponent } from '../../../../shared/form-controls/select-search/select-search.component';
+import {
+  EmptyHasNextPagination,
+  EmptyPage,
+  Page,
+  PageImpl,
+} from '../../../../shared/util/page';
+import {
+  SelectSearchItem,
+  SelectSearchItemImpl,
+} from '../../../../shared/form-controls/select-search/select-search.item';
+import { CountryEnvironmentService } from '../../../../api/env/country-environment.service';
+import { PromoService } from '../../../../api/promo/promo.service';
+import { CountryEnvironmentModel } from '../../../../api/env/country-environment.model';
+import {
+  PromoSearchQuery,
+  PromoSearchQueryImpl,
+} from '../../../../api/promo/promo-search.query';
+import { PromoType } from '../../../../api/promo/promo-type';
+import { InputComponent } from '../../../../shared/form-controls/input/input.component';
+import { FormsModule } from '@angular/forms';
+import { CheckboxComponent } from '../../../../shared/form-controls/checkbox/checkbox.component';
+import { PromoSearchResponse } from '../../../../api/promo/promo-search.response';
+import { TooltipSpanComponent } from '../../../../shared/components/tooltip-span/tooltip-span.component';
+import { Promo } from '../../../../api/promo/promo';
 
 @Component({
   selector: 'app-search-promotions',
   standalone: true,
-  imports: [],
+  imports: [
+    NgForOf,
+    SelectSearchComponent,
+    InputComponent,
+    FormsModule,
+    CheckboxComponent,
+    NgIf,
+    TooltipSpanComponent,
+  ],
   templateUrl: './search-promotions.component.html',
   styleUrl: './search-promotions.component.scss',
 })
-export class SearchPromotionsComponent {}
+export class SearchPromotionsComponent implements OnInit {
+  types: Page<SelectSearchItem<PromoType>> = new EmptyPage();
+
+  environments: Page<SelectSearchItem<CountryEnvironmentModel>> =
+    new EmptyPage();
+  selectedEnv?: CountryEnvironmentModel;
+
+  query: PromoSearchQuery = new PromoSearchQueryImpl();
+  searchResponse: PromoSearchResponse = {
+    promotions: [],
+    pagination: new EmptyHasNextPagination(),
+  };
+
+  constructor(
+    private envService: CountryEnvironmentService,
+    private promoService: PromoService,
+  ) {}
+
+  async ngOnInit(): Promise<void> {
+    this.envService.selectedEnv$.subscribe((value) => {
+      if (value) {
+        this.selectedEnv = value;
+        this.reloadFilters();
+      }
+    });
+
+    this.environments = new PageImpl(
+      (await this.envService.getEnvs()).map(
+        (env) => new SelectSearchItemImpl(env.envName, env.id, env),
+      ),
+    );
+  }
+
+  typeSelected(typeSelection: SelectSearchItem<PromoType>): void {
+    if (
+      typeSelection.objRef &&
+      !this.query.types.includes(typeSelection.objRef)
+    ) {
+      this.query.types.push(typeSelection.objRef);
+      this.reloadFilters();
+    }
+  }
+
+  removeType(settingType: PromoType): void {
+    this.query.types.splice(this.query.types.indexOf(settingType), 1);
+    this.reloadFilters();
+  }
+
+  envSelected(env: SelectSearchItem<CountryEnvironmentModel>): void {
+    if (env.objRef) {
+      this.selectedEnv = env.objRef;
+      this.reloadFilters();
+    }
+  }
+
+  private async reloadFilters(): Promise<void> {
+    this.query.vendorIds = [this.selectedEnv?.vendorId + ''];
+
+    this.types = new PageImpl(
+      Object.keys(PromoType)
+        .filter((lvl) => !this.query.types.includes(lvl as PromoType))
+        .map((lvl) => new SelectSearchItemImpl(lvl, lvl, lvl as PromoType)),
+    );
+
+    this.query.page.page = 0;
+    await this.fetchData();
+  }
+
+  async pageChange(page: number): Promise<void> {
+    this.query.page.page = page;
+    await this.fetchData();
+  }
+
+  queryStringChange(str?: string): void {
+    this.query.query = str;
+    this.reloadFilters();
+  }
+
+  ignoreStartDateToggleChange(value?: boolean): void {
+    this.query.ignoreStartDate = value;
+    this.reloadFilters();
+  }
+
+  private async fetchData(): Promise<void> {
+    const response = await this.promoService.searchPromos(
+      this.query,
+      this.selectedEnv,
+    );
+
+    if (response.response) {
+      this.searchResponse = response.response;
+    } else {
+      this.searchResponse = {
+        promotions: [],
+        pagination: new EmptyHasNextPagination(),
+      };
+    }
+  }
+
+  shortenStr(str: any): string {
+    return (
+      str.substring(0, Math.min(str.length, 25)) +
+      (str.length > 25 ? '...' : '')
+    );
+  }
+
+  openDetailsDialog(promo: Promo): void {
+    alert('openingDetails!');
+  }
+}
 
 export const SEARCH_PROMOTIONS_ROUTES: Routes = [
   {

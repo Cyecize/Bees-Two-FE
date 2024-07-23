@@ -5,7 +5,7 @@
            (keyup)="onKeyUp()"
            (keydown)="onKeyDown()"
            [value]="currentDisplaySelection"
-           [name]="formControlName"
+           [name]="formControlName || inputId"
            type="text" class="form-control select-search-input"
            [id]="inputId" [placeholder]="placeholder">
     <div class="select-search-options-container">

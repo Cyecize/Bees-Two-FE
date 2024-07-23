@@ -1,8 +1,8 @@
 <div class="form-floating">
   <input (touchend)="inputTouched($event)"
-         (change)="inputChanged($event)"
+         (change)="inputChanged($event); changeEnded($event);"
          (keyup)="inputChanged($event)"
-         [value]="value"
+         [value]="value || ''"
          [name]="formControlName"
          [type]="type" class="form-control"
          [id]="inputId" [placeholder]="placeholder">

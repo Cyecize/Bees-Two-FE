@@ -14,6 +14,16 @@ export class EmptyPagination implements Pagination {
   totalPages = 1;
 }
 
+export interface HasNextPagination {
+  hasNext: boolean;
+  page: number;
+}
+
+export class EmptyHasNextPagination implements HasNextPagination {
+  hasNext = false;
+  page = 0;
+}
+
 export interface Page<T> {
   content: T[];
   totalPages: number;

@@ -52,6 +52,9 @@ export class InputComponent implements OnInit, ControlValueAccessor {
   onChange: EventEmitter<any> = new EventEmitter<any>();
 
   @Output()
+  onChangeEnd: EventEmitter<any> = new EventEmitter<any>();
+
+  @Output()
   onTouch: EventEmitter<any> = new EventEmitter<any>();
 
   inputId!: string;
@@ -68,6 +71,10 @@ export class InputComponent implements OnInit, ControlValueAccessor {
 
   inputTouched(event: any): void {
     this.onTouch.emit(event);
+  }
+
+  changeEnded(event: any): void {
+    this.onChangeEnd.emit(event.target.value);
   }
 
   writeValue(obj: any): void {
