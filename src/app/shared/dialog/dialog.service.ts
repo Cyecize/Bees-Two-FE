@@ -9,6 +9,8 @@ import { DialogComponent } from './dialogs/dialog.component';
 import { DialogComponentPayload } from './dialogs/dialog.component.payload';
 import { ConfirmDialogComponent } from './dialogs/confirm-dialog/confirm-dialog.component';
 import { ConfirmDialogPayload } from './dialogs/confirm-dialog/confirm-dialog-payload.model';
+import { WrappedResponse } from '../util/field-error-wrapper';
+import { RequestResultDialogComponent } from './dialogs/request-result-dialog/request-result-dialog.component';
 
 @Injectable({ providedIn: 'root' })
 export class DialogService {
@@ -34,6 +36,20 @@ export class DialogService {
       ConfirmDialogComponent,
       title || 'Confirm',
       new ConfirmDialogPayload(message, confirmMessage),
+    );
+
+    return dialogComponentMatDialogRef
+      .afterClosed()
+      .pipe(map((value) => value || false));
+  }
+
+  public openRequestResultDialog(
+    response: WrappedResponse<any>,
+  ): Observable<boolean> {
+    const dialogComponentMatDialogRef = this.open(
+      RequestResultDialogComponent,
+      'Bees Response',
+      response,
     );
 
     return dialogComponentMatDialogRef

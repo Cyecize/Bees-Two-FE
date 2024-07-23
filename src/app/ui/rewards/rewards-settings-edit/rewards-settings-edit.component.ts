@@ -72,15 +72,7 @@ export class RewardsSettingsEditComponent implements OnInit {
       .subscribe(async (confirmed) => {
         if (confirmed) {
           const response = await this.rewardsSettingsService.upsert(value);
-
-          if (!response.isSuccess) {
-            console.log(response.errorResp);
-            this.dialogService.openConfirmDialog(
-              `Operation failed with status ${response.errorResp?.data?.statusCode} and trace id ${response.errorResp?.data?.requestTraceId}`,
-            );
-          } else {
-            this.dialogService.openConfirmDialog('Operation Successful!');
-          }
+          this.dialogService.openRequestResultDialog(response);
         }
       });
   }

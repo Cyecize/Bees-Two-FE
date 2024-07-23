@@ -5,7 +5,6 @@ import {
 } from '../rewards-settings-form/rewards-settings-form.component';
 import { Routes } from '@angular/router';
 import { SelectSearchComponent } from '../../../shared/form-controls/select-search/select-search.component';
-import { RewardsSettingPayload } from '../../../api/rewards/settings/payloads/rewards-setting.payload';
 import { DialogService } from '../../../shared/dialog/dialog.service';
 import { RewardsSettingsService } from '../../../api/rewards/settings/rewards-settings.service';
 
@@ -30,15 +29,7 @@ export class RewardsSettingsCreateComponent {
       .subscribe(async (confirmed) => {
         if (confirmed) {
           const response = await this.rewardsSettingsService.upsert(value);
-
-          if (!response.isSuccess) {
-            console.log(response.errorResp);
-            this.dialogService.openConfirmDialog(
-              `Operation failed with status ${response.errorResp?.data?.statusCode} and trace id ${response.errorResp?.data?.requestTraceId}`,
-            );
-          } else {
-            this.dialogService.openConfirmDialog('Operation Successful!');
-          }
+          this.dialogService.openRequestResultDialog(response);
         }
       });
   }
