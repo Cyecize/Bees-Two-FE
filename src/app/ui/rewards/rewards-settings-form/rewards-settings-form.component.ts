@@ -100,10 +100,15 @@ export class RewardsSettingsFormComponent implements OnInit {
   typesDisabled = false;
 
   @Input()
+  raw = false;
+
+  rawJson = '';
+
+  @Input()
   set setting(value: RewardSetting) {
     this._setting = value;
     if (this.metaForm) {
-      this.metaForm.patchValue(this._setting);
+      this.patchSetting();
     }
   }
 
@@ -149,9 +154,7 @@ export class RewardsSettingsFormComponent implements OnInit {
       }
     });
 
-    if (this.setting) {
-      this.metaForm.patchValue(this.setting);
-    }
+    this.patchSetting();
   }
 
   envSelected(env: SelectSearchItem<CountryEnvironmentModel>): void {
@@ -183,8 +186,24 @@ export class RewardsSettingsFormComponent implements OnInit {
       }),
     });
 
+    this.patchSetting();
+  }
+
+  private patchSetting(): void {
     if (this.setting) {
       this.metaForm.patchValue(this.setting);
+
+      const settingCopy = { ...this.setting };
+      // @ts-ignore
+      delete settingCopy.settingId;
+      // @ts-ignore
+      delete settingCopy.level;
+      // @ts-ignore
+      delete settingCopy.tier;
+      // @ts-ignore
+      delete settingCopy.type;
+
+      this.rawJson = JSON.stringify(settingCopy, null, 2);
     }
   }
 
@@ -192,6 +211,23 @@ export class RewardsSettingsFormComponent implements OnInit {
     this.formSubmitted.emit({
       meta: this.metaForm.getRawValue(),
       setting: value,
+      env: this.selectedEnv,
+      authTokenOverride: this.overrideAuthToken,
+    });
+  }
+
+  onRawFormSubmit(): void {
+    let data;
+    try {
+      data = JSON.parse(this.rawJson);
+    } catch (err) {
+      alert('Your JSON is invalid!');
+      return;
+    }
+
+    this.formSubmitted.emit({
+      meta: this.metaForm.getRawValue(),
+      setting: data,
       env: this.selectedEnv,
       authTokenOverride: this.overrideAuthToken,
     });

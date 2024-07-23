@@ -23,6 +23,7 @@ import { DialogService } from '../../../shared/dialog/dialog.service';
 export class RewardsSettingsEditComponent implements OnInit {
   settingToEdit!: RewardSetting;
   settingEnv!: CountryEnvironmentModel;
+  rawEdit = false;
 
   constructor(
     private settingService: RewardsSettingsService,
@@ -34,6 +35,7 @@ export class RewardsSettingsEditComponent implements OnInit {
   ) {}
 
   async ngOnInit(): Promise<void> {
+    this.rawEdit = this.route.snapshot.data['raw'];
     const settingId = this.route.snapshot.params['id'];
     const tier = this.route.snapshot.params['tier'];
     const level = this.route.snapshot.params['level'];

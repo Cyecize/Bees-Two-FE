@@ -3,6 +3,7 @@
 </div>
 
 <app-rewards-settings-form
+  [raw]="rawEdit"
   [setting]="settingToEdit"
   (formSubmitted)="onFormSubmit($event)"
   [typesDisabled]="true"

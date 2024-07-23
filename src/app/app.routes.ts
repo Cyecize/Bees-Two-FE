@@ -74,6 +74,9 @@ const rewardsRoutes: Routes = [
       },
       {
         path: AppRoutingPath.EDIT_REWARDS_SETTINGS.path,
+        data: {
+          raw: false,
+        },
         loadChildren: () =>
           import(
             './ui/rewards/rewards-settings-edit/rewards-settings-edit.component'
@@ -81,6 +84,29 @@ const rewardsRoutes: Routes = [
       },
       {
         path: AppRoutingPath.CREATE_REWARDS_SETTINGS.path,
+        data: {
+          raw: false,
+        },
+        loadChildren: () =>
+          import(
+            './ui/rewards/rewards-settings-create/rewards-settings-create.component'
+          ).then((value) => value.CREATE_REWARDS_SETTINGS_ROUTES),
+      },
+      {
+        path: AppRoutingPath.EDIT_REWARDS_SETTINGS_RAW.path,
+        data: {
+          raw: true,
+        },
+        loadChildren: () =>
+          import(
+            './ui/rewards/rewards-settings-edit/rewards-settings-edit.component'
+          ).then((value) => value.EDIT_REWARDS_SETTINGS_ROUTES),
+      },
+      {
+        path: AppRoutingPath.CREATE_REWARDS_SETTINGS_RAW.path,
+        data: {
+          raw: true,
+        },
         loadChildren: () =>
           import(
             './ui/rewards/rewards-settings-create/rewards-settings-create.component'

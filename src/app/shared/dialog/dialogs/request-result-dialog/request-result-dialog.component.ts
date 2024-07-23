@@ -25,9 +25,9 @@ import { NgIf } from '@angular/common';
       </p>
     </div>
 
-    <button class="btn btn-outline-dark" (click)="showData()">
-      View Data
-    </button>
+    <button class="btn btn-outline-dark" (click)="showData()">View Data</button>
+
+    <hr *ngIf="dataToView" />
     <div class="pt-2" style="max-height: 450px; overflow-y: auto">
       <pre>{{ dataToView }}</pre>
     </div>

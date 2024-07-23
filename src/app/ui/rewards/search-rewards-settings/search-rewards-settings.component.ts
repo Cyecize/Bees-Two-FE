@@ -33,6 +33,7 @@ import { ShowRewardSettingDialogComponent } from '../show-reward-setting-dialog/
 import { RouteUtils } from '../../../shared/routing/route-utils';
 import { AppRoutingPath } from '../../../app-routing.path';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination.component';
+import { ShowRewardSettingDialogPayload } from '../show-reward-setting-dialog/show-reward-setting-dialog.payload';
 
 @Component({
   selector: 'app-search-rewards',
@@ -144,7 +145,7 @@ export class SearchRewardsSettingsComponent implements OnInit {
     this.dialogService.open(
       ShowRewardSettingDialogComponent,
       'Details',
-      setting,
+      new ShowRewardSettingDialogPayload(setting, this.selectedEnv),
     );
   }
 
@@ -197,19 +198,6 @@ export class SearchRewardsSettingsComponent implements OnInit {
     } else {
       this.searchResponse = { content: [], pagination: new EmptyPagination() };
     }
-  }
-
-  getEditRoute(setting: RewardSetting): string {
-    return RouteUtils.setPathParams(
-      AppRoutingPath.EDIT_REWARDS_SETTINGS.toString(),
-      [
-        setting.level,
-        setting.settingId,
-        setting.tier,
-        setting.type,
-        this.selectedEnv?.id,
-      ],
-    );
   }
 }
 

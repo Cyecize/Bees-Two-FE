@@ -14,88 +14,104 @@
           placeholder="Override Auth Token"
           [(ngModel)]="overrideAuthToken"></app-input>
       </div>
-  </div>
-
-  <hr>
-
-  <div class="pb-3">
-    <h4>Metadata</h4>
-    <form [formGroup]="metaForm">
-      <div class="mt-2">
-        <app-input placeholder="Setting ID" formControlName="settingId"></app-input>
-      </div>
-      <div class="mt-2">
-        <app-select [options]="levels" placeholder="Level" formControlName="level"></app-select>
-      </div>
-      <div class="mt-2">
-        <app-select [options]="tiers" placeholder="Tier" formControlName="tier"></app-select>
-      </div>
-      <div class="mt-2">
-        <app-select *ngIf="!typesDisabled" [options]="types" placeholder="Type" formControlName="type"></app-select>
-        <p *ngIf="typesDisabled">Type: <strong>{{currentType}}</strong></p>
-      </div>
-    </form>
+    </div>
 
     <hr>
 
-    <app-benefits-banner-form
-      (formSubmitted)="onFormSubmit($event)"
-      [existingSetting]="setting"
-      [metaFormValid]="metaForm.valid"
-      *ngIf="currentType === settingTypes.BENEFITS_BANNER"></app-benefits-banner-form>
+    <div class="pb-3">
+      <h4>Metadata</h4>
+      <form [formGroup]="metaForm">
+        <div class="mt-2">
+          <app-input placeholder="Setting ID" formControlName="settingId"></app-input>
+        </div>
+        <div class="mt-2">
+          <app-select [options]="levels" placeholder="Level" formControlName="level"></app-select>
+        </div>
+        <div class="mt-2">
+          <app-select [options]="tiers" placeholder="Tier" formControlName="tier"></app-select>
+        </div>
+        <div class="mt-2">
+          <app-select *ngIf="!typesDisabled" [options]="types" placeholder="Type" formControlName="type"></app-select>
+          <p *ngIf="typesDisabled">Type: <strong>{{ currentType }}</strong></p>
+        </div>
+      </form>
 
-    <app-hub-header-form
-      (formSubmitted)="onFormSubmit($event)"
-      [existingSetting]="setting"
-      [metaFormValid]="metaForm.valid"
-      *ngIf="currentType === settingTypes.HUB_HEADER"></app-hub-header-form>
+      <hr>
 
-    <app-bees-bank-form
-      (formSubmitted)="onFormSubmit($event)"
-      [existingSetting]="setting"
-      [metaFormValid]="metaForm.valid"
-      *ngIf="currentType === settingTypes.BEES_BANK"></app-bees-bank-form>
+      <div *ngIf="!raw">
+        <app-benefits-banner-form
+          (formSubmitted)="onFormSubmit($event)"
+          [existingSetting]="setting"
+          [metaFormValid]="metaForm.valid"
+          *ngIf="currentType === settingTypes.BENEFITS_BANNER"></app-benefits-banner-form>
 
-    <app-toggles-form
-      (formSubmitted)="onFormSubmit($event)"
-      [existingSetting]="setting"
-      [metaFormValid]="metaForm.valid"
-      *ngIf="currentType === settingTypes.TOGGLES"></app-toggles-form>
+        <app-hub-header-form
+          (formSubmitted)="onFormSubmit($event)"
+          [existingSetting]="setting"
+          [metaFormValid]="metaForm.valid"
+          *ngIf="currentType === settingTypes.HUB_HEADER"></app-hub-header-form>
 
-    <app-enrollment-page-form
-      (formSubmitted)="onFormSubmit($event)"
-      [existingSetting]="setting"
-      [metaFormValid]="metaForm.valid"
-      *ngIf="currentType === settingTypes.ENROLLMENT_PAGE"></app-enrollment-page-form>
+        <app-bees-bank-form
+          (formSubmitted)="onFormSubmit($event)"
+          [existingSetting]="setting"
+          [metaFormValid]="metaForm.valid"
+          *ngIf="currentType === settingTypes.BEES_BANK"></app-bees-bank-form>
 
-    <app-terms-and-conditions-form
-      (formSubmitted)="onFormSubmit($event)"
-      [existingSetting]="setting"
-      [metaFormValid]="metaForm.valid"
-      *ngIf="currentType === settingTypes.TERMS"></app-terms-and-conditions-form>
+        <app-toggles-form
+          (formSubmitted)="onFormSubmit($event)"
+          [existingSetting]="setting"
+          [metaFormValid]="metaForm.valid"
+          *ngIf="currentType === settingTypes.TOGGLES"></app-toggles-form>
 
-    <app-rules-form
-      (formSubmitted)="onFormSubmit($event)"
-      [existingSetting]="setting"
-      [metaFormValid]="metaForm.valid"
-      *ngIf="currentType === settingTypes.RULES"></app-rules-form>
+        <app-enrollment-page-form
+          (formSubmitted)="onFormSubmit($event)"
+          [existingSetting]="setting"
+          [metaFormValid]="metaForm.valid"
+          *ngIf="currentType === settingTypes.ENROLLMENT_PAGE"></app-enrollment-page-form>
 
-    <app-categories-form
-      (formSubmitted)="onFormSubmit($event)"
-      [existingSetting]="setting"
-      [metaFormValid]="metaForm.valid"
-      *ngIf="currentType === settingTypes.CATEGORIES"></app-categories-form>
+        <app-terms-and-conditions-form
+          (formSubmitted)="onFormSubmit($event)"
+          [existingSetting]="setting"
+          [metaFormValid]="metaForm.valid"
+          *ngIf="currentType === settingTypes.TERMS"></app-terms-and-conditions-form>
 
-    <app-filter-form
-      (formSubmitted)="onFormSubmit($event)"
-      [existingSetting]="setting"
-      [metaFormValid]="metaForm.valid"
-      *ngIf="currentType === settingTypes.FILTER"></app-filter-form>
+        <app-rules-form
+          (formSubmitted)="onFormSubmit($event)"
+          [existingSetting]="setting"
+          [metaFormValid]="metaForm.valid"
+          *ngIf="currentType === settingTypes.RULES"></app-rules-form>
 
-    <app-default-configuration-form
-      (formSubmitted)="onFormSubmit($event)"
-      [existingSetting]="setting"
-      [metaFormValid]="metaForm.valid"
-      *ngIf="currentType === settingTypes.DEFAULT_CONFIGURATION"></app-default-configuration-form>
+        <app-categories-form
+          (formSubmitted)="onFormSubmit($event)"
+          [existingSetting]="setting"
+          [metaFormValid]="metaForm.valid"
+          *ngIf="currentType === settingTypes.CATEGORIES"></app-categories-form>
+
+        <app-filter-form
+          (formSubmitted)="onFormSubmit($event)"
+          [existingSetting]="setting"
+          [metaFormValid]="metaForm.valid"
+          *ngIf="currentType === settingTypes.FILTER"></app-filter-form>
+
+        <app-default-configuration-form
+          (formSubmitted)="onFormSubmit($event)"
+          [existingSetting]="setting"
+          [metaFormValid]="metaForm.valid"
+          *ngIf="currentType === settingTypes.DEFAULT_CONFIGURATION"></app-default-configuration-form>
+      </div>
+
+      <div *ngIf="raw" class="pb-4">
+        <h4>Raw JSON</h4>
+        <small>There is no validation here. Whatever you write will be sent to BEES</small>
+        <textarea class="form-control" rows="20" [(ngModel)]="rawJson"></textarea>
+
+        <div class="mt-3 text-end">
+          <button
+            class="btn btn-outline-dark"
+            [disabled]="!metaForm.valid"
+            (click)="onRawFormSubmit()">Save</button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
