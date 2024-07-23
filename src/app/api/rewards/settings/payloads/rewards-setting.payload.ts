@@ -63,13 +63,13 @@ export interface RewardsSettingBeesBankPayload extends RewardsSettingPayload {
 }
 
 export interface TogglesContainer {
-  earningByItem: boolean | null;
   acceptItemsCountMultiplier: boolean | null;
   findItemBySku: boolean | null;
   includeItemVariantsForEarning: boolean | null;
   earningByRule: boolean | null;
   payWithPointsEnabled: boolean | null;
   pwpPartialRefund: boolean | null;
+  supportLegacyDtComboCreation: boolean | null;
 }
 
 export interface RewardsSettingsTogglesPayload extends RewardsSettingPayload {

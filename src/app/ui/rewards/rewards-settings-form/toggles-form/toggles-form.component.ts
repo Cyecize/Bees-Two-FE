@@ -7,13 +7,13 @@ import { RewardsSettingsTogglesPayload } from '../../../../api/rewards/settings/
 import { CheckboxComponent } from '../../../../shared/form-controls/checkbox/checkbox.component';
 
 interface TogglesForm {
-  earningByItem: FormControl<boolean | null>;
   acceptItemsCountMultiplier: FormControl<boolean | null>;
   findItemBySku: FormControl<boolean | null>;
   includeItemVariantsForEarning: FormControl<boolean | null>;
   earningByRule: FormControl<boolean | null>;
   payWithPointsEnabled: FormControl<boolean | null>;
   pwpPartialRefund: FormControl<boolean | null>;
+  supportLegacyDtComboCreation: FormControl<boolean | null>;
 }
 
 interface TogglesFormGroup {
@@ -43,13 +43,13 @@ export class TogglesFormComponent implements OnInit {
   ngOnInit(): void {
     this.form = new FormGroup<TogglesFormGroup>({
       toggles: new FormGroup<TogglesForm>({
-        earningByItem: new FormControl<boolean | null>(null),
         acceptItemsCountMultiplier: new FormControl<boolean | null>(null),
         findItemBySku: new FormControl<boolean | null>(null),
         includeItemVariantsForEarning: new FormControl<boolean | null>(null),
         earningByRule: new FormControl<boolean | null>(null),
         payWithPointsEnabled: new FormControl<boolean | null>(null),
         pwpPartialRefund: new FormControl<boolean | null>(null),
+        supportLegacyDtComboCreation: new FormControl<boolean | null>(null),
       }),
     });
 

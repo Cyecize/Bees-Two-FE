@@ -1,7 +1,5 @@
-import { FieldError } from '../field-error/field-error';
-import { HttpStatus } from '../http/http-status';
 import { firstValueFrom, Observable } from 'rxjs';
-import { isArrayLike } from 'rxjs/internal/util/isArrayLike';
+import { ErrorResponse } from '../../api/proxy/error-response';
 
 export class FieldErrorWrapper<T> {
   constructor(private delegate: () => Observable<T>) {}
@@ -10,26 +8,11 @@ export class FieldErrorWrapper<T> {
     try {
       return new WrappedResponse<T>(
         true,
-        [],
+        undefined,
         await firstValueFrom<T>(this.delegate.call(null)),
       );
     } catch (err: any) {
-      if (
-        err.status === HttpStatus.BAD_REQUEST &&
-        isArrayLike(err.error.fieldErrors)
-      ) {
-        return new WrappedResponse<T>(
-          false,
-          err.error.fieldErrors as FieldError[],
-        );
-      }
-
-      return new WrappedResponse<T>(false, [
-        {
-          message: err.error?.message || 'something.went.wrong',
-          field: '',
-        },
-      ]);
+      return new WrappedResponse<T>(false, err.error);
     }
   }
 }
@@ -37,7 +20,7 @@ export class FieldErrorWrapper<T> {
 export class WrappedResponse<T> {
   constructor(
     public readonly isSuccess: boolean,
-    public readonly errors: FieldError[],
+    public readonly errorResp?: ErrorResponse,
     private readonly resp?: T,
   ) {}
 

@@ -30,9 +30,15 @@ export class RewardsSettingsCreateComponent {
       .subscribe(async (confirmed) => {
         if (confirmed) {
           const response = await this.rewardsSettingsService.upsert(value);
-          this.dialogService.openConfirmDialog(
-            `Operation completed with status ${response.statusCode}`,
-          );
+
+          if (!response.isSuccess) {
+            console.log(response.errorResp);
+            this.dialogService.openConfirmDialog(
+              `Operation failed with status ${response.errorResp?.data?.statusCode} and trace id ${response.errorResp?.data?.requestTraceId}`,
+            );
+          } else {
+            this.dialogService.openConfirmDialog('Operation Successful!');
+          }
         }
       });
   }

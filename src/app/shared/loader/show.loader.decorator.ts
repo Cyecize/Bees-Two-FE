@@ -16,7 +16,7 @@ export const ShowLoader = (): any => {
 
       loader.show();
       try {
-        await originalMethod.apply(this, args);
+        return await originalMethod.apply(this, args);
       } finally {
         loader.hide();
       }

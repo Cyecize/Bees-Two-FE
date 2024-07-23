@@ -84,13 +84,13 @@ export interface BeesBankImageUrlPair {
 }
 
 export interface RewardsToggles {
-  earningByItem?: boolean;
   acceptItemsCountMultiplier?: boolean;
   findItemBySku?: boolean;
   includeItemVariantsForEarning?: boolean;
   earningByRule?: boolean;
   payWithPointsEnabled?: boolean;
   pwpPartialRefund?: boolean;
+  supportLegacyDtComboCreation?: boolean;
 }
 
 export interface EnrollmentPage {

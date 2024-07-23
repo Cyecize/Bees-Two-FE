@@ -35,7 +35,7 @@ export class ConfirmDialogComponent
 
   ngOnInit(): void {
     this.message = this.payload.message;
-    this.confirmMessage = this.payload.confirmMessage || 'confirm';
+    this.confirmMessage = this.payload.confirmMessage || 'Confirm';
   }
 
   getIcon(): Observable<string> {

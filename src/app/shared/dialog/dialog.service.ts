@@ -32,7 +32,7 @@ export class DialogService {
   ): Observable<boolean> {
     const dialogComponentMatDialogRef = this.open(
       ConfirmDialogComponent,
-      title || 'confirm',
+      title || 'Confirm',
       new ConfirmDialogPayload(message, confirmMessage),
     );
 
