@@ -14,6 +14,7 @@ interface TogglesForm {
   payWithPointsEnabled: FormControl<boolean | null>;
   pwpPartialRefund: FormControl<boolean | null>;
   supportLegacyDtComboCreation: FormControl<boolean | null>;
+  displayOutOfStockProductsLast: FormControl<boolean | null>;
 }
 
 interface TogglesFormGroup {
@@ -50,6 +51,7 @@ export class TogglesFormComponent implements OnInit {
         payWithPointsEnabled: new FormControl<boolean | null>(null),
         pwpPartialRefund: new FormControl<boolean | null>(null),
         supportLegacyDtComboCreation: new FormControl<boolean | null>(null),
+        displayOutOfStockProductsLast: new FormControl<boolean | null>(null),
       }),
     });
 

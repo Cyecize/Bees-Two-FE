@@ -91,6 +91,7 @@ export interface RewardsToggles {
   payWithPointsEnabled?: boolean;
   pwpPartialRefund?: boolean;
   supportLegacyDtComboCreation?: boolean;
+  displayOutOfStockProductsLast?: boolean;
 }
 
 export interface EnrollmentPage {

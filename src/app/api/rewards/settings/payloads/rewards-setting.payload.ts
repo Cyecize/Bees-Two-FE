@@ -70,6 +70,7 @@ export interface TogglesContainer {
   payWithPointsEnabled: boolean | null;
   pwpPartialRefund: boolean | null;
   supportLegacyDtComboCreation: boolean | null;
+  displayOutOfStockProductsLast: boolean | null;
 }
 
 export interface RewardsSettingsTogglesPayload extends RewardsSettingPayload {
