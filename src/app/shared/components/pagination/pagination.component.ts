@@ -35,7 +35,7 @@ export class PaginationComponent {
   }
 
   changePage(page: number): void {
-    if (page < 0 || page >= this.pagination.totalPages) {
+    if (page < 0 || page >= this.pagination.totalPages || page === this.pagination.page) {
       return;
     }
     this.pageChange.next(page);
