@@ -26,3 +26,12 @@ export class PageRequestImpl implements PageRequest {
     ];
   }
 }
+
+export class PageRequestImplV2 extends PageRequestImpl {
+  override toBeesParams(): BeesParamPayload[] {
+    return [
+      new BeesParamPayloadImpl('page', this.page),
+      new BeesParamPayloadImpl('size', this.pageSize),
+    ];
+  }
+}

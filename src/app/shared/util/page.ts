@@ -24,6 +24,16 @@ export class EmptyHasNextPagination implements HasNextPagination {
   page = 0;
 }
 
+export interface HasMorePagination {
+  hasMore: boolean;
+  page: number;
+}
+
+export class EmptyHasMorePagination implements HasMorePagination {
+  hasMore = false;
+  page = 0;
+}
+
 export interface Page<T> {
   content: T[];
   totalPages: number;

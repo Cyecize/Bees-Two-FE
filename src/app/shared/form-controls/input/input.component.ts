@@ -46,6 +46,9 @@ export class InputComponent implements OnInit, ControlValueAccessor {
   @Input({ required: false })
   errors: FieldError[] = [];
 
+  @Input({ required: false })
+  clearOnChangeEnd = false;
+
   value: any;
 
   @Output()
@@ -75,6 +78,9 @@ export class InputComponent implements OnInit, ControlValueAccessor {
 
   changeEnded(event: any): void {
     this.onChangeEnd.emit(event.target.value);
+    if (this.clearOnChangeEnd) {
+      this.value = '';
+    }
   }
 
   writeValue(obj: any): void {

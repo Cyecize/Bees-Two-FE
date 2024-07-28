@@ -41,6 +41,9 @@ export class CheckboxComponent implements OnInit, ControlValueAccessor {
   @Output()
   onTouch: EventEmitter<any> = new EventEmitter<any>();
 
+  @Output()
+  onChangeEnd: EventEmitter<any> = new EventEmitter<any>();
+
   inputId!: string;
 
   value: any;
@@ -53,6 +56,10 @@ export class CheckboxComponent implements OnInit, ControlValueAccessor {
   inputChanged(event: any): void {
     this.value = event.target.checked;
     this.onChange.emit(this.value);
+  }
+
+  changeEnded(event: any): void {
+    this.onChangeEnd.emit(event.target.value);
   }
 
   inputTouched(event: any): void {

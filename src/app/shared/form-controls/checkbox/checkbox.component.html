@@ -3,7 +3,7 @@
     class="form-check-input"
     type="checkbox"
     (touchend)="inputTouched($event)"
-    (change)="inputChanged($event)"
+    (change)="inputChanged($event); changeEnded($event)"
     (keyup)="inputChanged($event)"
     [checked]="value"
     [id]="inputId"
