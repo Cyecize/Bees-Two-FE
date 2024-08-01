@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Routes } from '@angular/router';
 import { NgForOf, NgIf } from '@angular/common';
 import { SelectSearchComponent } from '../../../../shared/form-controls/select-search/select-search.component';
@@ -27,6 +27,7 @@ import { TooltipSpanComponent } from '../../../../shared/components/tooltip-span
 import { Promo } from '../../../../api/promo/promo';
 import { EnvOverrideFieldComponent } from '../../../env/env-override-field/env-override-field.component';
 import { EnvOverrideService } from '../../../../api/env/env-override.service';
+import { Subscription } from "rxjs";
 
 @Component({
   selector: 'app-search-promotions',
@@ -44,10 +45,11 @@ import { EnvOverrideService } from '../../../../api/env/env-override.service';
   templateUrl: './search-promotions.component.html',
   styleUrl: './search-promotions.component.scss',
 })
-export class SearchPromotionsComponent implements OnInit {
+export class SearchPromotionsComponent implements OnInit, OnDestroy {
   types: Page<SelectSearchItem<PromoType>> = new EmptyPage();
 
   selectedEnv?: CountryEnvironmentModel;
+  envSub!: Subscription;
 
   query: PromoSearchQuery = new PromoSearchQueryImpl();
   searchResponse: PromoSearchResponse = {
@@ -61,10 +63,14 @@ export class SearchPromotionsComponent implements OnInit {
   ) {}
 
   async ngOnInit(): Promise<void> {
-    this.envOverrideService.envOverride$.subscribe((value) => {
+    this.envSub = this.envOverrideService.envOverride$.subscribe((value) => {
       this.selectedEnv = value;
       this.reloadFilters();
     });
+  }
+
+  ngOnDestroy(): void {
+    this.envSub.unsubscribe();
   }
 
   typeSelected(typeSelection: SelectSearchItem<PromoType>): void {

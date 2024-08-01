@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Routes } from '@angular/router';
 import { PlatformIdService } from '../../../../api/platformid/platform-id.service';
 import { SelectSearchComponent } from '../../../../shared/form-controls/select-search/select-search.component';
@@ -31,6 +31,7 @@ import { ShowDealDetailsDialogComponent } from '../show-deal-details-dialog/show
 import { ShowDealDetailsDialogPayload } from '../show-deal-details-dialog/show-deal-details-dialog.payload';
 import { EnvOverrideService } from '../../../../api/env/env-override.service';
 import { EnvOverrideFieldComponent } from '../../../env/env-override-field/env-override-field.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-search-deals',
@@ -48,7 +49,7 @@ import { EnvOverrideFieldComponent } from '../../../env/env-override-field/env-o
   templateUrl: './search-deals.component.html',
   styleUrl: './search-deals.component.scss',
 })
-export class SearchDealsComponent implements OnInit {
+export class SearchDealsComponent implements OnInit, OnDestroy {
   selectedEnv?: CountryEnvironmentModel;
 
   query: DealsSearchQuery = new DealsSearchQueryImpl();
@@ -57,7 +58,7 @@ export class SearchDealsComponent implements OnInit {
   fullResponse!: WrappedResponse<any>;
 
   outputTypes: Page<SelectSearchItem<DealOutputType>> = new EmptyPage();
-
+  envSub!: Subscription;
   constructor(
     private platformIdService: PlatformIdService,
     private onvOverrideService: EnvOverrideService,
@@ -66,10 +67,14 @@ export class SearchDealsComponent implements OnInit {
   ) {}
 
   async ngOnInit(): Promise<void> {
-    this.onvOverrideService.envOverride$.subscribe((value) => {
+    this.envSub = this.onvOverrideService.envOverride$.subscribe((value) => {
       this.selectedEnv = value;
       this.reloadFilters();
     });
+  }
+
+  ngOnDestroy(): void {
+    this.envSub.unsubscribe();
   }
 
   async pageChange(page: number): Promise<void> {

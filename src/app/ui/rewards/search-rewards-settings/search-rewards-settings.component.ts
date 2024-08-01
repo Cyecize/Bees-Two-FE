@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { RouterLink, Routes } from '@angular/router';
 import { SelectSearchComponent } from '../../../shared/form-controls/select-search/select-search.component';
 import { InputComponent } from '../../../shared/form-controls/input/input.component';
@@ -33,6 +33,7 @@ import { PaginationComponent } from '../../../shared/components/pagination/pagin
 import { ShowRewardSettingDialogPayload } from '../show-reward-setting-dialog/show-reward-setting-dialog.payload';
 import { EnvOverrideFieldComponent } from '../../env/env-override-field/env-override-field.component';
 import { EnvOverrideService } from '../../../api/env/env-override.service';
+import { Subscription } from "rxjs";
 
 @Component({
   selector: 'app-search-rewards',
@@ -49,7 +50,7 @@ import { EnvOverrideService } from '../../../api/env/env-override.service';
   templateUrl: './search-rewards-settings.component.html',
   styleUrl: './search-rewards-settings.component.scss',
 })
-export class SearchRewardsSettingsComponent implements OnInit {
+export class SearchRewardsSettingsComponent implements OnInit, OnDestroy {
   levels: Page<SelectSearchItem<RewardsSettingLevel>> = new EmptyPage();
   tiers: Page<SelectSearchItem<RewardsTierLevel>> = new EmptyPage();
   types: Page<SelectSearchItem<RewardsSettingType>> = new EmptyPage();
@@ -62,6 +63,7 @@ export class SearchRewardsSettingsComponent implements OnInit {
   };
 
   selectedEnv?: CountryEnvironmentModel;
+  envSub!: Subscription;
 
   constructor(
     private rewardsSettingsService: RewardsSettingsService,
@@ -70,10 +72,14 @@ export class SearchRewardsSettingsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.envOverrideService.envOverride$.subscribe((value) => {
+    this.envSub = this.envOverrideService.envOverride$.subscribe((value) => {
       this.selectedEnv = value;
       this.reloadFilters();
     });
+  }
+
+  ngOnDestroy(): void {
+    this.envSub.unsubscribe();
   }
 
   levelSelected(levelSelection: SelectSearchItem<RewardsSettingLevel>): void {
