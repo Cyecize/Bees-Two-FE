@@ -16,6 +16,6 @@ export class AppRoutingPath {
   public static readonly EDIT_REWARDS_SETTINGS = new RouteConfig(':level/:id/:tier/:type/env/:envId/edit', AppRoutingPath.REWARDS_SETTINGS);
   public static readonly EDIT_REWARDS_SETTINGS_RAW = new RouteConfig(':level/:id/:tier/:type/env/:envId/edit-raw', AppRoutingPath.REWARDS_SETTINGS);
   public static readonly ACCOUNTS = new RouteConfig('accounts', null);
-  public static readonly ACCOUNTS_SEARCH = new RouteConfig('search', AppRoutingPath.ACCOUNTS);
+  public static readonly ACCOUNTS_SEARCH_V1 = new RouteConfig('search-v1', AppRoutingPath.ACCOUNTS);
 
 }

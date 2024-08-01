@@ -130,7 +130,7 @@ const accountRoutes: Routes = [
           ).then((value) => value.CHOOSE_OPTION_ALERT_ROUTES),
       },
       {
-        path: AppRoutingPath.ACCOUNTS_SEARCH.path,
+        path: AppRoutingPath.ACCOUNTS_SEARCH_V1.path,
         loadChildren: () =>
           import(
             './ui/accounts/search-accounts/search-accounts.component'
