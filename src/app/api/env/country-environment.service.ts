@@ -7,9 +7,9 @@ import { ObjectUtils } from '../../shared/util/object-utils';
 
 @Injectable({ providedIn: 'root' })
 export class CountryEnvironmentService {
-  private selectedEnvSubject =
+  private readonly selectedEnvSubject =
     new BehaviorSubject<CountryEnvironmentModel | null>(null);
-  selectedEnv$ = this.selectedEnvSubject.asObservable();
+  public readonly selectedEnv$ = this.selectedEnvSubject.asObservable();
 
   private allEnvs!: Promise<CountryEnvironmentModel[]>;
 
