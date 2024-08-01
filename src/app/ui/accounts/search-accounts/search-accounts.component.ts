@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Routes } from '@angular/router';
 import { SelectSearchComponent } from '../../../shared/form-controls/select-search/select-search.component';
 import { CountryEnvironmentModel } from '../../../api/env/country-environment.model';
@@ -14,8 +14,9 @@ import {
 import { AccountV1 } from '../../../api/accounts/v1/account-v1';
 import { InputComponent } from '../../../shared/form-controls/input/input.component';
 import { FormsModule } from '@angular/forms';
-import { NgForOf, NgIf } from "@angular/common";
-import { TooltipSpanComponent } from "../../../shared/components/tooltip-span/tooltip-span.component";
+import { NgForOf, NgIf } from '@angular/common';
+import { TooltipSpanComponent } from '../../../shared/components/tooltip-span/tooltip-span.component';
+import { Subscription } from "rxjs";
 
 @Component({
   selector: 'app-search-accounts',
@@ -32,13 +33,15 @@ import { TooltipSpanComponent } from "../../../shared/components/tooltip-span/to
   templateUrl: './search-accounts.component.html',
   styleUrl: './search-accounts.component.scss',
 })
-export class SearchAccountsComponent implements OnInit {
+export class SearchAccountsComponent implements OnInit, OnDestroy {
   private envOverride?: CountryEnvironmentModel;
 
   query: AccountV1SearchQuery = new AccountV1SearchQueryImpl();
 
   accounts: AccountV1[] = [];
   fullResponse!: WrappedResponse<any>;
+
+  envSub!: Subscription;
 
   constructor(
     private dialogService: DialogService,
@@ -47,10 +50,14 @@ export class SearchAccountsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.envOverrideService.envOverride$.subscribe((value) => {
+    this.envSub = this.envOverrideService.envOverride$.subscribe((value) => {
       this.envOverride = value;
       this.reloadFilters();
     });
+  }
+
+  ngOnDestroy(): void {
+    this.envSub.unsubscribe();
   }
 
   async pageChange(page: number): Promise<void> {

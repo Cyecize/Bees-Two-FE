@@ -1,6 +1,7 @@
 <div>
   <div>
     <h3>Search Accounts</h3>
+    <small>Will not work if your token doesn't have <strong>CompanyServices.ADMIN / Company.ADMIN</strong> roles.</small>
   </div>
 
   <div>
@@ -71,17 +72,17 @@
         <tbody>
         <tr *ngFor="let account of accounts">
           <th scope="row">
-            <div><small>
+            <div><small>Bees:
               <app-tooltip-span
                 [tooltipText]="account.accountId"
                 [displayText]="shortenStr(account.accountId)"></app-tooltip-span>
             </small></div>
-            <div><small>
+            <div><small>Vendor:
               <app-tooltip-span
                 [tooltipText]="account.vendorAccountId"
                 [displayText]="shortenStr(account.vendorAccountId)"></app-tooltip-span>
             </small></div>
-            <div><small>
+            <div><small>Customer:
               <app-tooltip-span
                 [tooltipText]="account.customerAccountId"
                 [displayText]="shortenStr(account.customerAccountId)"></app-tooltip-span>
@@ -96,8 +97,8 @@
               </span>
             </div>
           </td>
-          <td>
-            <div class="d-flex justify-content-around">
+          <td style="vertical-align: middle">
+            <div class="d-flex justify-content-around align-items-center">
               <button class="btn btn-outline-success" (click)="openDetailsDialog(account)">View Details</button>
             </div>
           </td>
