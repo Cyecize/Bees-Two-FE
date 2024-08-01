@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { AppRoutingPath } from './app-routing.path';
 import { PromosBaseComponent } from './ui/promos/promos-base/promos-base.component';
 import { RewardsBaseComponent } from './ui/rewards/rewards-base/rewards-base.component';
+import { AccountsBaseComponent } from './ui/accounts/accounts-base/accounts-base.component';
 
 export const promoRoutes: Routes = [
   {
@@ -116,6 +117,29 @@ const rewardsRoutes: Routes = [
   },
 ];
 
+const accountRoutes: Routes = [
+  {
+    path: '',
+    component: AccountsBaseComponent,
+    children: [
+      {
+        path: '',
+        loadChildren: () =>
+          import(
+            './shared/components/choose-option-alert/choose-option-alert.component'
+          ).then((value) => value.CHOOSE_OPTION_ALERT_ROUTES),
+      },
+      {
+        path: AppRoutingPath.ACCOUNTS_SEARCH.path,
+        loadChildren: () =>
+          import(
+            './ui/accounts/search-accounts/search-accounts.component'
+          ).then((value) => value.SEARCH_ACCOUNTS_ROUTES),
+      },
+    ],
+  },
+];
+
 export const routes: Routes = [
   {
     path: AppRoutingPath.HOME.path,
@@ -129,6 +153,10 @@ export const routes: Routes = [
   {
     path: AppRoutingPath.REWARDS.path,
     children: rewardsRoutes,
+  },
+  {
+    path: AppRoutingPath.ACCOUNTS.path,
+    children: accountRoutes,
   },
   {
     path: '**',
