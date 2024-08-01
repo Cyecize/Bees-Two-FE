@@ -1,12 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { SelectSearchComponent } from '../../../shared/form-controls/select-search/select-search.component';
-import { EmptyPage, Page, PageImpl } from '../../../shared/util/page';
-import {
-  SelectSearchItem,
-  SelectSearchItemImpl,
-} from '../../../shared/form-controls/select-search/select-search.item';
 import { CountryEnvironmentModel } from '../../../api/env/country-environment.model';
-import { CountryEnvironmentService } from '../../../api/env/country-environment.service';
 import {
   FormControl,
   FormGroup,
@@ -39,6 +33,8 @@ import { RulesFormComponent } from './rules-form/rules-form.component';
 import { CategoriesFormComponent } from './categories-form/categories-form.component';
 import { FilterFormComponent } from './filter-form/filter-form.component';
 import { DefaultConfigurationFormComponent } from './default-configuration-form/default-configuration-form.component';
+import { EnvOverrideFieldComponent } from '../../env/env-override-field/env-override-field.component';
+import { EnvOverrideService } from '../../../api/env/env-override.service';
 
 export interface MetaForm {
   settingId: FormControl<string>;
@@ -74,6 +70,7 @@ export interface RewardsSettingsFormOutput {
     FilterFormComponent,
     DefaultConfigurationFormComponent,
     FormsModule,
+    EnvOverrideFieldComponent,
   ],
   templateUrl: './rewards-settings-form.component.html',
   styleUrl: './rewards-settings-form.component.scss',
@@ -81,10 +78,6 @@ export interface RewardsSettingsFormOutput {
 export class RewardsSettingsFormComponent implements OnInit {
   private _setting!: RewardSetting;
 
-  environments: Page<SelectSearchItem<CountryEnvironmentModel>> =
-    new EmptyPage();
-
-  @Input()
   selectedEnv?: CountryEnvironmentModel;
   overrideAuthToken = '';
 
@@ -120,7 +113,7 @@ export class RewardsSettingsFormComponent implements OnInit {
   formSubmitted: EventEmitter<RewardsSettingsFormOutput> =
     new EventEmitter<RewardsSettingsFormOutput>();
 
-  constructor(private envService: CountryEnvironmentService) {}
+  constructor(private envOverrideService: EnvOverrideService) {}
 
   async ngOnInit(): Promise<void> {
     this.createForm();
@@ -135,18 +128,10 @@ export class RewardsSettingsFormComponent implements OnInit {
       (value) => new SelectOptionKey(value),
     );
 
-    this.envService.selectedEnv$.subscribe((value) => {
-      if (value) {
-        this.selectedEnv = value;
-        this.reloadData();
-      }
+    this.envOverrideService.envOverride$.subscribe((value) => {
+      this.selectedEnv = value;
+      this.reloadData();
     });
-
-    this.environments = new PageImpl(
-      (await this.envService.getEnvs()).map(
-        (env) => new SelectSearchItemImpl(env.envName, env.id, env),
-      ),
-    );
 
     this.metaForm.valueChanges.subscribe((value) => {
       if (value.type) {
@@ -155,13 +140,6 @@ export class RewardsSettingsFormComponent implements OnInit {
     });
 
     this.patchSetting();
-  }
-
-  envSelected(env: SelectSearchItem<CountryEnvironmentModel>): void {
-    if (env.objRef) {
-      this.selectedEnv = env.objRef;
-      this.reloadData();
-    }
   }
 
   private reloadData(): void {}

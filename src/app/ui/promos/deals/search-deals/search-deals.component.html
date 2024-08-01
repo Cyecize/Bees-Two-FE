@@ -7,11 +7,7 @@
     <h4>Environment</h4>
     <div class="filters-header">
       <div class="filter">
-        <app-select-search
-          placeholder="Override Environment"
-          [payload]="environments"
-          [currentDisplaySelection]="selectedEnv?.envName"
-          (selectionChange)="envSelected($event)"></app-select-search>
+        <app-env-override-field></app-env-override-field>
       </div>
     </div>
   </div>
@@ -22,7 +18,10 @@
     <h4>Filters</h4>
     <div class="filters-header">
       <div class="filter">
-        <app-input placeholder="Vendor Account ID" (onChangeEnd)="contractIdChange($event)"></app-input>
+        <div class="d-flex">
+          <app-input placeholder="Vendor Account ID" (onChangeEnd)="contractIdChange($event)"></app-input>
+          <button class="btn btn-sm btn-outline-warning ms-1">Pick</button>
+        </div>
         <small
           *ngIf="query.body.contractId">
           Platform ID:

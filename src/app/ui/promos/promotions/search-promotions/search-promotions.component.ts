@@ -12,7 +12,6 @@ import {
   SelectSearchItem,
   SelectSearchItemImpl,
 } from '../../../../shared/form-controls/select-search/select-search.item';
-import { CountryEnvironmentService } from '../../../../api/env/country-environment.service';
 import { PromoService } from '../../../../api/promo/promo.service';
 import { CountryEnvironmentModel } from '../../../../api/env/country-environment.model';
 import {
@@ -26,6 +25,8 @@ import { CheckboxComponent } from '../../../../shared/form-controls/checkbox/che
 import { PromoSearchResponse } from '../../../../api/promo/promo-search.response';
 import { TooltipSpanComponent } from '../../../../shared/components/tooltip-span/tooltip-span.component';
 import { Promo } from '../../../../api/promo/promo';
+import { EnvOverrideFieldComponent } from '../../../env/env-override-field/env-override-field.component';
+import { EnvOverrideService } from '../../../../api/env/env-override.service';
 
 @Component({
   selector: 'app-search-promotions',
@@ -38,6 +39,7 @@ import { Promo } from '../../../../api/promo/promo';
     CheckboxComponent,
     NgIf,
     TooltipSpanComponent,
+    EnvOverrideFieldComponent,
   ],
   templateUrl: './search-promotions.component.html',
   styleUrl: './search-promotions.component.scss',
@@ -45,8 +47,6 @@ import { Promo } from '../../../../api/promo/promo';
 export class SearchPromotionsComponent implements OnInit {
   types: Page<SelectSearchItem<PromoType>> = new EmptyPage();
 
-  environments: Page<SelectSearchItem<CountryEnvironmentModel>> =
-    new EmptyPage();
   selectedEnv?: CountryEnvironmentModel;
 
   query: PromoSearchQuery = new PromoSearchQueryImpl();
@@ -56,23 +56,15 @@ export class SearchPromotionsComponent implements OnInit {
   };
 
   constructor(
-    private envService: CountryEnvironmentService,
+    private envOverrideService: EnvOverrideService,
     private promoService: PromoService,
   ) {}
 
   async ngOnInit(): Promise<void> {
-    this.envService.selectedEnv$.subscribe((value) => {
-      if (value) {
-        this.selectedEnv = value;
-        this.reloadFilters();
-      }
+    this.envOverrideService.envOverride$.subscribe((value) => {
+      this.selectedEnv = value;
+      this.reloadFilters();
     });
-
-    this.environments = new PageImpl(
-      (await this.envService.getEnvs()).map(
-        (env) => new SelectSearchItemImpl(env.envName, env.id, env),
-      ),
-    );
   }
 
   typeSelected(typeSelection: SelectSearchItem<PromoType>): void {
@@ -88,13 +80,6 @@ export class SearchPromotionsComponent implements OnInit {
   removeType(settingType: PromoType): void {
     this.query.types.splice(this.query.types.indexOf(settingType), 1);
     this.reloadFilters();
-  }
-
-  envSelected(env: SelectSearchItem<CountryEnvironmentModel>): void {
-    if (env.objRef) {
-      this.selectedEnv = env.objRef;
-      this.reloadFilters();
-    }
   }
 
   private async reloadFilters(): Promise<void> {

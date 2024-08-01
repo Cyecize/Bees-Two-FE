@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Routes } from '@angular/router';
 import { PlatformIdService } from '../../../../api/platformid/platform-id.service';
-import { CountryEnvironmentService } from '../../../../api/env/country-environment.service';
 import { SelectSearchComponent } from '../../../../shared/form-controls/select-search/select-search.component';
 import { NgForOf, NgIf } from '@angular/common';
 import { EmptyPage, Page, PageImpl } from '../../../../shared/util/page';
@@ -27,10 +26,11 @@ import { WrappedResponse } from '../../../../shared/util/field-error-wrapper';
 import { DialogService } from '../../../../shared/dialog/dialog.service';
 import { TooltipSpanComponent } from '../../../../shared/components/tooltip-span/tooltip-span.component';
 import { DealOutputType } from '../../../../api/deals/deal-output-type';
-import { PromoType } from '../../../../api/promo/promo-type';
 import { Deal } from '../../../../api/deals/deal';
 import { ShowDealDetailsDialogComponent } from '../show-deal-details-dialog/show-deal-details-dialog.component';
 import { ShowDealDetailsDialogPayload } from '../show-deal-details-dialog/show-deal-details-dialog.payload';
+import { EnvOverrideService } from '../../../../api/env/env-override.service';
+import { EnvOverrideFieldComponent } from '../../../env/env-override-field/env-override-field.component';
 
 @Component({
   selector: 'app-search-deals',
@@ -43,13 +43,12 @@ import { ShowDealDetailsDialogPayload } from '../show-deal-details-dialog/show-d
     NgForOf,
     FormsModule,
     TooltipSpanComponent,
+    EnvOverrideFieldComponent,
   ],
   templateUrl: './search-deals.component.html',
   styleUrl: './search-deals.component.scss',
 })
 export class SearchDealsComponent implements OnInit {
-  environments: Page<SelectSearchItem<CountryEnvironmentModel>> =
-    new EmptyPage();
   selectedEnv?: CountryEnvironmentModel;
 
   query: DealsSearchQuery = new DealsSearchQueryImpl();
@@ -61,31 +60,16 @@ export class SearchDealsComponent implements OnInit {
 
   constructor(
     private platformIdService: PlatformIdService,
-    private envService: CountryEnvironmentService,
+    private onvOverrideService: EnvOverrideService,
     private dealsService: DealsService,
     private dialogService: DialogService,
   ) {}
 
   async ngOnInit(): Promise<void> {
-    this.envService.selectedEnv$.subscribe((value) => {
-      if (value) {
-        this.selectedEnv = value;
-        this.reloadFilters();
-      }
-    });
-
-    this.environments = new PageImpl(
-      (await this.envService.getEnvs()).map(
-        (env) => new SelectSearchItemImpl(env.envName, env.id, env),
-      ),
-    );
-  }
-
-  envSelected(env: SelectSearchItem<CountryEnvironmentModel>): void {
-    if (env.objRef) {
-      this.selectedEnv = env.objRef;
+    this.onvOverrideService.envOverride$.subscribe((value) => {
+      this.selectedEnv = value;
       this.reloadFilters();
-    }
+    });
   }
 
   async pageChange(page: number): Promise<void> {
@@ -151,7 +135,7 @@ export class SearchDealsComponent implements OnInit {
 
     if (value?.trim()) {
       const encodedPlatformId = await this.platformIdService.encodeContract({
-        vendorId: this.envService.getCurrentEnv()?.vendorId || '',
+        vendorId: this.selectedEnv?.vendorId || '',
         vendorAccountId: value,
       });
 

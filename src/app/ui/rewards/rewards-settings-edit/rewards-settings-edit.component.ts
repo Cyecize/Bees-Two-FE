@@ -12,6 +12,7 @@ import { AppRoutingPath } from '../../../app-routing.path';
 import { RewardSetting } from '../../../api/rewards/settings/rewards-settings-search.response';
 import { CountryEnvironmentModel } from '../../../api/env/country-environment.model';
 import { DialogService } from '../../../shared/dialog/dialog.service';
+import { EnvOverrideService } from '../../../api/env/env-override.service';
 
 @Component({
   selector: 'app-rewards-settings-edit',
@@ -22,13 +23,13 @@ import { DialogService } from '../../../shared/dialog/dialog.service';
 })
 export class RewardsSettingsEditComponent implements OnInit {
   settingToEdit!: RewardSetting;
-  settingEnv!: CountryEnvironmentModel;
   rawEdit = false;
 
   constructor(
     private settingService: RewardsSettingsService,
     private route: ActivatedRoute,
     private envService: CountryEnvironmentService,
+    private envOverrideService: EnvOverrideService,
     private nav: RouteNavigator,
     private dialogService: DialogService,
     private rewardsSettingsService: RewardsSettingsService,
@@ -49,6 +50,8 @@ export class RewardsSettingsEditComponent implements OnInit {
       return;
     }
 
+    this.envOverrideService.setEnv(env);
+
     const setting = await this.settingService.findById(
       settingId,
       tier,
@@ -62,7 +65,6 @@ export class RewardsSettingsEditComponent implements OnInit {
       return;
     }
 
-    this.settingEnv = env;
     this.settingToEdit = setting;
   }
 

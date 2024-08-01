@@ -2,11 +2,7 @@
   <h4>Environment</h4>
   <div>
     <div>
-      <app-select-search
-        placeholder="Override Environment"
-        [payload]="environments"
-        [currentDisplaySelection]="selectedEnv?.envName"
-        (selectionChange)="envSelected($event)"></app-select-search>
+      <app-env-override-field></app-env-override-field>
     </div>
     <div class="mt-2">
       <div>

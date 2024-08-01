@@ -22,7 +22,6 @@ import { RewardsTierLevel } from '../../../api/rewards/rewards-tier-level';
 import { RewardsSettingType } from '../../../api/rewards/settings/enums/rewards-setting-type';
 import { RewardsSettingsService } from '../../../api/rewards/settings/rewards-settings.service';
 import { CountryEnvironmentModel } from '../../../api/env/country-environment.model';
-import { CountryEnvironmentService } from '../../../api/env/country-environment.service';
 import {
   RewardSetting,
   RewardsSettingsSearchResponse,
@@ -30,10 +29,10 @@ import {
 import { TooltipSpanComponent } from '../../../shared/components/tooltip-span/tooltip-span.component';
 import { DialogService } from '../../../shared/dialog/dialog.service';
 import { ShowRewardSettingDialogComponent } from '../show-reward-setting-dialog/show-reward-setting-dialog.component';
-import { RouteUtils } from '../../../shared/routing/route-utils';
-import { AppRoutingPath } from '../../../app-routing.path';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination.component';
 import { ShowRewardSettingDialogPayload } from '../show-reward-setting-dialog/show-reward-setting-dialog.payload';
+import { EnvOverrideFieldComponent } from '../../env/env-override-field/env-override-field.component';
+import { EnvOverrideService } from '../../../api/env/env-override.service';
 
 @Component({
   selector: 'app-search-rewards',
@@ -45,6 +44,7 @@ import { ShowRewardSettingDialogPayload } from '../show-reward-setting-dialog/sh
     TooltipSpanComponent,
     RouterLink,
     PaginationComponent,
+    EnvOverrideFieldComponent,
   ],
   templateUrl: './search-rewards-settings.component.html',
   styleUrl: './search-rewards-settings.component.scss',
@@ -60,29 +60,20 @@ export class SearchRewardsSettingsComponent implements OnInit {
     content: [],
     pagination: new EmptyPagination(),
   };
-  environments: Page<SelectSearchItem<CountryEnvironmentModel>> =
-    new EmptyPage();
+
   selectedEnv?: CountryEnvironmentModel;
 
   constructor(
     private rewardsSettingsService: RewardsSettingsService,
-    private envService: CountryEnvironmentService,
+    private envOverrideService: EnvOverrideService,
     private dialogService: DialogService,
   ) {}
 
-  async ngOnInit(): Promise<void> {
-    this.envService.selectedEnv$.subscribe((value) => {
-      if (value) {
-        this.selectedEnv = value;
-        this.reloadFilters();
-      }
+  ngOnInit(): void {
+    this.envOverrideService.envOverride$.subscribe((value) => {
+      this.selectedEnv = value;
+      this.reloadFilters();
     });
-
-    this.environments = new PageImpl(
-      (await this.envService.getEnvs()).map(
-        (env) => new SelectSearchItemImpl(env.envName, env.id, env),
-      ),
-    );
   }
 
   levelSelected(levelSelection: SelectSearchItem<RewardsSettingLevel>): void {
@@ -128,13 +119,6 @@ export class SearchRewardsSettingsComponent implements OnInit {
   removeType(settingType: RewardsSettingType): void {
     this.query.types.splice(this.query.types.indexOf(settingType), 1);
     this.reloadFilters();
-  }
-
-  envSelected(env: SelectSearchItem<CountryEnvironmentModel>): void {
-    if (env.objRef) {
-      this.selectedEnv = env.objRef;
-      this.reloadFilters();
-    }
   }
 
   shortenStr(str: string): string {
