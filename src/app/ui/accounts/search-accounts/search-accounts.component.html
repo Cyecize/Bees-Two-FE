@@ -1,1 +1,109 @@
-<p>search-accounts works!</p>
+<div>
+  <div>
+    <h3>Search Accounts</h3>
+  </div>
+
+  <div>
+    <h4>Environment</h4>
+    <div class="filters-header">
+      <div class="filter">
+        <app-env-override-field></app-env-override-field>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="filters">
+    <h4>Filters</h4>
+    <div class="filters-header">
+      <div class="filter">
+        <app-input placeholder="(Bees) Account ID"
+                   (onChangeEnd)="reloadFilters()"
+                   [(ngModel)]="query.accountId"></app-input>
+      </div>
+      <div class="filter">
+        <app-input placeholder="Vendor Account ID"
+                   (onChangeEnd)="reloadFilters()"
+                   [(ngModel)]="query.vendorAccountId"></app-input>
+      </div>
+      <div class="filter">
+        <app-input placeholder="Customer Account ID"
+                   (onChangeEnd)="reloadFilters()"
+                   [(ngModel)]="query.customerAccountId"></app-input>
+      </div>
+      <div class="filter">
+        <app-input placeholder="Tax ID"
+                   (onChangeEnd)="reloadFilters()"
+                   [(ngModel)]="query.taxId"></app-input>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="main">
+    <div *ngIf="fullResponse && !fullResponse.isSuccess">
+      <div class="alert alert-warning d-flex justify-content-between">
+        <p>Request concluded with failure!</p>
+        <button class="btn btn-outline-dark" (click)="openResponseDetailsDialog()">Show Details</button>
+      </div>
+    </div>
+    <p>Showing {{ accounts.length }} accounts on page {{ query.page.page + 1 }}</p>
+    <div>
+      <button [disabled]="query.page.page < 1" (click)="pageChange(query.page.page - 1)"
+              class="btn btn-outline-dark m-1">Prev
+      </button>
+      <button *ngIf="accounts.length >= query.page.pageSize" (click)="pageChange(query.page.page + 1)"
+              class="btn btn-outline-dark m-1">Next
+      </button>
+
+      <hr>
+
+      <table class="table table-striped table-hover">
+        <thead>
+        <tr>
+          <th scope="col">Ids</th>
+          <th scope="col">Name / Status / Payment</th>
+          <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let account of accounts">
+          <th scope="row">
+            <div><small>
+              <app-tooltip-span
+                [tooltipText]="account.accountId"
+                [displayText]="shortenStr(account.accountId)"></app-tooltip-span>
+            </small></div>
+            <div><small>
+              <app-tooltip-span
+                [tooltipText]="account.vendorAccountId"
+                [displayText]="shortenStr(account.vendorAccountId)"></app-tooltip-span>
+            </small></div>
+            <div><small>
+              <app-tooltip-span
+                [tooltipText]="account.customerAccountId"
+                [displayText]="shortenStr(account.customerAccountId)"></app-tooltip-span>
+            </small></div>
+          </th>
+          <td>
+            <div>{{ account.name }}</div>
+            <div>{{ account.status }}</div>
+            <div>
+              <span>Payment methods:
+                {{ account.paymentMethods.join(', ') }}
+              </span>
+            </div>
+          </td>
+          <td>
+            <div class="d-flex justify-content-around">
+              <button class="btn btn-outline-success" (click)="openDetailsDialog(account)">View Details</button>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
