@@ -136,6 +136,13 @@ const accountRoutes: Routes = [
             './ui/accounts/search-accounts/search-accounts.component'
           ).then((value) => value.SEARCH_ACCOUNTS_ROUTES),
       },
+      {
+        path: AppRoutingPath.ACCOUNTS_ADD_V2_RAW.path,
+        loadChildren: () =>
+          import('./ui/accounts/add-account/add-account.component').then(
+            (value) => value.ADD_ACCOUNT_ROUTES,
+          ),
+      },
     ],
   },
 ];

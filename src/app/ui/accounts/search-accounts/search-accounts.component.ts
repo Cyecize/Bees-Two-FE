@@ -35,13 +35,12 @@ import { Subscription } from "rxjs";
 })
 export class SearchAccountsComponent implements OnInit, OnDestroy {
   private envOverride?: CountryEnvironmentModel;
+  private envSub!: Subscription;
 
   query: AccountV1SearchQuery = new AccountV1SearchQueryImpl();
 
   accounts: AccountV1[] = [];
   fullResponse!: WrappedResponse<any>;
-
-  envSub!: Subscription;
 
   constructor(
     private dialogService: DialogService,
