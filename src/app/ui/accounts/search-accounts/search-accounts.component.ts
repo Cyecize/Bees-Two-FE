@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Routes } from '@angular/router';
 import { SelectSearchComponent } from '../../../shared/form-controls/select-search/select-search.component';
 import { CountryEnvironmentModel } from '../../../api/env/country-environment.model';
@@ -16,7 +16,9 @@ import { InputComponent } from '../../../shared/form-controls/input/input.compon
 import { FormsModule } from '@angular/forms';
 import { NgForOf, NgIf } from '@angular/common';
 import { TooltipSpanComponent } from '../../../shared/components/tooltip-span/tooltip-span.component';
-import { Subscription } from "rxjs";
+import { Subscription } from 'rxjs';
+import { ShowAccountDetailsDialogComponent } from '../show-account-details-dialog/show-account-details-dialog.component';
+import { ShowAccountDetailsDialogPayload } from '../show-account-details-dialog/show-account-details-dialog.payload';
 
 @Component({
   selector: 'app-search-accounts',
@@ -102,8 +104,11 @@ export class SearchAccountsComponent implements OnInit, OnDestroy {
   }
 
   openDetailsDialog(account: AccountV1): void {
-    alert('details!');
-    console.log(account);
+    this.dialogService.open(
+      ShowAccountDetailsDialogComponent,
+      '',
+      new ShowAccountDetailsDialogPayload(account, this.envOverride),
+    );
   }
 }
 
