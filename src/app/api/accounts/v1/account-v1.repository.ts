@@ -3,8 +3,8 @@ import { ProxyService } from '../../proxy/proxy.service';
 import { Observable } from 'rxjs';
 import { BeesResponse } from '../../proxy/bees-response';
 import { Endpoints } from '../../../shared/http/endpoints';
-import { BeesEntity } from '../../proxy/bees-entity';
-import { RequestMethod } from '../../proxy/request-method';
+import { BeesEntity } from '../../common/bees-entity';
+import { RequestMethod } from '../../common/request-method';
 import { AccountV1 } from './account-v1';
 import { AccountV1SearchQuery } from './account-v1-search.query';
 
@@ -18,7 +18,7 @@ export class AccountV1Repository {
   ): Observable<BeesResponse<AccountV1[]>> {
     return this.proxyService.makeRequest<AccountV1[]>({
       endpoint: Endpoints.ACCOUNT_V1,
-      entity: BeesEntity.ACCOUNT,
+      entity: BeesEntity.ACCOUNTS,
       method: RequestMethod.GET,
       targetEnv: envId,
       queryParams: query.toBeesQueryParams(),

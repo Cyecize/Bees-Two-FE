@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Routes } from '@angular/router';
 import { NgForOf, NgIf } from '@angular/common';
 import { SelectSearchComponent } from '../../../../shared/form-controls/select-search/select-search.component';
@@ -27,7 +27,7 @@ import { TooltipSpanComponent } from '../../../../shared/components/tooltip-span
 import { Promo } from '../../../../api/promo/promo';
 import { EnvOverrideFieldComponent } from '../../../env/env-override-field/env-override-field.component';
 import { EnvOverrideService } from '../../../../api/env/env-override.service';
-import { Subscription } from "rxjs";
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-search-promotions',

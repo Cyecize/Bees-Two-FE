@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { ProxyService } from '../../proxy/proxy.service';
 import { Endpoints } from '../../../shared/http/endpoints';
-import { BeesEntity } from '../../proxy/bees-entity';
-import { RequestMethod } from '../../proxy/request-method';
+import { BeesEntity } from '../../common/bees-entity';
+import { RequestMethod } from '../../common/request-method';
 import { RewardsSettingsSearchQuery } from './rewards-settings-search.query';
 import { BeesResponse } from '../../proxy/bees-response';
 import { Observable } from 'rxjs';

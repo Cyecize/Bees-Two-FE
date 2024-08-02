@@ -3,7 +3,7 @@ import { ProxyRequestPayload } from './proxy-request.payload';
 import { Observable } from 'rxjs';
 import { ProxyRepository } from './proxy.repository';
 import { CountryEnvironmentService } from '../env/country-environment.service';
-import { RequestMethod } from './request-method';
+import { RequestMethod } from '../common/request-method';
 import { BeesResponse } from './bees-response';
 
 @Injectable({ providedIn: 'root' })

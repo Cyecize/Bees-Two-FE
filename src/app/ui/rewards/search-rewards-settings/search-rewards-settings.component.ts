@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { RouterLink, Routes } from '@angular/router';
 import { SelectSearchComponent } from '../../../shared/form-controls/select-search/select-search.component';
 import { InputComponent } from '../../../shared/form-controls/input/input.component';
@@ -33,7 +33,7 @@ import { PaginationComponent } from '../../../shared/components/pagination/pagin
 import { ShowRewardSettingDialogPayload } from '../show-reward-setting-dialog/show-reward-setting-dialog.payload';
 import { EnvOverrideFieldComponent } from '../../env/env-override-field/env-override-field.component';
 import { EnvOverrideService } from '../../../api/env/env-override.service';
-import { Subscription } from "rxjs";
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-search-rewards',

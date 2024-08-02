@@ -1,5 +1,5 @@
-import { BeesEntity } from './bees-entity';
-import { RequestMethod } from './request-method';
+import { BeesEntity } from '../common/bees-entity';
+import { RequestMethod } from '../common/request-method';
 import { BeesParamPayload } from './bees-param.payload';
 
 export interface ProxyRequestPayload {

@@ -1,4 +1,4 @@
-import { BeesEntity } from './bees-entity';
+import { BeesEntity } from '../common/bees-entity';
 import { CountryEnvironmentModel } from '../env/country-environment.model';
 
 export interface ErrorResponse {
