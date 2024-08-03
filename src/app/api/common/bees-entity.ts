@@ -3,4 +3,5 @@ export enum BeesEntity {
   DEALS = 'DEALS',
   PROMOTIONS = 'PROMOTIONS',
   REWARDS_SETTINGS = 'REWARDS_SETTINGS',
+  ITEMS = 'ITEMS',
 }

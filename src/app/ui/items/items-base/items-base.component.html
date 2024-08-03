@@ -1,0 +1,19 @@
+<div class="container mt-5">
+
+  <div class="row">
+    <div class="col-md-8">
+      <router-outlet></router-outlet>
+    </div>
+    <div class="col-md-4 col-md-4 sidebar-section rounded sidebar-background">
+      <section class="sidebar-item">
+        <h4>Items</h4>
+        <ul>
+          <li routerLinkActive="link-active">
+            <a [routerLink]="routes.ITEMS_SEARCH.toString()">Search V2</a>
+          </li>
+        </ul>
+      </section>
+      <hr>
+    </div>
+  </div>
+</div>

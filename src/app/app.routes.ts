@@ -3,6 +3,7 @@ import { AppRoutingPath } from './app-routing.path';
 import { PromosBaseComponent } from './ui/promos/promos-base/promos-base.component';
 import { RewardsBaseComponent } from './ui/rewards/rewards-base/rewards-base.component';
 import { AccountsBaseComponent } from './ui/accounts/accounts-base/accounts-base.component';
+import { ItemsBaseComponent } from './ui/items/items-base/items-base.component';
 
 export const promoRoutes: Routes = [
   {
@@ -147,6 +148,29 @@ const accountRoutes: Routes = [
   },
 ];
 
+const itemRoutes: Routes = [
+  {
+    path: '',
+    component: ItemsBaseComponent,
+    children: [
+      {
+        path: '',
+        loadChildren: () =>
+          import(
+            './shared/components/choose-option-alert/choose-option-alert.component'
+          ).then((value) => value.CHOOSE_OPTION_ALERT_ROUTES),
+      },
+      {
+        path: AppRoutingPath.ITEMS_SEARCH.path,
+        loadChildren: () =>
+          import('./ui/items/search-items/search-items.component').then(
+            (value) => value.SEARCH_ITEMS_ROUTES,
+          ),
+      },
+    ],
+  },
+];
+
 export const routes: Routes = [
   {
     path: AppRoutingPath.HOME.path,
@@ -164,6 +188,10 @@ export const routes: Routes = [
   {
     path: AppRoutingPath.ACCOUNTS.path,
     children: accountRoutes,
+  },
+  {
+    path: AppRoutingPath.ITEMS.path,
+    children: itemRoutes,
   },
   {
     path: '**',

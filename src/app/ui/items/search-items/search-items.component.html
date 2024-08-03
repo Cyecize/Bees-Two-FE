@@ -1,0 +1,149 @@
+<div>
+  <div>
+    <h3>Search Items</h3>
+  </div>
+
+  <div>
+    <h4>Environment</h4>
+    <div class="filters-header">
+      <div class="filter">
+        <app-env-override-field></app-env-override-field>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="filters">
+    <h4>Filters</h4>
+    <div class="filters-header">
+      <div class="filter">
+        <app-input
+          placeholder="SKUs"
+          [clearOnChangeEnd]="true"
+          (onChangeEnd)="addSKU($event)"></app-input>
+        <div *ngFor="let sku of query.skus" class="d-flex justify-content-between">
+          <span>{{ sku }}</span>
+          <span (click)="removeSKU(sku)"><i class="fa-solid fa-x"></i></span>
+        </div>
+      </div>
+      <div class="filter">
+        <app-input
+          placeholder="Vendor Item IDs"
+          [clearOnChangeEnd]="true"
+          (onChangeEnd)="addVendorItemId($event)"></app-input>
+        <div *ngFor="let vendorItemId of query.vendorItemIds" class="d-flex justify-content-between">
+          <span>{{ vendorItemId }}</span>
+          <span (click)="removeVendorItemId(vendorItemId)"><i class="fa-solid fa-x"></i></span>
+        </div>
+      </div>
+      <div class="filter">
+        <app-input
+          placeholder="IDs (BEES)"
+          [clearOnChangeEnd]="true"
+          (onChangeEnd)="addBeesId($event)"></app-input>
+        <div *ngFor="let beesId of query.ids" class="d-flex justify-content-between">
+          <span>{{ beesId }}</span>
+          <span (click)="removeBeesId(beesId)"><i class="fa-solid fa-x"></i></span>
+        </div>
+      </div>
+      <div class="filter">
+        <app-input
+          placeholder="Platform IDs"
+          [clearOnChangeEnd]="true"
+          (onChangeEnd)="addPlatformId($event)"></app-input>
+        <div *ngFor="let platformId of query.itemPlatformIds" class="d-flex justify-content-between">
+          <span>{{ platformId }}</span>
+          <span (click)="removePlatformId(platformId)"><i class="fa-solid fa-x"></i></span>
+        </div>
+      </div>
+      <div class="filter">
+        <app-input
+          placeholder="Aging Groups"
+          [clearOnChangeEnd]="true"
+          (onChangeEnd)="addAgingGroup($event)"></app-input>
+        <div *ngFor="let agingGroup of query.agingGroups" class="d-flex justify-content-between">
+          <span>{{ agingGroup }}</span>
+          <span (click)="removeAgingGroup(agingGroup)"><i class="fa-solid fa-x"></i></span>
+        </div>
+      </div>
+      <div class="filter">
+        <app-checkbox label="Include Deleted"
+                      [(ngModel)]="query.includeDeleted"
+                      (onChangeEnd)="reloadFilters()"></app-checkbox>
+      </div>
+      <div class="filter">
+        <app-checkbox label="Include Disabled"
+                      [(ngModel)]="query.includeDisabled"
+                      (onChangeEnd)="reloadFilters()"></app-checkbox>
+      </div>
+      <div class="filter">
+        <app-checkbox label="Include Alcoholic"
+                      [(ngModel)]="query.includeAlcoholic"
+                      (onChangeEnd)="reloadFilters()"></app-checkbox>
+      </div>
+      <div class="filter">
+        <app-checkbox label="Include Narcotic"
+                      [(ngModel)]="query.includeNarcotic"
+                      (onChangeEnd)="reloadFilters()"></app-checkbox>
+      </div>
+      <div class="filter">
+        <app-checkbox label="Include Hidden"
+                      [(ngModel)]="query.includeHidden"
+                      (onChangeEnd)="reloadFilters()"></app-checkbox>
+      </div>
+      <div class="filter">
+        <app-input placeholder="Manufacturer ID"
+                   (onChangeEnd)="reloadFilters()"
+                   [(ngModel)]="query.manufacturerId"></app-input>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="main">
+    <div *ngIf="fullResponse && !fullResponse.isSuccess">
+      <div class="alert alert-warning d-flex justify-content-between">
+        <p>Request concluded with failure!</p>
+        <button class="btn btn-outline-dark" (click)="openResponseDetailsDialog()">Show Details</button>
+      </div>
+    </div>
+    <p>Showing {{ items.length }} items on page {{ query.page.page + 1 }}</p>
+    <div>
+      <button [disabled]="query.page.page < 1" (click)="pageChange(query.page.page - 1)"
+              class="btn btn-outline-dark m-1">Prev
+      </button>
+      <button *ngIf="fullResponse?.response?.response?.pagination?.hasNext"
+              (click)="pageChange(query.page.page + 1)"
+              class="btn btn-outline-dark m-1">Next
+      </button>
+      <hr>
+
+      <table class="table table-striped table-hover">
+        <thead>
+        <tr>
+          <th scope="col">Vendor Item ID</th>
+          <th scope="col">Name</th>
+          <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let item of items">
+          <th scope="row">
+            <div><strong>{{ item.vendorItemId }}</strong></div>
+          </th>
+          <td>
+            <div>{{ item.itemName }}</div>
+          </td>
+          <td style="vertical-align: middle">
+            <div class="d-flex justify-content-around align-items-center">
+              <button class="btn btn-outline-success" (click)="openDetailsDialog(item)">View Details</button>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

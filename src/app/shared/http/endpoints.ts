@@ -12,4 +12,5 @@ export class Endpoints {
   public static readonly PROMOTIONS_V3 = '/v1/promotion-service/v3/promotions';
   public static readonly DEAL_SERVICE_V3 = '/deal-service/v3';
   public static readonly ACCOUNT_V1 = '/v1/accounts/';
+  public static readonly ITEMS_V2 = '/api/items/items/v2';
 }
