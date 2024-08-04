@@ -167,6 +167,13 @@ const itemRoutes: Routes = [
             (value) => value.SEARCH_ITEMS_ROUTES,
           ),
       },
+      {
+        path: AppRoutingPath.ITEMS_ADD_RAW.path,
+        loadChildren: () =>
+          import('./ui/items/add-item/add-item.component').then(
+            (value) => value.ADD_ITEM_ROUTES,
+          ),
+      },
     ],
   },
 ];

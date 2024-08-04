@@ -20,5 +20,5 @@ export class AppRoutingPath {
   public static readonly ACCOUNTS_ADD_V2_RAW = new RouteConfig('add-v2-raw', AppRoutingPath.ACCOUNTS);
   public static readonly ITEMS = new RouteConfig('items', null);
   public static readonly ITEMS_SEARCH = new RouteConfig('search', AppRoutingPath.ITEMS);
-
+  public static readonly ITEMS_ADD_RAW = new RouteConfig('add-raw', AppRoutingPath.ITEMS);
 }

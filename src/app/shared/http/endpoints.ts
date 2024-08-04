@@ -13,4 +13,5 @@ export class Endpoints {
   public static readonly DEAL_SERVICE_V3 = '/deal-service/v3';
   public static readonly ACCOUNT_V1 = '/v1/accounts/';
   public static readonly ITEMS_V2 = '/api/items/items/v2';
+  public static readonly ITEMS_V2_RELAY = '/api/item-relay/v2/items';
 }
