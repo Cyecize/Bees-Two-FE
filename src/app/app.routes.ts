@@ -4,6 +4,7 @@ import { PromosBaseComponent } from './ui/promos/promos-base/promos-base.compone
 import { RewardsBaseComponent } from './ui/rewards/rewards-base/rewards-base.component';
 import { AccountsBaseComponent } from './ui/accounts/accounts-base/accounts-base.component';
 import { ItemsBaseComponent } from './ui/items/items-base/items-base.component';
+import { ProductAssortmentBaseComponent } from './ui/product-assortment/product-assortment-base/product-assortment-base.component';
 
 export const promoRoutes: Routes = [
   {
@@ -178,6 +179,29 @@ const itemRoutes: Routes = [
   },
 ];
 
+const productAssortmentRoutes: Routes = [
+  {
+    path: '',
+    component: ProductAssortmentBaseComponent,
+    children: [
+      {
+        path: '',
+        loadChildren: () =>
+          import(
+            './shared/components/choose-option-alert/choose-option-alert.component'
+          ).then((value) => value.CHOOSE_OPTION_ALERT_ROUTES),
+      },
+      {
+        path: AppRoutingPath.ASSORTMENT_INCLUSION_V4.path,
+        loadChildren: () =>
+          import(
+            './ui/product-assortment/assortment-inclusion/assortment-inclusion.component'
+          ).then((value) => value.ASSORTMENT_INCLUSION_ROUTES),
+      },
+    ],
+  },
+];
+
 export const routes: Routes = [
   {
     path: AppRoutingPath.HOME.path,
@@ -199,6 +223,10 @@ export const routes: Routes = [
   {
     path: AppRoutingPath.ITEMS.path,
     children: itemRoutes,
+  },
+  {
+    path: AppRoutingPath.ASSORTMENT.path,
+    children: productAssortmentRoutes,
   },
   {
     path: '**',

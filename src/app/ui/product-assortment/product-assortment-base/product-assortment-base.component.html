@@ -1,0 +1,25 @@
+<div class="container mt-5">
+
+  <div class="row">
+    <div class="col-md-8">
+      <router-outlet></router-outlet>
+    </div>
+    <div class="col-md-4 col-md-4 sidebar-section rounded sidebar-background">
+      <section class="sidebar-item">
+        <h4>Product Assortment</h4>
+        <ul>
+          <li routerLinkActive="link-active">
+            <a [routerLink]="routes.ASSORTMENT_SEARCH_BY_DDC_V2.toString()">Search By DDC V2</a>
+          </li>
+          <li routerLinkActive="link-active">
+            <a [routerLink]="routes.ASSORTMENT_INCLUSION_V4.toString()">Add Inclusion V4</a>
+          </li>
+          <li routerLinkActive="link-active">
+            <a [routerLink]="routes.ASSORTMENT_UNAVAILABLE_V3.toString()">Add Exclusion V3</a>
+          </li>
+        </ul>
+      </section>
+      <hr>
+    </div>
+  </div>
+</div>
