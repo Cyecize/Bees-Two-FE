@@ -1,0 +1,72 @@
+<h4>Environment</h4>
+<div>
+  <app-env-override-field></app-env-override-field>
+</div>
+<hr>
+
+<form [formGroup]="form">
+  <div formArrayName="deliveryCenterIds">
+    <h5>Delivery Centers</h5>
+    <button (click)="addDeliveryCenterId()" class="btn btn-sm btn-outline-dark">
+      Add DDC
+    </button>
+    <div *ngFor="let ddc of deliveryCenterIds.controls; let ddcId = index"
+         class="ms-4">
+      <div class="m-1 mt-3">
+        <app-input placeholder="DDC" [formControlName]="ddcId"></app-input>
+        (<strong style="cursor:pointer;" (click)="removeDeliveryCenterId(ddcId)">Remove</strong>)
+      </div>
+    </div>
+  </div>
+
+  <h5>Assortments</h5>
+  <div formArrayName="assortments">
+    <div *ngFor="let assortment of assortments.controls; let i = index" [formGroupName]="i">
+      <h6>Assortment {{ i + 1 }}</h6>
+
+      <div class="m-1 mt-3">
+        <app-input type="number" placeholder="Quantity Multiplier" formControlName="quantityMultiplier"></app-input>
+      </div>
+      <div class="m-1 mt-3">
+        <app-input type="number" placeholder="Rank" formControlName="rank"></app-input>
+      </div>
+      <div class="m-1 mt-3">
+        <app-input placeholder="Vendor Item ID" formControlName="vendorItemId"></app-input>
+      </div>
+
+      <h6>Delivery Methods</h6>
+      <div formArrayName="deliveryMethods">
+        <app-select
+          placeholder="Choose a delivery method"
+          [options]="deliveryMethodOptions"
+          (onChange)="addDeliveryMethod(i, $event)"></app-select>
+        <div *ngFor="let deliveryMethod of getDeliveryMethods(i).controls; let j = index"
+             [formGroupName]="j" class="d-flex justify-content-between">
+          <span>{{ deliveryMethod.value }}</span>
+          <span (click)="removeDeliveryMethod(i, j)"><i class="fa-solid fa-x"></i></span>
+        </div>
+      </div>
+
+      <button
+        type="button"
+        class="btn btn-sm btn-outline-danger"
+        (click)="removeAssortment(i)">Remove Assortment</button>
+    </div>
+
+    <button class="btn btn-sm btn-outline-dark mt-2" (click)="addAssortment()">
+      Add Assortment
+    </button>
+    <hr>
+    <div>
+      <strong>OR</strong>
+      <br>
+      <app-input
+        (onChangeEnd)="bulkAddAssortments($event)"
+        placeholder="Add comma separated vendor item IDs"></app-input>
+    </div>
+  </div>
+
+  <div class="form-group mt-5 text-end">
+    <button (click)="onFormSubmit()" [disabled]="!form.valid" class="btn btn-outline-dark">Save</button>
+  </div>
+</form>

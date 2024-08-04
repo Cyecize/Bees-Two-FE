@@ -1,14 +1,17 @@
 export interface SelectOption {
   key: string;
   value: string | number | null;
+  disabled?: boolean;
 }
 
 export class SelectOptionKey implements SelectOption {
   key: string;
   value: string | number | null;
-  constructor(keyAndValue: string | number) {
+  disabled?: boolean;
+  constructor(keyAndValue: string | number, disabled?: boolean) {
     this.key = keyAndValue + '';
     this.value = keyAndValue;
+    this.disabled = disabled;
   }
 }
 
