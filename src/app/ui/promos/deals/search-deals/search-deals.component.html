@@ -26,7 +26,7 @@
         </div>
         <small
           *ngIf="query.body.contractId">
-          Platform ID:
+          Platform ID ({{ selectedAccId || '' }}):
           <strong>
             <app-tooltip-span
               [tooltipText]="query.body.contractId"

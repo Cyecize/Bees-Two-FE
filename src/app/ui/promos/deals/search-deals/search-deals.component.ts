@@ -32,6 +32,7 @@ import { ShowDealDetailsDialogPayload } from '../show-deal-details-dialog/show-d
 import { EnvOverrideService } from '../../../../api/env/env-override.service';
 import { EnvOverrideFieldComponent } from '../../../env/env-override-field/env-override-field.component';
 import { Subscription } from 'rxjs';
+import { ShowLoader } from "../../../../shared/loader/show.loader.decorator";
 
 @Component({
   selector: 'app-search-deals',
@@ -59,6 +60,8 @@ export class SearchDealsComponent implements OnInit, OnDestroy {
 
   outputTypes: Page<SelectSearchItem<DealOutputType>> = new EmptyPage();
   envSub!: Subscription;
+  selectedAccId = '';
+
   constructor(
     private platformIdService: PlatformIdService,
     private onvOverrideService: EnvOverrideService,
@@ -98,6 +101,7 @@ export class SearchDealsComponent implements OnInit, OnDestroy {
     this.query.body.sanitize();
   }
 
+  @ShowLoader()
   private async fetchData(): Promise<void> {
     const response = await this.dealsService.searchDeals(
       this.query,
@@ -137,6 +141,7 @@ export class SearchDealsComponent implements OnInit, OnDestroy {
 
   async contractIdChange(value: any): Promise<void> {
     this.query.body.contractId = undefined;
+    this.selectedAccId = value || '';
 
     if (value?.trim()) {
       const encodedPlatformId = await this.platformIdService.encodeContract({
@@ -223,9 +228,10 @@ export class SearchDealsComponent implements OnInit, OnDestroy {
     }
     this.dialogService
       .openAccountPicker(this.selectedEnv)
-      .subscribe((account) => {
+      .subscribe(async (account) => {
         if (account) {
-          this.contractIdChange(account.vendorAccountId);
+          await this.contractIdChange(account.vendorAccountId);
+          this.selectedAccId = account.name;
         }
       });
   }
