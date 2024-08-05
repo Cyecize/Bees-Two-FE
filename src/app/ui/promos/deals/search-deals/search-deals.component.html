@@ -26,8 +26,9 @@
         </div>
         <small
           *ngIf="query.body.contractId">
-          Platform ID ({{ selectedAccId || '' }}):
+          <strong *ngIf="selectedAccId">({{ selectedAccId || '' }})<br></strong>
           <strong>
+          Platform ID:
             <app-tooltip-span
               [tooltipText]="query.body.contractId"
               [displayText]="shortenStr(query.body.contractId )"></app-tooltip-span>
@@ -107,11 +108,11 @@
       </div>
       <div class="filter">
         <app-input
-          placeholder="Item Platform Id"
+          placeholder="Item Platform Ids"
           [clearOnChangeEnd]="true"
           (onChangeEnd)="addItemId($event)"></app-input>
         <div *ngFor="let itemId of query.body.itemIds" class="d-flex justify-content-between">
-          <span>{{ itemId }}</span>
+          <span>{{ shortenStr(itemId, 15) }}</span>
           <span (click)="removeItemId(itemId)"><i class="fa-solid fa-x"></i></span>
         </div>
       </div>

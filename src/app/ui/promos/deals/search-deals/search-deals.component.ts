@@ -124,10 +124,10 @@ export class SearchDealsComponent implements OnInit, OnDestroy {
     this.dialogService.openRequestResultDialog(this.fullResponse);
   }
 
-  shortenStr(str: any): string {
+  shortenStr(str: any, len = 25): string {
     return (
-      str.substring(0, Math.min(str.length, 25)) +
-      (str.length > 25 ? '...' : '')
+      str.substring(0, Math.min(str.length, len)) +
+      (str.length > len ? '...' : '')
     );
   }
 
@@ -141,7 +141,7 @@ export class SearchDealsComponent implements OnInit, OnDestroy {
 
   async contractIdChange(value: any): Promise<void> {
     this.query.body.contractId = undefined;
-    this.selectedAccId = value || '';
+    this.selectedAccId = '';
 
     if (value?.trim()) {
       const encodedPlatformId = await this.platformIdService.encodeContract({
