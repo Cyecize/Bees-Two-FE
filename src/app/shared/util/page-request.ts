@@ -35,3 +35,23 @@ export class PageRequestImplV2 extends PageRequestImpl {
     ];
   }
 }
+
+export interface LocalPageRequest {
+  pageNumber: number;
+  pageSize: number;
+}
+
+export class LocalPageRequestImpl implements LocalPageRequest {
+  pageNumber = 0;
+  pageSize: number = DEFAULT_PAGE_SIZE;
+
+  constructor(page?: number, size?: number) {
+    if (page) {
+      this.pageNumber = page;
+    }
+
+    if (size) {
+      this.pageSize = size;
+    }
+  }
+}

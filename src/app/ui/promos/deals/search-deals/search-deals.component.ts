@@ -215,6 +215,20 @@ export class SearchDealsComponent implements OnInit, OnDestroy {
     this.query.types.splice(this.query.types.indexOf(outputType), 1);
     this.reloadFilters();
   }
+
+  pickAccount(): void {
+    if (!this.selectedEnv) {
+      alert('Please choose an environment first!');
+      return;
+    }
+    this.dialogService
+      .openAccountPicker(this.selectedEnv)
+      .subscribe((account) => {
+        if (account) {
+          this.contractIdChange(account.vendorAccountId);
+        }
+      });
+  }
 }
 
 export const SEARCH_DEALS_ROUTES: Routes = [

@@ -11,6 +11,9 @@ import { ConfirmDialogComponent } from './dialogs/confirm-dialog/confirm-dialog.
 import { ConfirmDialogPayload } from './dialogs/confirm-dialog/confirm-dialog-payload.model';
 import { WrappedResponse } from '../util/field-error-wrapper';
 import { RequestResultDialogComponent } from './dialogs/request-result-dialog/request-result-dialog.component';
+import { AccountPickerDialogComponent } from '../../ui/accounts-local/account-picker-dialog/account-picker-dialog.component';
+import { CountryEnvironmentModel } from '../../api/env/country-environment.model';
+import { LocalAccount } from '../../api/accounts/local/local-account';
 
 @Injectable({ providedIn: 'root' })
 export class DialogService {
@@ -55,5 +58,9 @@ export class DialogService {
     return dialogComponentMatDialogRef
       .afterClosed()
       .pipe(map((value) => value || false));
+  }
+
+  openAccountPicker(env: CountryEnvironmentModel): Observable<LocalAccount> {
+    return this.open(AccountPickerDialogComponent, '', env).afterClosed();
   }
 }

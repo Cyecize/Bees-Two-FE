@@ -10,8 +10,8 @@
            [id]="inputId" [placeholder]="placeholder">
     <div class="select-search-options-container">
       <div class="select-search-options">
-        <div class="select-search-pagination" *ngIf="payload.totalPages && payload.totalPages > 1 && payload.pageable.page > 0">
-          <span style="cursor: pointer" (click)="pageChanged(payload.pageable.page - 1)">Load Previous</span>
+        <div class="select-search-pagination" *ngIf="payload.totalPages && payload.totalPages > 1 && payload.pageable.pageNumber > 0">
+          <span style="cursor: pointer" (click)="pageChanged(payload.pageable.pageNumber - 1)">Load Previous</span>
         </div>
 
         <option *ngIf="nullSelectText"
@@ -24,11 +24,11 @@
         </option>
 
         <div class="select-search-pagination"
-             *ngIf="payload.totalPages && payload.totalPages > 1 && payload.pageable.page + 1 < payload.totalPages">
-          <span style="cursor: pointer" (click)="pageChanged(payload.pageable.page + 1)">Load More</span>
+             *ngIf="payload.totalPages && payload.totalPages > 1 && payload.pageable.pageNumber + 1 < payload.totalPages">
+          <span style="cursor: pointer" (click)="pageChanged(payload.pageable.pageNumber + 1)">Load More</span>
         </div>
         <div class="select-search-pagination"
-             *ngIf="payload.totalPages && payload.totalPages > 1 && payload.pageable.page + 1 === payload.totalPages">
+             *ngIf="payload.totalPages && payload.totalPages > 1 && payload.pageable.pageNumber + 1 === payload.totalPages">
           <span style="cursor: pointer">Last Page</span>
         </div>
       </div>

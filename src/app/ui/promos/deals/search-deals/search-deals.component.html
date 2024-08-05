@@ -20,7 +20,9 @@
       <div class="filter">
         <div class="d-flex">
           <app-input placeholder="Vendor Account ID" (onChangeEnd)="contractIdChange($event)"></app-input>
-          <button class="btn btn-sm btn-outline-warning ms-1">Pick</button>
+          <button
+            (click)="pickAccount()"
+            class="btn btn-sm btn-outline-warning ms-1">Pick</button>
         </div>
         <small
           *ngIf="query.body.contractId">

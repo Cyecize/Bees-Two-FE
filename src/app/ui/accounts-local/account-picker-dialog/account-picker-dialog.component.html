@@ -1,0 +1,49 @@
+<div>
+  <h2>Accounts</h2>
+  <div class="filters-header">
+    <div class="filter">
+      <app-input
+        placeholder="Name"
+        (onChangeEnd)="nameChanged($event)"></app-input>
+    </div>
+    <div class="filter">
+      <app-input
+        placeholder="ID (Bees, Vendor, Customer)"
+        (onChangeEnd)="idChanged($event)"></app-input>
+    </div>
+  </div>
+  <hr>
+  <div style="overflow-y: auto; max-height: 500px;">
+
+    <p>TODO: Implement pagination and sorting here</p>
+
+    <p *ngIf="!accountsPage.content.length" class="alert alert-warning">
+      No saved accounts found for {{ payload.envName }}
+    </p>
+    <table class="table">
+      <thead>
+      <tr>
+        <th scope="col">Bees ID</th>
+        <th scope="col">Name</th>
+        <th scope="col">IDs</th>
+        <th scope="col">Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let acc of accountsPage.content">
+        <th scope="row">{{ acc.beesId }}</th>
+        <td>{{ acc.name }}</td>
+        <td>
+          <div>Customer ID: <span>{{ acc.customerAccountId }}</span></div>
+          <div>Vendor ID: <span>{{ acc.vendorAccountId }}</span></div>
+        </td>
+        <td>
+          <div class="m-1">
+            <button class="btn btn-outline-info" (click)="selectAccount(acc)">Choose</button>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
