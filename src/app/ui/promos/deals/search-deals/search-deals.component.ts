@@ -12,7 +12,7 @@ import { CountryEnvironmentModel } from '../../../../api/env/country-environment
 import {
   DealsSearchQuery,
   DealsSearchQueryImpl,
-} from '../../../../api/deals/deals-search.query';
+} from '../../../../api/deals/payloads/deals-search.query';
 import { DealsService } from '../../../../api/deals/deals.service';
 import {
   DealsSearchResponse,
@@ -25,14 +25,14 @@ import { FormsModule } from '@angular/forms';
 import { WrappedResponse } from '../../../../shared/util/field-error-wrapper';
 import { DialogService } from '../../../../shared/dialog/dialog.service';
 import { TooltipSpanComponent } from '../../../../shared/components/tooltip-span/tooltip-span.component';
-import { DealOutputType } from '../../../../api/deals/deal-output-type';
+import { DealOutputType } from '../../../../api/deals/enums/deal-output-type';
 import { Deal } from '../../../../api/deals/deal';
 import { ShowDealDetailsDialogComponent } from '../show-deal-details-dialog/show-deal-details-dialog.component';
 import { ShowDealDetailsDialogPayload } from '../show-deal-details-dialog/show-deal-details-dialog.payload';
 import { EnvOverrideService } from '../../../../api/env/env-override.service';
 import { EnvOverrideFieldComponent } from '../../../env/env-override-field/env-override-field.component';
 import { Subscription } from 'rxjs';
-import { ShowLoader } from "../../../../shared/loader/show.loader.decorator";
+import { ShowLoader } from '../../../../shared/loader/show.loader.decorator';
 
 @Component({
   selector: 'app-search-deals',
@@ -132,11 +132,14 @@ export class SearchDealsComponent implements OnInit, OnDestroy {
   }
 
   openDetailsDialog(deal: Deal): void {
-    this.dialogService.open(
-      ShowDealDetailsDialogComponent,
-      'Deal Details',
-      new ShowDealDetailsDialogPayload(deal, this.selectedEnv),
-    );
+    this.dialogService
+      .open(
+        ShowDealDetailsDialogComponent,
+        'Deal Details',
+        new ShowDealDetailsDialogPayload(deal, this.selectedEnv),
+      )
+      .afterClosed()
+      .subscribe((_) => this.reloadFilters());
   }
 
   async contractIdChange(value: any): Promise<void> {

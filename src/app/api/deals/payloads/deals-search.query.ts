@@ -1,10 +1,13 @@
-import { PageRequest, PageRequestImplV2 } from '../../shared/util/page-request';
+import {
+  PageRequest,
+  PageRequestImplV2,
+} from '../../../shared/util/page-request';
 import {
   BeesParamPayload,
   BeesParamPayloadImpl,
-} from '../proxy/bees-param.payload';
-import { ObjectUtils } from '../../shared/util/object-utils';
-import { DealOutputType } from './deal-output-type';
+} from '../../proxy/bees-param.payload';
+import { ObjectUtils } from '../../../shared/util/object-utils';
+import { DealOutputType } from '../enums/deal-output-type';
 
 export interface DealsSearchQuery {
   types: DealOutputType[];

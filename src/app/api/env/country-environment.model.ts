@@ -7,4 +7,5 @@ export interface CountryEnvironmentModel {
   countryCode: string;
   vendorId: string;
   storeId: string;
+  timezone: string;
 }
