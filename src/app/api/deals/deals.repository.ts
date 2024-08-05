@@ -10,6 +10,7 @@ import { DealsSearchResponse } from './deals-search.response';
 import { DeleteDealsPayload } from './payloads/delete-deals.payload';
 import { BeesParamPayloadImpl } from '../proxy/bees-param.payload';
 import { CountryEnvironmentModel } from '../env/country-environment.model';
+import { CreateDealsPayload } from './payloads/create-deals.payload';
 
 @Injectable({ providedIn: 'root' })
 export class DealsRepository {
@@ -37,6 +38,23 @@ export class DealsRepository {
       endpoint: Endpoints.DEAL_RELAY_V3,
       entity: BeesEntity.DEALS,
       method: RequestMethod.DELETE,
+      targetEnv: env.id,
+      data: payload,
+      headers: [
+        new BeesParamPayloadImpl('X-Timestamp', new Date().getTime()),
+        new BeesParamPayloadImpl('Timezone', env.timezone),
+      ],
+    });
+  }
+
+  public upsert(
+    payload: CreateDealsPayload,
+    env: CountryEnvironmentModel,
+  ): Observable<BeesResponse<any>> {
+    return this.proxyService.makeRequest<any>({
+      endpoint: Endpoints.DEAL_RELAY_V3,
+      entity: BeesEntity.DEALS,
+      method: RequestMethod.PUT,
       targetEnv: env.id,
       data: payload,
       headers: [

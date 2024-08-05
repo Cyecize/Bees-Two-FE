@@ -8,6 +8,7 @@ import {
   WrappedResponse,
 } from '../../shared/util/field-error-wrapper';
 import { DeleteDealsPayload } from './payloads/delete-deals.payload';
+import { CreateDealsPayload } from './payloads/create-deals.payload';
 
 @Injectable({ providedIn: 'root' })
 export class DealsService {
@@ -28,6 +29,15 @@ export class DealsService {
   ): Promise<WrappedResponse<any>> {
     return await new FieldErrorWrapper(() =>
       this.repository.deleteDeals(payload, env),
+    ).execute();
+  }
+
+  public async createDeals(
+    payload: CreateDealsPayload,
+    env: CountryEnvironmentModel,
+  ): Promise<WrappedResponse<any>> {
+    return await new FieldErrorWrapper(() =>
+      this.repository.upsert(payload, env),
     ).execute();
   }
 }

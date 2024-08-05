@@ -1,0 +1,50 @@
+<div>
+  <h4>Environment</h4>
+  <div>
+    <app-env-override-field></app-env-override-field>
+  </div>
+  <hr>
+
+  <div>
+    <form [formGroup]="form">
+      <h4>Deal ID data</h4>
+      <div>
+        <app-select
+          placeholder="Deal ID Type"
+          [options]="dealIdTypes"
+          formControlName="type"></app-select>
+      </div>
+
+      <div formArrayName="ids" class="mt-2">
+        <app-input
+          placeholder="Enter ID"
+          [clearOnChangeEnd]="true"
+          (onChangeEnd)="addId($event)"></app-input>
+        <div *ngFor="let id of ids.controls; let idInd = index"
+             class="ms-4">
+          <div class="m-1 mt-3">
+            <app-input placeholder="ID" [formControlName]="idInd"></app-input>
+            (<strong style="cursor:pointer;" (click)="removeId(idInd)">Remove</strong>)
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <div *ngIf="raw" class="mt-2 pb-4">
+      <h4>Raw JSON</h4>
+      <small>There is no validation here. Whatever you write will be sent to BEES</small>
+      <br>
+      <strong>[</strong>
+      <textarea class="form-control" rows="20" [(ngModel)]="rawJson"></textarea>
+      <strong>]</strong>
+
+      <div class="mt-3 text-end">
+        <button
+          class="btn btn-outline-dark"
+          [disabled]="!form.valid"
+          (click)="onRawFormSubmit()">Save
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

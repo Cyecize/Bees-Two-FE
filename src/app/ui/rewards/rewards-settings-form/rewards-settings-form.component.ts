@@ -131,6 +131,7 @@ export class RewardsSettingsFormComponent implements OnInit {
     this.envOverrideService.envOverride$.subscribe((value) => {
       this.selectedEnv = value;
       this.reloadData();
+      //TODO: unsubscribe from this
     });
 
     this.metaForm.valueChanges.subscribe((value) => {
