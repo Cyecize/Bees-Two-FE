@@ -8,6 +8,7 @@ export class AppRoutingPath {
   public static readonly CREATE_PROMO = new RouteConfig('create-promos-v3', AppRoutingPath.PROMOS);
   public static readonly SEARCH_DEALS = new RouteConfig('search-deals', AppRoutingPath.PROMOS);
   public static readonly CREATE_DEAL = new RouteConfig('create-deal', AppRoutingPath.PROMOS);
+  public static readonly EDIT_DEAL = new RouteConfig('deals/:idType/:idValue/:vendorDealId/env/:envId/edit', AppRoutingPath.PROMOS);
   public static readonly REWARDS = new RouteConfig('rewards', null);
   public static readonly REWARDS_SETTINGS = new RouteConfig('settings', AppRoutingPath.REWARDS);
   public static readonly SEARCH_REWARDS_SETTINGS = new RouteConfig('search', AppRoutingPath.REWARDS_SETTINGS);

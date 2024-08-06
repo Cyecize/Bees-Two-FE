@@ -8,6 +8,10 @@ import { DealsService } from '../../../../api/deals/deals.service';
 import { DeleteSingleVendorDealIdPayload } from '../../../../api/deals/payloads/delete-deals.payload';
 import { CountryEnvironmentService } from '../../../../api/env/country-environment.service';
 import { CountryEnvironmentModel } from '../../../../api/env/country-environment.model';
+import { DealIdType } from '../../../../api/deals/enums/deal-id-type';
+import { RouteUtils } from '../../../../shared/routing/route-utils';
+import { AppRoutingPath } from '../../../../app-routing.path';
+import { PlatformIdService } from '../../../../api/platformid/platform-id.service';
 
 @Component({
   selector: 'app-show-reward-setting-dialog',
@@ -21,25 +25,60 @@ export class ShowDealDetailsDialogComponent
   implements OnInit
 {
   dataJson!: string;
+  editRoute!: string;
 
   constructor(
     private dialogService: DialogService,
     private dealsService: DealsService,
     private envService: CountryEnvironmentService,
+    private platformIdService: PlatformIdService,
   ) {
     super();
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.dataJson = JSON.stringify(this.payload.deal, null, 2);
+    await this.setEditRoute();
   }
 
-  getEditRoute(): string {
-    return 'TODO';
-  }
+  async setEditRoute(): Promise<void> {
+    let dealIdBundle: { type: DealIdType; value: string };
+    const queryBody = this.payload.query.body;
 
-  getEditRawRoute(): string {
-    return 'TODO';
+    if (queryBody.contractId?.trim()) {
+      const contract = await this.platformIdService.decodeString(
+        queryBody.contractId,
+      );
+      dealIdBundle = {
+        type: DealIdType.ACCOUNT,
+        value: contract.vendorAccountId,
+      };
+    } else if (queryBody.deliveryCenterId?.trim()) {
+      dealIdBundle = {
+        type: DealIdType.DELIVERY_CENTER,
+        value: queryBody.deliveryCenterId,
+      };
+    } else if (queryBody.priceListId?.trim()) {
+      dealIdBundle = {
+        type: DealIdType.PRICE_LIST,
+        value: queryBody.priceListId,
+      };
+    } else {
+      dealIdBundle = {
+        type: DealIdType.VENDOR,
+        value: queryBody.vendorId || '',
+      };
+    }
+
+    this.editRoute = RouteUtils.setPathParams(
+      AppRoutingPath.EDIT_DEAL.toString(),
+      {
+        idType: dealIdBundle.type,
+        idValue: dealIdBundle.value,
+        vendorDealId: this.payload.deal.vendorDealId,
+        envId: this.payload.selectedEnv.id,
+      },
+    );
   }
 
   getIcon(): Observable<string> {

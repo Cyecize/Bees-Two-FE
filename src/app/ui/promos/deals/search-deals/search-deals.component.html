@@ -159,6 +159,7 @@
         <thead>
         <tr>
           <th scope="col">Vendor Deal ID</th>
+          <th scope="col">Type</th>
           <th scope="col">Level / Priority</th>
           <th scope="col">Actions</th>
         </tr>
@@ -168,6 +169,9 @@
           <th scope="row">
             <small>{{deal.vendorDealId }}</small>
           </th>
+          <td>
+            {{ deal.dealType }}
+          </td>
           <td>
             {{ deal.level || deal.priority }}
           </td>

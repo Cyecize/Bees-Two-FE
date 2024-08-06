@@ -46,6 +46,13 @@ export const promoRoutes: Routes = [
             (value) => value.ADD_DEALS_ROUTES,
           ),
       },
+      {
+        path: AppRoutingPath.EDIT_DEAL.path,
+        loadChildren: () =>
+          import('./ui/promos/deals/edit-deal/edit-deal.component').then(
+            (value) => value.EDIT_DEALS_ROUTES,
+          ),
+      },
     ],
   },
 ];

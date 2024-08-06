@@ -1,3 +1,5 @@
+import { DealOutputType } from './enums/deal-output-type';
+
 export interface Deal {
   deliveryCenterId?: string;
   contractId: string;
@@ -9,6 +11,7 @@ export interface Deal {
   timezone: string;
   vendorId: string;
   hiddenOnBrowse: boolean;
+  dealType: DealOutputType;
   enforced: boolean;
   enableVariantGroupingAndConversion: boolean;
   conditions: any; // TODO: Define conditions

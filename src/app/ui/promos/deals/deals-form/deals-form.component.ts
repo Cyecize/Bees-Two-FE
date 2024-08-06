@@ -30,6 +30,7 @@ import {
   SelectOptionKey,
 } from '../../../../shared/form-controls/select/select.option';
 import { InputComponent } from '../../../../shared/form-controls/input/input.component';
+import { Deal } from '../../../../api/deals/deal';
 
 interface DealsForm {
   ids: FormArray<FormControl<string>>;
@@ -52,6 +53,7 @@ interface DealsForm {
   styleUrl: './deals-form.component.scss',
 })
 export class DealsFormComponent implements OnInit, OnDestroy {
+  private _deals: Deal[] = [];
   private envOverride?: CountryEnvironmentModel;
   private envSub!: Subscription;
 
@@ -59,7 +61,26 @@ export class DealsFormComponent implements OnInit, OnDestroy {
   dealIdTypes: SelectOption[] = [];
 
   @Input()
+  set deals(val: Deal[]) {
+    this._deals = val;
+    if (val.length > 0) {
+      const objects: string[] = [];
+      val.forEach((deal) => {
+        objects.push(JSON.stringify(deal, null, 2));
+      });
+
+      this.rawJson = objects.join('\n,');
+    }
+  }
+
+  @Input()
+  dealIdType!: DealIdType;
+
+  @Input()
+  dealIdValue!: string;
+
   raw = true;
+
   rawJson = '';
 
   @Output()
@@ -85,6 +106,11 @@ export class DealsFormComponent implements OnInit, OnDestroy {
     this.envSub = this.envOverrideService.envOverride$.subscribe((value) => {
       this.envOverride = value;
     });
+
+    if (this.dealIdType) {
+      this.form.controls.type.setValue(this.dealIdType);
+      this.addId(this.dealIdValue);
+    }
   }
 
   ngOnDestroy(): void {

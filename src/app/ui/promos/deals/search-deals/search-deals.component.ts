@@ -51,7 +51,7 @@ import { ShowLoader } from '../../../../shared/loader/show.loader.decorator';
   styleUrl: './search-deals.component.scss',
 })
 export class SearchDealsComponent implements OnInit, OnDestroy {
-  selectedEnv?: CountryEnvironmentModel;
+  selectedEnv!: CountryEnvironmentModel;
 
   query: DealsSearchQuery = new DealsSearchQueryImpl();
 
@@ -71,7 +71,9 @@ export class SearchDealsComponent implements OnInit, OnDestroy {
 
   async ngOnInit(): Promise<void> {
     this.envSub = this.onvOverrideService.envOverride$.subscribe((value) => {
-      this.selectedEnv = value;
+      if (value) {
+        this.selectedEnv = value;
+      }
       this.reloadFilters();
     });
   }
@@ -136,7 +138,7 @@ export class SearchDealsComponent implements OnInit, OnDestroy {
       .open(
         ShowDealDetailsDialogComponent,
         'Deal Details',
-        new ShowDealDetailsDialogPayload(deal, this.selectedEnv),
+        new ShowDealDetailsDialogPayload(deal, this.query, this.selectedEnv),
       )
       .afterClosed()
       .subscribe((_) => this.reloadFilters());

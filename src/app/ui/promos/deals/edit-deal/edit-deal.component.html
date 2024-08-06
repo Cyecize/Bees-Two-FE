@@ -1,0 +1,12 @@
+<div>
+  <div>
+    <h3>Create / Update deal</h3>
+  </div>
+
+  <div class="main">
+    <app-deals-form [deals]="deals"
+                    [dealIdType]="dealType"
+                    [dealIdValue]="dealIdValue"
+                    (formSubmitted)="onFormSubmit($event)"></app-deals-form>
+  </div>
+</div>
