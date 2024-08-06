@@ -31,6 +31,7 @@ import {
 } from '../../../../shared/form-controls/select/select.option';
 import { InputComponent } from '../../../../shared/form-controls/input/input.component';
 import { Deal } from '../../../../api/deals/deal';
+import { DialogService } from '../../../../shared/dialog/dialog.service';
 
 interface DealsForm {
   ids: FormArray<FormControl<string>>;
@@ -86,7 +87,10 @@ export class DealsFormComponent implements OnInit, OnDestroy {
   @Output()
   formSubmitted = new EventEmitter<CreateDealsPayload>();
 
-  constructor(private envOverrideService: EnvOverrideService) {}
+  constructor(
+    private envOverrideService: EnvOverrideService,
+    private dialogService: DialogService,
+  ) {}
 
   ngOnInit(): void {
     this.dealIdTypes = Object.keys(DealIdType).map(
@@ -143,4 +147,20 @@ export class DealsFormComponent implements OnInit, OnDestroy {
   removeId(idInd: number): void {
     this.ids.removeAt(idInd);
   }
+
+  pickAccount(): void {
+    if (!this.envOverride) {
+      alert('Please choose an environment first!');
+      return;
+    }
+    this.dialogService
+      .openAccountPicker(this.envOverride)
+      .subscribe(async (account) => {
+        if (account) {
+          this.addId(account.vendorAccountId);
+        }
+      });
+  }
+
+  protected readonly DealIdType = DealIdType;
 }

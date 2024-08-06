@@ -16,10 +16,16 @@
       </div>
 
       <div formArrayName="ids" class="mt-2">
-        <app-input
-          placeholder="Enter ID"
-          [clearOnChangeEnd]="true"
-          (onChangeEnd)="addId($event)"></app-input>
+        <div class="d-flex">
+          <app-input
+            placeholder="Enter ID"
+            [clearOnChangeEnd]="true"
+            (onChangeEnd)="addId($event)"></app-input>
+          <button
+            *ngIf="DealIdType.ACCOUNT === form.controls.type.value"
+            (click)="pickAccount()"
+            class="btn btn-sm btn-outline-warning ms-1">Pick</button>
+        </div>
         <div *ngFor="let id of ids.controls; let idInd = index"
              class="ms-4">
           <div class="m-1 mt-3">
