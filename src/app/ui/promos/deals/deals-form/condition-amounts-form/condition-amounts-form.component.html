@@ -1,0 +1,34 @@
+<div [formGroup]="form">
+  <h6>Amounts
+    (<span (click)="addAmount()" style="cursor:pointer;">
+                  <i class="fa-solid fa-plus"></i>
+                  </span>)
+  </h6>
+  <div *ngIf="hasAmounts()" formArrayName="amounts">
+    <div
+      class="mt-1 d-flex flex-wrap align-items-center"
+      *ngFor="let am of amounts.controls; let amInd = index"
+      [formGroupName]="amInd">
+      <app-select
+        [options]="scopes"
+        class="m-1 ms-0"
+        placeholder="Scope"
+        formControlName="scope"></app-select>
+      <app-select
+        [options]="operators"
+        class="m-1 ms-0"
+        placeholder="Operator"
+        formControlName="operator"></app-select>
+      <app-select
+        [options]="fields"
+        class="m-1 ms-0"
+        placeholder="Field"
+        formControlName="field"></app-select>
+      <app-input type="number" class="m-1" placeholder="Value" formControlName="value"></app-input>
+      (<span
+      (click)="removeAmount(amInd)"
+      style="cursor:pointer;">
+      <i class="fa-solid fa-x"></i></span>)
+    </div>
+  </div>
+</div>

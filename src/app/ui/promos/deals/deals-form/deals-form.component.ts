@@ -32,11 +32,19 @@ import {
 import { InputComponent } from '../../../../shared/form-controls/input/input.component';
 import { Deal } from '../../../../api/deals/deal';
 import { DialogService } from '../../../../shared/dialog/dialog.service';
-
-interface DealsForm {
-  ids: FormArray<FormControl<string>>;
-  type: FormControl<DealIdType>;
-}
+import { DealAccumulationType } from '../../../../api/deals/enums/deal-accumulation-type';
+import { CheckboxComponent } from '../../../../shared/form-controls/checkbox/checkbox.component';
+import {
+  ConditionsForm,
+  DealForm,
+  DealsForm,
+  DeliveryDateForm,
+} from './deal-forms';
+import { ConditionLineItemFormComponent } from './condition-line-item-form/condition-line-item-form.component';
+import { ConditionDatetimeSimulationFormComponent } from './condition-datetime-simulation-form/condition-datetime-simulation-form.component';
+import { ConditionDeliveryDateFormComponent } from './condition-delivery-date-form/condition-delivery-date-form.component';
+import { ConditionAmountsFormComponent } from './condition-amounts-form/condition-amounts-form.component';
+import { MultipleLineItemConditionFormComponent } from './multiple-line-item-condition-form/multiple-line-item-condition-form.component';
 
 @Component({
   selector: 'app-deals-form',
@@ -49,29 +57,34 @@ interface DealsForm {
     InputComponent,
     NgIf,
     FormsModule,
+    CheckboxComponent,
+    ConditionLineItemFormComponent,
+    ConditionDatetimeSimulationFormComponent,
+    ConditionDeliveryDateFormComponent,
+    ConditionAmountsFormComponent,
+    MultipleLineItemConditionFormComponent,
   ],
   templateUrl: './deals-form.component.html',
   styleUrl: './deals-form.component.scss',
 })
 export class DealsFormComponent implements OnInit, OnDestroy {
   private _deals: Deal[] = [];
+  protected readonly DealIdType = DealIdType;
   private envOverride?: CountryEnvironmentModel;
   private envSub!: Subscription;
 
   form!: FormGroup<DealsForm>;
   dealIdTypes: SelectOption[] = [];
+  accumulationTypeOptions: SelectOption[] = [];
 
   @Input()
   set deals(val: Deal[]) {
     this._deals = val;
-    if (val.length > 0) {
-      const objects: string[] = [];
-      val.forEach((deal) => {
-        objects.push(JSON.stringify(deal, null, 2));
-      });
+    this.patchDeal(val);
+  }
 
-      this.rawJson = objects.join('\n,');
-    }
+  get deals(): Deal[] {
+    return this._deals;
   }
 
   @Input()
@@ -80,7 +93,7 @@ export class DealsFormComponent implements OnInit, OnDestroy {
   @Input()
   dealIdValue!: string;
 
-  raw = true;
+  raw = false;
 
   rawJson = '';
 
@@ -97,6 +110,12 @@ export class DealsFormComponent implements OnInit, OnDestroy {
       (key) => new SelectOptionKey(key),
     );
 
+    this.accumulationTypeOptions = [
+      new SelectOptionKey('Select One', true),
+    ].concat(
+      Object.keys(DealAccumulationType).map((val) => new SelectOptionKey(val)),
+    );
+
     this.form = new FormGroup<DealsForm>({
       ids: new FormArray<FormControl<string>>([], {
         validators: [Validators.required],
@@ -105,6 +124,7 @@ export class DealsFormComponent implements OnInit, OnDestroy {
         validators: [Validators.required],
         nonNullable: true,
       }),
+      deals: new FormArray<FormGroup<DealForm>>([]),
     });
 
     this.envSub = this.envOverrideService.envOverride$.subscribe((value) => {
@@ -125,6 +145,14 @@ export class DealsFormComponent implements OnInit, OnDestroy {
     return this.form.controls.ids;
   }
 
+  get dealForms(): FormArray<FormGroup<DealForm>> {
+    return this.form.controls.deals;
+  }
+
+  getConditionsForm(formInd: number): FormGroup<ConditionsForm> {
+    return this.dealForms.at(formInd).controls.conditions;
+  }
+
   onRawFormSubmit(): void {
     let data: DealPayload[];
     try {
@@ -138,6 +166,10 @@ export class DealsFormComponent implements OnInit, OnDestroy {
       ...this.form.getRawValue(),
       deals: data,
     });
+  }
+
+  onFormSubmit(): void {
+    this.formSubmitted.emit(this.form.getRawValue());
   }
 
   addId(id: string): void {
@@ -162,5 +194,63 @@ export class DealsFormComponent implements OnInit, OnDestroy {
       });
   }
 
-  protected readonly DealIdType = DealIdType;
+  private patchDeal(val: Deal[]): void {
+    if (val.length > 0) {
+      const objects: string[] = [];
+      val.forEach((deal) => {
+        objects.push(JSON.stringify(deal, null, 2));
+        this.addDeal(deal);
+      });
+
+      this.rawJson = objects.join('\n,');
+    }
+  }
+
+  addDeal(deal?: Deal): void {
+    this.form.controls.deals.push(
+      new FormGroup<DealForm>({
+        accumulationType: new FormControl<DealAccumulationType | null>(
+          deal?.accumulationType || null,
+        ),
+        enableVariantGroupingAndConversion: new FormControl<boolean | null>(
+          deal?.enableVariantGroupingAndConversion || null,
+        ),
+        enforced: new FormControl<boolean | null>(deal?.enforced || null),
+        hiddenOnBrowse: new FormControl<boolean | null>(
+          deal?.hiddenOnBrowse || null,
+        ),
+        hiddenOnDeals: new FormControl<boolean | null>(
+          deal?.hiddenOnDeals || null,
+        ),
+        priority: new FormControl<number | null>(deal?.priority || null),
+        level: new FormControl<number | null>(deal?.level || null),
+        vendorDealId: new FormControl<string>(deal?.vendorDealId || '', {
+          validators: Validators.required,
+          nonNullable: true,
+        }),
+        vendorPromotionId: new FormControl<string>(
+          deal?.vendorPromotionId || '',
+          {
+            validators: Validators.required,
+            nonNullable: true,
+          },
+        ),
+        conditions: new FormGroup<ConditionsForm>({
+          couponCode: new FormControl<string | null>(null),
+          deliveryDate: new FormArray<FormGroup<DeliveryDateForm>>([]),
+          firstOrder: new FormControl<boolean | null>(null),
+          paymentMethod: new FormControl<string | null>(null),
+        }),
+        output: new FormControl<string | null>(null),
+      }),
+    );
+  }
+
+  removeDeal(dealInd: number): void {
+    this.dealForms.removeAt(dealInd);
+  }
+
+  maybeGetDeal(formInd: number): Deal | undefined {
+    return this.deals[formInd];
+  }
 }

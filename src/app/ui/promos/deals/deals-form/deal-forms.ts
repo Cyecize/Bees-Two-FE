@@ -1,0 +1,71 @@
+import { FormArray, FormControl, FormGroup } from '@angular/forms';
+import { DealIdType } from '../../../../api/deals/enums/deal-id-type';
+import { DealAccumulationType } from '../../../../api/deals/enums/deal-accumulation-type';
+import { DealConditionAmountScope } from '../../../../api/deals/enums/deal-condition-amount-scope';
+import { DealConditionAmountOperator } from '../../../../api/deals/enums/deal-condition-amount-operator';
+import { DealConditionAmountField } from '../../../../api/deals/enums/deal-condition-amount-field';
+
+export interface DealsForm {
+  ids: FormArray<FormControl<string>>;
+  type: FormControl<DealIdType>;
+  deals: FormArray<FormGroup<DealForm>>;
+}
+
+export interface DealForm {
+  vendorDealId: FormControl<string>;
+  vendorPromotionId: FormControl<string>;
+  accumulationType: FormControl<DealAccumulationType | null>;
+  priority: FormControl<number | null>;
+  level: FormControl<number | null>;
+  enforced: FormControl<boolean | null>;
+  enableVariantGroupingAndConversion: FormControl<boolean | null>;
+  hiddenOnBrowse: FormControl<boolean | null>;
+  hiddenOnDeals: FormControl<boolean | null>;
+  conditions: FormGroup<ConditionsForm>;
+  output: FormControl<string | null>;
+}
+
+export interface ConditionsForm {
+  paymentMethod: FormControl<string | null>;
+  simulationDateTime?: FormGroup<SimulationDateTimeForm>;
+  deliveryDate: FormArray<FormGroup<DeliveryDateForm>>;
+  firstOrder: FormControl<boolean | null>;
+  couponCode: FormControl<string | null>;
+  lineItem?: FormGroup<LineItemConditionForm>;
+  multipleLineItem?: FormGroup<MultipleLineItemConditionForm>;
+  amounts?: FormArray<FormGroup<AmountConditionForm>>;
+}
+
+export interface SimulationDateTimeForm {
+  startDateTime: FormControl<string>;
+  endDateTime: FormControl<string>;
+}
+
+export interface DeliveryDateForm {
+  startDate: FormControl<string>;
+  endDate: FormControl<string | null>;
+}
+
+export interface LineItemConditionForm {
+  vendorItemIds: FormArray<FormControl<string>>;
+  minimumQuantity: FormControl<number | null>;
+  sharedMinimumQuantity: FormControl<boolean | null>;
+  crossDiscount: FormControl<boolean | null>;
+}
+
+export interface MultipleLineItemConditionForm {
+  items: FormArray<FormGroup<MultipleLineItemItemsConditionForm>>;
+}
+
+export interface MultipleLineItemItemsConditionForm {
+  vendorItemIds: FormArray<FormControl<string>>;
+  minimumQuantity: FormControl<number | null>;
+  minimumAmount: FormControl<number | null>;
+}
+
+export interface AmountConditionForm {
+  scope: FormControl<DealConditionAmountScope>;
+  operator: FormControl<DealConditionAmountOperator>;
+  field: FormControl<DealConditionAmountField>;
+  value: FormControl<number>;
+}

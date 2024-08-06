@@ -14,6 +14,7 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { NgIf } from '@angular/common';
+import { ObjectUtils } from '../../util/object-utils';
 
 @Component({
   selector: 'app-input',
@@ -68,7 +69,7 @@ export class InputComponent implements OnInit, ControlValueAccessor {
   }
 
   inputChanged(event: any): void {
-    this.value = event.target.value;
+    this.setValue(event.target.value);
     this.onChange.emit(this.value);
   }
 
@@ -79,12 +80,12 @@ export class InputComponent implements OnInit, ControlValueAccessor {
   changeEnded(event: any): void {
     this.onChangeEnd.emit(event.target.value);
     if (this.clearOnChangeEnd) {
-      this.value = '';
+      this.setValue('');
     }
   }
 
   writeValue(obj: any): void {
-    this.value = obj;
+    this.setValue(obj);
   }
 
   registerOnChange(fn: any): void {
@@ -101,5 +102,17 @@ export class InputComponent implements OnInit, ControlValueAccessor {
 
   private getUniqueStr(): string {
     return (Math.random().toString(36) + '0000000000').substring(2, 12);
+  }
+
+  private setValue(val: any): void {
+    if (this.type === 'number' && !ObjectUtils.isNil(val)) {
+      const num = Number(val);
+      if (!isNaN(num)) {
+        this.value = num;
+        return;
+      }
+    }
+
+    this.value = val;
   }
 }

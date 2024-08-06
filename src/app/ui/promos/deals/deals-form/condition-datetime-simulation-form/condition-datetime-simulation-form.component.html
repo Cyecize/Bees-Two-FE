@@ -1,0 +1,24 @@
+<div [formGroup]="form">
+  <h6>
+    Simulation DateTime
+    (
+    <span
+      *ngIf="!hasSimulationDateTime()"
+      (click)="addSimulationDateTime()"
+      style="cursor:pointer;"><i class="fa-solid fa-plus"></i></span>
+
+    <span
+      *ngIf="hasSimulationDateTime()"
+      (click)="removeSimulationDateTime()"
+      style="cursor:pointer;">
+                  <i class="fa-solid fa-x"></i></span>
+    )
+  </h6>
+  <div *ngIf="hasSimulationDateTime()" formGroupName="simulationDateTime">
+    <strong>EG Date: 2024-08-05T00:00:00Z</strong>
+    <div class="d-flex">
+      <app-input class="m-1 ms-0" placeholder="Start Date" formControlName="startDateTime"></app-input>
+      <app-input class="m-1" placeholder="End Date" formControlName="endDateTime"></app-input>
+    </div>
+  </div>
+</div>

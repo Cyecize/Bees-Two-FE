@@ -1,0 +1,23 @@
+<div [formGroup]="form">
+  <h6>Delivery Date
+    (<span (click)="addDeliveryDate()" style="cursor:pointer;">
+                  <i class="fa-solid fa-plus"></i>
+                  </span>)
+  </h6>
+  <div formArrayName="deliveryDate">
+    <strong *ngIf="getDeliveryDateForms().length > 0">
+      EG. Date: 2020-12-31 00:00
+    </strong>
+    <div
+      class="mt-1 d-flex align-items-center"
+      *ngFor="let date of getDeliveryDateForms().controls; let dateInd = index"
+      [formGroupName]="dateInd">
+      <app-input class="m-1 ms-0" placeholder="Start Date" formControlName="startDate"></app-input>
+      <app-input class="m-1" placeholder="End Date" formControlName="endDate"></app-input>
+      (<span
+      (click)="removeDeliveryDate(dateInd)"
+      style="cursor:pointer;">
+                    <i class="fa-solid fa-x"></i></span>)
+    </div>
+  </div>
+</div>

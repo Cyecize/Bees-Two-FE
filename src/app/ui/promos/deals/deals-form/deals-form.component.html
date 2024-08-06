@@ -34,6 +34,127 @@
           </div>
         </div>
       </div>
+
+      <div class="mt-2">
+        <h4>Select how to display the form</h4>
+        <div class="d-flex">
+          <button [disabled]="raw"
+                  (click)="raw = true"
+                  class="m-1 btn btn-sm btn-outline-dark">Raw JSON
+          </button>
+          <button [disabled]="!raw"
+                  (click)="raw = false"
+                  class="m-1 btn btn-sm btn-outline-primary">Form Controls
+          </button>
+        </div>
+      </div>
+
+      <div *ngIf="!raw" class="mt-2">
+        <h4>Deals Data</h4>
+        <button class="btn btn-sm btn-outline-primary"
+                (click)="addDeal()"
+                type="button">Add a deal
+        </button>
+
+        <div formArrayName="deals">
+          <div *ngFor="let deal of dealForms.controls; let formInd = index" [formGroupName]="formInd">
+            <div class="d-flex justify-content-between">
+              <strong>Deal# {{ formInd + 1 }} </strong>
+              <span style="cursor:pointer;" (click)="removeDeal(formInd)"><i class="fa-solid fa-x"></i></span>
+            </div>
+            <div class="mt-2">
+              <app-input
+                type="text"
+                placeholder="Vendor Promo ID"
+                formControlName="vendorPromotionId"></app-input>
+            </div>
+            <div class="mt-2">
+              <app-input
+                type="text"
+                placeholder="Vendor Deal ID"
+                formControlName="vendorDealId"></app-input>
+            </div>
+            <div class="mt-2">
+              <app-select
+                placeholder="Accumulation Type"
+                [options]="accumulationTypeOptions"
+                formControlName="accumulationType"></app-select>
+            </div>
+            <div class="mt-2 d-flex">
+              <app-input
+                class="m-1 ms-0"
+                type="number"
+                formControlName="level"
+                placeholder="Level"></app-input>
+
+              <app-input
+                class="m-1"
+                type="number"
+                formControlName="priority"
+                placeholder="Priority"></app-input>
+            </div>
+            <div class="mt-2">
+              <app-checkbox label="Enforced" formControlName="enforced"></app-checkbox>
+            </div>
+            <div class="mt-2">
+              <app-checkbox label="Enable Variant Grouping and Conversion"
+                            formControlName="enableVariantGroupingAndConversion"></app-checkbox>
+            </div>
+            <div class="mt-2">
+              <app-checkbox label="Hidden on Browse" formControlName="hiddenOnBrowse"></app-checkbox>
+            </div>
+            <div class="mt-2">
+              <app-checkbox label="Hidden on Deals" formControlName="hiddenOnDeals"></app-checkbox>
+            </div>
+
+            <div formGroupName="conditions">
+              <h5 class="mt-2">Conditions</h5>
+              <div class="mt-2">
+                <app-checkbox label="First Order" formControlName="firstOrder"></app-checkbox>
+              </div>
+              <div class="mt-2 d-flex">
+                <app-input class="m-1 ms-0" placeholder="Coupon Code" formControlName="couponCode"></app-input>
+                <app-input class="m-1" placeholder="Payment Method" formControlName="paymentMethod"></app-input>
+              </div>
+              <div class="mt-2">
+                <app-condition-delivery-date-form
+                  [deal]="maybeGetDeal(formInd)"
+                  [form]="getConditionsForm(formInd)">
+                </app-condition-delivery-date-form>
+              </div>
+              <div class="mt-2">
+                <app-condition-datetime-simulation-form
+                  [deal]="maybeGetDeal(formInd)"
+                  [form]="getConditionsForm(formInd)">
+                </app-condition-datetime-simulation-form>
+              </div>
+              <div class="mt-2">
+                <app-condition-line-item-form
+                  [deal]="maybeGetDeal(formInd)"
+                  [form]="getConditionsForm(formInd)"></app-condition-line-item-form>
+              </div>
+              <div class="mt-2">
+                <app-multiple-line-item-condition-form
+                  [deal]="maybeGetDeal(formInd)"
+                  [form]="getConditionsForm(formInd)"></app-multiple-line-item-condition-form>
+              </div>
+              <div class="mt-2">
+                <app-condition-amounts-form
+                  [deal]="maybeGetDeal(formInd)"
+                  [form]="getConditionsForm(formInd)"></app-condition-amounts-form>
+              </div>
+            </div>
+            <hr class="mt-2">
+          </div>
+        </div>
+
+        <div class="mt-2 mb-5 text-end">
+          <button
+            (click)="onFormSubmit()"
+            [disabled]="!form.valid" type="submit" class="btn btn-outline-dark">Save
+          </button>
+        </div>
+      </div>
     </form>
 
     <div *ngIf="raw" class="mt-2 pb-4">

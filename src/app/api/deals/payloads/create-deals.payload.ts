@@ -11,14 +11,14 @@ export interface CreateDealsPayload {
 export interface DealPayload {
   vendorDealId: string;
   vendorPromotionId: string;
-  accumulationType?: DealAccumulationType;
-  level?: number;
-  priority?: number;
-  type?: DealType;
-  couponBaseName?: string;
-  enforced?: boolean;
-  hiddenOnBrowse?: boolean;
-  enableVariantGroupingAndConversion?: boolean;
+  accumulationType?: DealAccumulationType | null;
+  level?: number | null;
+  priority?: number | null;
+  type?: DealType | null;
+  couponBaseName?: string | null;
+  enforced?: boolean | null;
+  hiddenOnBrowse?: boolean | null;
+  enableVariantGroupingAndConversion?: boolean | null;
 
   //TODO: Define those too
   conditions?: any;
