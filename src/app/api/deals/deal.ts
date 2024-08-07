@@ -5,6 +5,7 @@ import { DealConditionAmountOperator } from './enums/deal-condition-amount-opera
 import { DealConditionAmountField } from './enums/deal-condition-amount-field';
 import { DealDiscountType } from './enums/deal-discount-type';
 import { DealComboType } from './enums/deal-combo-type';
+import { DealOrderTotalApplyTo } from './enums/deal-order-total-apply-to';
 
 export interface LineItemDealCondition {
   vendorItemIds: string[];
@@ -92,4 +93,17 @@ export interface DealConditions {
 export interface DealOutput {
   lineItemDiscount?: LineItemOutput;
   multipleLineItemDiscount?: MultipleLineItemOutput;
+  orderTotalScaledDiscount?: OrderTotalScaledDiscountOutput;
+}
+
+export interface OrderTotalScaledDiscountOutput {
+  ranges: OrderTotalScaledDiscountOutputRange[];
+}
+
+export interface OrderTotalScaledDiscountOutputRange {
+  from: number;
+  to: number;
+  type: DealDiscountType;
+  discount: number;
+  applyTo: DealOrderTotalApplyTo;
 }

@@ -48,6 +48,7 @@ import { ConditionAmountsFormComponent } from './condition-amounts-form/conditio
 import { MultipleLineItemConditionFormComponent } from './multiple-line-item-condition-form/multiple-line-item-condition-form.component';
 import { OutputLineItemFormComponent } from './output-line-item-form/output-line-item-form.component';
 import { MultipleLineItemOutputFormComponent } from './multiple-line-item-output-form/multiple-line-item-output-form.component';
+import { OrderTotalScaledDiscountOutputFormComponent } from './order-total-scaled-discount-output-form/order-total-scaled-discount-output-form.component';
 
 @Component({
   selector: 'app-deals-form',
@@ -68,6 +69,7 @@ import { MultipleLineItemOutputFormComponent } from './multiple-line-item-output
     MultipleLineItemConditionFormComponent,
     OutputLineItemFormComponent,
     MultipleLineItemOutputFormComponent,
+    OrderTotalScaledDiscountOutputFormComponent,
   ],
   templateUrl: './deals-form.component.html',
   styleUrl: './deals-form.component.scss',

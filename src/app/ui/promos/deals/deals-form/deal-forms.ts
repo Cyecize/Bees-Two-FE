@@ -6,6 +6,7 @@ import { DealConditionAmountOperator } from '../../../../api/deals/enums/deal-co
 import { DealConditionAmountField } from '../../../../api/deals/enums/deal-condition-amount-field';
 import { DealDiscountType } from '../../../../api/deals/enums/deal-discount-type';
 import { DealComboType } from '../../../../api/deals/enums/deal-combo-type';
+import { DealOrderTotalApplyTo } from '../../../../api/deals/enums/deal-order-total-apply-to';
 
 export interface SimulationDateTimeForm {
   startDateTime: FormControl<string>;
@@ -39,6 +40,27 @@ export interface AmountConditionForm {
   operator: FormControl<DealConditionAmountOperator>;
   field: FormControl<DealConditionAmountField>;
   value: FormControl<number>;
+}
+
+export interface LineItemDiscountOutput {
+  vendorItemIds: FormArray<FormControl<string>>;
+  type: FormControl<DealDiscountType | null>;
+  value: FormControl<number | null>;
+  maxQuantity: FormControl<number | null>;
+  proportion: FormControl<number | null>;
+}
+
+export interface MultipleLineItemDiscountOutput {
+  proportion: FormControl<number | null>;
+  comboType: FormControl<DealComboType | null>;
+  type: FormControl<DealDiscountType | null>;
+  items: FormArray<FormGroup<MultipleLineItemDiscountOutputItem>>;
+}
+
+export interface MultipleLineItemDiscountOutputItem {
+  vendorItemId: FormControl<string>;
+  value: FormControl<number>;
+  maxQuantity: FormControl<number>;
 }
 
 export interface DealsForm {
@@ -75,25 +97,17 @@ export interface ConditionsForm {
 export interface OutputForm {
   lineItemDiscount?: FormGroup<LineItemDiscountOutput>;
   multipleLineItemDiscount?: FormGroup<MultipleLineItemDiscountOutput>;
+  orderTotalScaledDiscount?: FormGroup<OrderTotalScaledDiscountOutputForm>;
 }
 
-export interface LineItemDiscountOutput {
-  vendorItemIds: FormArray<FormControl<string>>;
-  type: FormControl<DealDiscountType | null>;
-  value: FormControl<number | null>;
-  maxQuantity: FormControl<number | null>;
-  proportion: FormControl<number | null>;
+export interface OrderTotalScaledDiscountOutputForm {
+  ranges: FormArray<FormGroup<OrderTotalScaledDiscountOutputRangeForm>>;
 }
 
-export interface MultipleLineItemDiscountOutput {
-  proportion: FormControl<number | null>;
-  comboType: FormControl<DealComboType | null>;
-  type: FormControl<DealDiscountType | null>;
-  items: FormArray<FormGroup<MultipleLineItemDiscountOutputItem>>;
-}
-
-export interface MultipleLineItemDiscountOutputItem {
-  vendorItemId: FormControl<string>;
-  value: FormControl<number>;
-  maxQuantity: FormControl<number>;
+export interface OrderTotalScaledDiscountOutputRangeForm {
+  from: FormControl<number>;
+  to: FormControl<number>;
+  type: FormControl<DealDiscountType>;
+  discount: FormControl<number>;
+  applyTo: FormControl<DealOrderTotalApplyTo | null>;
 }

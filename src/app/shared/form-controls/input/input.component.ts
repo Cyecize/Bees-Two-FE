@@ -105,7 +105,11 @@ export class InputComponent implements OnInit, ControlValueAccessor {
   }
 
   private setValue(val: any): void {
-    if (this.type === 'number' && !ObjectUtils.isNil(val)) {
+    if (
+      this.type === 'number' &&
+      !ObjectUtils.isNil(val) &&
+      (val + '').trim()
+    ) {
       const num = Number(val);
       if (!isNaN(num)) {
         this.value = num;

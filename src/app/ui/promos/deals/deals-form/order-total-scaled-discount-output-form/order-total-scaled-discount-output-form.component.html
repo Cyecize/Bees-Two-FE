@@ -1,0 +1,61 @@
+<div [formGroup]="form">
+  <h6>
+    Order Total Scaled
+    (
+    <span
+      *ngIf="!hasOrderTotalGroup()"
+      (click)="addOrderTotal()"
+      style="cursor:pointer;">
+                  <i class="fa-solid fa-plus"></i></span>
+
+    <span
+      *ngIf="hasOrderTotalGroup()"
+      (click)="removeOrderTotal()"
+      style="cursor:pointer;">
+                  <i class="fa-solid fa-x"></i></span>
+    )
+  </h6>
+  <div *ngIf="hasOrderTotalGroup()" formGroupName="orderTotalScaledDiscount">
+    <div class="mt-1" formArrayName="ranges">
+      <div>
+        <button (click)="addRange()" type="button" class="btn btn-sm btn-outline-info">Add Range</button>
+        <div *ngFor="let id of ranges.controls; let rangeId = index"
+             class="ms-4" [formGroupName]="rangeId">
+          <hr>
+          <div class="d-flex flex-wrap justify-content-start">
+            <app-input
+              class="m-1"
+              type="number"
+              placeholder="From"
+              formControlName="from"></app-input>
+
+            <app-input
+              class="m-1"
+              type="number"
+              placeholder="To"
+              formControlName="to"></app-input>
+
+            <app-select
+              class="m-1"
+              [options]="types"
+              placeholder="Type (% or $)"
+              formControlName="type"></app-select>
+
+            <app-input
+              class="m-1"
+              type="number"
+              placeholder="Discount"
+              formControlName="discount"></app-input>
+
+            <app-select
+              class="m-1"
+              [options]="applyToOptions"
+              placeholder="Apply To"
+              formControlName="applyTo"></app-select>
+            (<strong style="cursor:pointer;" (click)="removeRange(rangeId)">Remove</strong>)
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
