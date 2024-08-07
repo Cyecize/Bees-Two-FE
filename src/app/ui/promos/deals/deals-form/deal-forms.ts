@@ -33,6 +33,7 @@ export interface MultipleLineItemItemsConditionForm {
   vendorItemIds: FormArray<FormControl<string>>;
   minimumQuantity: FormControl<number | null>;
   minimumAmount: FormControl<number | null>;
+  maxQuantityPerUnit: FormControl<number | null>;
 }
 
 export interface AmountConditionForm {

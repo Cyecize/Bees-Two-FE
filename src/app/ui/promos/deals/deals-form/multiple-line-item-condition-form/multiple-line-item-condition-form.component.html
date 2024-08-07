@@ -22,9 +22,15 @@
         <div *ngFor="let lineItem of lineItems.controls; let itemGroupInd = index"
              [formGroupName]="itemGroupInd">
           <hr class="mt-2">
-          <div class="mt-1 d-flex">
+          <div class="mt-1 d-flex align-items-center">
             <app-input type="number" placeholder="Min Qty" formControlName="minimumQuantity"></app-input>
             <app-input type="number" class="ms-1" placeholder="Min Amount" formControlName="minimumAmount"></app-input>
+            <app-input
+              type="number"
+              class="ms-1"
+              placeholder="Max Qty Per Unit"
+              formControlName="maxQuantityPerUnit"></app-input>
+            <strong style="cursor:pointer;" (click)="removeLineItem(itemGroupInd)">Remove Group</strong>
           </div>
           <div class="mt-1" formArrayName="vendorItemIds">
             <div class="d-flex">

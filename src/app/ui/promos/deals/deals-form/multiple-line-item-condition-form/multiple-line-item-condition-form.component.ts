@@ -82,6 +82,7 @@ export class MultipleLineItemConditionFormComponent implements OnInit {
       ),
       minimumQuantity: new FormControl<number | null>(null),
       minimumAmount: new FormControl<number | null>(null),
+      maxQuantityPerUnit: new FormControl<number | null>(null),
     });
 
     if (item) {
