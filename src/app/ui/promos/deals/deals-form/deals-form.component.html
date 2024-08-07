@@ -22,6 +22,7 @@
             [clearOnChangeEnd]="true"
             (onChangeEnd)="addId($event)"></app-input>
           <button
+            type="button"
             *ngIf="DealIdType.ACCOUNT === form.controls.type.value"
             (click)="pickAccount()"
             class="btn btn-sm btn-outline-warning ms-1">Pick</button>
@@ -40,10 +41,12 @@
         <div class="d-flex">
           <button [disabled]="raw"
                   (click)="raw = true"
+                  type="button"
                   class="m-1 btn btn-sm btn-outline-dark">Raw JSON
           </button>
           <button [disabled]="!raw"
                   (click)="raw = false"
+                  type="button"
                   class="m-1 btn btn-sm btn-outline-primary">Form Controls
           </button>
         </div>
@@ -142,6 +145,22 @@
                 <app-condition-amounts-form
                   [deal]="maybeGetDeal(formInd)"
                   [form]="getConditionsForm(formInd)"></app-condition-amounts-form>
+              </div>
+            </div>
+
+            <div formGroupName="output">
+              <h5 class="mt-2">Output</h5>
+              <div class="mt-2">
+                <app-output-line-item-form
+                  [deal]="maybeGetDeal(formInd)"
+                  [form]="getOutputForm(formInd)">
+                </app-output-line-item-form>
+              </div>
+              <div class="mt-2">
+                <app-multiple-line-item-output-form
+                  [deal]="maybeGetDeal(formInd)"
+                  [form]="getOutputForm(formInd)">
+                </app-multiple-line-item-output-form>
               </div>
             </div>
             <hr class="mt-2">

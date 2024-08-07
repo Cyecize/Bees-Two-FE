@@ -9,6 +9,7 @@
           [id]="elementId">
     <option [disabled]="opt.disabled"
             *ngFor="let opt of options"
+            [attr.selected]="value === opt.value ? true : null"
             [value]="opt.value">{{opt.key}}</option>
   </select>
   <label [for]="elementId">{{ placeholder }}</label>

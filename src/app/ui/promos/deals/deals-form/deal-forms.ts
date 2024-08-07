@@ -4,37 +4,8 @@ import { DealAccumulationType } from '../../../../api/deals/enums/deal-accumulat
 import { DealConditionAmountScope } from '../../../../api/deals/enums/deal-condition-amount-scope';
 import { DealConditionAmountOperator } from '../../../../api/deals/enums/deal-condition-amount-operator';
 import { DealConditionAmountField } from '../../../../api/deals/enums/deal-condition-amount-field';
-
-export interface DealsForm {
-  ids: FormArray<FormControl<string>>;
-  type: FormControl<DealIdType>;
-  deals: FormArray<FormGroup<DealForm>>;
-}
-
-export interface DealForm {
-  vendorDealId: FormControl<string>;
-  vendorPromotionId: FormControl<string>;
-  accumulationType: FormControl<DealAccumulationType | null>;
-  priority: FormControl<number | null>;
-  level: FormControl<number | null>;
-  enforced: FormControl<boolean | null>;
-  enableVariantGroupingAndConversion: FormControl<boolean | null>;
-  hiddenOnBrowse: FormControl<boolean | null>;
-  hiddenOnDeals: FormControl<boolean | null>;
-  conditions: FormGroup<ConditionsForm>;
-  output: FormControl<string | null>;
-}
-
-export interface ConditionsForm {
-  paymentMethod: FormControl<string | null>;
-  simulationDateTime?: FormGroup<SimulationDateTimeForm>;
-  deliveryDate: FormArray<FormGroup<DeliveryDateForm>>;
-  firstOrder: FormControl<boolean | null>;
-  couponCode: FormControl<string | null>;
-  lineItem?: FormGroup<LineItemConditionForm>;
-  multipleLineItem?: FormGroup<MultipleLineItemConditionForm>;
-  amounts?: FormArray<FormGroup<AmountConditionForm>>;
-}
+import { DealDiscountType } from '../../../../api/deals/enums/deal-discount-type';
+import { DealComboType } from '../../../../api/deals/enums/deal-combo-type';
 
 export interface SimulationDateTimeForm {
   startDateTime: FormControl<string>;
@@ -68,4 +39,61 @@ export interface AmountConditionForm {
   operator: FormControl<DealConditionAmountOperator>;
   field: FormControl<DealConditionAmountField>;
   value: FormControl<number>;
+}
+
+export interface DealsForm {
+  ids: FormArray<FormControl<string>>;
+  type: FormControl<DealIdType>;
+  deals: FormArray<FormGroup<DealForm>>;
+}
+
+export interface DealForm {
+  vendorDealId: FormControl<string>;
+  vendorPromotionId: FormControl<string>;
+  accumulationType: FormControl<DealAccumulationType | null>;
+  priority: FormControl<number | null>;
+  level: FormControl<number | null>;
+  enforced: FormControl<boolean | null>;
+  enableVariantGroupingAndConversion: FormControl<boolean | null>;
+  hiddenOnBrowse: FormControl<boolean | null>;
+  hiddenOnDeals: FormControl<boolean | null>;
+  conditions: FormGroup<ConditionsForm>;
+  output: FormGroup<OutputForm>;
+}
+
+export interface ConditionsForm {
+  paymentMethod: FormControl<string | null>;
+  simulationDateTime?: FormGroup<SimulationDateTimeForm>;
+  deliveryDate: FormArray<FormGroup<DeliveryDateForm>>;
+  firstOrder: FormControl<boolean | null>;
+  couponCode: FormControl<string | null>;
+  lineItem?: FormGroup<LineItemConditionForm>;
+  multipleLineItem?: FormGroup<MultipleLineItemConditionForm>;
+  amounts?: FormArray<FormGroup<AmountConditionForm>>;
+}
+
+export interface OutputForm {
+  lineItemDiscount?: FormGroup<LineItemDiscountOutput>;
+  multipleLineItemDiscount?: FormGroup<MultipleLineItemDiscountOutput>;
+}
+
+export interface LineItemDiscountOutput {
+  vendorItemIds: FormArray<FormControl<string>>;
+  type: FormControl<DealDiscountType | null>;
+  value: FormControl<number | null>;
+  maxQuantity: FormControl<number | null>;
+  proportion: FormControl<number | null>;
+}
+
+export interface MultipleLineItemDiscountOutput {
+  proportion: FormControl<number | null>;
+  comboType: FormControl<DealComboType | null>;
+  type: FormControl<DealDiscountType | null>;
+  items: FormArray<FormGroup<MultipleLineItemDiscountOutputItem>>;
+}
+
+export interface MultipleLineItemDiscountOutputItem {
+  vendorItemId: FormControl<string>;
+  value: FormControl<number>;
+  maxQuantity: FormControl<number>;
 }

@@ -25,6 +25,7 @@ export interface DealsSearchQueryBody {
   deliveryDate?: string;
   firstOrder?: boolean;
   hiddenOnDeals?: boolean;
+  hiddenOnBrowse?: boolean;
   itemIds: string[];
   orderSubtotal?: number;
   orderTotal?: number;
@@ -43,6 +44,7 @@ export class DealsSearchQueryBodyImpl implements DealsSearchQueryBody {
   deliveryDate?: string;
   firstOrder?: boolean;
   hiddenOnDeals?: boolean;
+  hiddenOnBrowse?: boolean;
   itemIds: string[] = [];
   orderSubtotal?: number;
   orderTotal?: number;

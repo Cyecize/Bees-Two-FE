@@ -97,6 +97,11 @@
                       (onChangeEnd)="reloadFilters()"></app-checkbox>
       </div>
       <div class="filter">
+        <app-checkbox label="Hidden On Browse"
+                      [(ngModel)]="query.body.hiddenOnBrowse"
+                      (onChangeEnd)="reloadFilters()"></app-checkbox>
+      </div>
+      <div class="filter">
         <app-checkbox label="Ignore Start Date"
                       [(ngModel)]="query.ignoreStartDate"
                       (onChangeEnd)="reloadFilters()"></app-checkbox>

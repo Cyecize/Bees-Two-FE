@@ -39,12 +39,15 @@ import {
   DealForm,
   DealsForm,
   DeliveryDateForm,
+  OutputForm,
 } from './deal-forms';
 import { ConditionLineItemFormComponent } from './condition-line-item-form/condition-line-item-form.component';
 import { ConditionDatetimeSimulationFormComponent } from './condition-datetime-simulation-form/condition-datetime-simulation-form.component';
 import { ConditionDeliveryDateFormComponent } from './condition-delivery-date-form/condition-delivery-date-form.component';
 import { ConditionAmountsFormComponent } from './condition-amounts-form/condition-amounts-form.component';
 import { MultipleLineItemConditionFormComponent } from './multiple-line-item-condition-form/multiple-line-item-condition-form.component';
+import { OutputLineItemFormComponent } from './output-line-item-form/output-line-item-form.component';
+import { MultipleLineItemOutputFormComponent } from './multiple-line-item-output-form/multiple-line-item-output-form.component';
 
 @Component({
   selector: 'app-deals-form',
@@ -63,6 +66,8 @@ import { MultipleLineItemConditionFormComponent } from './multiple-line-item-con
     ConditionDeliveryDateFormComponent,
     ConditionAmountsFormComponent,
     MultipleLineItemConditionFormComponent,
+    OutputLineItemFormComponent,
+    MultipleLineItemOutputFormComponent,
   ],
   templateUrl: './deals-form.component.html',
   styleUrl: './deals-form.component.scss',
@@ -153,6 +158,10 @@ export class DealsFormComponent implements OnInit, OnDestroy {
     return this.dealForms.at(formInd).controls.conditions;
   }
 
+  getOutputForm(formInd: number): FormGroup<OutputForm> {
+    return this.dealForms.at(formInd).controls.output;
+  }
+
   onRawFormSubmit(): void {
     let data: DealPayload[];
     try {
@@ -241,7 +250,7 @@ export class DealsFormComponent implements OnInit, OnDestroy {
           firstOrder: new FormControl<boolean | null>(null),
           paymentMethod: new FormControl<string | null>(null),
         }),
-        output: new FormControl<string | null>(null),
+        output: new FormGroup<OutputForm>({}),
       }),
     );
   }

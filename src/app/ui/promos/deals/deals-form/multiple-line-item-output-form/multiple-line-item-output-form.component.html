@@ -1,0 +1,41 @@
+<div [formGroup]="form">
+  <h6>
+    Multiple Line Item
+    (
+    <span
+      *ngIf="!hasMultipleLineItem()"
+      (click)="addMultipleLineItem()"
+      style="cursor:pointer;">
+                  <i class="fa-solid fa-plus"></i></span>
+
+    <span
+      *ngIf="hasMultipleLineItem()"
+      (click)="removeMultipleLineItem()"
+      style="cursor:pointer;">
+                  <i class="fa-solid fa-x"></i></span>
+    )
+  </h6>
+  <div *ngIf="hasMultipleLineItem()" formGroupName="multipleLineItemDiscount">
+    <div class="mt-1">
+      <app-select [options]="comboTypes" placeholder="Combo Type" formControlName="comboType"></app-select>
+      <app-select [options]="types" placeholder="Discount Type" formControlName="type"></app-select>
+      <app-input type="number" placeholder="Proportion" formControlName="proportion"></app-input>
+    </div>
+
+    <div class="mt-1 mb-1">
+      <button (click)="addLineItem()" class="btn btn-sm btn-outline-info">Add Item</button>
+      <div formArrayName="items">
+        <div *ngFor="let lineItem of lineItems.controls; let itemGroupInd = index"
+             [formGroupName]="itemGroupInd">
+          <hr class="mt-2">
+          <div class="mt-1 d-flex align-items-center">
+            <app-input type="text" class="ms-1" placeholder="Vendor Item Id" formControlName="vendorItemId"></app-input>
+            <app-input type="number" class="ms-1" placeholder="Value" formControlName="value"></app-input>
+            <app-input type="number" placeholder="Max Qty" formControlName="maxQuantity"></app-input>
+            <span (click)="removeLineItem(itemGroupInd)"><i class="fa-solid fa-x"></i></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

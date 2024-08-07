@@ -1,0 +1,43 @@
+<div [formGroup]="form">
+  <h6>
+    Line Item Discount
+    (
+    <span
+      *ngIf="!hasLineItem()"
+      (click)="addLineItem()"
+      style="cursor:pointer;">
+                  <i class="fa-solid fa-plus"></i></span>
+
+    <span
+      *ngIf="hasLineItem()"
+      (click)="removeLineItem()"
+      style="cursor:pointer;">
+                  <i class="fa-solid fa-x"></i></span>
+    )
+  </h6>
+  <div *ngIf="hasLineItem()" formGroupName="lineItemDiscount">
+    <div class="mt-1 d-flex justify-content-between">
+      <app-select [options]="types" class="me-2" placeholder="Type" formControlName="type"></app-select>
+      <app-input type="number" class="me-2" placeholder="Discount" formControlName="value"></app-input>
+      <app-input type="number" class="me-2" placeholder="Max Qty" formControlName="maxQuantity"></app-input>
+      <app-input type="number" class="me-2" placeholder="Proportion" formControlName="proportion"></app-input>
+    </div>
+    <div class="mt-1" formArrayName="vendorItemIds">
+      <div class="d-flex">
+        <app-input
+          placeholder="Enter Vendor Item Id"
+          [clearOnChangeEnd]="true"
+          (onChangeEnd)="addSku($event)"></app-input>
+      </div>
+      <div class="d-flex flex-wrap justify-content-start">
+        <div *ngFor="let id of vendorItemIds.controls; let skuInd = index"
+             class="ms-4">
+          <div class="m-1 mt-3">
+            <app-input placeholder="Vendor Item Id" [formControlName]="skuInd"></app-input>
+            (<strong style="cursor:pointer;" (click)="removeSku(skuInd)">Remove</strong>)
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
