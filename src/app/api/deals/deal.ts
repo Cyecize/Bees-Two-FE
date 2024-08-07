@@ -85,6 +85,19 @@ export interface MultiItemScaledByMinQtyOutputRange {
   value: number;
 }
 
+export interface OrderTotalDiscountOutput {
+  type: DealDiscountType;
+  discount?: number;
+  proportion?: number;
+  maxAmount?: number;
+}
+
+export interface PalletDiscountOutput {
+  discount?: number;
+  proportion?: number;
+  measureUnit?: string;
+}
+
 export interface Deal {
   deliveryCenterId?: string;
   contractId: string;
@@ -118,4 +131,6 @@ export interface DealOutput {
   multipleLineItemDiscount?: MultipleLineItemOutput;
   orderTotalScaledDiscount?: OrderTotalScaledDiscountOutput;
   multipleLineItemScaledDiscountByMinimumQuantityAchieved?: MultiItemScaledByMinQtyOutput;
+  orderTotalDiscount?: OrderTotalDiscountOutput;
+  palletDiscount?: PalletDiscountOutput;
 }

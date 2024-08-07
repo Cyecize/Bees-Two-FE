@@ -1,0 +1,25 @@
+<div [formGroup]="form">
+  <h6>
+    Pallet Discount
+    (
+    <span
+      *ngIf="!hasPalletForm()"
+      (click)="addPallet()"
+      style="cursor:pointer;">
+                  <i class="fa-solid fa-plus"></i></span>
+
+    <span
+      *ngIf="hasPalletForm()"
+      (click)="removePallet()"
+      style="cursor:pointer;">
+                  <i class="fa-solid fa-x"></i></span>
+    )
+  </h6>
+  <div *ngIf="hasPalletForm()" formGroupName="palletDiscount">
+    <div class="mt-1 d-flex justify-content-between">
+      <app-input type="number" class="me-2" placeholder="Discount" formControlName="discount"></app-input>
+      <app-input type="number" class="me-2" placeholder="Proportion" formControlName="proportion"></app-input>
+      <app-input type="text" class="me-2" placeholder="Measure Unit" formControlName="measureUnit"></app-input>
+    </div>
+  </div>
+</div>

@@ -163,6 +163,12 @@
                 </app-multiple-line-item-output-form>
               </div>
               <div class="mt-2">
+                <div class="mt-2">
+                  <app-order-total-discount-output-form
+                    [deal]="maybeGetDeal(formInd)"
+                    [form]="getOutputForm(formInd)">
+                  </app-order-total-discount-output-form>
+                </div>
                 <app-order-total-scaled-discount-output-form
                   [deal]="maybeGetDeal(formInd)"
                   [form]="getOutputForm(formInd)">
@@ -173,6 +179,12 @@
                   [deal]="maybeGetDeal(formInd)"
                   [form]="getOutputForm(formInd)">
                 </app-multi-line-item-scaled-by-qty-output-form>
+              </div>
+              <div class="mt-2">
+                <app-pallet-discount-output-form
+                  [deal]="maybeGetDeal(formInd)"
+                  [form]="getOutputForm(formInd)">
+                </app-pallet-discount-output-form>
               </div>
             </div>
             <hr class="mt-2">

@@ -1,0 +1,26 @@
+<div [formGroup]="form">
+  <h6>
+    Order Total
+    (
+    <span
+      *ngIf="!hasOrderTotal()"
+      (click)="addOrderTotal()"
+      style="cursor:pointer;">
+                  <i class="fa-solid fa-plus"></i></span>
+
+    <span
+      *ngIf="hasOrderTotal()"
+      (click)="removeOrderTotal()"
+      style="cursor:pointer;">
+                  <i class="fa-solid fa-x"></i></span>
+    )
+  </h6>
+  <div *ngIf="hasOrderTotal()" formGroupName="orderTotalDiscount">
+    <div class="mt-1 d-flex justify-content-between">
+      <app-select placeholder="Type" class="me-2" [options]="types" formControlName="type"></app-select>
+      <app-input type="number" class="me-2" placeholder="Discount" formControlName="discount"></app-input>
+      <app-input type="number" class="me-2" placeholder="Proportion" formControlName="proportion"></app-input>
+      <app-input type="number" class="me-2" placeholder="Max Amount" formControlName="maxAmount"></app-input>
+    </div>
+  </div>
+</div>
