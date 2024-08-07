@@ -1,0 +1,76 @@
+<div [formGroup]="form">
+  <h6>
+    Multiple Line Item Scaled Discount
+    (
+    <span
+      *ngIf="!hasItemScaledForm()"
+      (click)="addItemScaledForm()"
+      style="cursor:pointer;">
+                  <i class="fa-solid fa-plus"></i></span>
+
+    <span
+      *ngIf="hasItemScaledForm()"
+      (click)="removeLineItemScaledForm()"
+      style="cursor:pointer;">
+                  <i class="fa-solid fa-x"></i></span>
+    )
+  </h6>
+  <div *ngIf="hasItemScaledForm()" formGroupName="multipleLineItemScaledDiscount">
+    <div class="mt-1" formArrayName="ranges">
+      <div>
+        <button (click)="addRange()" type="button" class="btn btn-sm btn-outline-info">Add Range</button>
+        <div *ngFor="let id of ranges.controls; let rangeInd = index"
+             class="ms-4" [formGroupName]="rangeInd">
+          <hr>
+          <strong>Range# {{ rangeInd + 1 }}</strong>
+          <div class="d-flex flex-wrap justify-content-start align-items-center">
+            <app-input
+              class="m-1"
+              type="number"
+              placeholder="From"
+              formControlName="from"></app-input>
+
+            <app-input
+              class="m-1"
+              type="number"
+              placeholder="To"
+              formControlName="to"></app-input>
+
+            <app-input
+              class="m-1"
+              type="number"
+              placeholder="Proportion"
+              formControlName="proportion"></app-input>
+
+            <app-select
+              class="m-1"
+              [options]="types"
+              placeholder="Type"
+              formControlName="type"></app-select>
+
+            <span
+              (click)="removeRange(rangeInd)"
+              style="cursor:pointer;"><i class="fa-solid fa-x"></i></span>
+          </div>
+          <div class="mt-1 mb-1">
+            <button (click)="addItem(rangeInd)" class="btn btn-sm btn-outline-info">Add Item</button>
+            <div formArrayName="items">
+              <div *ngFor="let lineItem of getItemsForm(rangeInd).controls; let itemGroupInd = index"
+                   [formGroupName]="itemGroupInd">
+                <hr class="mt-2">
+                <div class="mt-1 d-flex align-items-center">
+                  <app-input type="text" class="ms-1" placeholder="Vendor Item Id"
+                             formControlName="vendorItemId"></app-input>
+                  <app-input type="number" class="ms-1" placeholder="Value" formControlName="value"></app-input>
+                  <app-input type="number" class="ms-1" placeholder="Max Qty" formControlName="maxQuantity"></app-input>
+                  <span (click)="removeItemsForm(rangeInd, itemGroupInd)"><i class="fa-solid fa-x"></i></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

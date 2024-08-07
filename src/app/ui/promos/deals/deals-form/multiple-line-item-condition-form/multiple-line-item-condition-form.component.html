@@ -17,11 +17,12 @@
   </h6>
   <div *ngIf="hasMultipleLineItem()" formGroupName="multipleLineItem">
     <div class="mt-1 mb-1">
-      <button (click)="addLineItem()" class="btn btn-sm btn-outline-info">Add Line Item</button>
+      <button (click)="addLineItem()" class="btn btn-sm btn-outline-info">Add Group</button>
       <div formArrayName="items">
         <div *ngFor="let lineItem of lineItems.controls; let itemGroupInd = index"
              [formGroupName]="itemGroupInd">
           <hr class="mt-2">
+          <strong>Group# {{ itemGroupInd + 1 }}</strong>
           <div class="mt-1 d-flex align-items-center">
             <app-input type="number" placeholder="Min Qty" formControlName="minimumQuantity"></app-input>
             <app-input type="number" class="ms-1" placeholder="Min Amount" formControlName="minimumAmount"></app-input>

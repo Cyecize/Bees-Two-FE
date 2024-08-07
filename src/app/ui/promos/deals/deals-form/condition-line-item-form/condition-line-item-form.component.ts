@@ -57,9 +57,9 @@ export class ConditionLineItemFormComponent implements OnInit {
     this.form.addControl(
       'lineItem',
       new FormGroup<LineItemConditionForm>({
-        crossDiscount: new FormControl<boolean | null>(null),
+        crossDiscount: new FormControl<boolean>(false),
         minimumQuantity: new FormControl<number | null>(null),
-        sharedMinimumQuantity: new FormControl<boolean | null>(null),
+        sharedMinimumQuantity: new FormControl<boolean>(false),
         vendorItemIds: new FormArray<FormControl<string>>(
           [],
           Validators.required,

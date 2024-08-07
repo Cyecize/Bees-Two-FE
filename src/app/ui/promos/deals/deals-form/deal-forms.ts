@@ -114,6 +114,24 @@ export interface LineItemScaledDiscountOutputRangeForm {
   maxQuantity: FormControl<number | null>;
 }
 
+export interface MultiLineItemScaledDiscountOutputForm {
+  ranges: FormArray<FormGroup<MultiLineItemScaledDiscountOutputRangeForm>>;
+}
+
+export interface MultiLineItemScaledDiscountOutputRangeForm {
+  from: FormControl<number>;
+  to?: FormControl<number | null>;
+  proportion?: FormControl<number | null>;
+  type: FormControl<DealDiscountType>;
+  items: FormArray<FormGroup<MultiLineItemScaledDiscountOutputRangeItemForm>>;
+}
+
+export interface MultiLineItemScaledDiscountOutputRangeItemForm {
+  vendorItemId: FormControl<string>;
+  value: FormControl<number>;
+  maxQuantity?: FormControl<number | null>;
+}
+
 export interface DealsForm {
   ids: FormArray<FormControl<string>>;
   type: FormControl<DealIdType>;
@@ -153,4 +171,5 @@ export interface OutputForm {
   orderTotalDiscount?: FormGroup<OrderTotalDiscountOutputForm>;
   palletDiscount?: FormGroup<PalletDiscountOutputForm>;
   lineItemScaledDiscount?: FormGroup<LineItemScaledDiscountOutputForm>;
+  multipleLineItemScaledDiscount?: FormGroup<MultiLineItemScaledDiscountOutputForm>;
 }
