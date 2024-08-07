@@ -17,9 +17,15 @@
   </h6>
   <div *ngIf="hasMultipleLineItem()" formGroupName="multipleLineItemDiscount">
     <div class="mt-1">
-      <app-select [options]="comboTypes" placeholder="Combo Type" formControlName="comboType"></app-select>
-      <app-select [options]="types" placeholder="Discount Type" formControlName="type"></app-select>
-      <app-input type="number" placeholder="Proportion" formControlName="proportion"></app-input>
+      <div class="mt-1">
+        <app-select [options]="comboTypes" placeholder="Combo Type" formControlName="comboType"></app-select>
+      </div>
+      <div class="mt-1">
+        <app-select [options]="types" placeholder="Discount Type" formControlName="type"></app-select>
+      </div>
+      <div class="mt-1">
+        <app-input type="number" placeholder="Proportion" formControlName="proportion"></app-input>
+      </div>
     </div>
 
     <div class="mt-1 mb-1">

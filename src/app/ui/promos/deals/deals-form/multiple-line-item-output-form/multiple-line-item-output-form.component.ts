@@ -103,10 +103,7 @@ export class MultipleLineItemOutputFormComponent implements OnInit {
         nonNullable: true,
         validators: Validators.required,
       }),
-      maxQuantity: new FormControl<number>(null!, {
-        nonNullable: true,
-        validators: Validators.required,
-      }),
+      maxQuantity: new FormControl<number | null>(null),
       value: new FormControl<number>(null!, {
         nonNullable: true,
         validators: Validators.required,

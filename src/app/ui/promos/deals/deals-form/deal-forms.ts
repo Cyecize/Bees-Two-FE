@@ -61,7 +61,30 @@ export interface MultipleLineItemDiscountOutput {
 export interface MultipleLineItemDiscountOutputItem {
   vendorItemId: FormControl<string>;
   value: FormControl<number>;
-  maxQuantity: FormControl<number>;
+  maxQuantity: FormControl<number | null>;
+}
+
+export interface OrderTotalScaledDiscountOutputForm {
+  ranges: FormArray<FormGroup<OrderTotalScaledDiscountOutputRangeForm>>;
+}
+
+export interface OrderTotalScaledDiscountOutputRangeForm {
+  from: FormControl<number>;
+  to: FormControl<number>;
+  type: FormControl<DealDiscountType>;
+  discount: FormControl<number>;
+  applyTo: FormControl<DealOrderTotalApplyTo | null>;
+}
+
+export interface MultiItemScaledByMinQtyOutputForm {
+  ranges: FormArray<FormGroup<MultiItemScaledByMinQtyOutputRangeForm>>;
+}
+
+export interface MultiItemScaledByMinQtyOutputRangeForm {
+  from: FormControl<number>;
+  to: FormControl<number>;
+  type: FormControl<DealDiscountType>;
+  value: FormControl<number>;
 }
 
 export interface DealsForm {
@@ -99,16 +122,5 @@ export interface OutputForm {
   lineItemDiscount?: FormGroup<LineItemDiscountOutput>;
   multipleLineItemDiscount?: FormGroup<MultipleLineItemDiscountOutput>;
   orderTotalScaledDiscount?: FormGroup<OrderTotalScaledDiscountOutputForm>;
-}
-
-export interface OrderTotalScaledDiscountOutputForm {
-  ranges: FormArray<FormGroup<OrderTotalScaledDiscountOutputRangeForm>>;
-}
-
-export interface OrderTotalScaledDiscountOutputRangeForm {
-  from: FormControl<number>;
-  to: FormControl<number>;
-  type: FormControl<DealDiscountType>;
-  discount: FormControl<number>;
-  applyTo: FormControl<DealOrderTotalApplyTo | null>;
+  multipleLineItemScaledDiscountByMinimumQuantityAchieved?: FormGroup<MultiItemScaledByMinQtyOutputForm>;
 }
