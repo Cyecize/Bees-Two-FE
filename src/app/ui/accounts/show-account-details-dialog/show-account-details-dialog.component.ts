@@ -3,6 +3,9 @@ import { Observable } from 'rxjs';
 import { RouterLink } from '@angular/router';
 import { ShowAccountDetailsDialogPayload } from './show-account-details-dialog.payload';
 import { DialogContentBaseComponent } from '../../../shared/dialog/dialogs/dialog-content-base.component';
+import { DialogService } from '../../../shared/dialog/dialog.service';
+import { AccountFormDialogComponent } from '../../accounts-local/account-form-dialog/account-form-dialog.component';
+import { AccountFormDialogPayload } from '../../accounts-local/account-form-dialog/account-form-dialog.payload';
 
 @Component({
   selector: 'app-show-account-details-dialog',
@@ -16,6 +19,10 @@ export class ShowAccountDetailsDialogComponent
   implements OnInit
 {
   dataJson!: string;
+
+  constructor(private dialogService: DialogService) {
+    super();
+  }
 
   ngOnInit(): void {
     this.dataJson = JSON.stringify(this.payload.account, null, 2);
@@ -39,5 +46,16 @@ export class ShowAccountDetailsDialogComponent
 
   delete(): void {
     alert('bout 2 delete!');
+  }
+
+  saveLocally(): void {
+    this.dialogService.open(
+      AccountFormDialogComponent,
+      '',
+      new AccountFormDialogPayload(
+        this.payload.selectedEnv!,
+        this.payload.account,
+      ),
+    );
   }
 }

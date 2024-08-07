@@ -10,6 +10,9 @@ export interface LocalAccountQuery {
   env: number;
   name?: string;
   id?: string;
+  beesId?: string;
+  vendorAccountId?: string;
+  customerAccountId?: string;
 }
 
 export class LocalAccountQueryImpl implements LocalAccountQuery {
@@ -21,4 +24,7 @@ export class LocalAccountQueryImpl implements LocalAccountQuery {
     field: 'id',
     direction: SortDirection.ASC,
   };
+  beesId = '';
+  vendorAccountId = '';
+  customerAccountId = '';
 }

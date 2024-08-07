@@ -5,6 +5,8 @@ export class Endpoints {
   public static readonly PLATFORM_ID_ENCODE_CONTRACT = '/platform-id/encode/contract';
   public static readonly PLATFORM_ID_DECODE_CONTRACT = '/platform-id/decode/contract/:id';
   public static readonly ACCOUNTS_SEARCH = '/accounts/search';
+  public static readonly ACCOUNTS = '/accounts';
+  public static readonly ACCOUNT = '/accounts/:id';
 
   // Bees endpoints
   public static readonly DATA_INGESTION = '/api/v1/data-ingestion-relay-service/v1';

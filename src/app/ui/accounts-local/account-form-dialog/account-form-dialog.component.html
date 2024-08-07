@@ -1,0 +1,64 @@
+<div>
+  <h2>Save Account</h2>
+  <p>You are saving this account for <strong>{{ payload.env.envName }}</strong></p>
+  <hr>
+  <div>
+    <form [formGroup]="form">
+      <div class="mt-2">
+        <app-input
+          (onChangeEnd)="reloadFilters()"
+          placeholder="Name"
+          formControlName="name"></app-input>
+      </div>
+      <div class="mt-2">
+        <app-input
+          (onChangeEnd)="reloadFilters()"
+          placeholder="Bees ID"
+          formControlName="beesId"></app-input>
+      </div>
+      <div class="mt-2">
+        <app-input
+          (onChangeEnd)="reloadFilters()"
+          placeholder="Customer Account ID"
+          formControlName="customerAccountId"></app-input>
+      </div>
+      <div class="mt-2">
+        <app-input
+          (onChangeEnd)="reloadFilters()"
+          placeholder="Vendor Account ID"
+          formControlName="vendorAccountId"></app-input>
+      </div>
+      <div class="mt-2 text-end">
+        <button (click)="onFormSubmit()"
+                type="submit"
+                class="btn btn-success"
+                [disabled]="!form.valid">
+          Save
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <div style="overflow-y: auto; max-height: 500px;" class="mt-5" *ngIf="accountsPage.content.length">
+    <h3 class="alert alert-warning">Found the following accounts that could be potential duplicates</h3>
+    <table class="table">
+      <thead>
+      <tr>
+        <th scope="col">Bees ID</th>
+        <th scope="col">Name</th>
+        <th scope="col">IDs</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let acc of accountsPage.content">
+        <th scope="row">{{ acc.beesId }}</th>
+        <td>{{ acc.name }}</td>
+        <td>
+          <div>Customer ID: <span>{{ acc.customerAccountId }}</span></div>
+          <div>Vendor ID: <span>{{ acc.vendorAccountId }}</span></div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
