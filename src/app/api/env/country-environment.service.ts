@@ -42,6 +42,10 @@ export class CountryEnvironmentService {
     return this.selectedEnvSubject.getValue();
   }
 
+  public async reInit(): Promise<void> {
+    await this.init();
+  }
+
   private async init(): Promise<void> {
     this.allEnvs = firstValueFrom(this.repository.getAllEnvs());
 

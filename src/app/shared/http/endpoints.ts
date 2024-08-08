@@ -1,4 +1,6 @@
 export class Endpoints {
+  public static readonly LOGIN = '/login';
+  public static readonly USER_DETAILS = '/user-details';
   public static readonly ENVIRONMENTS = '/environments';
   public static readonly ENVIRONMENT = '/environments/:id';
   public static readonly REQUEST = '/request';

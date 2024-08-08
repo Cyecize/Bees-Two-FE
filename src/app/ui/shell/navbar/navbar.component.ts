@@ -5,6 +5,8 @@ import { NgIf } from '@angular/common';
 import { DialogService } from '../../../shared/dialog/dialog.service';
 import { EnvViewerDialogComponent } from '../../env/env-viewer-dialog/env-viewer-dialog.component';
 import { EnvPickerDialogComponent } from '../../env/env-picker-dialog/env-picker-dialog.component';
+import { UserService } from '../../../api/user/user.service';
+import { User } from '../../../api/user/user';
 
 @Component({
   selector: 'app-navbar',
@@ -15,10 +17,12 @@ import { EnvPickerDialogComponent } from '../../env/env-picker-dialog/env-picker
 })
 export class NavbarComponent implements OnInit {
   selectedEnv!: CountryEnvironmentModel;
+  currentUser?: User;
 
   constructor(
     private envService: CountryEnvironmentService,
     private dialogService: DialogService,
+    private userService: UserService,
   ) {}
 
   ngOnInit(): void {
@@ -27,6 +31,10 @@ export class NavbarComponent implements OnInit {
         this.selectedEnv = env;
       }
     });
+
+    this.userService.currentUser$.subscribe(
+      (user) => (this.currentUser = user),
+    );
   }
 
   showCurrentEnv(): void {

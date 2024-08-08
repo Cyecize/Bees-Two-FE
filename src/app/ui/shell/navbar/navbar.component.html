@@ -37,13 +37,18 @@
         <!--        </li>-->
       </ul>
       <ul class="navbar-nav mb-2 ">
+        <li *ngIf="currentUser" class="nav-item">
+          <span class="nav-link">{{ currentUser.email }}</span>
+        </li>
         <li *ngIf="selectedEnv" class="nav-item">
           <span style="cursor:pointer;" (click)="showCurrentEnv()" class="nav-link">
             {{ selectedEnv.envName }} ({{ selectedEnv.env }})
           </span>
         </li>
         <li class="nav-item">
-          <button (click)="selectEnv()" class="nav-link btn btn-outline-success">Select Environment</button>
+          <div class="nav-link p-0">
+            <button (click)="selectEnv()" class="btn btn-outline-success">Select Environment</button>
+          </div>
         </li>
       </ul>
     </div>

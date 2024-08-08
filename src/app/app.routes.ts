@@ -216,6 +216,11 @@ export const routes: Routes = [
       import('./ui/home/home.component').then((value) => value.HOME_ROUTES),
   },
   {
+    path: AppRoutingPath.LOGIN.path,
+    loadChildren: () =>
+      import('./ui/login/login.component').then((value) => value.LOGIN_ROUTES),
+  },
+  {
     path: AppRoutingPath.PROMOS.path,
     children: promoRoutes,
   },

@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
-import { HttpClientService } from '../../shared/http/http-client.service';
 import { Observable } from 'rxjs';
 import { Endpoints } from '../../shared/http/endpoints';
 import { ProxyRequestPayload } from './proxy-request.payload';
 import { BeesResponse } from './bees-response';
+import { HttpClientSecuredService } from '../../shared/http/http-client-secured.service';
 
 @Injectable({ providedIn: 'root' })
 export class ProxyRepository {
-  constructor(private http: HttpClientService) {}
+  constructor(private http: HttpClientSecuredService) {}
 
   public makeRequest<TResponse>(
     payload: ProxyRequestPayload,

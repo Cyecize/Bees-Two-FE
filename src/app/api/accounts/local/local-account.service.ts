@@ -17,7 +17,7 @@ export class LocalAccountService {
   }
 
   public async createAccount(
-    payload: CreateLocalAccountPayload
+    payload: CreateLocalAccountPayload,
   ): Promise<LocalAccount> {
     return firstValueFrom(this.repository.create(payload));
   }
