@@ -1,4 +1,4 @@
 export const environment = {
-  backendUrl: '',
+  backendUrl: 'https://bees-two-be.cyeserv.fun',
   apiUrl: '',
 };
