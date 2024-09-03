@@ -163,7 +163,7 @@ export interface DealOutput {
   lineItemScaledDiscount?: LineItemScaledDiscountOutput;
   multipleLineItemDiscount?: MultipleLineItemOutput;
   orderTotalScaledDiscount?: OrderTotalScaledDiscountOutput;
-  multipleLineItemScaledDiscountByMinimumQuantityAchieved?: MultiItemScaledByMinQtyOutput;
+  multipleLineItemScaledDiscountSkuPool?: MultiItemScaledByMinQtyOutput;
   orderTotalDiscount?: OrderTotalDiscountOutput;
   palletDiscount?: PalletDiscountOutput;
   multipleLineItemScaledDiscount?: MultiLineItemScaledDiscountOutput;

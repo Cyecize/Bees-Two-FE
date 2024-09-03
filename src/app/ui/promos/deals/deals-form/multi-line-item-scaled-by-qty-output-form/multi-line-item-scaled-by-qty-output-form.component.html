@@ -1,6 +1,6 @@
 <div [formGroup]="form">
   <h6>
-    SKU Sold <span class="text-warning">BETA</span> (Multi Line Scaled By Min Qty Achieved)
+    SKU Sold (Multi Line Scaled By Min Qty Achieved)
     (
     <span
       *ngIf="!hasSkuSoldForm()"
@@ -15,7 +15,7 @@
                   <i class="fa-solid fa-x"></i></span>
     )
   </h6>
-  <div *ngIf="hasSkuSoldForm()" formGroupName="multipleLineItemScaledDiscountByMinimumQuantityAchieved">
+  <div *ngIf="hasSkuSoldForm()" formGroupName="multipleLineItemScaledDiscountSkuPool">
     <div class="mt-1" formArrayName="ranges">
       <div>
         <button (click)="addRange()" type="button" class="btn btn-sm btn-outline-info">Add Range</button>

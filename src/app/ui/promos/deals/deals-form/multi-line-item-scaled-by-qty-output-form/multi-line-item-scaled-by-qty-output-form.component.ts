@@ -64,19 +64,16 @@ export class MultiLineItemScaledByQtyOutputFormComponent implements OnInit {
 
   get skuSoldForm(): FormGroup<MultiItemScaledByMinQtyOutputForm> {
     // @ts-ignore
-    return this.form.controls
-      .multipleLineItemScaledDiscountByMinimumQuantityAchieved;
+    return this.form.controls.multipleLineItemScaledDiscountSkuPool;
   }
 
   hasSkuSoldForm(): boolean {
-    return this.form.contains(
-      'multipleLineItemScaledDiscountByMinimumQuantityAchieved',
-    );
+    return this.form.contains('multipleLineItemScaledDiscountSkuPool');
   }
 
   addSkuSold(): void {
     this.form.addControl(
-      'multipleLineItemScaledDiscountByMinimumQuantityAchieved',
+      'multipleLineItemScaledDiscountSkuPool',
       new FormGroup<MultiItemScaledByMinQtyOutputForm>({
         ranges: new FormArray<
           FormGroup<MultiItemScaledByMinQtyOutputRangeForm>
@@ -86,9 +83,7 @@ export class MultiLineItemScaledByQtyOutputFormComponent implements OnInit {
   }
 
   removeSkuSold(): void {
-    this.form.removeControl(
-      'multipleLineItemScaledDiscountByMinimumQuantityAchieved',
-    );
+    this.form.removeControl('multipleLineItemScaledDiscountSkuPool');
   }
 
   addRange(range?: MultiItemScaledByMinQtyOutputRange): void {
@@ -127,16 +122,16 @@ export class MultiLineItemScaledByQtyOutputFormComponent implements OnInit {
   }
 
   private applyDeal(deal: Deal): void {
-    if (!deal.output?.multipleLineItemScaledDiscountByMinimumQuantityAchieved) {
+    if (!deal.output?.multipleLineItemScaledDiscountSkuPool) {
       return;
     }
 
     this.addSkuSold();
     this.skuSoldForm.patchValue(
-      deal.output.multipleLineItemScaledDiscountByMinimumQuantityAchieved,
+      deal.output.multipleLineItemScaledDiscountSkuPool,
     );
 
-    deal.output.multipleLineItemScaledDiscountByMinimumQuantityAchieved.ranges.forEach(
+    deal.output.multipleLineItemScaledDiscountSkuPool.ranges.forEach(
       (range) => {
         this.addRange(range);
       },

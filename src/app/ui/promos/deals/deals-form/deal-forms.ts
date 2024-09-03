@@ -33,7 +33,7 @@ export interface MultipleLineItemItemsConditionForm {
   vendorItemIds: FormArray<FormControl<string>>;
   minimumQuantity: FormControl<number | null>;
   minimumAmount: FormControl<number | null>;
-  maxQuantityPerUnit: FormControl<number | null>;
+  maxQuantity: FormControl<number | null>;
 }
 
 export interface AmountConditionForm {
@@ -167,7 +167,7 @@ export interface OutputForm {
   lineItemDiscount?: FormGroup<LineItemDiscountOutput>;
   multipleLineItemDiscount?: FormGroup<MultipleLineItemDiscountOutput>;
   orderTotalScaledDiscount?: FormGroup<OrderTotalScaledDiscountOutputForm>;
-  multipleLineItemScaledDiscountByMinimumQuantityAchieved?: FormGroup<MultiItemScaledByMinQtyOutputForm>;
+  multipleLineItemScaledDiscountSkuPool?: FormGroup<MultiItemScaledByMinQtyOutputForm>;
   orderTotalDiscount?: FormGroup<OrderTotalDiscountOutputForm>;
   palletDiscount?: FormGroup<PalletDiscountOutputForm>;
   lineItemScaledDiscount?: FormGroup<LineItemScaledDiscountOutputForm>;
