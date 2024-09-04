@@ -124,6 +124,19 @@ const rewardsRoutes: Routes = [
       },
     ],
   },
+  {
+    path: AppRoutingPath.REWARDS_SEGMENTATION.path,
+    component: RewardsBaseComponent,
+    children: [
+      {
+        path: AppRoutingPath.SEARCH_SEGMENTATION_GROUPS.path,
+        loadChildren: () =>
+          import(
+            './ui/rewards-segmentation/search-segmentation-groups/search-segmentation-groups.component'
+          ).then((value) => value.SEARCH_SEGMENTATION_GROUPS_ROUTES),
+      },
+    ],
+  },
 ];
 
 const accountRoutes: Routes = [

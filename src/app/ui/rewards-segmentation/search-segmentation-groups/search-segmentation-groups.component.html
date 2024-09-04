@@ -1,0 +1,73 @@
+<div>
+  <div>
+    <h3>Rewards Settings</h3>
+  </div>
+
+  <div>
+    <h4>Environment</h4>
+    <div class="filters-header">
+      <div class="filter">
+        <app-env-override-field></app-env-override-field>
+      </div>
+    </div>
+  </div>
+
+  <div class="filters">
+    <div class="filters-header">
+      <div class="filter">
+        <app-input
+          formControlName="names"
+          placeholder="Enter name"
+          [clearOnChangeEnd]="true"
+          (onChangeEnd)="query.names.push($event); reloadFilters();"></app-input>
+        <div *ngFor="let name of query.names; let ind = index" class="d-flex justify-content-between">
+          <span>{{ name }}</span>
+          <span (click)="query.names.splice(ind, 1); reloadFilters();"><i class="fa-solid fa-x"></i></span>
+        </div>
+      </div>
+
+      <div class="filter">
+        <app-input
+          formControlName="purposes"
+          placeholder="Enter purpose"
+          [clearOnChangeEnd]="true"
+          (onChangeEnd)="query.purposes.push($event); reloadFilters();"></app-input>
+        <div *ngFor="let purpose of query.purposes; let ind = index" class="d-flex justify-content-between">
+          <span>{{ purpose }}</span>
+          <span (click)="query.purposes.splice(ind, 1); reloadFilters();"><i class="fa-solid fa-x"></i></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<hr>
+<div class="main">
+  <table class="table table-striped table-hover">
+    <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+      <th scope="col">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let group of searchResponse">
+      <th scope="row">
+        <app-tooltip-span
+          [displayText]="shortenStr(group.id)"
+          [tooltipText]="group.id"></app-tooltip-span>
+      </th>
+      <td>
+        <strong>{{ group.name }}</strong>
+      </td>
+      <td>
+        <div class="d-flex justify-content-around">
+          <button class="btn btn-outline-success" (click)="openDetailsDialog(group)">View Details</button>
+        </div>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <hr>
+</div>

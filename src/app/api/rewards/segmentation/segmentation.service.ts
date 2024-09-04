@@ -1,0 +1,19 @@
+import { Injectable } from '@angular/core';
+import { SegmentationRepository } from './segmentation.repository';
+import { CountryEnvironmentModel } from '../../env/country-environment.model';
+import { BeesResponse } from '../../proxy/bees-response';
+import { firstValueFrom } from 'rxjs';
+import { SegmentationGroupQuery } from './segmentation-group.query';
+import { SegmentationGroupModel } from './segmentation-group.model';
+
+@Injectable({ providedIn: 'root' })
+export class SegmentationService {
+  constructor(private repository: SegmentationRepository) {}
+
+  public async searchGroups(
+    query: SegmentationGroupQuery,
+    env?: CountryEnvironmentModel,
+  ): Promise<BeesResponse<SegmentationGroupModel[]>> {
+    return firstValueFrom(this.repository.searchGroups(query, env?.id));
+  }
+}

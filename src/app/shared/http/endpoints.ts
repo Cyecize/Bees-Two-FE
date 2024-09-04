@@ -14,6 +14,8 @@ export class Endpoints {
   public static readonly DATA_INGESTION = '/api/v1/data-ingestion-relay-service/v1';
   public static readonly BEES_REWARDS_SETTINGS_V1 = '/api/rewards-service/v1/settings';
   public static readonly BEES_REWARDS_SETTING_V1 = '/api/rewards-service/v1/settings/:settingId/:type/:level/:tier';
+  public static readonly BEES_SEGMENTATION_GROUPS = '/segmentation-service/v1/groups';
+  public static readonly BEES_SEGMENTATION_ACCOUNT_GROUPS = '/segmentation-service/v1/account-groups';
   public static readonly PROMOTIONS_V3 = '/v1/promotion-service/v3/promotions';
   public static readonly DEAL_SERVICE_V3 = '/deal-service/v3';
   public static readonly DEAL_RELAY_V3 = '/deal-relay/v3';

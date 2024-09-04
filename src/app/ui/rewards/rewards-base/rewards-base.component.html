@@ -20,6 +20,21 @@
         </ul>
       </section>
       <hr>
+
+      <section class="sidebar-item">
+        <h4>Segmentation</h4>
+        <ul>
+          <li routerLinkActive="link-active">
+            <a [routerLink]="routes.SEARCH_SEGMENTATION_GROUPS.toString()">Search All Groups</a>
+          </li>
+          <li routerLinkActive="link-active">
+            <a [routerLink]="routes.SEARCH_SEGMENTATION_GROUPS_BY_ACCOUNT.toString()">Search Groups By Accounts</a>
+          </li>
+          <li routerLinkActive="link-active">
+            <a [routerLink]="routes.CREATE_SEGMENTATION_GROUP.toString()">Create / Update Group</a>
+          </li>
+        </ul>
+      </section>
     </div>
   </div>
 </div>
