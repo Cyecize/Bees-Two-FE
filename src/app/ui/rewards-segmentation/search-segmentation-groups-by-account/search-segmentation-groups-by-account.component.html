@@ -78,4 +78,5 @@
     </tbody>
   </table>
   <hr>
+  <app-pagination (pageChange)="pageChange($event)" [pagination]="v2ToV1Pagination(searchResponse.pagination)"></app-pagination>
 </div>

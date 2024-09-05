@@ -10,12 +10,9 @@ import { PaginationComponent } from '../../../shared/components/pagination/pagin
 import { EnvOverrideFieldComponent } from '../../env/env-override-field/env-override-field.component';
 import { EnvOverrideService } from '../../../api/env/env-override.service';
 import { Subscription } from 'rxjs';
-import { SegmentationGroupModel } from '../../../api/rewards/segmentation/segmentation-group.model';
 import { SegmentationService } from '../../../api/rewards/segmentation/segmentation.service';
-import { ShowSegmentGroupDetailsDialogComponent } from '../show-segment-group-details-dialog/show-segment-group-details-dialog.component';
-import { ShowSegmentGroupDetailsDialogPayload } from '../show-segment-group-details-dialog/show-segment-group-details-dialog.payload';
 import { SegmentationGroupByAccountSearchResponse } from '../../../api/rewards/segmentation/segmentation-group-by-account.search-response';
-import { EmptyPaginationV2 } from '../../../shared/util/page';
+import { EmptyPaginationV2, v2ToV1Pagination } from '../../../shared/util/page';
 import {
   SegmentationGroupByAccountQuery,
   SegmentationGroupByAccountQueryImpl,
@@ -24,6 +21,7 @@ import { SegmentationGroupByAccountModel } from '../../../api/rewards/segmentati
 import { DealIdType } from '../../../api/deals/enums/deal-id-type';
 import { ShowSegmentGroupByAccountDetailsDialogComponent } from '../show-segment-group-by-account-details-dialog/show-segment-group-by-account-details-dialog.component';
 import { ShowSegmentGroupByAccountDetailsDialogPayload } from '../show-segment-group-by-account-details-dialog/show-segment-group-by-account-details-dialog.payload';
+import { ShowLoader } from '../../../shared/loader/show.loader.decorator';
 
 @Component({
   selector: 'app-search-segmentation-groups-by-account',
@@ -77,9 +75,11 @@ export class SearchSegmentationGroupsByAccountComponent
   }
 
   async reloadFilters(): Promise<void> {
+    this.query.page.page = 0;
     await this.fetchData();
   }
 
+  @ShowLoader()
   private async fetchData(): Promise<void> {
     const response = await this.segmentationService.searchGroupsByAccount(
       this.query,
@@ -127,6 +127,13 @@ export class SearchSegmentationGroupsByAccountComponent
   addAccountId(accId: string): void {
     this.query.accountIds.push(accId);
     this.reloadFilters();
+  }
+
+  protected readonly v2ToV1Pagination = v2ToV1Pagination;
+
+  pageChange(page: number): void {
+    this.query.page.page = page;
+    this.fetchData();
   }
 }
 

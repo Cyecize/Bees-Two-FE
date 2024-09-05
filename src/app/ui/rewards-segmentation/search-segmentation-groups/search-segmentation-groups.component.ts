@@ -18,6 +18,7 @@ import { SegmentationGroupModel } from '../../../api/rewards/segmentation/segmen
 import { SegmentationService } from '../../../api/rewards/segmentation/segmentation.service';
 import { ShowSegmentGroupDetailsDialogComponent } from '../show-segment-group-details-dialog/show-segment-group-details-dialog.component';
 import { ShowSegmentGroupDetailsDialogPayload } from '../show-segment-group-details-dialog/show-segment-group-details-dialog.payload';
+import { ShowLoader } from '../../../shared/loader/show.loader.decorator';
 
 @Component({
   selector: 'app-search-segmentation-groups',
@@ -67,6 +68,7 @@ export class SearchSegmentationGroupsComponent implements OnInit, OnDestroy {
     await this.fetchData();
   }
 
+  @ShowLoader()
   private async fetchData(): Promise<void> {
     const response = await this.segmentationService.searchGroups(
       this.query,

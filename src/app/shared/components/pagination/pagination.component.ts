@@ -13,14 +13,34 @@ export class PaginationComponent {
   @Input()
   pagination!: Pagination;
 
+  @Input()
+  maxPages = 15;
+
   @Output()
   pageChange: EventEmitter<number> = new EventEmitter<number>();
+
+  hasPageOverflow(): boolean {
+    return this.pagination?.totalPages > this.maxPages;
+  }
 
   getPageNumbers(): number[] {
     const res: number[] = [];
 
-    for (let i = 0; i < this.pagination?.totalPages; i++) {
-      res.push(i);
+    if (!this.hasPageOverflow()) {
+      for (let i = 0; i < Math.min(this.pagination?.totalPages); i++) {
+        res.push(i);
+      }
+    } else {
+      const range = Math.floor(this.maxPages / 2);
+      const start = Math.max(0, this.pagination?.page - range);
+      const end = Math.min(
+        this.pagination?.totalPages,
+        this.pagination?.page + range,
+      );
+
+      for (let i = start; i < end; i++) {
+        res.push(i);
+      }
     }
 
     return res;

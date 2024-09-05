@@ -28,6 +28,16 @@ export class EmptyPaginationV2 implements PaginationV2 {
   totalPage = 1;
 }
 
+export function v2ToV1Pagination(v2Page: PaginationV2): Pagination {
+  const page = new EmptyPagination();
+  page.totalElements = v2Page.totalElements;
+  page.totalPages = v2Page.totalPage;
+  page.page = v2Page.page;
+  page.pageSize = v2Page.pageSize;
+
+  return page;
+}
+
 export interface HasNextPagination {
   hasNext: boolean;
   page: number;
