@@ -1,5 +1,21 @@
 <div style="overflow-y: auto; max-height: 500px;">
-<pre>{{ dataJson }}</pre>
+  <pre>{{ dataJson }}</pre>
+</div>
+
+<div>
+  <h3>Assigned groups:</h3>
+  <ul>
+    <li *ngFor="let groupId of payload.group.groupIds">
+      <div class="d-flex justify-content-between">
+        <span>{{ groupId }}</span>
+        <span style="cursor: pointer;">
+          <i (click)="unassignGroup(groupId)"
+             class="fa fa-x" aria-hidden="true"></i>
+        </span>
+
+      </div>
+    </li>
+  </ul>
 </div>
 <hr>
 <div class="text-end">

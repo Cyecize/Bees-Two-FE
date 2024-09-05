@@ -97,15 +97,22 @@ export class SearchSegmentationGroupsByAccountComponent
   }
 
   openDetailsDialog(group: SegmentationGroupByAccountModel): void {
-    this.dialogService.open(
-      ShowSegmentGroupByAccountDetailsDialogComponent,
-      '',
-      new ShowSegmentGroupByAccountDetailsDialogPayload(
-        group,
-        this.query,
-        this.selectedEnv!,
-      ),
-    );
+    this.dialogService
+      .open(
+        ShowSegmentGroupByAccountDetailsDialogComponent,
+        '',
+        new ShowSegmentGroupByAccountDetailsDialogPayload(
+          group,
+          this.query,
+          this.selectedEnv!,
+        ),
+      )
+      .afterClosed()
+      .subscribe((val) => {
+        if (val) {
+          this.reloadFilters();
+        }
+      });
   }
 
   protected readonly DealIdType = DealIdType;

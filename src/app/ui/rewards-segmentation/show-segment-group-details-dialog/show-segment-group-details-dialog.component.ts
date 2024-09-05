@@ -42,30 +42,27 @@ export class ShowSegmentGroupDetailsDialogComponent
   }
 
   delete(): void {
-    alert('del!');
-    // this.dialogService
-    //   .openConfirmDialog(
-    //     `You are about to delete a deal with id ${this.payload.deal.vendorDealId}`,
-    //     'Delete deal!',
-    //     'Delete',
-    //   )
-    //   .subscribe(async (confirm) => {
-    //     if (confirm) {
-    //       // @ts-ignore
-    //       const env: CountryEnvironmentModel =
-    //         this.payload.selectedEnv || this.envService.getCurrentEnv();
-    //       const result = await this.dealsService.deleteDeals(
-    //         new DeleteSingleVendorDealIdPayload(this.payload.deal.vendorDealId),
-    //         env,
-    //       );
-    //
-    //       if (result.isSuccess) {
-    //         alert('Deal was deleted!');
-    //         this.close(null);
-    //       } else {
-    //         this.dialogService.openRequestResultDialog(result);
-    //       }
-    //     }
-    //   });
+    this.dialogService
+      .openConfirmDialog(
+        `You are about to delete a group with id ${this.payload.group.id}`,
+        'Delete group!',
+        'Delete',
+      )
+      .subscribe(async (confirm) => {
+        if (confirm) {
+          const result = await this.segmentationService.deleteGroup(
+            this.payload.group.id,
+            prompt('Enter token from BEES One / Membership!')!,
+            this.payload.selectedEnv,
+          );
+
+          if (result.isSuccess) {
+            alert('Group was deleted!');
+            this.close(true);
+          } else {
+            this.dialogService.openRequestResultDialog(result);
+          }
+        }
+      });
   }
 }

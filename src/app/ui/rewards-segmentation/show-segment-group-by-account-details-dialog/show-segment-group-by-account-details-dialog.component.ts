@@ -6,11 +6,12 @@ import { DialogContentBaseComponent } from '../../../shared/dialog/dialogs/dialo
 import { DialogService } from '../../../shared/dialog/dialog.service';
 import { SegmentationService } from '../../../api/rewards/segmentation/segmentation.service';
 import { CountryEnvironmentService } from '../../../api/env/country-environment.service';
+import { NgForOf } from '@angular/common';
 
 @Component({
   selector: 'app-show-segment-group-by-account-details-dialog',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, NgForOf],
   templateUrl: './show-segment-group-by-account-details-dialog.component.html',
   styleUrl: './show-segment-group-by-account-details-dialog.component.scss',
 })
@@ -42,30 +43,58 @@ export class ShowSegmentGroupByAccountDetailsDialogComponent
   }
 
   delete(): void {
-    alert('del!');
-    // this.dialogService
-    //   .openConfirmDialog(
-    //     `You are about to delete a deal with id ${this.payload.deal.vendorDealId}`,
-    //     'Delete deal!',
-    //     'Delete',
-    //   )
-    //   .subscribe(async (confirm) => {
-    //     if (confirm) {
-    //       // @ts-ignore
-    //       const env: CountryEnvironmentModel =
-    //         this.payload.selectedEnv || this.envService.getCurrentEnv();
-    //       const result = await this.dealsService.deleteDeals(
-    //         new DeleteSingleVendorDealIdPayload(this.payload.deal.vendorDealId),
-    //         env,
-    //       );
-    //
-    //       if (result.isSuccess) {
-    //         alert('Deal was deleted!');
-    //         this.close(null);
-    //       } else {
-    //         this.dialogService.openRequestResultDialog(result);
-    //       }
-    //     }
-    //   });
+    this.dialogService
+      .openConfirmDialog(
+        `You are about to delete an account group with account id ${this.payload.group.accountId}`,
+        'Delete account group!',
+        'Delete',
+      )
+      .subscribe(async (confirm) => {
+        if (confirm) {
+          const result = await this.segmentationService.deleteAccountGroup(
+            this.payload.group.accountId,
+            prompt('Enter token from BEES One / Membership!')!,
+            this.payload.selectedEnv,
+          );
+
+          if (result.isSuccess) {
+            alert('Account Group was deleted!');
+            this.close(true);
+          } else {
+            this.dialogService.openRequestResultDialog(result);
+          }
+        }
+      });
+  }
+
+  unassignGroup(groupId: string): void {
+    this.dialogService
+      .openConfirmDialog(
+        `You are about to unassign group ${groupId} from account group with account id ${this.payload.group.accountId}`,
+        'Unassign group from account!',
+        'Unassign',
+      )
+      .subscribe(async (confirm) => {
+        if (confirm) {
+          const result = await this.segmentationService.deleteAccountGroupGroup(
+            this.payload.group.accountId,
+            groupId,
+            prompt('Enter token from BEES One / Membership!')!,
+            this.payload.selectedEnv,
+          );
+
+          if (result.isSuccess) {
+            alert('Group was unassigned!');
+            this.payload.group = (
+              await this.segmentationService.getAccountGroup(
+                this.payload.group.accountId,
+                this.payload.selectedEnv,
+              )
+            ).response;
+          } else {
+            this.dialogService.openRequestResultDialog(result);
+          }
+        }
+      });
   }
 }

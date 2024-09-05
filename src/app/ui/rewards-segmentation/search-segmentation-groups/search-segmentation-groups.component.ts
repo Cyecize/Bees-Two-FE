@@ -83,15 +83,22 @@ export class SearchSegmentationGroupsComponent implements OnInit, OnDestroy {
   }
 
   openDetailsDialog(group: SegmentationGroupModel): void {
-    this.dialogService.open(
-      ShowSegmentGroupDetailsDialogComponent,
-      '',
-      new ShowSegmentGroupDetailsDialogPayload(
-        group,
-        this.query,
-        this.selectedEnv!,
-      ),
-    );
+    this.dialogService
+      .open(
+        ShowSegmentGroupDetailsDialogComponent,
+        '',
+        new ShowSegmentGroupDetailsDialogPayload(
+          group,
+          this.query,
+          this.selectedEnv!,
+        ),
+      )
+      .afterClosed()
+      .subscribe((val) => {
+        if (val) {
+          this.reloadFilters();
+        }
+      });
   }
 }
 
