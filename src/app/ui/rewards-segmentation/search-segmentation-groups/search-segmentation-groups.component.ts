@@ -16,6 +16,8 @@ import {
 } from '../../../api/rewards/segmentation/segmentation-group.query';
 import { SegmentationGroupModel } from '../../../api/rewards/segmentation/segmentation-group.model';
 import { SegmentationService } from '../../../api/rewards/segmentation/segmentation.service';
+import { ShowSegmentGroupDetailsDialogComponent } from '../show-segment-group-details-dialog/show-segment-group-details-dialog.component';
+import { ShowSegmentGroupDetailsDialogPayload } from '../show-segment-group-details-dialog/show-segment-group-details-dialog.payload';
 
 @Component({
   selector: 'app-search-segmentation-groups',
@@ -78,7 +80,17 @@ export class SearchSegmentationGroupsComponent implements OnInit, OnDestroy {
     }
   }
 
-  openDetailsDialog(group: SegmentationGroupModel): void {}
+  openDetailsDialog(group: SegmentationGroupModel): void {
+    this.dialogService.open(
+      ShowSegmentGroupDetailsDialogComponent,
+      '',
+      new ShowSegmentGroupDetailsDialogPayload(
+        group,
+        this.query,
+        this.selectedEnv!,
+      ),
+    );
+  }
 }
 
 export const SEARCH_SEGMENTATION_GROUPS_ROUTES: Routes = [
