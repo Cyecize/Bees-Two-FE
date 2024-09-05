@@ -14,6 +14,20 @@ export class EmptyPagination implements Pagination {
   totalPages = 1;
 }
 
+export interface PaginationV2 {
+  page: number;
+  pageSize: number;
+  totalElements: number;
+  totalPage: number;
+}
+
+export class EmptyPaginationV2 implements PaginationV2 {
+  page = 0;
+  pageSize = 1;
+  totalElements = 0;
+  totalPage = 1;
+}
+
 export interface HasNextPagination {
   hasNext: boolean;
   page: number;

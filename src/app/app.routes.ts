@@ -135,6 +135,13 @@ const rewardsRoutes: Routes = [
             './ui/rewards-segmentation/search-segmentation-groups/search-segmentation-groups.component'
           ).then((value) => value.SEARCH_SEGMENTATION_GROUPS_ROUTES),
       },
+      {
+        path: AppRoutingPath.SEARCH_SEGMENTATION_GROUPS_BY_ACCOUNT.path,
+        loadChildren: () =>
+          import(
+            './ui/rewards-segmentation/search-segmentation-groups-by-account/search-segmentation-groups-by-account.component'
+          ).then((value) => value.SEARCH_SEGMENTATION_GROUPS_BY_ACCOUNT_ROUTES),
+      },
     ],
   },
 ];
