@@ -12,6 +12,12 @@ import {
   WrappedResponse,
 } from '../../../shared/util/field-error-wrapper';
 import { SegmentationGroupByAccountModel } from './segmentation-group-by-account.model';
+import { SegmentationGroupPayload } from './segmentation-group.payload';
+import {
+  BeesParamPayload,
+  BeesParamPayloadImpl,
+} from '../../proxy/bees-param.payload';
+import { BeesMultipartFile } from '../../proxy/bees-multipart-value.payload';
 
 @Injectable({ providedIn: 'root' })
 export class SegmentationService {
@@ -72,6 +78,49 @@ export class SegmentationService {
       this.repository.deleteGroupInAccountGroup(
         accountId,
         groupId,
+        authTokenOverride,
+        env?.id,
+      ),
+    ).execute();
+  }
+
+  public async upsertGroup(
+    payload: SegmentationGroupPayload,
+    authTokenOverride: string,
+    env?: CountryEnvironmentModel,
+  ): Promise<WrappedResponse<BeesResponse<any>>> {
+    const headers: BeesParamPayload[] = [];
+    headers.push(new BeesParamPayloadImpl('groupName', payload.groupName));
+
+    if (payload.groupId) {
+      headers.push(new BeesParamPayloadImpl('groupId', payload.groupId));
+    }
+
+    if (payload.groupDescription) {
+      headers.push(
+        new BeesParamPayloadImpl('groupDescription', payload.groupDescription),
+      );
+    }
+
+    if (payload.purpose) {
+      headers.push(new BeesParamPayloadImpl('purpose', payload.purpose));
+    }
+
+    const csvHeaders = 'POC_ID,POINTS,QUANTITY';
+    const rows = payload.pocs
+      .map((item) => {
+        return `${item.pocId},${item.points ?? ''},${item.quantity ?? ''}`;
+      })
+      .join('\n');
+
+    const base64Content = btoa(`${csvHeaders}\n${rows}`);
+    const fileName = 'file.csv';
+    const mediaType = 'text/csv';
+
+    return await new FieldErrorWrapper(() =>
+      this.repository.upsertGroup(
+        headers,
+        new BeesMultipartFile(mediaType, fileName, base64Content),
         authTokenOverride,
         env?.id,
       ),

@@ -11,6 +11,10 @@ import { SegmentationGroupByAccountQuery } from './segmentation-group-by-account
 import { SegmentationGroupByAccountSearchResponse } from './segmentation-group-by-account.search-response';
 import { RouteUtils } from '../../../shared/routing/route-utils';
 import { SegmentationGroupByAccountModel } from './segmentation-group-by-account.model';
+import { BeesParamPayload } from '../../proxy/bees-param.payload';
+import { MultipartBeesFormDataPayload } from '../../proxy/bees-form-data.payload';
+import { BeesMultipartFormParamPayloadImpl } from '../../proxy/bees-form-param.payload';
+import { BeesMultipartValuePayload } from '../../proxy/bees-multipart-value.payload';
 
 @Injectable({ providedIn: 'root' })
 export class SegmentationRepository {
@@ -107,6 +111,25 @@ export class SegmentationRepository {
       method: RequestMethod.DELETE,
       targetEnv: envId,
       authTokenOverride: authTokenOverride,
+    });
+  }
+
+  public upsertGroup(
+    headers: BeesParamPayload[],
+    multipartFile: BeesMultipartValuePayload,
+    authTokenOverride: string,
+    envId?: number,
+  ): Observable<BeesResponse<any>> {
+    return this.proxyService.makeRequest<any>({
+      endpoint: Endpoints.BEES_SEGMENTATION_ACCOUNT_GROUPS,
+      entity: BeesEntity.SEGMENTATION,
+      method: RequestMethod.PUT,
+      targetEnv: envId,
+      headers: headers,
+      authTokenOverride: authTokenOverride,
+      formData: new MultipartBeesFormDataPayload([
+        new BeesMultipartFormParamPayloadImpl('file', multipartFile),
+      ]),
     });
   }
 }

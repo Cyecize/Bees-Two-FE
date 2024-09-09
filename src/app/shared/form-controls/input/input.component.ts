@@ -78,7 +78,7 @@ export class InputComponent implements OnInit, ControlValueAccessor {
   }
 
   changeEnded(event: any): void {
-    this.onChangeEnd.emit(event.target.value);
+    this.onChangeEnd.emit(this.value);
     if (this.clearOnChangeEnd) {
       this.setValue('');
     }
