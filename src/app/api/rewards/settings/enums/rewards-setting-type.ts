@@ -9,4 +9,5 @@ export enum RewardsSettingType {
   HUB_HEADER = 'HUB_HEADER',
   ENROLLMENT_PAGE = 'ENROLLMENT_PAGE',
   TOGGLES = 'TOGGLES',
+  MODULES = 'MODULES', //TODO: Implement the form
 }
