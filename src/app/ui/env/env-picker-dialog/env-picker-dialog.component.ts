@@ -1,16 +1,32 @@
 import { Component, OnInit } from '@angular/core';
 import { DialogContentBaseComponent } from '../../../shared/dialog/dialogs/dialog-content-base.component';
-import { firstValueFrom, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { CountryEnvironmentService } from '../../../api/env/country-environment.service';
 import { CountryEnvironmentModel } from '../../../api/env/country-environment.model';
 import { NgForOf, NgIf } from '@angular/common';
 import { DialogService } from '../../../shared/dialog/dialog.service';
 import { EnvViewerDialogComponent } from '../env-viewer-dialog/env-viewer-dialog.component';
+import { SelectSearchComponent } from '../../../shared/form-controls/select-search/select-search.component';
+import { InputComponent } from '../../../shared/form-controls/input/input.component';
+import {
+  CountryEnvironmentQuery,
+  CountryEnvironmentQueryImpl,
+} from '../../../api/env/country-environment.query';
+import {
+  CountryCodeQuery,
+  CountryCodeQueryImpl,
+} from '../../../api/env/country-code.query';
+import { EmptyPage, Page, PageImpl } from '../../../shared/util/page';
+import {
+  SelectSearchItem,
+  SelectSearchItemImpl,
+} from '../../../shared/form-controls/select-search/select-search.item';
+import { Env } from '../../../api/env/env';
 
 @Component({
   selector: 'app-env-picker-dialog',
   standalone: true,
-  imports: [NgIf, NgForOf],
+  imports: [NgIf, NgForOf, SelectSearchComponent, InputComponent],
   templateUrl: './env-picker-dialog.component.html',
   styleUrl: './env-picker-dialog.component.scss',
 })
@@ -18,8 +34,17 @@ export class EnvPickerDialogComponent
   extends DialogContentBaseComponent<any>
   implements OnInit
 {
+  private readonly PAGE_SIZE = 6;
   currentEnv!: CountryEnvironmentModel;
-  envs: CountryEnvironmentModel[] = [];
+  envs: Page<SelectSearchItem<Env>> = new EmptyPage();
+
+  showMoreFilters = false;
+
+  query: CountryEnvironmentQuery = new CountryEnvironmentQueryImpl();
+  countryCodeQuery: CountryCodeQuery = new CountryCodeQueryImpl(this.query);
+
+  envsPage: Page<CountryEnvironmentModel> = new EmptyPage();
+  countryCodes: Page<SelectSearchItem<string>> = new EmptyPage();
 
   constructor(
     private envService: CountryEnvironmentService,
@@ -36,7 +61,16 @@ export class EnvPickerDialogComponent
       }
     });
 
-    this.envs = await this.envService.getEnvs();
+    this.envs = new PageImpl(
+      [new SelectSearchItemImpl<Env>('All', '', null!)].concat(
+        ...Object.keys(Env).map(
+          (env) => new SelectSearchItemImpl(env, env, env as Env),
+        ),
+      ),
+    );
+
+    this.query.page.pageSize = this.PAGE_SIZE;
+    await this.reloadFilters();
   }
 
   getIcon(): Observable<string> {
@@ -50,4 +84,86 @@ export class EnvPickerDialogComponent
   viewEnvDetails(env: CountryEnvironmentModel): void {
     this.dialogService.open(EnvViewerDialogComponent, '', env);
   }
+
+  countryCodeDropdownSearch(val: string): void {
+    this.countryCodeQuery.page.pageNumber = 0;
+    this.countryCodeQuery.countryCode = val;
+    this.query.countryCode = undefined;
+    this.fetchCountryCodes();
+  }
+
+  countryCodeDropdownPageChange(page: number): void {
+    this.countryCodeQuery.page.pageNumber = page;
+    this.fetchCountryCodes();
+  }
+
+  countryCodeChanged(code: SelectSearchItem<string>): void {
+    this.query.countryCode = code.objRef;
+    if (!code.objRef) {
+      this.countryCodeQuery.countryCode = undefined;
+    }
+    this.reloadFilters();
+  }
+
+  envNameChanged(val: any): void {
+    this.query.envName = val;
+    this.reloadFilters();
+  }
+
+  vendorIdChanged(val: any): void {
+    this.query.vendorId = val;
+    this.reloadFilters();
+  }
+
+  storeIdChanged(val: any): void {
+    console.log(val);
+    this.query.storeId = val;
+    this.reloadFilters();
+  }
+
+  envSelected(val: SelectSearchItem<any>): void {
+    this.query.env = val.objRef;
+    this.reloadFilters();
+  }
+
+  private async reloadFilters(): Promise<void> {
+    this.query.page.pageNumber = 0;
+    this.countryCodeQuery.page.pageNumber = 0;
+
+    if (await this.fetchCountryEnvironments()) {
+      await this.fetchCountryCodes();
+    }
+  }
+
+  private async fetchCountryEnvironments(): Promise<boolean> {
+    const res = await this.envService.searchEnvs(this.query);
+    if (!res.isSuccess) {
+      alert('Error while searching envs! Check the console.');
+      console.log(res);
+      return false;
+    }
+
+    this.envsPage = res.response;
+    return true;
+  }
+
+  private async fetchCountryCodes(): Promise<void> {
+    const res = await this.envService.searchCountryCodes(this.countryCodeQuery);
+    if (!res.isSuccess) {
+      alert('Error while fetching country codes! Check the console.');
+      console.log(res);
+      return;
+    }
+    const items = res.response.content.map(
+      (cc) => new SelectSearchItemImpl(cc, cc, cc),
+    );
+    this.countryCodes = new PageImpl<SelectSearchItem<string>>(
+      [new SelectSearchItemImpl<string>('All', '', null!)].concat(...items),
+      res.response.totalElements,
+      res.response.totalPages,
+      res.response.pageable,
+    );
+  }
+
+  protected readonly alert = alert;
 }

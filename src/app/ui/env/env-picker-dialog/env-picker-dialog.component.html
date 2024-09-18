@@ -1,10 +1,63 @@
 <div>
   <div *ngIf="currentEnv">
-    <p>Currently, you have selected <strong>{{ currentEnv.envName }}</strong></p>
+    <p>Currently, you have selected <strong><u>{{ currentEnv.envName }}</u></strong></p>
   </div>
 
-  <h2>Environments</h2>
-
+  <h4>Environments</h4>
+  <hr class="mt-1 mb-1">
+  <div>
+    <div class="filters">
+      <div class="main-filters-header">
+        <div class="filter">
+          <app-select-search
+            formControlName="levels"
+            placeholder="Country"
+            [payload]="countryCodes"
+            (pageChange)="countryCodeDropdownPageChange($event)"
+            (search)="countryCodeDropdownSearch($event)"
+            (selectionChange)="countryCodeChanged($event)"
+            [clearOnSelect]="false"></app-select-search>
+        </div>
+        <div class="filter">
+          <app-input
+            (onChangeEnd)="envNameChanged($event)"
+            formControlName="envName"
+            placeholder="Name">
+          </app-input>
+        </div>
+        <div class="filter">
+          <app-select-search
+            formControlName="env"
+            placeholder="Environment"
+            [payload]="envs"
+            (selectionChange)="envSelected($event)"></app-select-search>
+        </div>
+      </div>
+      <div class="text-end">
+        <small class="btn btn-sm btn-outline-info"
+               (click)="showMoreFilters = !showMoreFilters">
+          More filters
+        </small>
+      </div>
+      <div *ngIf="showMoreFilters" class="filters-header">
+        <div class="filter">
+          <app-input
+            (onChangeEnd)="vendorIdChanged($event)"
+            formControlName="vendorId"
+            placeholder="Vendor ID">
+          </app-input>
+        </div>
+        <div class="filter">
+          <app-input
+            (onChangeEnd)="storeIdChanged($event)"
+            formControlName="storeId"
+            placeholder="Store ID">
+          </app-input>
+        </div>
+      </div>
+    </div>
+  </div>
+  <hr class="mb-0 mt-1">
   <div style="overflow-y: auto; max-height: 500px;">
     <table class="table">
       <thead>
@@ -16,7 +69,7 @@
       </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let env of envs">
+      <tr *ngFor="let env of envsPage.content">
         <th scope="row">{{ env.id }}</th>
         <td>{{ env.envName }}</td>
         <td>{{ env.env }}</td>
@@ -32,7 +85,8 @@
               <button
                 *ngIf="currentEnv && currentEnv.id === env.id"
                 class="btn btn-success"
-                disabled>Select</button>
+                disabled>Select
+              </button>
             </div>
             <div class="m-1">
               <button class="btn btn-outline-info" (click)="viewEnvDetails(env)">View more</button>

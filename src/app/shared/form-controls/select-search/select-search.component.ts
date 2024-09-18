@@ -102,7 +102,7 @@ export class SelectSearchComponent implements OnInit, ControlValueAccessor {
 
     if (this.clearOnSelect) {
       this.currentDisplaySelection = '';
-      this.searchChanged();
+      this.searchChanged(null);
     }
   }
 
@@ -116,7 +116,6 @@ export class SelectSearchComponent implements OnInit, ControlValueAccessor {
 
   onKeyUp(): void {
     clearTimeout(this.interval);
-    this.interval = setTimeout(() => this.searchChanged(), 300);
   }
 
   inputTouched(event: any): void {
@@ -145,10 +144,8 @@ export class SelectSearchComponent implements OnInit, ControlValueAccessor {
     this.disabled = isDisabled;
   }
 
-  private searchChanged(): void {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    this.search.next(this.currentDisplaySelection);
+  searchChanged(ev: any): void {
+    this.search.next(ev.target.value);
   }
 
   private getUniqueStr(): string {

@@ -4,6 +4,13 @@ import { BehaviorSubject, firstValueFrom, Observable } from 'rxjs';
 import { CountryEnvironmentModel } from './country-environment.model';
 import { STORAGE_SELECTED_ENV_ID_NAME } from '../../shared/general.constants';
 import { ObjectUtils } from '../../shared/util/object-utils';
+import { CountryEnvironmentQuery } from './country-environment.query';
+import {
+  FieldErrorWrapperLocal,
+  WrappedResponseLocal,
+} from '../../shared/util/field-error-wrapper-local';
+import { Page } from '../../shared/util/page';
+import { CountryCodeQuery } from './country-code.query';
 
 @Injectable({ providedIn: 'root' })
 export class CountryEnvironmentService {
@@ -19,6 +26,22 @@ export class CountryEnvironmentService {
 
   public getEnvs(): Promise<CountryEnvironmentModel[]> {
     return this.allEnvs;
+  }
+
+  public async searchEnvs(
+    query: CountryEnvironmentQuery,
+  ): Promise<WrappedResponseLocal<Page<CountryEnvironmentModel>>> {
+    return await new FieldErrorWrapperLocal(() =>
+      this.repository.searchEnvs(query),
+    ).execute();
+  }
+
+  public async searchCountryCodes(
+    query: CountryCodeQuery,
+  ): Promise<WrappedResponseLocal<Page<string>>> {
+    return await new FieldErrorWrapperLocal(() =>
+      this.repository.searchCountryCodes(query),
+    ).execute();
   }
 
   public async findById(

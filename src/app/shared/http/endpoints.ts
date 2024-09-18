@@ -3,6 +3,8 @@ export class Endpoints {
   public static readonly USER_DETAILS = '/user-details';
   public static readonly ENVIRONMENTS = '/environments';
   public static readonly ENVIRONMENT = '/environments/:id';
+  public static readonly ENVIRONMENTS_SEARCH = '/environments/search';
+  public static readonly ENVIRONMENTS_COUNTRY_CODES = '/environments/country-codes';
   public static readonly REQUEST = '/request';
   public static readonly PLATFORM_ID_ENCODE_CONTRACT = '/platform-id/encode/contract';
   public static readonly PLATFORM_ID_DECODE_CONTRACT = '/platform-id/decode/contract/:id';
