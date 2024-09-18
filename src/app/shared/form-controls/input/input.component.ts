@@ -44,6 +44,9 @@ export class InputComponent implements OnInit, ControlValueAccessor {
   @Input()
   formControlName!: string | number;
 
+  @Input()
+  generateUniqueControlName = false;
+
   @Input({ required: false })
   errors: FieldError[] = [];
 
@@ -66,6 +69,10 @@ export class InputComponent implements OnInit, ControlValueAccessor {
   ngOnInit(): void {
     const prefix = this.formControlName || '';
     this.inputId = `${prefix}_${this.getUniqueStr()}`;
+
+    if (this.generateUniqueControlName) {
+      this.formControlName = this.getUniqueStr();
+    }
   }
 
   inputChanged(event: any): void {

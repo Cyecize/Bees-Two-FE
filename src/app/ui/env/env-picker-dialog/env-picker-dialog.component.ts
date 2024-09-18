@@ -16,17 +16,30 @@ import {
   CountryCodeQuery,
   CountryCodeQueryImpl,
 } from '../../../api/env/country-code.query';
-import { EmptyPage, Page, PageImpl } from '../../../shared/util/page';
+import {
+  EmptyPage,
+  Page,
+  PageImpl,
+  pageToPagination,
+} from '../../../shared/util/page';
 import {
   SelectSearchItem,
   SelectSearchItemImpl,
 } from '../../../shared/form-controls/select-search/select-search.item';
 import { Env } from '../../../api/env/env';
+import { PaginationComponent } from '../../../shared/components/pagination/pagination.component';
+import { ShowLoader } from '../../../shared/loader/show.loader.decorator';
 
 @Component({
   selector: 'app-env-picker-dialog',
   standalone: true,
-  imports: [NgIf, NgForOf, SelectSearchComponent, InputComponent],
+  imports: [
+    NgIf,
+    NgForOf,
+    SelectSearchComponent,
+    InputComponent,
+    PaginationComponent,
+  ],
   templateUrl: './env-picker-dialog.component.html',
   styleUrl: './env-picker-dialog.component.scss',
 })
@@ -34,7 +47,7 @@ export class EnvPickerDialogComponent
   extends DialogContentBaseComponent<any>
   implements OnInit
 {
-  private readonly PAGE_SIZE = 6;
+  private readonly PAGE_SIZE = 5;
   currentEnv!: CountryEnvironmentModel;
   envs: Page<SelectSearchItem<Env>> = new EmptyPage();
 
@@ -116,7 +129,6 @@ export class EnvPickerDialogComponent
   }
 
   storeIdChanged(val: any): void {
-    console.log(val);
     this.query.storeId = val;
     this.reloadFilters();
   }
@@ -124,6 +136,11 @@ export class EnvPickerDialogComponent
   envSelected(val: SelectSearchItem<any>): void {
     this.query.env = val.objRef;
     this.reloadFilters();
+  }
+
+  pageChanged(page: number): void {
+    this.query.page.pageNumber = page;
+    this.fetchCountryEnvironments();
   }
 
   private async reloadFilters(): Promise<void> {
@@ -135,6 +152,7 @@ export class EnvPickerDialogComponent
     }
   }
 
+  @ShowLoader()
   private async fetchCountryEnvironments(): Promise<boolean> {
     const res = await this.envService.searchEnvs(this.query);
     if (!res.isSuccess) {
@@ -166,4 +184,5 @@ export class EnvPickerDialogComponent
   }
 
   protected readonly alert = alert;
+  protected readonly pageToPagination = pageToPagination;
 }

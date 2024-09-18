@@ -92,3 +92,12 @@ export class PageImpl<T> implements Page<T> {
     return this._totalPages || 1;
   }
 }
+
+export function pageToPagination(page: Page<any>): Pagination {
+  return {
+    page: page.pageable.pageNumber,
+    pageSize: page.pageable.pageSize,
+    totalPages: page.totalPages,
+    totalElements: page.totalElements,
+  };
+}

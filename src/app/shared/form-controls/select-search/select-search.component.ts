@@ -43,6 +43,9 @@ export class SelectSearchComponent implements OnInit, ControlValueAccessor {
   formControlName!: string;
 
   @Input()
+  generateUniqueControlName = false;
+
+  @Input()
   errors: FieldError[] = [];
 
   @Input()
@@ -83,6 +86,10 @@ export class SelectSearchComponent implements OnInit, ControlValueAccessor {
     const prefix = this.formControlName || '';
     this.inputId = `${prefix}_${this.getUniqueStr()}`;
     this.selectionChange.subscribe((val) => this.onChange.next(val?.value));
+
+    if (this.generateUniqueControlName) {
+      this.formControlName = this.getUniqueStr();
+    }
   }
 
   optionChosen(val: SelectSearchItem<any> | null, ev: MouseEvent): void {

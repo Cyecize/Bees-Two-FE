@@ -1,6 +1,6 @@
 <div>
   <div *ngIf="currentEnv">
-    <p>Currently, you have selected <strong><u>{{ currentEnv.envName }}</u></strong></p>
+    <p class="m-0">Currently, you have selected <strong><u>{{ currentEnv.envName }}</u></strong></p>
   </div>
 
   <h4>Environments</h4>
@@ -10,7 +10,7 @@
       <div class="main-filters-header">
         <div class="filter">
           <app-select-search
-            formControlName="levels"
+            [generateUniqueControlName]="true"
             placeholder="Country"
             [payload]="countryCodes"
             (pageChange)="countryCodeDropdownPageChange($event)"
@@ -21,13 +21,13 @@
         <div class="filter">
           <app-input
             (onChangeEnd)="envNameChanged($event)"
-            formControlName="envName"
+            [generateUniqueControlName]="true"
             placeholder="Name">
           </app-input>
         </div>
         <div class="filter">
           <app-select-search
-            formControlName="env"
+            [generateUniqueControlName]="true"
             placeholder="Environment"
             [payload]="envs"
             (selectionChange)="envSelected($event)"></app-select-search>
@@ -43,14 +43,14 @@
         <div class="filter">
           <app-input
             (onChangeEnd)="vendorIdChanged($event)"
-            formControlName="vendorId"
+            [generateUniqueControlName]="true"
             placeholder="Vendor ID">
           </app-input>
         </div>
         <div class="filter">
           <app-input
             (onChangeEnd)="storeIdChanged($event)"
-            formControlName="storeId"
+            [generateUniqueControlName]="true"
             placeholder="Store ID">
           </app-input>
         </div>
@@ -96,5 +96,8 @@
       </tr>
       </tbody>
     </table>
+    <app-pagination
+      (pageChange)="pageChanged($event)"
+      [pagination]="pageToPagination(envsPage)"></app-pagination>
   </div>
 </div>
