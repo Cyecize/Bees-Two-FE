@@ -1,0 +1,117 @@
+<div>
+  <div class="d-flex " style="max-height: 200px; overflow-y: auto;">
+    <table class="table">
+      <thead>
+      </thead>
+      <tbody>
+      <tr>
+        <td>Name</td>
+        <td>
+          <strong>{{ payload.item.itemName }}</strong>
+        </td>
+      </tr>
+      <tr>
+        <td>Deleted / Enabled / Hidden</td>
+        <td>
+          {{ boolToYesNo(payload.item.deleted) }}
+          /
+          {{ boolToYesNo(payload.item.enabled) }}
+          /
+          {{ boolToYesNo(payload.item.hidden) }}
+        </td>
+      </tr>
+      <tr>
+        <td>Id</td>
+        <td>
+          <app-tooltip-span
+            [trimDisplayTextChars]="50"
+            [enableCopy]="true"
+            [tooltipText]="payload.item.id"
+            [displayText]="payload.item.id"></app-tooltip-span>
+        </td>
+      </tr>
+      <tr>
+        <td>Id (Platform)</td>
+        <td>
+          <app-tooltip-span
+            [trimDisplayTextChars]="50"
+            [enableCopy]="true"
+            [tooltipText]="payload.item.itemPlatformId"
+            [displayText]="payload.item.itemPlatformId"></app-tooltip-span>
+        </td>
+      </tr>
+      <tr>
+        <td>SKU</td>
+        <td>
+          <app-tooltip-span
+            [trimDisplayTextChars]="50"
+            [enableCopy]="true"
+            [tooltipText]="payload.item.sku"
+            [displayText]="payload.item.sku"></app-tooltip-span>
+        </td>
+      </tr>
+      <tr>
+        <td>Vendor Item ID</td>
+        <td>
+          <app-tooltip-span
+            [trimDisplayTextChars]="50"
+            [enableCopy]="true"
+            [tooltipText]="payload.item.vendorItemId"
+            [displayText]="payload.item.vendorItemId"></app-tooltip-span>
+        </td>
+      </tr>
+      <tr>
+        <td>Variant</td>
+        <td>
+          {{ boolToYesNo(payload.item.variant) }}
+        </td>
+      </tr>
+      <tr *ngIf="payload.item.redeemable">
+        <td>Redeemable</td>
+        <td>
+          {{ boolToYesNo(payload.item.redeemable) }}
+        </td>
+      </tr>
+      <tr *ngIf="payload.item.minOrderQuantity">
+        <td>Min Order QTY</td>
+        <td>
+          {{ payload.item.minOrderQuantity }}
+        </td>
+      </tr>
+      <tr *ngIf="payload.item.package?.packageId">
+        <td>Package ID</td>
+        <td>
+          {{ payload.item.package.packageId }}
+        </td>
+      </tr>
+      </tbody>
+    </table>
+    <div
+      style="height: 400px;"
+      *ngIf="payload.item.itemImage">
+      <img src="{{ payload.item.itemImage }}"
+           style="max-height: 100%; max-width: 100%;">
+    </div>
+  </div>
+
+  <hr *ngIf="showJson">
+  <div *ngIf="showJson" style="overflow-y: auto; max-height: 300px;">
+    <pre>{{ dataJson }}</pre>
+  </div>
+  <hr>
+  <div class="text-end">
+    <button class="btn btn-outline-dark m-1" (click)="close(undefined);">Close</button>
+    <button class="btn btn-outline-success m-1" (click)="copy();">Copy JSON</button>
+    <button class="btn btn-outline-secondary m-1"
+            *ngIf="!showJson"
+            (click)="showJson = true">Show JSON
+    </button>
+    <button class="btn btn-outline-dark m-1"
+            *ngIf="showJson"
+            (click)="showJson = false">Hide JSON
+    </button>
+    <button class="btn btn-outline-danger m-1" (click)="delete();">Delete</button>
+    <a class="btn btn-outline-success m-1" [routerLink]="getEditRawRoute()" (click)="close(undefined);">Edit Raw</a>
+    <a class="btn btn-outline-warning m-1" [routerLink]="getEditRoute()" (click)="close(undefined);">Edit</a>
+  </div>
+</div>

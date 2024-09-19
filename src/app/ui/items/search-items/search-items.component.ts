@@ -19,6 +19,8 @@ import { ItemsSearchResponse } from '../../../api/items/items-search.response';
 import { ItemService } from '../../../api/items/item.service';
 import { CheckboxComponent } from '../../../shared/form-controls/checkbox/checkbox.component';
 import { ObjectUtils } from '../../../shared/util/object-utils';
+import { ShowItemDetailsDialogComponent } from '../show-item-details-dialog/show-item-details-dialog.component';
+import { ShowItemDetailsDialogPayload } from '../show-item-details-dialog/show-item-details-dialog.payload';
 
 @Component({
   selector: 'app-search-items',
@@ -104,12 +106,11 @@ export class SearchItemsComponent implements OnInit, OnDestroy {
   }
 
   openDetailsDialog(item: Item): void {
-    console.log(item);
-    // this.dialogService.open(
-    //   ShowAccountDetailsDialogComponent,
-    //   '',
-    //   new ShowAccountDetailsDialogPayload(account, this.envOverride),
-    // );
+    this.dialogService.open(
+      ShowItemDetailsDialogComponent,
+      '',
+      new ShowItemDetailsDialogPayload(item, this.envOverride),
+    );
   }
 
   addSKU(code: string): void {
