@@ -10,14 +10,21 @@ import {
   LocalAccountQueryImpl,
 } from '../../../api/accounts/local/local-account.query';
 import { LocalAccount } from '../../../api/accounts/local/local-account';
-import { EmptyPage, Page } from '../../../shared/util/page';
+import { EmptyPage, Page, pageToPagination } from '../../../shared/util/page';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination.component';
 import { InputComponent } from '../../../shared/form-controls/input/input.component';
+import { TooltipSpanComponent } from '../../../shared/components/tooltip-span/tooltip-span.component';
 
 @Component({
   selector: 'app-account-picker-dialog',
   standalone: true,
-  imports: [NgIf, NgForOf, PaginationComponent, InputComponent],
+  imports: [
+    NgIf,
+    NgForOf,
+    PaginationComponent,
+    InputComponent,
+    TooltipSpanComponent,
+  ],
   templateUrl: './account-picker-dialog.component.html',
   styleUrl: './account-picker-dialog.component.scss',
 })
@@ -25,6 +32,7 @@ export class AccountPickerDialogComponent
   extends DialogContentBaseComponent<CountryEnvironmentModel>
   implements OnInit
 {
+  private readonly PAGE_SIZE = 5;
   query: LocalAccountQuery = new LocalAccountQueryImpl();
   accountsPage: Page<LocalAccount> = new EmptyPage();
 
@@ -38,6 +46,7 @@ export class AccountPickerDialogComponent
   async ngOnInit(): Promise<void> {
     this.setTitle('Pick an Account');
     this.query.env = this.payload.id;
+    this.query.page.pageSize = this.PAGE_SIZE;
     this.reloadFilters();
   }
 
@@ -59,6 +68,11 @@ export class AccountPickerDialogComponent
     this.reloadFilters();
   }
 
+  pageChanged(page: number): void {
+    this.query.page.pageNumber = page;
+    this.fetch();
+  }
+
   reloadFilters(): void {
     this.query.page.pageNumber = 0;
 
@@ -70,4 +84,6 @@ export class AccountPickerDialogComponent
       this.query,
     );
   }
+
+  protected pageToPagination = pageToPagination;
 }

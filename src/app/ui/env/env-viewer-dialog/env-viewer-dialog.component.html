@@ -20,11 +20,16 @@
   </tr>
   <tr>
     <td>Vendor ID</td>
-    <td>{{ payload.vendorId }}</td>
+    <td>
+      <app-copy-icon [copyText]="payload.vendorId"></app-copy-icon>
+      {{ payload.vendorId }}
+    </td>
   </tr>
   <tr>
     <td>Store ID</td>
-    <td>{{ payload.storeId }}</td>
+    <td>
+      <app-copy-icon [copyText]="payload.storeId"></app-copy-icon>
+      {{ payload.storeId }}</td>
   </tr>
   </tbody>
 </table>
@@ -32,6 +37,7 @@
 <div class="text-end">
   <button *ngIf="currentEnv && currentEnv.id !== payload.id"
           class="btn btn-outline-primary m-1"
-          (click)="selectEnv()">Select this Environment</button>
+          (click)="selectEnv()">Select this Environment
+  </button>
   <button class="btn btn-info m-1" (click)="close(null)">Close</button>
 </div>

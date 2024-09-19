@@ -69,6 +69,14 @@ export class SearchAccountsComponent implements OnInit, OnDestroy {
   async reloadFilters(): Promise<void> {
     this.query.vendorId = this.envOverride?.vendorId + '';
 
+    if (
+      !this.query.vendorAccountId &&
+      !this.query.customerAccountId &&
+      this.query.accountId
+    ) {
+      this.query.vendorId = undefined;
+    }
+
     this.query.page.page = 0;
 
     await this.fetchData();
@@ -109,6 +117,21 @@ export class SearchAccountsComponent implements OnInit, OnDestroy {
       '',
       new ShowAccountDetailsDialogPayload(account, this.envOverride),
     );
+  }
+
+  pickAccount(): void {
+    if (!this.envOverride) {
+      alert('Please choose an environment first!');
+      return;
+    }
+    this.dialogService
+      .openAccountPicker(this.envOverride)
+      .subscribe(async (account) => {
+        if (account) {
+          this.query.accountId = account.beesId;
+          this.reloadFilters();
+        }
+      });
   }
 }
 

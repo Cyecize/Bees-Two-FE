@@ -1,15 +1,170 @@
-<div style="overflow-y: auto; max-height: 500px;">
-  <h3>TODO: display the data properly</h3>
-<pre>
-  {{ dataJson }}
-</pre>
-</div>
-<hr>
-<div class="text-end">
-  <button class="btn btn-outline-dark m-1" (click)="close(undefined);">Close</button>
-  <button class="btn btn-outline-success m-1" (click)="copy();">Copy</button>
-  <button class="btn btn-outline-danger m-1" (click)="delete();">Delete</button>
-  <button class="btn btn-outline-primary m-1" (click)="saveLocally();">Save</button>
-  <a class="btn btn-outline-success m-1" [routerLink]="getEditRawRoute()" (click)="close(undefined);">Edit Raw</a>
-  <a class="btn btn-outline-warning m-1" [routerLink]="getEditRoute()" (click)="close(undefined);">Edit</a>
+<div>
+  <div style="max-height: 200px; overflow-y: auto;">
+    <table class="table">
+      <thead>
+      </thead>
+      <tbody>
+      <tr>
+        <td>Name</td>
+        <td>
+          <strong>{{ payload.account.name }}</strong>
+        </td>
+      </tr>
+      <tr *ngIf="payload.account.status">
+        <td>Status</td>
+        <td>
+          {{ payload.account.status }}
+        </td>
+      </tr>
+      <tr>
+        <td>Id (BEES)</td>
+        <td>
+          <app-tooltip-span
+            [trimDisplayTextChars]="50"
+            [enableCopy]="true"
+            [tooltipText]="payload.account.accountId"
+            [displayText]="payload.account.accountId"></app-tooltip-span>
+        </td>
+      </tr>
+      <tr>
+        <td>Id (Customer)</td>
+        <td>
+          <app-tooltip-span
+            [trimDisplayTextChars]="50"
+            [enableCopy]="true"
+            [tooltipText]="payload.account.customerAccountId"
+            [displayText]="payload.account.customerAccountId"></app-tooltip-span>
+        </td>
+      </tr>
+      <tr>
+        <td>Id (Vendor)</td>
+        <td>
+          <app-tooltip-span
+            [trimDisplayTextChars]="50"
+            [enableCopy]="true"
+            [tooltipText]="payload.account.vendorAccountId"
+            [displayText]="payload.account.vendorAccountId"></app-tooltip-span>
+        </td>
+      </tr>
+      <tr>
+        <td>Vendor ID</td>
+        <td>
+          <app-tooltip-span
+            [trimDisplayTextChars]="50"
+            [enableCopy]="true"
+            [tooltipText]="payload.account.vendorId"
+            [displayText]="payload.account.vendorId"></app-tooltip-span>
+        </td>
+      </tr>
+      <tr *ngIf="payload.account.challengeIds?.length">
+        <td>Challenge Ids</td>
+        <td>
+          <div *ngFor="let id of payload.account.challengeIds">
+            <app-copy-icon [copyText]="id"></app-copy-icon>
+            {{ id }}
+          </div>
+        </td>
+      </tr>
+      <tr *ngIf="payload.account.paymentMethods?.length">
+        <td>Payment methods</td>
+        <td>
+          {{ payload.account.paymentMethods.join(", ") }}
+        </td>
+      </tr>
+      <tr *ngIf="payload.account.deliveryCenterId">
+        <td>Delivery Center ID</td>
+        <td>
+          <app-tooltip-span
+            [trimDisplayTextChars]="50"
+            [enableCopy]="true"
+            [tooltipText]="payload.account.deliveryCenterId"
+            [displayText]="payload.account.deliveryCenterId"></app-tooltip-span>
+        </td>
+      </tr>
+      <tr *ngIf="payload.account.deliveryScheduleId">
+        <td>Delivery Schedule ID</td>
+        <td>
+          <app-tooltip-span
+            [trimDisplayTextChars]="50"
+            [enableCopy]="true"
+            [tooltipText]="payload.account.deliveryScheduleId"
+            [displayText]="payload.account.deliveryScheduleId"></app-tooltip-span>
+        </td>
+      </tr>
+      <tr *ngIf="payload.account.priceListId">
+        <td>Price list ID</td>
+        <td>
+          <app-tooltip-span
+            [trimDisplayTextChars]="50"
+            [enableCopy]="true"
+            [tooltipText]="payload.account.priceListId"
+            [displayText]="payload.account.priceListId"></app-tooltip-span>
+        </td>
+      </tr>
+      <tr *ngIf="payload.account.taxId">
+        <td>Tax ID</td>
+        <td>
+          <app-tooltip-span
+            [trimDisplayTextChars]="50"
+            [enableCopy]="true"
+            [tooltipText]="payload.account.taxId"
+            [displayText]="payload.account.taxId"></app-tooltip-span>
+        </td>
+      </tr>
+      <tr *ngIf="payload.account.segment">
+        <td>Segment</td>
+        <td>
+          <app-tooltip-span
+            [trimDisplayTextChars]="50"
+            [enableCopy]="true"
+            [tooltipText]="payload.account.segment"
+            [displayText]="payload.account.segment"></app-tooltip-span>
+        </td>
+      </tr>
+      <tr *ngIf="payload.account.subSegment">
+        <td>Sub Segment</td>
+        <td>
+          <app-tooltip-span
+            [trimDisplayTextChars]="50"
+            [enableCopy]="true"
+            [tooltipText]="payload.account.subSegment"
+            [displayText]="payload.account.subSegment"></app-tooltip-span>
+        </td>
+      </tr>
+      <tr *ngIf="payload.account.channel">
+        <td>Channel</td>
+        <td>
+          <app-tooltip-span
+            [trimDisplayTextChars]="50"
+            [enableCopy]="true"
+            [tooltipText]="payload.account.channel"
+            [displayText]="payload.account.channel"></app-tooltip-span>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr *ngIf="showJson">
+  <div *ngIf="showJson" style="overflow-y: auto; max-height: 300px;">
+    <pre>{{ dataJson }}</pre>
+  </div>
+  <hr>
+  <div class="text-end">
+    <button class="btn btn-outline-dark m-1" (click)="close(undefined);">Close</button>
+    <button class="btn btn-outline-success m-1" (click)="copy();">Copy JSON</button>
+    <button class="btn btn-outline-secondary m-1"
+            *ngIf="!showJson"
+            (click)="showJson = true">Show JSON
+    </button>
+    <button class="btn btn-outline-dark m-1"
+            *ngIf="showJson"
+            (click)="showJson = false">Hide JSON
+    </button>
+    <button class="btn btn-outline-danger m-1" (click)="delete();">Delete</button>
+    <button class="btn btn-outline-primary m-1" (click)="saveLocally();">Save</button>
+    <a class="btn btn-outline-success m-1" [routerLink]="getEditRawRoute()" (click)="close(undefined);">Edit Raw</a>
+    <a class="btn btn-outline-warning m-1" [routerLink]="getEditRoute()" (click)="close(undefined);">Edit</a>
+  </div>
+
 </div>

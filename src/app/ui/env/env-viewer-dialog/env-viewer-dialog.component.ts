@@ -4,11 +4,12 @@ import { CountryEnvironmentModel } from '../../../api/env/country-environment.mo
 import { Observable } from 'rxjs';
 import { CountryEnvironmentService } from '../../../api/env/country-environment.service';
 import { NgIf } from '@angular/common';
+import { CopyIconComponent } from '../../../shared/components/copy-icon/copy-icon.component';
 
 @Component({
   selector: 'app-env-viewer-dialog',
   standalone: true,
-  imports: [NgIf],
+  imports: [NgIf, CopyIconComponent],
   templateUrl: './env-viewer-dialog.component.html',
   styleUrl: './env-viewer-dialog.component.scss',
 })

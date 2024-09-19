@@ -19,9 +19,14 @@
     <h4>Filters</h4>
     <div class="filters-header">
       <div class="filter">
-        <app-input placeholder="(Bees) Account ID"
-                   (onChangeEnd)="reloadFilters()"
-                   [(ngModel)]="query.accountId"></app-input>
+        <div class="d-flex">
+          <app-input placeholder="(Bees) Account ID"
+                      (onChangeEnd)="reloadFilters()"
+                      [(ngModel)]="query.accountId"></app-input>
+          <button
+            (click)="pickAccount()"
+            class="btn btn-sm btn-outline-warning ms-1">Pick</button>
+        </div>
       </div>
       <div class="filter">
         <app-input placeholder="Vendor Account ID"
