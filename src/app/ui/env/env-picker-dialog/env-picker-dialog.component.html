@@ -3,7 +3,12 @@
     <p class="m-0">Currently, you have selected <strong><u>{{ currentEnv.envName }}</u></strong></p>
   </div>
 
-  <h4>Environments</h4>
+  <div class="d-flex justify-content-between">
+    <h4>Environments</h4>
+    <span style="cursor: pointer;" (click)="openAddEnvDialog()">
+      <i class="fa-solid fa-plus"></i>
+    </span>
+  </div>
   <hr class="mt-1 mb-1">
   <div>
     <div class="filters">

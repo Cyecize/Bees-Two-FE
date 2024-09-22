@@ -29,6 +29,7 @@ import {
 import { Env } from '../../../api/env/env';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination.component';
 import { ShowLoader } from '../../../shared/loader/show.loader.decorator';
+import { AddEnvDialogComponent } from '../add-env-dialog/add-env-dialog.component';
 
 @Component({
   selector: 'app-env-picker-dialog',
@@ -88,6 +89,17 @@ export class EnvPickerDialogComponent
 
   getIcon(): Observable<string> {
     return super.noIcon();
+  }
+
+  openAddEnvDialog(): void {
+    this.dialogService
+      .open(AddEnvDialogComponent, 'New Environment', null)
+      .afterClosed()
+      .subscribe((refresh) => {
+        if (refresh) {
+          this.reloadFilters();
+        }
+      });
   }
 
   selectEnv(env: CountryEnvironmentModel): void {

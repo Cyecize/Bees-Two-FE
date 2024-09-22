@@ -6,6 +6,7 @@ import { HttpClientSecuredService } from '../../shared/http/http-client-secured.
 import { CountryEnvironmentQuery } from './country-environment.query';
 import { Page } from '../../shared/util/page';
 import { CountryCodeQuery } from './country-code.query';
+import { CountryEnvironmentPayload } from './country-environment.payload';
 
 @Injectable({ providedIn: 'root' })
 export class CountryEnvironmentRepository {
@@ -28,6 +29,15 @@ export class CountryEnvironmentRepository {
     return this.http.post<CountryCodeQuery, Page<string>>(
       Endpoints.ENVIRONMENTS_COUNTRY_CODES,
       query,
+    );
+  }
+
+  public createEnv(
+    payload: CountryEnvironmentPayload,
+  ): Observable<CountryEnvironmentModel> {
+    return this.http.post<CountryEnvironmentPayload, CountryEnvironmentModel>(
+      Endpoints.ENVIRONMENTS,
+      payload,
     );
   }
 }

@@ -11,6 +11,7 @@ import {
 } from '../../shared/util/field-error-wrapper-local';
 import { Page } from '../../shared/util/page';
 import { CountryCodeQuery } from './country-code.query';
+import { CountryEnvironmentPayload } from './country-environment.payload';
 
 @Injectable({ providedIn: 'root' })
 export class CountryEnvironmentService {
@@ -41,6 +42,14 @@ export class CountryEnvironmentService {
   ): Promise<WrappedResponseLocal<Page<string>>> {
     return await new FieldErrorWrapperLocal(() =>
       this.repository.searchCountryCodes(query),
+    ).execute();
+  }
+
+  public async createEnv(
+    payload: CountryEnvironmentPayload,
+  ): Promise<WrappedResponseLocal<CountryEnvironmentModel>> {
+    return await new FieldErrorWrapperLocal(() =>
+      this.repository.createEnv(payload),
     ).execute();
   }
 
