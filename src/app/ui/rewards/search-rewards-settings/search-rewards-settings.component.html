@@ -66,6 +66,7 @@
       <tr *ngFor="let setting of searchResponse.content">
         <th scope="row">
           <app-tooltip-span
+            [enableCopy]="true"
             [displayText]="shortenStr(setting.settingId)"
             [tooltipText]="setting.settingId"></app-tooltip-span>
         </th>
