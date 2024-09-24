@@ -152,7 +152,7 @@ export class SelectSearchComponent implements OnInit, ControlValueAccessor {
   }
 
   searchChanged(ev: any): void {
-    this.search.next(ev.target.value);
+    this.search.next(ev?.target?.value);
   }
 
   private getUniqueStr(): string {
