@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DialogContentBaseComponent } from '../../../shared/dialog/dialogs/dialog-content-base.component';
 import { Observable } from 'rxjs';
-import { CountryEnvironmentModel } from '../../../api/env/country-environment.model';
 import { NgForOf, NgIf } from '@angular/common';
 import { DialogService } from '../../../shared/dialog/dialog.service';
 import { LocalAccountService } from '../../../api/accounts/local/local-account.service';
@@ -14,6 +13,7 @@ import { EmptyPage, Page, pageToPagination } from '../../../shared/util/page';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination.component';
 import { InputComponent } from '../../../shared/form-controls/input/input.component';
 import { TooltipSpanComponent } from '../../../shared/components/tooltip-span/tooltip-span.component';
+import { AccountPickerDialogPayload } from './account-picker-dialog.payload';
 
 @Component({
   selector: 'app-account-picker-dialog',
@@ -29,7 +29,7 @@ import { TooltipSpanComponent } from '../../../shared/components/tooltip-span/to
   styleUrl: './account-picker-dialog.component.scss',
 })
 export class AccountPickerDialogComponent
-  extends DialogContentBaseComponent<CountryEnvironmentModel>
+  extends DialogContentBaseComponent<AccountPickerDialogPayload>
   implements OnInit
 {
   private readonly PAGE_SIZE = 5;
@@ -45,7 +45,7 @@ export class AccountPickerDialogComponent
 
   async ngOnInit(): Promise<void> {
     this.setTitle('Pick an Account');
-    this.query.env = this.payload.id;
+    this.query.env = this.payload.env.id;
     this.query.page.pageSize = this.PAGE_SIZE;
     this.reloadFilters();
   }

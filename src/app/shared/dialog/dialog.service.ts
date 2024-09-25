@@ -14,6 +14,7 @@ import { RequestResultDialogComponent } from './dialogs/request-result-dialog/re
 import { AccountPickerDialogComponent } from '../../ui/accounts-local/account-picker-dialog/account-picker-dialog.component';
 import { CountryEnvironmentModel } from '../../api/env/country-environment.model';
 import { LocalAccount } from '../../api/accounts/local/local-account';
+import { AccountPickerDialogPayload } from '../../ui/accounts-local/account-picker-dialog/account-picker-dialog.payload';
 
 @Injectable({ providedIn: 'root' })
 export class DialogService {
@@ -60,7 +61,14 @@ export class DialogService {
       .pipe(map((value) => value || false));
   }
 
-  openAccountPicker(env: CountryEnvironmentModel): Observable<LocalAccount> {
-    return this.open(AccountPickerDialogComponent, '', env).afterClosed();
+  openAccountPicker(
+    env: CountryEnvironmentModel,
+    hideActions?: boolean,
+  ): Observable<LocalAccount> {
+    return this.open(
+      AccountPickerDialogComponent,
+      '',
+      new AccountPickerDialogPayload(env, hideActions),
+    ).afterClosed();
   }
 }

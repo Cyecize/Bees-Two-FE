@@ -44,4 +44,8 @@ export class NavbarComponent implements OnInit {
   selectEnv(): void {
     this.dialogService.open(EnvPickerDialogComponent, '', undefined);
   }
+
+  openAccountPicker(): void {
+    this.dialogService.openAccountPicker(this.selectedEnv, true);
+  }
 }
