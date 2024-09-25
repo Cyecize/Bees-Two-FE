@@ -1,23 +1,26 @@
 import { Component, OnInit } from '@angular/core';
 import { CountryEnvironmentService } from '../../../api/env/country-environment.service';
 import { CountryEnvironmentModel } from '../../../api/env/country-environment.model';
-import { NgIf } from '@angular/common';
+import { NgIf, NgOptimizedImage } from '@angular/common';
 import { DialogService } from '../../../shared/dialog/dialog.service';
 import { EnvViewerDialogComponent } from '../../env/env-viewer-dialog/env-viewer-dialog.component';
 import { EnvPickerDialogComponent } from '../../env/env-picker-dialog/env-picker-dialog.component';
 import { UserService } from '../../../api/user/user.service';
 import { User } from '../../../api/user/user';
+import { RouterLink } from '@angular/router';
+import { AppRoutingPath } from '../../../app-routing.path';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [NgIf],
+  imports: [NgIf, NgOptimizedImage, RouterLink],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss',
 })
 export class NavbarComponent implements OnInit {
   selectedEnv!: CountryEnvironmentModel;
   currentUser?: User;
+  routes = AppRoutingPath;
 
   constructor(
     private envService: CountryEnvironmentService,

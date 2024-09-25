@@ -1,6 +1,10 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container">
-    <a class="navbar-brand" href="#">BEES Two</a>
+    <a class="navbar-brand" [routerLink]="routes.HOME.toString()">
+      <strong>BEES</strong>
+      <img class="ms-1" ngSrc="assets/bee.png" height="20" width="20">
+      <img class="ms-1" ngSrc="assets/bee.png" height="20" width="20">
+    </a>
     <button class="navbar-toggler" type="button"
             data-bs-toggle="collapse"
             data-bs-target="#navbarSupportedContent"
