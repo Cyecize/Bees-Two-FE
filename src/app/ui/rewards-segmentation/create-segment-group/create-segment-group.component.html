@@ -28,13 +28,34 @@
   <h5>POCS</h5>
   <div class="row">
     <div class="col">
-      <app-input (onChangeEnd)="setPocsToAdd($event)" placeholder="Pocs to Add" type="number"></app-input>
+      <div class="row">
+        <div class="col">
+          <app-input (onChangeEnd)="setPocsToAdd($event)" placeholder="Pocs to Add" type="number"></app-input>
+        </div>
+        <div class="col">
+          <button type="button"
+                  (click)="addPocs()"
+                  class="btn btn-sm btn-outline-primary">Add Pocs
+          </button>
+        </div>
+      </div>
     </div>
     <div class="col">
-      <button type="button"
-              (click)="addPocs()"
-              class="btn btn-sm btn-outline-primary">Add Pocs
-      </button>
+      <div class="row">
+        <div class="col">
+          <textarea
+            class="form-control"
+            #pocsArray
+            placeholder="Array of account ids... [&quot;poc1&quot;, &quot;poc2&quot;]"
+            rows="7"></textarea>
+        </div>
+        <div class="col">
+          <button type="button"
+                  (click)="addPocsArray(pocsArray.value)"
+                  class="btn btn-sm btn-outline-secondary">Add Pocs
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 

@@ -95,6 +95,30 @@ export class CreateSegmentGroupComponent implements OnInit, OnDestroy {
     this.pocsToAdd = pocsToAdd;
   }
 
+  addPocsArray(val: string): void {
+    val = val?.trim();
+
+    if (!val) {
+      return;
+    }
+
+    let data: string[];
+
+    try {
+      data = JSON.parse(val) as string[];
+    } catch (err) {
+      alert('Your JSON is invalid!');
+      return;
+    }
+
+    data
+      .map((val) => val.trim())
+      .forEach((val) => {
+        const group = this.addPocForm();
+        group.controls.pocId.patchValue(val);
+      });
+  }
+
   addPocs(): void {
     if (!this.pocsToAdd) {
       return;
@@ -105,17 +129,19 @@ export class CreateSegmentGroupComponent implements OnInit, OnDestroy {
     }
   }
 
-  addPocForm(): void {
-    this.form.controls.pocs.push(
-      new FormGroup<SegmentGroupPocsForm>({
-        pocId: new FormControl<string>(null!, {
-          nonNullable: true,
-          validators: Validators.required,
-        }),
-        points: new FormControl<number | null>(null),
-        quantity: new FormControl<number | null>(null),
+  addPocForm(): FormGroup<SegmentGroupPocsForm> {
+    const group = new FormGroup<SegmentGroupPocsForm>({
+      pocId: new FormControl<string>(null!, {
+        nonNullable: true,
+        validators: Validators.required,
       }),
-    );
+      points: new FormControl<number | null>(null),
+      quantity: new FormControl<number | null>(null),
+    });
+
+    this.form.controls.pocs.push(group);
+
+    return group;
   }
 
   async formSubmitted(): Promise<void> {

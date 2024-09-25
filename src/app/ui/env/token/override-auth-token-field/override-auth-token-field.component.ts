@@ -34,6 +34,7 @@ export class OverrideAuthTokenFieldComponent implements OnInit, OnDestroy {
   tokenChanged = new EventEmitter<string | undefined>();
 
   set token(val: string) {
+    val = val?.trim();
     this._token = val;
     this.tokenChanged.next(val);
   }

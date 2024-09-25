@@ -1,6 +1,6 @@
 <div>
   <div>
-    <h3>Rewards Settings</h3>
+    <h3>Segment groups</h3>
   </div>
 
   <div>
@@ -54,6 +54,7 @@
     <tr *ngFor="let group of searchResponse">
       <th scope="row">
         <app-tooltip-span
+          [enableCopy]="true"
           [displayText]="shortenStr(group.id)"
           [tooltipText]="group.id"></app-tooltip-span>
       </th>
