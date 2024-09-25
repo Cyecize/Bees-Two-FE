@@ -35,7 +35,15 @@
   <div class="mt-2 ms-2" formArrayName="pocs">
     <div *ngFor="let poc of form.controls.pocs.controls; let i = index" [formGroupName]="i">
       <div class="d-flex justify-content-between align-items-center">
-        <app-input class="m-1" placeholder="Poc ID" formControlName="pocId"></app-input>
+        <div class="d-flex">
+          <app-input
+            class="m-1"
+            placeholder="Poc ID"
+            formControlName="pocId"></app-input>
+          <button
+            (click)="pickAccount(i)"
+            class="btn btn-sm btn-outline-warning m-1">Pick</button>
+        </div>
         <app-input class="m-1" placeholder="Points" formControlName="points"></app-input>
         <app-input class="m-1" placeholder="Quantity" formControlName="quantity"></app-input>
         <span>

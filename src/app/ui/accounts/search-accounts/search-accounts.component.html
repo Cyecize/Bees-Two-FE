@@ -79,16 +79,19 @@
           <th scope="row">
             <div><small>Bees:
               <app-tooltip-span
+                [enableCopy]="true"
                 [tooltipText]="account.accountId"
                 [displayText]="shortenStr(account.accountId)"></app-tooltip-span>
             </small></div>
             <div><small>Vendor:
               <app-tooltip-span
+                [enableCopy]="true"
                 [tooltipText]="account.vendorAccountId"
                 [displayText]="shortenStr(account.vendorAccountId)"></app-tooltip-span>
             </small></div>
             <div><small>Customer:
               <app-tooltip-span
+                [enableCopy]="true"
                 [tooltipText]="account.customerAccountId"
                 [displayText]="shortenStr(account.customerAccountId)"></app-tooltip-span>
             </small></div>

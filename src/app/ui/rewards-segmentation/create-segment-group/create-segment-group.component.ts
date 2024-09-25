@@ -129,6 +129,14 @@ export class CreateSegmentGroupComponent implements OnInit, OnDestroy {
   removePocForm(i: number): void {
     this.form.controls.pocs.removeAt(i);
   }
+
+  pickAccount(ind: number): void {
+    this.dialogService.openAccountPicker(this.envOverride!).subscribe((acc) => {
+      if (acc) {
+        this.form.controls.pocs.at(ind).controls.pocId.patchValue(acc.beesId);
+      }
+    });
+  }
 }
 
 export const CREATE_SEGMENT_GROUP_ROUTES: Routes = [
