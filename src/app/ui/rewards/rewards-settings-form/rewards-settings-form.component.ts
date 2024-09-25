@@ -35,6 +35,7 @@ import { FilterFormComponent } from './filter-form/filter-form.component';
 import { DefaultConfigurationFormComponent } from './default-configuration-form/default-configuration-form.component';
 import { EnvOverrideFieldComponent } from '../../env/env-override-field/env-override-field.component';
 import { EnvOverrideService } from '../../../api/env/env-override.service';
+import { OverrideAuthTokenFieldComponent } from '../../env/token/override-auth-token-field/override-auth-token-field.component';
 
 export interface MetaForm {
   settingId: FormControl<string>;
@@ -71,6 +72,7 @@ export interface RewardsSettingsFormOutput {
     DefaultConfigurationFormComponent,
     FormsModule,
     EnvOverrideFieldComponent,
+    OverrideAuthTokenFieldComponent,
   ],
   templateUrl: './rewards-settings-form.component.html',
   styleUrl: './rewards-settings-form.component.scss',
@@ -79,7 +81,7 @@ export class RewardsSettingsFormComponent implements OnInit {
   private _setting!: RewardSetting;
 
   selectedEnv?: CountryEnvironmentModel;
-  overrideAuthToken = '';
+  overrideAuthToken: string | undefined = '';
 
   tiers: SelectOption[] = [];
   types: SelectOption[] = [];

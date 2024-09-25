@@ -19,6 +19,7 @@ import { SelectComponent } from '../../../shared/form-controls/select/select.com
 import { ShowLoader } from '../../../shared/loader/show.loader.decorator';
 import { SegmentationService } from '../../../api/rewards/segmentation/segmentation.service';
 import { DialogService } from '../../../shared/dialog/dialog.service';
+import { OverrideAuthTokenFieldComponent } from '../../env/token/override-auth-token-field/override-auth-token-field.component';
 
 interface SegmentGroupForm {
   groupId: FormControl<string | null>;
@@ -45,6 +46,7 @@ interface SegmentGroupPocsForm {
     SelectComponent,
     FormsModule,
     NgForOf,
+    OverrideAuthTokenFieldComponent,
   ],
   templateUrl: './create-segment-group.component.html',
   styleUrl: './create-segment-group.component.scss',
@@ -55,6 +57,7 @@ export class CreateSegmentGroupComponent implements OnInit, OnDestroy {
 
   form!: FormGroup<SegmentGroupForm>;
   pocsToAdd!: number;
+  overrideAuthToken: string | undefined;
 
   constructor(
     private envOverrideService: EnvOverrideService,
@@ -115,11 +118,23 @@ export class CreateSegmentGroupComponent implements OnInit, OnDestroy {
     );
   }
 
-  @ShowLoader()
   async formSubmitted(): Promise<void> {
+    this.dialogService
+      .openConfirmDialog(
+        `You are about to create segmentation group on env: ${this.envOverride?.envName}`,
+      )
+      .subscribe(async (confirmed) => {
+        if (confirmed) {
+          this.upsertGroup();
+        }
+      });
+  }
+
+  @ShowLoader()
+  private async upsertGroup(): Promise<void> {
     const result = await this.segmentationService.upsertGroup(
       this.form.getRawValue(),
-      prompt('Enter Auth token from BEES One!')!,
+      this.overrideAuthToken!,
       this.envOverride,
     );
 

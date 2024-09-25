@@ -1,0 +1,68 @@
+<div *ngIf="!payload">
+  <p class="alert alert-danger">There is no selected environment!</p>
+  <div class="text-end">
+    <button class="btn btn-dark" (click)="close(undefined)">Close</button>
+  </div>
+</div>
+
+<small *ngIf="payload">Environment: <strong>{{ payload.envName }}</strong></small>
+
+<div *ngIf="token">
+  <table class="table">
+    <thead>
+    </thead>
+    <tbody>
+    <tr>
+      <td>Token</td>
+      <td><app-tooltip-span
+        [trimDisplayTextChars]="25"
+        [displayText]="token.token"
+        [tooltipText]="token.token"
+        [enableCopy]="true"></app-tooltip-span></td>
+    </tr>
+    <tr>
+      <td>Expires</td>
+      <td>{{ token.expires.toLocaleString() }}</td>
+    </tr>
+    </tbody>
+  </table>
+
+  <div class="text-end">
+    <button
+      (click)="clearToken()"
+      class="btn btn-outline-danger m-1">Clear token!
+    </button>
+    <button
+      (click)="selectToken()"
+      class="btn btn-outline-info m-1">Choose
+    </button>
+  </div>
+</div>
+
+<div *ngIf="payload && !token">
+  <p class="alert alert-warning">There is no token!</p>
+
+  <form [formGroup]="form">
+    <div class="mt-1">
+      <app-input
+        formControlName="token"
+        placeholder="Token"></app-input>
+    </div>
+
+    <div class="mt-2">
+      <app-input
+        type="number"
+        formControlName="expiresMinutes"
+        placeholder="Expires in {minutes}"></app-input>
+    </div>
+
+    <div class="mt-2 text-end">
+      <button
+        class="btn btn-outline-dark"
+        [disabled]="!form.valid"
+        (click)="saveTokenAndClose()">Save and Close
+      </button>
+    </div>
+  </form>
+</div>
+

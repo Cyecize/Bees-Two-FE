@@ -2,6 +2,12 @@
 <div>
   <app-env-override-field></app-env-override-field>
 </div>
+<div class="mt-2">
+  <div>
+    <app-override-auth-token-field
+      (tokenChanged)="overrideAuthToken = $event"></app-override-auth-token-field>
+  </div>
+</div>
 <hr>
 
 <form [formGroup]="form">

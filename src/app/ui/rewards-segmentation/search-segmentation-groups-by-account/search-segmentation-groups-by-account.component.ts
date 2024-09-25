@@ -100,7 +100,7 @@ export class SearchSegmentationGroupsByAccountComponent
     this.dialogService
       .open(
         ShowSegmentGroupByAccountDetailsDialogComponent,
-        '',
+        'Account details',
         new ShowSegmentGroupByAccountDetailsDialogPayload(
           group,
           this.query,

@@ -15,6 +15,8 @@ import { AccountPickerDialogComponent } from '../../ui/accounts-local/account-pi
 import { CountryEnvironmentModel } from '../../api/env/country-environment.model';
 import { LocalAccount } from '../../api/accounts/local/local-account';
 import { AccountPickerDialogPayload } from '../../ui/accounts-local/account-picker-dialog/account-picker-dialog.payload';
+import { BeesToken } from '../../api/env/token/bees-token';
+import { BeesTokenOverrideDialogComponent } from '../../ui/env/token/bees-token-override-dialog/bees-token-override-dialog.component';
 
 @Injectable({ providedIn: 'root' })
 export class DialogService {
@@ -61,7 +63,7 @@ export class DialogService {
       .pipe(map((value) => value || false));
   }
 
-  openAccountPicker(
+  public openAccountPicker(
     env: CountryEnvironmentModel,
     hideActions?: boolean,
   ): Observable<LocalAccount> {
@@ -69,6 +71,16 @@ export class DialogService {
       AccountPickerDialogComponent,
       '',
       new AccountPickerDialogPayload(env, hideActions),
+    ).afterClosed();
+  }
+
+  public openBeesTokenOverrideDialog(
+    env: CountryEnvironmentModel,
+  ): Observable<BeesToken> {
+    return this.open(
+      BeesTokenOverrideDialogComponent,
+      'Bees Token Override',
+      env,
     ).afterClosed();
   }
 }

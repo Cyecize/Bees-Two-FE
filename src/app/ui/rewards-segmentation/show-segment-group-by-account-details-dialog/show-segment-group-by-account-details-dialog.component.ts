@@ -51,18 +51,27 @@ export class ShowSegmentGroupByAccountDetailsDialogComponent
       )
       .subscribe(async (confirm) => {
         if (confirm) {
-          const result = await this.segmentationService.deleteAccountGroup(
-            this.payload.group.accountId,
-            prompt('Enter token from BEES One / Membership!')!,
-            this.payload.selectedEnv,
-          );
+          this.dialogService
+            .openBeesTokenOverrideDialog(this.payload.selectedEnv)
+            .subscribe(async (token) => {
+              if (!token) {
+                alert('Please select a token in order to proceed!');
+                return;
+              }
 
-          if (result.isSuccess) {
-            alert('Account Group was deleted!');
-            this.close(true);
-          } else {
-            this.dialogService.openRequestResultDialog(result);
-          }
+              const result = await this.segmentationService.deleteAccountGroup(
+                this.payload.group.accountId,
+                token.token,
+                this.payload.selectedEnv,
+              );
+
+              if (result.isSuccess) {
+                alert('Account Group was deleted!');
+                this.close(true);
+              } else {
+                this.dialogService.openRequestResultDialog(result);
+              }
+            });
         }
       });
   }
@@ -75,26 +84,38 @@ export class ShowSegmentGroupByAccountDetailsDialogComponent
         'Unassign',
       )
       .subscribe(async (confirm) => {
-        if (confirm) {
-          const result = await this.segmentationService.deleteAccountGroupGroup(
-            this.payload.group.accountId,
-            groupId,
-            prompt('Enter token from BEES One / Membership!')!,
-            this.payload.selectedEnv,
-          );
-
-          if (result.isSuccess) {
-            alert('Group was unassigned!');
-            this.payload.group = (
-              await this.segmentationService.getAccountGroup(
-                this.payload.group.accountId,
-                this.payload.selectedEnv,
-              )
-            ).response;
-          } else {
-            this.dialogService.openRequestResultDialog(result);
-          }
+        if (!confirm) {
+          return;
         }
+
+        this.dialogService
+          .openBeesTokenOverrideDialog(this.payload.selectedEnv)
+          .subscribe(async (token) => {
+            if (!token) {
+              alert('Please select a token in order to proceed!');
+              return;
+            }
+
+            const result =
+              await this.segmentationService.deleteAccountGroupGroup(
+                this.payload.group.accountId,
+                groupId,
+                token.token,
+                this.payload.selectedEnv,
+              );
+
+            if (result.isSuccess) {
+              alert('Group was unassigned!');
+              this.payload.group = (
+                await this.segmentationService.getAccountGroup(
+                  this.payload.group.accountId,
+                  this.payload.selectedEnv,
+                )
+              ).response;
+            } else {
+              this.dialogService.openRequestResultDialog(result);
+            }
+          });
       });
   }
 }

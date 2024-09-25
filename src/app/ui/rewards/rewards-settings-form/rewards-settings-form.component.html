@@ -6,9 +6,8 @@
     </div>
     <div class="mt-2">
       <div>
-        <app-input
-          placeholder="Override Auth Token"
-          [(ngModel)]="overrideAuthToken"></app-input>
+        <app-override-auth-token-field
+          (tokenChanged)="overrideAuthToken = $event"></app-override-auth-token-field>
       </div>
     </div>
 

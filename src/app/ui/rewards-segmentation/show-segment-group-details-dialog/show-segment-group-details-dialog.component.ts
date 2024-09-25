@@ -50,18 +50,27 @@ export class ShowSegmentGroupDetailsDialogComponent
       )
       .subscribe(async (confirm) => {
         if (confirm) {
-          const result = await this.segmentationService.deleteGroup(
-            this.payload.group.id,
-            prompt('Enter token from BEES One / Membership!')!,
-            this.payload.selectedEnv,
-          );
+          this.dialogService
+            .openBeesTokenOverrideDialog(this.payload.selectedEnv)
+            .subscribe(async (token) => {
+              if (!token) {
+                alert('You must select a token in order to proceed!');
+                return;
+              }
 
-          if (result.isSuccess) {
-            alert('Group was deleted!');
-            this.close(true);
-          } else {
-            this.dialogService.openRequestResultDialog(result);
-          }
+              const result = await this.segmentationService.deleteGroup(
+                this.payload.group.id,
+                token.token,
+                this.payload.selectedEnv,
+              );
+
+              if (result.isSuccess) {
+                alert('Group was deleted!');
+                this.close(true);
+              } else {
+                this.dialogService.openRequestResultDialog(result);
+              }
+            });
         }
       });
   }

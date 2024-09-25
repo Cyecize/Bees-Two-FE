@@ -48,4 +48,8 @@ export class NavbarComponent implements OnInit {
   openAccountPicker(): void {
     this.dialogService.openAccountPicker(this.selectedEnv, true);
   }
+
+  openTemporaryTokenDialog(): void {
+    this.dialogService.openBeesTokenOverrideDialog(this.selectedEnv);
+  }
 }
