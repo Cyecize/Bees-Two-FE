@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CountryEnvironmentRepository } from './country-environment.repository';
-import { BehaviorSubject, firstValueFrom, Observable } from 'rxjs';
+import { BehaviorSubject, firstValueFrom } from 'rxjs';
 import { CountryEnvironmentModel } from './country-environment.model';
 import { STORAGE_SELECTED_ENV_ID_NAME } from '../../shared/general.constants';
 import { ObjectUtils } from '../../shared/util/object-utils';
@@ -12,6 +12,7 @@ import {
 import { Page } from '../../shared/util/page';
 import { CountryCodeQuery } from './country-code.query';
 import { CountryEnvironmentPayload } from './country-environment.payload';
+import { EnvToken } from './env-token';
 
 @Injectable({ providedIn: 'root' })
 export class CountryEnvironmentService {
@@ -50,6 +51,14 @@ export class CountryEnvironmentService {
   ): Promise<WrappedResponseLocal<CountryEnvironmentModel>> {
     return await new FieldErrorWrapperLocal(() =>
       this.repository.createEnv(payload),
+    ).execute();
+  }
+
+  public async getToken(
+    env: CountryEnvironmentModel,
+  ): Promise<WrappedResponseLocal<EnvToken>> {
+    return await new FieldErrorWrapperLocal(() =>
+      this.repository.getToken(env.id),
     ).execute();
   }
 

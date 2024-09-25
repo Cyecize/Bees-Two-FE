@@ -39,6 +39,22 @@ export class HomeComponent implements OnInit {
   viewEnvDetails(): void {
     this.dialogService.open(EnvViewerDialogComponent, '', this.currentEnv);
   }
+
+  async generateToken(): Promise<void> {
+    const res = await this.envService.getToken(this.currentEnv);
+    if (!res.isSuccess) {
+      alert('Error while obtaining token, check the console!');
+      console.log(res);
+      return;
+    }
+
+    navigator.clipboard.writeText(res.response.token);
+    this.dialogService.openConfirmDialog(
+      `Token for ${res.response.countryEnvironment.envName} copied to clipboard!`,
+      'Success!',
+      '',
+    );
+  }
 }
 
 export const HOME_ROUTES: Routes = [

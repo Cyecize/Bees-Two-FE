@@ -7,6 +7,8 @@ import { CountryEnvironmentQuery } from './country-environment.query';
 import { Page } from '../../shared/util/page';
 import { CountryCodeQuery } from './country-code.query';
 import { CountryEnvironmentPayload } from './country-environment.payload';
+import { EnvToken } from './env-token';
+import { RouteUtils } from '../../shared/routing/route-utils';
 
 @Injectable({ providedIn: 'root' })
 export class CountryEnvironmentRepository {
@@ -38,6 +40,12 @@ export class CountryEnvironmentRepository {
     return this.http.post<CountryEnvironmentPayload, CountryEnvironmentModel>(
       Endpoints.ENVIRONMENTS,
       payload,
+    );
+  }
+
+  public getToken(envId: number): Observable<EnvToken> {
+    return this.http.get<EnvToken>(
+      RouteUtils.setPathParams(Endpoints.ENVIRONMENT_TOKEN, [envId])
     );
   }
 }
