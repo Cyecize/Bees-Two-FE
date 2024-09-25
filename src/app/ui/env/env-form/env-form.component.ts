@@ -36,7 +36,9 @@ export class EnvFormComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    this.envs = Object.keys(Env).map((key) => new SelectOptionKey(key));
+    this.envs = [new SelectOptionKey('Choose one', true)].concat(
+      ...Object.keys(Env).map((key) => new SelectOptionKey(key)),
+    );
 
     this.form = new FormGroup<EnvForm>({
       envName: new FormControl<string>(null!, {
