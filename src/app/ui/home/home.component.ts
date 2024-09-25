@@ -7,6 +7,7 @@ import { CountryEnvironmentModel } from '../../api/env/country-environment.model
 import { NgIf } from '@angular/common';
 import { EnvViewerDialogComponent } from '../env/env-viewer-dialog/env-viewer-dialog.component';
 import { AppRoutingPath } from '../../app-routing.path';
+import { ShowLoader } from "../../shared/loader/show.loader.decorator";
 
 @Component({
   selector: 'app-home',
@@ -40,6 +41,7 @@ export class HomeComponent implements OnInit {
     this.dialogService.open(EnvViewerDialogComponent, '', this.currentEnv);
   }
 
+  @ShowLoader()
   async generateToken(): Promise<void> {
     const res = await this.envService.getToken(this.currentEnv);
     if (!res.isSuccess) {
