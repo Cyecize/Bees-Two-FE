@@ -1,6 +1,6 @@
 <app-loader></app-loader>
 
 <div>
-  <app-navbar></app-navbar>
+  <app-navbar *ngIf="user"></app-navbar>
   <router-outlet />
 </div>
