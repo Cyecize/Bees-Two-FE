@@ -45,7 +45,7 @@ export class CountryEnvironmentRepository {
 
   public getToken(envId: number): Observable<EnvToken> {
     return this.http.get<EnvToken>(
-      RouteUtils.setPathParams(Endpoints.ENVIRONMENT_TOKEN, [envId])
+      RouteUtils.setPathParams(Endpoints.ENVIRONMENT_TOKEN, [envId]),
     );
   }
 }

@@ -7,7 +7,7 @@ import { CountryEnvironmentModel } from '../../api/env/country-environment.model
 import { NgIf } from '@angular/common';
 import { EnvViewerDialogComponent } from '../env/env-viewer-dialog/env-viewer-dialog.component';
 import { AppRoutingPath } from '../../app-routing.path';
-import { ShowLoader } from "../../shared/loader/show.loader.decorator";
+import { ShowLoader } from '../../shared/loader/show.loader.decorator';
 
 @Component({
   selector: 'app-home',

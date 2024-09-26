@@ -1,0 +1,48 @@
+<div>
+  <p>Pick account for {{ payload.env.envName }}</p>
+
+  <div class="mt-2">
+    <div class="d-flex">
+      <app-input
+        placeholder="Bees ID"></app-input>
+      <button
+        (click)="openAccountPicker()"
+        class="ms-1 btn btn-sm btn-outline-warning">Pick
+      </button>
+    </div>
+  </div>
+
+  <div class="mt-2" *ngIf="accounts.length">
+
+    <table class="table">
+      <thead>
+      <tr>
+        <th scope="col">Bees ID</th>
+        <th scope="col">Name</th>
+        <th scope="col">Action</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let acc of accounts">
+        <th scope="row">
+          <app-tooltip-span
+            [enableCopy]="true"
+            [tooltipText]="acc.accountId"
+            [displayText]="acc.accountId"></app-tooltip-span>
+        </th>
+        <td>{{ acc.name }}</td>
+        <td>
+          <button
+            class="btn btn-outline-info"
+            (click)="selectAccount(acc)">Choose
+          </button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="mt-2" *ngIf="!accounts.length">
+    <p class="alert alert-warning">No accounts found!</p>
+  </div>
+</div>

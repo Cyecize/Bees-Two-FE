@@ -179,6 +179,13 @@ const accountRoutes: Routes = [
             (value) => value.ADD_ACCOUNT_ROUTES,
           ),
       },
+      {
+        path: AppRoutingPath.DELIVERY_WINDOWS_ADD.path,
+        loadChildren: () =>
+          import(
+            './ui/accounts/add-delivery-window/add-delivery-window.component'
+          ).then((value) => value.ADD_DELIVERY_WINDOW_ROUTES),
+      },
     ],
   },
 ];

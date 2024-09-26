@@ -1,0 +1,120 @@
+<div>
+  <h3>Add Delivery Window</h3>
+</div>
+
+<div>
+  <h4>Environment</h4>
+  <div class="filters-header">
+    <div class="filter">
+      <app-env-override-field></app-env-override-field>
+    </div>
+  </div>
+</div>
+
+<hr>
+
+<div class="main pb-2">
+  <h4>Delivery Window Form</h4>
+
+  <form [formGroup]="form">
+    <div class="mt-2">
+      <div class="d-flex">
+        <app-input
+          placeholder="Delivery Schedule ID"
+          formControlName="deliveryScheduleId"></app-input>
+        <button
+          (click)="pickDeliveryScheduleId()"
+          class="ms-1 btn btn-sm btn-outline-warning">Pick From Account
+        </button>
+      </div>
+    </div>
+
+    <div *ngIf="form.getRawValue().deliveryScheduleId">
+      <div class="mt-3">
+        <small>Final date this window can be selected from the user.</small>
+        <mat-datepicker #expirationDatePicker></mat-datepicker>
+        <div class="d-flex">
+          <app-input
+            placeholder="Expiration Date"
+            formControlName="expirationDate"></app-input>
+          <button
+            (click)="expirationDatePicker.open()"
+            type="button"
+            class="ms-1 btn btn-sm btn-outline-warning">
+            Pick Date
+          </button>
+        </div>
+        <input
+          style="width: 1px; height: 1px; margin: 0; opacity: 0;"
+          (dateChange)="expirationDateChange($event.value)"
+          [matDatepicker]="expirationDatePicker">
+      </div>
+
+      <div class="mt-2">
+        <small>Start of the delivery window (should be after expire date)</small>
+        <mat-datepicker #startDatePicker></mat-datepicker>
+        <div class="d-flex">
+          <app-input
+            placeholder="Start Date"
+            formControlName="startDate"></app-input>
+          <button
+            type="button"
+            (click)="startDatePicker.open()"
+            class="ms-1 btn btn-sm btn-outline-warning">
+            Pick Date
+          </button>
+        </div>
+        <input
+          style="width: 1px; height: 1px; margin: 0; opacity: 0;"
+          (dateChange)="startDateChanged($event.value)"
+          [matDatepicker]="startDatePicker">
+      </div>
+
+      <div class="mt-3">
+        <small>Last day of delivery (must be after start date)</small>
+        <mat-datepicker #endDatePicker></mat-datepicker>
+        <div class="d-flex">
+          <app-input
+            placeholder="End Date"
+            formControlName="endDate"></app-input>
+          <button
+            (click)="endDatePicker.open()"
+            type="button"
+            class="ms-1 btn btn-sm btn-outline-warning">
+            Pick Date
+          </button>
+        </div>
+        <input type="text"
+               style="width: 1px; height: 1px; margin: 0; opacity: 0;"
+               (dateChange)="endDateChange($event.value)"
+               [matDatepicker]="endDatePicker">
+      </div>
+
+      <div class="mt-2">
+        <app-input
+          placeholder="Vendor Id"
+          formControlName="vendorId"></app-input>
+      </div>
+
+      <div class="mt-2">
+        <app-input
+          placeholder="Delivery Window ID"
+          formControlName="id"></app-input>
+      </div>
+
+      <div class="mt-2">
+        <app-checkbox
+          label="Alternative"
+          formControlName="alternative"></app-checkbox>
+      </div>
+    </div>
+
+    <div class="mt-2 text-end">
+      <button
+        [disabled]="!form.valid"
+        (click)="onFormSubmit()"
+        type="submit" class="btn btn-outline-dark">Save
+      </button>
+    </div>
+  </form>
+</div>

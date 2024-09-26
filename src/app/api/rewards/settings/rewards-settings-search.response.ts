@@ -2,7 +2,6 @@ import { Pagination } from '../../../shared/util/page';
 import { RewardsSettingType } from './enums/rewards-setting-type';
 import { RewardsSettingLevel } from './enums/rewards-setting-level';
 import { RewardsTierLevel } from '../rewards-tier-level';
-import { BeesBankContainer } from './payloads/rewards-setting.payload';
 import { RewardsSettingCalculationType } from './enums/rewards-setting-calculation-type';
 import { RewardsSettingEarnType } from './enums/rewards-setting-earn-type';
 
