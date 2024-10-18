@@ -21,6 +21,7 @@ import { CheckboxComponent } from '../../../shared/form-controls/checkbox/checkb
 import { ObjectUtils } from '../../../shared/util/object-utils';
 import { ShowItemDetailsDialogComponent } from '../show-item-details-dialog/show-item-details-dialog.component';
 import { ShowItemDetailsDialogPayload } from '../show-item-details-dialog/show-item-details-dialog.payload';
+import { ShowLoader } from '../../../shared/loader/show.loader.decorator';
 
 @Component({
   selector: 'app-search-items',
@@ -70,6 +71,30 @@ export class SearchItemsComponent implements OnInit, OnDestroy {
     await this.fetchData();
   }
 
+  @ShowLoader()
+  async fetchAllPages(): Promise<void> {
+    const res: Item[] = [];
+    let page = -1;
+    let hasNext = true;
+
+    while (hasNext) {
+      page++;
+      this.query.page.page = page;
+      console.log(`fetching page ${page}`);
+
+      if (!(await this.fetchData())) {
+        alert('Could not load all pages, stopping on page ' + page + 1);
+        return;
+      }
+
+      res.push(...this.items);
+      hasNext = this.fullResponse.response?.response?.pagination?.hasNext;
+    }
+
+    alert('Printing JSON in the console!');
+    console.log(JSON.stringify(res));
+  }
+
   async reloadFilters(): Promise<void> {
     this.query.vendorId = this.envOverride?.vendorId + '';
 
@@ -83,7 +108,7 @@ export class SearchItemsComponent implements OnInit, OnDestroy {
     await this.fetchData();
   }
 
-  private async fetchData(): Promise<void> {
+  private async fetchData(): Promise<boolean> {
     const response = await this.itemService.searchItems(
       this.query,
       this.envOverride,
@@ -98,7 +123,11 @@ export class SearchItemsComponent implements OnInit, OnDestroy {
       } else {
         this.items = [];
       }
+
+      return true;
     }
+
+    return false;
   }
 
   openResponseDetailsDialog(): void {
