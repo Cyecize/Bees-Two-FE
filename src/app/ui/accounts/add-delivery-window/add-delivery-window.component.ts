@@ -69,7 +69,6 @@ export class AddDeliveryWindowComponent implements OnInit, OnDestroy {
     this.form = new FormGroup<DeliveryWindowForm>({
       deliveryScheduleId: new FormControl<string>(null!, {
         nonNullable: true,
-        validators: [Validators.required],
       }),
       startDate: new FormControl<string>(null!, {
         nonNullable: true,
