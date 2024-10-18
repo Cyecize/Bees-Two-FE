@@ -151,6 +151,26 @@ const rewardsRoutes: Routes = [
       },
     ],
   },
+  {
+    path: AppRoutingPath.REWARDS_CHALLENGES.path,
+    component: RewardsBaseComponent,
+    children: [
+      {
+        path: AppRoutingPath.SEARCH_CHALLENGES.path,
+        loadChildren: () =>
+          import(
+            './ui/rewards-challenges/search-challenges/search-challenges.component'
+          ).then((value) => value.SEARCH_CHALLENGES_ROUTES),
+      },
+      {
+        path: AppRoutingPath.CREATE_CHALLENGE.path,
+        loadChildren: () =>
+          import(
+            './ui/rewards-challenges/create-challenge/create-challenge.component'
+          ).then((value) => value.CREATE_CHALLENGES_ROUTES),
+      },
+    ],
+  },
 ];
 
 const accountRoutes: Routes = [

@@ -21,6 +21,9 @@ export class AppRoutingPath {
   public static readonly SEARCH_SEGMENTATION_GROUPS = new RouteConfig('search-groups', AppRoutingPath.REWARDS_SEGMENTATION);
   public static readonly SEARCH_SEGMENTATION_GROUPS_BY_ACCOUNT = new RouteConfig('search-groups-by-account', AppRoutingPath.REWARDS_SEGMENTATION);
   public static readonly CREATE_SEGMENTATION_GROUP = new RouteConfig('create-group', AppRoutingPath.REWARDS_SEGMENTATION);
+  public static readonly REWARDS_CHALLENGES = new RouteConfig('challenges', AppRoutingPath.REWARDS);
+  public static readonly SEARCH_CHALLENGES = new RouteConfig('search', AppRoutingPath.REWARDS_CHALLENGES);
+  public static readonly CREATE_CHALLENGE = new RouteConfig('create', AppRoutingPath.REWARDS_CHALLENGES);
   public static readonly ACCOUNTS = new RouteConfig('accounts', null);
   public static readonly ACCOUNTS_SEARCH_V1 = new RouteConfig('search-v1', AppRoutingPath.ACCOUNTS);
   public static readonly ACCOUNTS_ADD_V2_RAW = new RouteConfig('add-v2-raw', AppRoutingPath.ACCOUNTS);
