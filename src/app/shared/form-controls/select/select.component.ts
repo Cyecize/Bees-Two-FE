@@ -64,6 +64,9 @@ export class SelectComponent implements OnInit, ControlValueAccessor {
 
   inputChanged(event: any): void {
     this.value = event.target.value;
+    if (this.value === 'null') {
+      this.value = null;
+    }
     this.onChange.emit(this.value);
   }
 
