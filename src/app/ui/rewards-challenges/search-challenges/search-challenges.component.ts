@@ -45,6 +45,8 @@ import {
 } from '@angular/material/datepicker';
 import { TooltipSpanComponent } from '../../../shared/components/tooltip-span/tooltip-span.component';
 import { Challenge } from '../../../api/rewards/challenges/challenge';
+import { ShowChallengeDialogComponent } from '../show-challenge-dialog/show-challenge-dialog.component';
+import { ShowChallengeDialogPayload } from '../show-challenge-dialog/show-challenge-dialog.payload';
 
 @Component({
   selector: 'app-search-challenges',
@@ -295,7 +297,11 @@ export class SearchChallengesComponent implements OnInit, OnDestroy {
   }
 
   openDetailsDialog(challenge: Challenge): void {
-    console.log(challenge);
+    this.dialogService.open(
+      ShowChallengeDialogComponent,
+      'Challenge Details',
+      new ShowChallengeDialogPayload(challenge, this.envOverride!),
+    );
   }
 }
 
