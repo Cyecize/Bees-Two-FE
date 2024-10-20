@@ -18,6 +18,7 @@ export class Endpoints {
   public static readonly BEES_REWARDS_SETTINGS_V1 = '/api/rewards-service/v1/settings';
   public static readonly BEES_REWARDS_SETTING_V1 = '/api/rewards-service/v1/settings/:settingId/:type/:level/:tier';
   public static readonly BEES_REWARDS_CHALLENGES_V2 = '/api/rewards-service/v2/challenges';
+  public static readonly BEES_REWARDS_CHALLENGE_V1 = '/api/v1/rewards-service/challenges/:id';
   public static readonly BEES_SEGMENTATION_GROUPS = '/segmentation-service/v1/groups';
   public static readonly BEES_SEGMENTATION_GROUP = '/segmentation-service/v1/groups/:id';
   public static readonly BEES_SEGMENTATION_ACCOUNT_GROUPS = '/segmentation-service/v1/account-groups';

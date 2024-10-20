@@ -7,6 +7,7 @@ import {
   FieldErrorWrapper,
   WrappedResponse,
 } from '../../../shared/util/field-error-wrapper';
+import { ChallengeMode } from './challenge-mode';
 
 @Injectable({ providedIn: 'root' })
 export class ChallengeService {
@@ -18,6 +19,21 @@ export class ChallengeService {
   ): Promise<WrappedResponse<ChallengesSearchResponse>> {
     return new FieldErrorWrapper(() =>
       this.repository.searchChallenges(query, env?.id),
+    ).execute();
+  }
+
+  public async cancelChallenge(
+    challengeId: string,
+    tokenOverride: string,
+    env?: CountryEnvironmentModel,
+  ): Promise<WrappedResponse<any>> {
+    return new FieldErrorWrapper(() =>
+      this.repository.patchChallenge(
+        challengeId,
+        { mode: ChallengeMode.CANCELLED, id: challengeId },
+        tokenOverride,
+        env?.id,
+      ),
     ).execute();
   }
 }

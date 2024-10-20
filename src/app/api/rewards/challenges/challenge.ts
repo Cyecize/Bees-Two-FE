@@ -1,6 +1,7 @@
 import { ChallengeExecutionMethod } from './challenge-execution-method';
 import { ChallengeFilterType } from './challenge-filter-type';
 import { ChallengeMode } from './challenge-mode';
+import { ChallengeType } from './challenge-type';
 
 export interface Challenge {
   id: string;
@@ -16,7 +17,7 @@ export interface Challenge {
   lastModified: string;
   campaignId: string;
   visionId: string;
-  type: any; // ChallengeType enum
+  type: ChallengeType;
   points: number;
   executionMethod: ChallengeExecutionMethod;
   filter: any; // Custom Filter Object

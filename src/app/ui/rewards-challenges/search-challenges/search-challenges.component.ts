@@ -47,6 +47,7 @@ import { TooltipSpanComponent } from '../../../shared/components/tooltip-span/to
 import { Challenge } from '../../../api/rewards/challenges/challenge';
 import { ShowChallengeDialogComponent } from '../show-challenge-dialog/show-challenge-dialog.component';
 import { ShowChallengeDialogPayload } from '../show-challenge-dialog/show-challenge-dialog.payload';
+import { ShowLoader } from '../../../shared/loader/show.loader.decorator';
 
 @Component({
   selector: 'app-search-challenges',
@@ -152,6 +153,7 @@ export class SearchChallengesComponent implements OnInit, OnDestroy {
     await this.fetchData();
   }
 
+  @ShowLoader()
   private async fetchData(): Promise<void> {
     const response = await this.challengeService.searchChallenges(
       this.query,
@@ -297,11 +299,18 @@ export class SearchChallengesComponent implements OnInit, OnDestroy {
   }
 
   openDetailsDialog(challenge: Challenge): void {
-    this.dialogService.open(
-      ShowChallengeDialogComponent,
-      'Challenge Details',
-      new ShowChallengeDialogPayload(challenge, this.envOverride!),
-    );
+    this.dialogService
+      .open(
+        ShowChallengeDialogComponent,
+        'Challenge Details',
+        new ShowChallengeDialogPayload(challenge, this.envOverride!),
+      )
+      .afterClosed()
+      .subscribe((val) => {
+        if (val) {
+          this.reloadFilters();
+        }
+      });
   }
 }
 

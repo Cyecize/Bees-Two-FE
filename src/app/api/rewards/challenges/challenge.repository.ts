@@ -7,6 +7,7 @@ import { BeesEntity } from '../../common/bees-entity';
 import { RequestMethod } from '../../common/request-method';
 import { ChallengesSearchResponse } from './challenges-search.response';
 import { ChallengesQuery } from './challenges-query';
+import { RouteUtils } from '../../../shared/routing/route-utils';
 
 @Injectable({ providedIn: 'root' })
 export class ChallengeRepository {
@@ -22,6 +23,24 @@ export class ChallengeRepository {
       method: RequestMethod.GET,
       targetEnv: envId,
       queryParams: query.toBeesQueryParams(),
+    });
+  }
+
+  public patchChallenge(
+    challengeId: string,
+    body: any,
+    tokenOverride: string,
+    envId?: number,
+  ): Observable<BeesResponse<any>> {
+    return this.proxyService.makeRequest<ChallengesSearchResponse>({
+      endpoint: RouteUtils.setPathParams(Endpoints.BEES_REWARDS_CHALLENGE_V1, [
+        challengeId,
+      ]),
+      entity: BeesEntity.CHALLENGES,
+      method: RequestMethod.PATCH,
+      targetEnv: envId,
+      authTokenOverride: tokenOverride,
+      data: body,
     });
   }
 }
