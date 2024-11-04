@@ -38,7 +38,7 @@ export interface ChallengesQuery {
 export class ChallengesQueryImpl implements ChallengesQuery {
   paginationModel?: ChallengePaginationModel;
   acceptLanguage?: string;
-  page: PageRequest = new PageRequestImpl();
+  page: PageRequest = new PageRequestImpl(0, 50);
   executionMethod: ChallengeExecutionMethod[] = [];
   challengeIds: string[] = [];
   modes: ChallengeMode[] = [];

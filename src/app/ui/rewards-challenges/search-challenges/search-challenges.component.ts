@@ -154,7 +154,7 @@ export class SearchChallengesComponent implements OnInit, OnDestroy {
   }
 
   @ShowLoader()
-  private async fetchData(): Promise<void> {
+  private async fetchData(): Promise<boolean> {
     const response = await this.challengeService.searchChallenges(
       this.query,
       this.envOverride,
@@ -172,7 +172,83 @@ export class SearchChallengesComponent implements OnInit, OnDestroy {
           content: [],
         };
       }
+      return true;
     }
+
+    return false;
+  }
+
+  @ShowLoader()
+  async fetchAllPages(print = true): Promise<Challenge[]> {
+    const res: Challenge[] = [];
+    let page = -1;
+    let hasNext = true;
+
+    while (hasNext) {
+      page++;
+      this.query.page.page = page;
+      console.log(`fetching page ${page}`);
+
+      if (!(await this.fetchData())) {
+        alert('Could not load all pages, stopping on page ' + page + 1);
+        return res;
+      }
+
+      res.push(...this.challenges.content);
+      hasNext =
+        this.challenges.pagination.page < this.challenges.pagination.totalPages;
+    }
+
+    if (print) {
+      alert('Printing JSON in the console!');
+      console.log(JSON.stringify(res));
+    }
+    return res;
+  }
+
+  async cancelAllPages(): Promise<void> {
+    this.dialogService
+      .openBeesTokenOverrideDialog(this.envOverride!)
+      .subscribe(async (token) => {
+        if (!token) {
+          alert('You must select a token in order to proceed!');
+          return;
+        }
+
+        const challenges = await this.fetchAllPages(false);
+
+        await this.bulkCancel(challenges, token.token);
+      });
+  }
+
+  @ShowLoader()
+  private async bulkCancel(
+    challenges: Challenge[],
+    token: string,
+  ): Promise<void> {
+    alert(`Executing cancel update to ${challenges.length} challenges!`);
+    const failedResponses = [];
+
+    let c = 0;
+    for (const challenge of challenges) {
+      const res = await this.challengeService.cancelChallenge(
+        challenge.id,
+        token,
+        this.envOverride,
+      );
+
+      c++;
+      if (!res.isSuccess) {
+        failedResponses.push(res);
+        console.log(`${c} Challenge ${challenge.id} failed to cancel!`);
+      } else {
+        console.log(`${c} Challenge ${challenge.id} canceled!`);
+      }
+    }
+
+    alert(
+      `Executed cancel update for ${challenges.length} challenges and ${failedResponses.length} failed.`,
+    );
   }
 
   executionMethodSelected(
