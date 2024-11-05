@@ -1,4 +1,4 @@
-import { FormControl } from '@angular/forms';
+import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { Env } from '../../../api/env/env';
 
 export interface EnvForm {
@@ -10,4 +10,10 @@ export interface EnvForm {
   storeId: FormControl<string>;
   clientId: FormControl<string>;
   clientSecret: FormControl<string>;
+  languages: FormArray<FormGroup<EnvLanguageForm>>;
+}
+
+export interface EnvLanguageForm {
+  languageCode: FormControl<string>;
+  defaultLanguage: FormControl<boolean>;
 }

@@ -31,6 +31,18 @@
       <app-copy-icon [copyText]="payload.storeId"></app-copy-icon>
       {{ payload.storeId }}</td>
   </tr>
+  <tr *ngIf="payload.defaultLanguage">
+    <td>Language</td>
+    <td>
+      {{ payload.defaultLanguage.languageCode }}
+    </td>
+  </tr>
+  <tr *ngIf="payload.languages?.length && payload.languages.length > 1">
+    <td>All Languages</td>
+    <td>
+      {{ joinLanguages() }}
+    </td>
+  </tr>
   </tbody>
 </table>
 

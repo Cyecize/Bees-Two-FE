@@ -41,4 +41,8 @@ export class EnvViewerDialogComponent
     this.envService.selectEnv(this.payload);
     this.close(null);
   }
+
+  joinLanguages(): string {
+    return this.payload.languages.map((l) => l.languageCode).join(', ');
+  }
 }

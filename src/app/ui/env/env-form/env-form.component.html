@@ -1,4 +1,4 @@
-<form [formGroup]="form">
+<form [formGroup]="form" class="pe-1" style="overflow-y: auto; max-height: 500px;">
   <div class="mt-2 ps-1 pe-1">
     <app-input
       placeholder="Name"
@@ -39,6 +39,37 @@
       class="m-1"
       placeholder="Client ID"
       formControlName="clientId"></app-input>
+  </div>
+  <div class="mt-2">
+    <div formArrayName="languages">
+      <div formGroupName="0" class="d-flex align-items-center justify-content-between">
+        <app-input
+          class="m-1"
+          formControlName="languageCode"
+          placeholder="Default language (Eg. fr-CA)"></app-input>
+        <div>
+          <button
+            type="button"
+            (click)="addNewLanguage()"
+            class="btn btn-sm btn-outline-warning">Add language
+          </button>
+        </div>
+      </div>
+
+      <div class="d-flex align-items-center justify-content-between"
+           [formGroupName]="ind + 1"
+           *ngFor="let ctr of secondaryLanguages; let ind = index">
+        <app-input
+          class="m-1"
+          formControlName="languageCode"
+          placeholder="Language (Eg. en-CA)"></app-input>
+
+        <div>
+          <span (click)="removeLanguage(ind + 1)"><i class="fa-solid fa-x"></i></span>
+        </div>
+      </div>
+
+    </div>
   </div>
   <div class="mt-2 text-end">
     <button

@@ -1,4 +1,5 @@
 import { Env } from './env';
+import { CountryEnvironmentLanguageModel } from './country-environment-language.model';
 
 export interface CountryEnvironmentModel {
   id: number;
@@ -8,4 +9,6 @@ export interface CountryEnvironmentModel {
   vendorId: string;
   storeId: string;
   timezone: string;
+  defaultLanguage: CountryEnvironmentLanguageModel;
+  languages: CountryEnvironmentLanguageModel[];
 }
