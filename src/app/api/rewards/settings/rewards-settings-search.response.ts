@@ -25,6 +25,7 @@ export interface RewardSetting {
   rules?: RewardsRule[];
   categories?: RewardsCategory[];
   filter?: RewardsFilter;
+  modules?: RewardsModule[];
 
   // Default settings
   initialBalance?: number;
@@ -162,4 +163,40 @@ export interface RewardsExclusion {
 export interface RewardsFilter {
   inclusion: RewardsInclusion;
   exclusion: RewardsExclusion;
+}
+
+export interface RewardsModule {
+  type: string;
+  title: string;
+  subtitle: string;
+  position: number;
+  enabled: boolean;
+  messages: any;
+  translations: RewardsModuleTranslation[];
+}
+
+export interface RewardsModuleTranslation {
+  languageId: string;
+  title: string;
+  subtitle: string;
+  messages: any;
+}
+
+export class RewardsModuleTranslationImpl implements RewardsModuleTranslation {
+  languageId: string;
+  title: string;
+  subtitle: string;
+  messages: any;
+
+  constructor(
+    languageId: string,
+    title: string,
+    subtitle: string,
+    messages: any,
+  ) {
+    this.languageId = languageId;
+    this.title = title;
+    this.subtitle = subtitle;
+    this.messages = messages;
+  }
 }

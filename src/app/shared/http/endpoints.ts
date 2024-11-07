@@ -7,6 +7,7 @@ export class Endpoints {
   public static readonly ENVIRONMENTS_SEARCH = '/environments/search';
   public static readonly ENVIRONMENTS_COUNTRY_CODES = '/environments/country-codes';
   public static readonly REQUEST = '/request';
+  public static readonly REQUEST_MULTILANGUAGE = '/request-multilanguage';
   public static readonly PLATFORM_ID_ENCODE_CONTRACT = '/platform-id/encode/contract';
   public static readonly PLATFORM_ID_DECODE_CONTRACT = '/platform-id/decode/contract/:id';
   public static readonly ACCOUNTS_SEARCH = '/accounts/search';

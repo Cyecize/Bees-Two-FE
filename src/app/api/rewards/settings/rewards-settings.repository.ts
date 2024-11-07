@@ -12,6 +12,7 @@ import {
   RewardsSettingPayload,
 } from './payloads/rewards-setting.payload';
 import { RouteUtils } from '../../../shared/routing/route-utils';
+import { RewardsSettingsTransformer } from './rewards-settings-transformer';
 
 @Injectable({ providedIn: 'root' })
 export class RewardsSettingsRepository {
@@ -21,13 +22,16 @@ export class RewardsSettingsRepository {
     query: RewardsSettingsSearchQuery,
     envId?: number,
   ): Observable<BeesResponse<RewardsSettingsSearchResponse>> {
-    return this.proxyService.makeRequest<RewardsSettingsSearchResponse>({
-      endpoint: Endpoints.BEES_REWARDS_SETTINGS_V1,
-      entity: BeesEntity.REWARDS_SETTINGS,
-      method: RequestMethod.GET,
-      targetEnv: envId,
-      queryParams: query.toBeesParams(),
-    });
+    return this.proxyService.makeMultilanguageRequest<RewardsSettingsSearchResponse>(
+      {
+        endpoint: Endpoints.BEES_REWARDS_SETTINGS_V1,
+        entity: BeesEntity.REWARDS_SETTINGS,
+        method: RequestMethod.GET,
+        targetEnv: envId,
+        queryParams: query.toBeesParams(),
+      },
+      new RewardsSettingsTransformer(),
+    );
   }
 
   public upsertSetting(

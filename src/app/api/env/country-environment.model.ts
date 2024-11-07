@@ -11,4 +11,5 @@ export interface CountryEnvironmentModel {
   timezone: string;
   defaultLanguage: CountryEnvironmentLanguageModel;
   languages: CountryEnvironmentLanguageModel[];
+  singleLanguage: boolean;
 }
