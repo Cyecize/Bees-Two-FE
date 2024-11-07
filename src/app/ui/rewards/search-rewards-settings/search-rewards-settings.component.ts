@@ -73,8 +73,10 @@ export class SearchRewardsSettingsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.envSub = this.envOverrideService.envOverride$.subscribe((value) => {
-      this.selectedEnv = value;
-      this.reloadFilters();
+      if (value) {
+        this.selectedEnv = value;
+        this.reloadFilters();
+      }
     });
   }
 

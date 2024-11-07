@@ -10,6 +10,11 @@ export class EnvOverrideService {
   public readonly envOverride$ = this.selectedEnvSubject.asObservable();
 
   public setEnv(env: CountryEnvironmentModel): void {
+    const currentEnv = this.selectedEnvSubject.value;
+    if (currentEnv?.id === env.id) {
+      return;
+    }
+
     this.selectedEnvSubject.next(env);
   }
 }
