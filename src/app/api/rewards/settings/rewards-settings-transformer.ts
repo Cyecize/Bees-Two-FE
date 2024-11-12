@@ -2,9 +2,11 @@ import { BeesMultilanguageTransformerBase } from '../../proxy/bees-multilanguage
 import { BeesResponse } from '../../proxy/bees-response';
 import { BeesResponsePerLanguage } from '../../proxy/bees-response-per-language';
 import {
+  RewardsCategoryTranslationImpl,
   RewardSetting,
   RewardsModuleTranslationImpl,
   RewardsSettingsSearchResponse,
+  RewardsTermsAndConditionsTranslationImpl,
 } from './rewards-settings-search.response';
 import { RewardsSettingType } from './enums/rewards-setting-type';
 
@@ -55,12 +57,32 @@ export class RewardsSettingsTransformer extends BeesMultilanguageTransformerBase
 
       switch (setting.type) {
         case RewardsSettingType.TERMS:
+          this.mergeTerms(
+            setting,
+            mainResponse.languageCode,
+            otherLanguageSettings,
+          );
           break;
         case RewardsSettingType.CATEGORIES:
+          this.mergeCategories(
+            setting,
+            mainResponse.languageCode,
+            otherLanguageSettings,
+          );
           break;
         case RewardsSettingType.BENEFITS_BANNER:
+          this.mergeBenefitsBanner(
+            setting,
+            mainResponse.languageCode,
+            otherLanguageSettings,
+          );
           break;
         case RewardsSettingType.ENROLLMENT_PAGE:
+          this.mergeEnrollmentPage(
+            setting,
+            mainResponse.languageCode,
+            otherLanguageSettings,
+          );
           break;
         case RewardsSettingType.MODULES:
           this.mergeModules(
@@ -132,6 +154,172 @@ export class RewardsSettingsTransformer extends BeesMultilanguageTransformerBase
           ),
         );
       }
+    });
+  }
+
+  private mergeTerms(
+    setting: RewardSetting,
+    defaultLanguage: string,
+    settings: { setting: RewardSetting; lang: string }[],
+  ): void {
+    for (let i = 0; i < (setting.termsAndConditions?.length || 0); i++) {
+      const term = setting.termsAndConditions![i];
+      term.translations = [];
+      term.translations.push(
+        new RewardsTermsAndConditionsTranslationImpl(
+          defaultLanguage,
+          term.documentURL,
+        ),
+      );
+
+      settings.forEach((setting) => {
+        const otherTerm = setting.setting.termsAndConditions![i];
+        term.translations!.push(
+          new RewardsTermsAndConditionsTranslationImpl(
+            setting.lang,
+            otherTerm.documentURL,
+          ),
+        );
+      });
+    }
+  }
+
+  private mergeCategories(
+    setting: RewardSetting,
+    defaultLanguage: string,
+    settings: { setting: RewardSetting; lang: string }[],
+  ): void {
+    for (let i = 0; i < (setting.categories?.length || 0); i++) {
+      const category = setting.categories![i];
+      category.translations = [];
+      category.translations.push(
+        new RewardsCategoryTranslationImpl(defaultLanguage, category.title),
+      );
+
+      settings.forEach((setting) => {
+        const otherCat = setting.setting.categories!.find(
+          (c) =>
+            c.categoryId === category.categoryId &&
+            c.categoryIdWeb === category.categoryIdWeb &&
+            c.storeId === category.storeId,
+        );
+
+        if (!otherCat) {
+          alert('no other cat (this should never happen!');
+          return;
+        }
+        category.translations!.push(
+          new RewardsCategoryTranslationImpl(setting.lang, otherCat.title),
+        );
+      });
+    }
+  }
+
+  private mergeBenefitsBanner(
+    setting: RewardSetting,
+    defaultLanguage: string,
+    settings: { setting: RewardSetting; lang: string }[],
+  ): void {
+    const banner = setting.benefitsBanner!;
+    banner.translations = [];
+    banner.translations.push({
+      languageId: defaultLanguage,
+      header: { title: banner.header.title },
+      content: {
+        sections: banner.content.sections.map((s) => {
+          return {
+            id: s.id,
+            title: s.title,
+            items: s.items.map((i) => {
+              return {
+                id: i.id,
+                text: i.text,
+              };
+            }),
+          };
+        }),
+      },
+    });
+
+    settings.forEach((setting) => {
+      const otherBanner = setting.setting.benefitsBanner;
+
+      if (!otherBanner) {
+        alert('No other benefits banner (this should never happen!');
+        return;
+      }
+
+      banner.translations.push({
+        languageId: setting.lang,
+        header: { title: otherBanner.header.title },
+        content: {
+          sections: otherBanner.content.sections.map((s) => {
+            return {
+              id: s.id,
+              title: s.title,
+              items: s.items.map((i) => {
+                return {
+                  id: i.id,
+                  text: i.text,
+                };
+              }),
+            };
+          }),
+        },
+      });
+    });
+  }
+
+  private mergeEnrollmentPage(
+    setting: RewardSetting,
+    defaultLanguage: string,
+    settings: { setting: RewardSetting; lang: string }[],
+  ): void {
+    const enrollmentPage = setting.enrollmentPage!;
+    enrollmentPage.translations = [];
+    enrollmentPage.translations.push({
+      languageId: defaultLanguage,
+      title: enrollmentPage.title,
+      subtitle: enrollmentPage.subtitle,
+      content: {
+        items: enrollmentPage.content.items.map((i) => {
+          return {
+            id: i.id,
+            title: i.title,
+            description: i.description,
+          };
+        }),
+      },
+      footer: {
+        textButton: enrollmentPage.footer.textButton,
+      },
+    });
+
+    settings.forEach((setting) => {
+      const otherEnrollmentPage = setting.setting.enrollmentPage;
+
+      if (!otherEnrollmentPage) {
+        alert('No other enrollment page (this should never happen!');
+        return;
+      }
+
+      enrollmentPage.translations.push({
+        languageId: setting.lang,
+        title: otherEnrollmentPage.title,
+        subtitle: otherEnrollmentPage.subtitle,
+        content: {
+          items: otherEnrollmentPage.content.items.map((i) => {
+            return {
+              id: i.id,
+              title: i.title,
+              description: i.description,
+            };
+          }),
+        },
+        footer: {
+          textButton: otherEnrollmentPage.footer.textButton,
+        },
+      });
     });
   }
 }

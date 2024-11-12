@@ -42,6 +42,29 @@ export interface BenefitsBanner {
   bgColor: string;
   //TODO: More fields here
   content: BenefitsBannerContent;
+  header: { title: string };
+  translations: BenefitsBannerTranslation[];
+}
+
+export interface BenefitsBannerTranslation {
+  languageId: string;
+  header: { title: string };
+  content: BenefitsBannerTranslationContent;
+}
+
+export interface BenefitsBannerTranslationContent {
+  sections: BenefitsBannerTranslationContentSection[];
+}
+
+export interface BenefitsBannerTranslationContentSection {
+  id: string;
+  title: string;
+  items: BenefitsBannerTranslationContentSectionItem[];
+}
+
+export interface BenefitsBannerTranslationContentSectionItem {
+  id: string;
+  text: string;
 }
 
 export interface BenefitsBannerContent {
@@ -51,6 +74,7 @@ export interface BenefitsBannerContent {
 
 export interface BenefitsBannerSection {
   id: string;
+  title: string;
   items: BenefitsBannerSectionItem[];
   //TODO: More fields here
 }
@@ -58,6 +82,7 @@ export interface BenefitsBannerSection {
 export interface BenefitsBannerSectionItem {
   id: string;
   position: number;
+  text: string;
   //TODO: More fields here
 }
 
@@ -97,6 +122,32 @@ export interface RewardsToggles {
 export interface EnrollmentPage {
   //TODO: Define full object
   content: EnrollmentPageContent;
+  footer: EnrollmentPageFooter;
+  title: string;
+  subtitle: string;
+  translations: EnrollmentPageTranslation[];
+}
+
+export interface EnrollmentPageTranslation {
+  languageId: string;
+  title: string;
+  subtitle: string;
+  content: EnrollmentPageTranslationContent;
+  footer: EnrollmentPageTranslationFooter;
+}
+
+export interface EnrollmentPageTranslationContent {
+  items: EnrollmentPageTranslationContentItem[];
+}
+
+export interface EnrollmentPageTranslationContentItem {
+  id: string;
+  title: string;
+  description: string;
+}
+
+export interface EnrollmentPageTranslationFooter {
+  textButton: string;
 }
 
 export interface EnrollmentPageContent {
@@ -104,8 +155,15 @@ export interface EnrollmentPageContent {
   items: EnrollmentPageContentItem[];
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface EnrollmentPageContentItem {
+  //TODO: Define full object
+  id: string;
+  title: string;
+  description: string;
+}
+
+export interface EnrollmentPageFooter {
+  textButton: string;
   //TODO: Define full object
 }
 
@@ -116,6 +174,21 @@ export interface RewardsTermsAndConditions {
   documentURL: string;
   changeLog: string;
   lastModified: string;
+  translations?: RewardsTermsAndConditionsTranslation[];
+}
+
+export interface RewardsTermsAndConditionsTranslation {
+  languageId: string;
+  documentURL: string;
+}
+
+export class RewardsTermsAndConditionsTranslationImpl
+  implements RewardsTermsAndConditionsTranslation
+{
+  constructor(
+    public languageId: string,
+    public documentURL: string,
+  ) {}
 }
 
 export interface RewardRuleItem {
@@ -145,7 +218,34 @@ export interface RewardsCategoryBrand {
 export interface RewardsCategory {
   //TODO: Define all fields
   categoryId: string;
+  categoryIdWeb: string;
+  storeId: string;
+  description: string;
+  buttonLabel: string;
+  buttonName: string;
+  image: string;
+  title: string;
+  titleClubB: string;
+  subtitle: string;
+  headerImage: string;
+  headerImageClubB: string;
+  position: number;
   brands: RewardsCategoryBrand[];
+  translations: RewardsCategoryTranslation[];
+}
+
+export interface RewardsCategoryTranslation {
+  languageId: string;
+  title: string;
+}
+
+export class RewardsCategoryTranslationImpl
+  implements RewardsCategoryTranslation
+{
+  constructor(
+    public languageId: string,
+    public title: string,
+  ) {}
 }
 
 export interface RewardsInclusion {
@@ -172,7 +272,7 @@ export interface RewardsModule {
   position: number;
   enabled: boolean;
   messages: any;
-  translations: RewardsModuleTranslation[];
+  translations?: RewardsModuleTranslation[];
 }
 
 export interface RewardsModuleTranslation {
