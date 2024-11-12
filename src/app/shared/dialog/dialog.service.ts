@@ -23,6 +23,7 @@ import { AccountV1 } from '../../api/accounts/v1/account-v1';
 import { PlatformIdType } from '../../api/platformid/platform-id.type';
 import { ContractIdDialogComponent } from '../../ui/platformid/contract-id-dialog/contract-id-dialog.component';
 import { DeliveryCenterIdDialogComponent } from '../../ui/platformid/delivery-center-id-dialog/delivery-center-id-dialog.component';
+import { InventoryPlatformIdDialogComponent } from '../../ui/platformid/inventory-platform-id-dialog/inventory-platform-id-dialog.component';
 
 @Injectable({ providedIn: 'root' })
 export class DialogService {
@@ -110,6 +111,9 @@ export class DialogService {
         break;
       case PlatformIdType.DELIVERY_CENTER:
         this.open(DeliveryCenterIdDialogComponent, '', env);
+        break;
+      case PlatformIdType.INVENTORY:
+        this.open(InventoryPlatformIdDialogComponent, '', env);
         break;
       default:
         throw new Error(`Unsupported ${type} type of platform ID!`);

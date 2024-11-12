@@ -15,23 +15,25 @@ import { NgIf } from '@angular/common';
 import { TooltipSpanComponent } from '../../../shared/components/tooltip-span/tooltip-span.component';
 import { DialogService } from '../../../shared/dialog/dialog.service';
 
-interface DDCForm {
+interface InventoryIdForm {
   vendorId: FormControl<string>;
+  vendorAccountId: FormControl<string | null>;
   vendorDeliveryCenterId: FormControl<string>;
+  vendorItemId: FormControl<string>;
 }
 
 @Component({
-  selector: 'app-delivery-center-id-dialog',
+  selector: 'app-inventory-platform-id-dialog',
   standalone: true,
   imports: [ReactiveFormsModule, InputComponent, NgIf, TooltipSpanComponent],
-  templateUrl: './delivery-center-id-dialog.component.html',
-  styleUrl: './delivery-center-id-dialog.component.scss',
+  templateUrl: './inventory-platform-id-dialog.component.html',
+  styleUrl: './inventory-platform-id-dialog.component.scss',
 })
-export class DeliveryCenterIdDialogComponent
+export class InventoryPlatformIdDialogComponent
   extends DialogContentBaseComponent<CountryEnvironmentModel>
   implements OnInit
 {
-  form!: FormGroup<DDCForm>;
+  form!: FormGroup<InventoryIdForm>;
   encodedId?: EncodedPlatformId;
 
   constructor(
@@ -46,14 +48,19 @@ export class DeliveryCenterIdDialogComponent
   }
 
   ngOnInit(): void {
-    this.setTitle('Create Delivery Center ID');
+    this.setTitle('Create Inventory Platform ID');
 
-    this.form = new FormGroup<DDCForm>({
+    this.form = new FormGroup<InventoryIdForm>({
       vendorId: new FormControl<string>(this.payload.vendorId, {
         nonNullable: true,
         validators: [Validators.required],
       }),
+      vendorAccountId: new FormControl<string | null>(null),
       vendorDeliveryCenterId: new FormControl<string>(null!, {
+        nonNullable: true,
+        validators: [Validators.required],
+      }),
+      vendorItemId: new FormControl<string>(null!, {
         nonNullable: true,
         validators: [Validators.required],
       }),
@@ -66,17 +73,18 @@ export class DeliveryCenterIdDialogComponent
   }
 
   private async encode(): Promise<EncodedPlatformId> {
-    return await this.platformIdService.encodeDeliveryCenterId(
+    return await this.platformIdService.encodeInventoryId(
       this.form.getRawValue(),
     );
   }
 
-  pickDeliveryCenterId(): void {
+  pickDDCAndAccountId(): void {
     this.dialogService.openBeesAccountPicker(this.payload).subscribe((acc) => {
       if (acc) {
-        this.form.controls.vendorDeliveryCenterId.patchValue(
-          acc.deliveryCenterId!,
-        );
+        this.form.patchValue({
+          vendorAccountId: acc.vendorAccountId,
+          vendorDeliveryCenterId: acc.deliveryCenterId,
+        });
       }
     });
   }
