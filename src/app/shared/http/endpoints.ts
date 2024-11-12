@@ -9,6 +9,7 @@ export class Endpoints {
   public static readonly REQUEST = '/request';
   public static readonly REQUEST_MULTILANGUAGE = '/request-multilanguage';
   public static readonly PLATFORM_ID_ENCODE_CONTRACT = '/platform-id/encode/contract';
+  public static readonly PLATFORM_ID_ENCODE_DELIVERY_CENTER = '/platform-id/encode/delivery-center';
   public static readonly PLATFORM_ID_DECODE_CONTRACT = '/platform-id/decode/contract/:id';
   public static readonly ACCOUNTS_SEARCH = '/accounts/search';
   public static readonly ACCOUNTS = '/accounts';

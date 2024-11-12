@@ -11,14 +11,21 @@
         <button
           *ngIf="currentEnv"
           class="ms-1 btn btn-outline-secondary"
-          (click)="generateToken()">Generate Token</button>
+          (click)="generateToken()">Generate Token
+        </button>
       </div>
       <hr>
       <h3>Platform Ids</h3>
       <div>
         <button
           class="btn btn-outline-success"
-          (click)="openPlatformDialog(platformIdTypes.CONTRACT)">Contract ID</button>
+          (click)="openPlatformDialog(platformIdTypes.CONTRACT)">Contract ID
+        </button>
+        <button
+          class="ms-1 btn btn-outline-info"
+          (click)="openPlatformDialog(platformIdTypes.DELIVERY_CENTER)">
+          Delivery Center ID
+        </button>
       </div>
     </div>
     <div class="col-md-6">
@@ -34,7 +41,8 @@
         <a class="text-decoration-none" style="color:inherit;" [routerLink]="routes.REWARDS.toString()">Rewards</a>
       </h3>
       <h3 class="alert alert-success">
-        <a class="text-decoration-none" style="color:inherit;" [routerLink]="routes.ACCOUNTS.toString()">Accounts & Delivery</a>
+        <a class="text-decoration-none" style="color:inherit;" [routerLink]="routes.ACCOUNTS.toString()">Accounts &
+          Delivery</a>
       </h3>
       <h3 class="alert alert-dark">
         <a class="text-decoration-none" style="color:inherit;" [routerLink]="routes.ASSORTMENT.toString()">

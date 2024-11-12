@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { Endpoints } from '../../shared/http/endpoints';
 import { RouteUtils } from '../../shared/routing/route-utils';
 import { EncodedPlatformId } from './dto/encoded-platform-id';
+import { DeliveryCenterPlatformId } from './dto/delivery-center-platform-id';
 
 @Injectable({ providedIn: 'root' })
 export class PlatformIdRepository {
@@ -15,6 +16,15 @@ export class PlatformIdRepository {
   ): Observable<EncodedPlatformId> {
     return this.http.post<ContractPlatformId, EncodedPlatformId>(
       Endpoints.PLATFORM_ID_ENCODE_CONTRACT,
+      contractPlatformId,
+    );
+  }
+
+  public encodeDeliveryCenterId(
+    contractPlatformId: DeliveryCenterPlatformId,
+  ): Observable<EncodedPlatformId> {
+    return this.http.post<DeliveryCenterPlatformId, EncodedPlatformId>(
+      Endpoints.PLATFORM_ID_ENCODE_DELIVERY_CENTER,
       contractPlatformId,
     );
   }

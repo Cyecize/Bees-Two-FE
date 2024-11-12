@@ -22,6 +22,7 @@ import { BeesAccountPickerDialogPayload } from '../../ui/accounts/bees-account-p
 import { AccountV1 } from '../../api/accounts/v1/account-v1';
 import { PlatformIdType } from '../../api/platformid/platform-id.type';
 import { ContractIdDialogComponent } from '../../ui/platformid/contract-id-dialog/contract-id-dialog.component';
+import { DeliveryCenterIdDialogComponent } from '../../ui/platformid/delivery-center-id-dialog/delivery-center-id-dialog.component';
 
 @Injectable({ providedIn: 'root' })
 export class DialogService {
@@ -106,6 +107,9 @@ export class DialogService {
     switch (type) {
       case PlatformIdType.CONTRACT:
         this.open(ContractIdDialogComponent, '', env);
+        break;
+      case PlatformIdType.DELIVERY_CENTER:
+        this.open(DeliveryCenterIdDialogComponent, '', env);
         break;
       default:
         throw new Error(`Unsupported ${type} type of platform ID!`);
