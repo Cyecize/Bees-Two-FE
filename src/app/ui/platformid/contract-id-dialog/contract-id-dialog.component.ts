@@ -13,6 +13,7 @@ import { EncodedPlatformId } from '../../../api/platformid/dto/encoded-platform-
 import { InputComponent } from '../../../shared/form-controls/input/input.component';
 import { NgIf } from '@angular/common';
 import { TooltipSpanComponent } from '../../../shared/components/tooltip-span/tooltip-span.component';
+import { DialogService } from '../../../shared/dialog/dialog.service';
 
 interface ContractIdForm {
   vendorId: FormControl<string>;
@@ -33,7 +34,10 @@ export class ContractIdDialogComponent
   form!: FormGroup<ContractIdForm>;
   encodedId?: EncodedPlatformId;
 
-  constructor(private platformIdService: PlatformIdService) {
+  constructor(
+    private platformIdService: PlatformIdService,
+    private dialogService: DialogService,
+  ) {
     super();
   }
 
@@ -63,5 +67,17 @@ export class ContractIdDialogComponent
 
   private async encode(): Promise<EncodedPlatformId> {
     return await this.platformIdService.encodeContract(this.form.getRawValue());
+  }
+
+  pickVendorAccountId(): void {
+    this.dialogService.openAccountPicker(this.payload).subscribe((value) => {
+      if (!value) {
+        return;
+      }
+
+      this.form.patchValue({
+        vendorAccountId: value.vendorAccountId,
+      });
+    });
   }
 }
