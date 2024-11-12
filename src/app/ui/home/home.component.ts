@@ -8,6 +8,7 @@ import { NgIf } from '@angular/common';
 import { EnvViewerDialogComponent } from '../env/env-viewer-dialog/env-viewer-dialog.component';
 import { AppRoutingPath } from '../../app-routing.path';
 import { ShowLoader } from '../../shared/loader/show.loader.decorator';
+import { PlatformIdType } from '../../api/platformid/platform-id.type';
 
 @Component({
   selector: 'app-home',
@@ -19,6 +20,7 @@ import { ShowLoader } from '../../shared/loader/show.loader.decorator';
 export class HomeComponent implements OnInit {
   currentEnv!: CountryEnvironmentModel;
   routes = AppRoutingPath;
+  platformIdTypes = PlatformIdType;
 
   constructor(
     private envService: CountryEnvironmentService,
@@ -56,6 +58,10 @@ export class HomeComponent implements OnInit {
       'Success!',
       '',
     );
+  }
+
+  openPlatformDialog(type: PlatformIdType): void {
+    this.dialogService.openPlatformIdDialog(this.currentEnv!, type);
   }
 }
 

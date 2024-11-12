@@ -20,6 +20,8 @@ import { BeesTokenOverrideDialogComponent } from '../../ui/env/token/bees-token-
 import { BeesAccountPickerDialogComponent } from '../../ui/accounts/bees-account-picker-dialog/bees-account-picker-dialog.component';
 import { BeesAccountPickerDialogPayload } from '../../ui/accounts/bees-account-picker-dialog/bees-account-picker-dialog.payload';
 import { AccountV1 } from '../../api/accounts/v1/account-v1';
+import { PlatformIdType } from '../../api/platformid/platform-id.type';
+import { ContractIdDialogComponent } from '../../ui/platformid/contract-id-dialog/contract-id-dialog.component';
 
 @Injectable({ providedIn: 'root' })
 export class DialogService {
@@ -95,5 +97,18 @@ export class DialogService {
       'Bees Token Override',
       env,
     ).afterClosed();
+  }
+
+  public openPlatformIdDialog(
+    env: CountryEnvironmentModel,
+    type: PlatformIdType,
+  ): void {
+    switch (type) {
+      case PlatformIdType.CONTRACT:
+        this.open(ContractIdDialogComponent, '', env);
+        break;
+      default:
+        throw new Error(`Unsupported ${type} type of platform ID!`);
+    }
   }
 }
