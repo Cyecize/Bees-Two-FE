@@ -26,7 +26,10 @@ export abstract class BeesMultilanguageTransformerBase<T>
           res.beesResponse.env,
         );
       }
-      return multilanguageResponse[0]?.beesResponse;
+
+      const response = multilanguageResponse[0]?.beesResponse;
+      this.finalize(response);
+      return response;
     }
 
     const defaultLanguage: string =
@@ -44,11 +47,18 @@ export abstract class BeesMultilanguageTransformerBase<T>
       (r) => r.languageCode !== mainBeesResponse?.languageCode,
     );
 
-    return this.doTransform(mainBeesResponse, multilanguageResponse);
+    const response = this.doTransform(mainBeesResponse, multilanguageResponse);
+    this.finalize(response);
+    return response;
   }
 
   abstract doTransform(
     mainLanguageResponse: BeesResponsePerLanguage<T>,
     otherLanguageResponses: BeesResponsePerLanguage<T>[],
   ): BeesResponse<T>;
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  finalize(response: BeesResponse<T>): void {
+    // Override me if you need to do any customizations
+  }
 }

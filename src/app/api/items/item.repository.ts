@@ -8,6 +8,7 @@ import { RequestMethod } from '../common/request-method';
 import { ItemsSearchQuery } from './items-search.query';
 import { ItemsSearchResponse } from './items-search.response';
 import { ItemPayload } from './item.payload';
+import { ItemsTransformer } from './items-transformer';
 
 @Injectable({ providedIn: 'root' })
 export class ItemRepository {
@@ -17,13 +18,16 @@ export class ItemRepository {
     query: ItemsSearchQuery,
     envId?: number,
   ): Observable<BeesResponse<ItemsSearchResponse>> {
-    return this.proxyService.makeRequest<ItemsSearchResponse>({
-      endpoint: Endpoints.ITEMS_V2,
-      entity: BeesEntity.ITEMS,
-      method: RequestMethod.GET,
-      targetEnv: envId,
-      queryParams: query.toBeesQueryParams(),
-    });
+    return this.proxyService.makeMultilanguageRequest<ItemsSearchResponse>(
+      {
+        endpoint: Endpoints.ITEMS_V2,
+        entity: BeesEntity.ITEMS,
+        method: RequestMethod.GET,
+        targetEnv: envId,
+        queryParams: query.toBeesQueryParams(),
+      },
+      new ItemsTransformer(),
+    );
   }
 
   public upsertItems(
