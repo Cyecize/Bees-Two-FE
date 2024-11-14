@@ -5,6 +5,7 @@ import { RewardsBaseComponent } from './ui/rewards/rewards-base/rewards-base.com
 import { AccountsBaseComponent } from './ui/accounts/accounts-base/accounts-base.component';
 import { ItemsBaseComponent } from './ui/items/items-base/items-base.component';
 import { ProductAssortmentBaseComponent } from './ui/product-assortment/product-assortment-base/product-assortment-base.component';
+import { UPLOAD_ITEM_IMAGES_ROUTES } from './ui/items/upload-item-images/upload-item-images.component';
 
 export const promoRoutes: Routes = [
   {
@@ -235,6 +236,13 @@ const itemRoutes: Routes = [
           import('./ui/items/add-item/add-item.component').then(
             (value) => value.ADD_ITEM_ROUTES,
           ),
+      },
+      {
+        path: AppRoutingPath.ITEMS_UPLOAD_IMAGES.path,
+        loadChildren: () =>
+          import(
+            './ui/items/upload-item-images/upload-item-images.component'
+          ).then((value) => value.UPLOAD_ITEM_IMAGES_ROUTES),
       },
     ],
   },

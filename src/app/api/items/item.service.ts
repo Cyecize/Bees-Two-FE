@@ -8,6 +8,7 @@ import {
 import { ItemsSearchQuery } from './items-search.query';
 import { ItemsSearchResponse } from './items-search.response';
 import { ItemPayload } from './item.payload';
+import { Item } from './item';
 
 @Injectable({ providedIn: 'root' })
 export class ItemService {
@@ -28,6 +29,15 @@ export class ItemService {
   ): Promise<WrappedResponse<any>> {
     return await new FieldErrorWrapper(() =>
       this.repository.upsertItems([item], env?.id),
+    ).execute();
+  }
+
+  public async saveItems(
+    items: ItemPayload[],
+    env?: CountryEnvironmentModel,
+  ): Promise<WrappedResponse<any>> {
+    return await new FieldErrorWrapper(() =>
+      this.repository.upsertItems(items, env?.id),
     ).execute();
   }
 }

@@ -1,0 +1,35 @@
+<div>
+  <h2>Upload product images for <strong>{{ envOverride?.envName }}</strong></h2>
+  <div>
+    <app-env-override-field></app-env-override-field>
+  </div>
+  <hr>
+  <form [formGroup]="form">
+    <div class="mt-2">
+      <label>Choose a ZIP file
+        <input formControlName="zipFile" type="file" id="zip-file" (change)="onFileSelected($event)" />
+      </label>
+    </div>
+    <div class="mt-2">
+      <small>The name of all images in the zip file MUST comply to this field!</small>
+      <app-select
+        placeholder="Match By"
+        [options]="matchTypeOptions"
+        formControlName="matchType"></app-select>
+    </div>
+    <div class="mt-2">
+      <small>Choose where the images should be stored</small>
+      <app-select
+        placeholder="Store In"
+        [options]="storageTypes"
+        formControlName="storageType"></app-select>
+    </div>
+    <div class="mt-2 text-end">
+      <button
+        class="btn btn-outline-dark"
+        [disabled]="!form.valid"
+        (click)="processZipFile()">Process Zip File
+      </button>
+    </div>
+  </form>
+</div>
