@@ -36,6 +36,15 @@ export class PageRequestImplV2 extends PageRequestImpl {
   }
 }
 
+export class PageRequestImplV3 extends PageRequestImpl {
+  override toBeesParams(): BeesParamPayload[] {
+    return [
+      new BeesParamPayloadImpl('page', this.page),
+      new BeesParamPayloadImpl('limit', this.pageSize),
+    ];
+  }
+}
+
 export interface LocalPageRequest {
   pageNumber: number;
   pageSize: number;

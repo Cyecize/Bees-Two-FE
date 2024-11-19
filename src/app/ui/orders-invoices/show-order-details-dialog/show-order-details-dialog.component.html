@@ -1,0 +1,74 @@
+<div>
+  <div class="d-flex " style="max-height: 200px; overflow-y: auto;">
+    <table class="table">
+      <thead>
+      </thead>
+      <tbody>
+      <tr>
+        <td>Order Number</td>
+        <td>
+          <strong>
+            <app-tooltip-span
+              [enableCopy]="true"
+              [displayText]="payload.order.orderNumber"
+              [tooltipText]="payload.order.orderNumber"></app-tooltip-span>
+          </strong>
+        </td>
+      </tr>
+      <tr>
+        <td>Status</td>
+        <td>
+          <strong>{{ payload.order.status }}</strong>
+        </td>
+      </tr>
+      <tr>
+        <td>Placement Date</td>
+        <td>
+          {{ payload.order.placementDate }}
+        </td>
+      </tr>
+      <tr *ngIf="payload.order.beesAccountId">
+        <td>Bees Acc ID</td>
+        <td>
+          <app-tooltip-span
+            [trimDisplayTextChars]="40"
+            [enableCopy]="true"
+            [displayText]="payload.order.beesAccountId"
+            [tooltipText]="payload.order.beesAccountId"></app-tooltip-span>
+        </td>
+      </tr>
+      <tr *ngIf="payload.order.vendor.accountId">
+        <td>Vendor Account Id</td>
+        <td>
+          <app-tooltip-span
+            [enableCopy]="true"
+            [trimDisplayTextChars]="40"
+            [tooltipText]="payload.order.vendor.accountId"
+            [displayText]="payload.order.vendor.accountId"></app-tooltip-span>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr *ngIf="showJson">
+  <div *ngIf="showJson" style="overflow-y: auto; max-height: 300px;">
+    <pre>{{ dataJson }}</pre>
+  </div>
+  <hr>
+  <div class="text-end">
+    <button class="btn btn-outline-dark m-1" (click)="close(undefined);">Close</button>
+    <button class="btn btn-outline-success m-1" (click)="copy();">Copy JSON</button>
+    <button class="btn btn-outline-secondary m-1"
+            *ngIf="!showJson"
+            (click)="showJson = true">Show JSON
+    </button>
+    <button class="btn btn-outline-dark m-1"
+            *ngIf="showJson"
+            (click)="showJson = false">Hide JSON
+    </button>
+    <button class="btn btn-outline-danger m-1" (click)="delete();">Delete</button>
+    <a class="btn btn-outline-success m-1" [routerLink]="getEditRawRoute()" (click)="close(undefined);">Edit Raw</a>
+    <a class="btn btn-outline-warning m-1" [routerLink]="getEditRoute()" (click)="close(undefined);">Edit</a>
+  </div>
+</div>

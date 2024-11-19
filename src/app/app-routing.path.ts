@@ -37,4 +37,6 @@ export class AppRoutingPath {
   public static readonly ASSORTMENT_INCLUSION_V4 = new RouteConfig('inclusion-v4', AppRoutingPath.ASSORTMENT);
   public static readonly ASSORTMENT_UNAVAILABLE_V3 = new RouteConfig('unavailable-v4', AppRoutingPath.ASSORTMENT);
   public static readonly ASSORTMENT_SEARCH_BY_DDC_V2 = new RouteConfig('search-ddc-v2', AppRoutingPath.ASSORTMENT);
+  public static readonly ORDERS_AND_INVOICES = new RouteConfig('orders-and-invoices', null);
+  public static readonly ORDERS_AND_INVOICES_SEARCH_ORDERS = new RouteConfig('search-orders', AppRoutingPath.ORDERS_AND_INVOICES);
 }

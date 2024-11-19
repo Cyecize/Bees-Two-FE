@@ -5,7 +5,7 @@ import { RewardsBaseComponent } from './ui/rewards/rewards-base/rewards-base.com
 import { AccountsBaseComponent } from './ui/accounts/accounts-base/accounts-base.component';
 import { ItemsBaseComponent } from './ui/items/items-base/items-base.component';
 import { ProductAssortmentBaseComponent } from './ui/product-assortment/product-assortment-base/product-assortment-base.component';
-import { UPLOAD_ITEM_IMAGES_ROUTES } from './ui/items/upload-item-images/upload-item-images.component';
+import { OrdersInvoicesBaseComponent } from './ui/orders-invoices/orders-invoices-base/orders-invoices-base.component';
 
 export const promoRoutes: Routes = [
   {
@@ -271,6 +271,29 @@ const productAssortmentRoutes: Routes = [
   },
 ];
 
+const orderInvoiceRoutes: Routes = [
+  {
+    path: '',
+    component: OrdersInvoicesBaseComponent,
+    children: [
+      {
+        path: '',
+        loadChildren: () =>
+          import(
+            './shared/components/choose-option-alert/choose-option-alert.component'
+          ).then((value) => value.CHOOSE_OPTION_ALERT_ROUTES),
+      },
+      {
+        path: AppRoutingPath.ORDERS_AND_INVOICES_SEARCH_ORDERS.path,
+        loadChildren: () =>
+          import(
+            './ui/orders-invoices/search-orders/search-orders.component'
+          ).then((value) => value.SEARCH_ORDERS_ROUTES),
+      },
+    ],
+  },
+];
+
 export const routes: Routes = [
   {
     path: AppRoutingPath.HOME.path,
@@ -301,6 +324,10 @@ export const routes: Routes = [
   {
     path: AppRoutingPath.ASSORTMENT.path,
     children: productAssortmentRoutes,
+  },
+  {
+    path: AppRoutingPath.ORDERS_AND_INVOICES.path,
+    children: orderInvoiceRoutes,
   },
   {
     path: '**',

@@ -1,0 +1,263 @@
+<div>
+  <div>
+    <h3>Search Orders</h3>
+  </div>
+
+  <div>
+    <h4>Environment</h4>
+    <div class="filters-header">
+      <div class="filter">
+        <app-env-override-field></app-env-override-field>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="filters">
+    <h4>Filters</h4>
+    <div class="filters-header">
+      <div class="filter">
+        <app-select
+          [options]="orderStatuses"
+          [(ngModel)]="query.orderStatus"
+          (onChange)="query.orderStatus = $event; reloadFilters()"
+          placeholder="Order Status"></app-select>
+      </div>
+      <div class="filter">
+        <app-select
+          [options]="orderStatusStrategies"
+          [(ngModel)]="query.orderStatusCondition"
+          (onChange)="query.orderStatusCondition = $event; reloadFilters()"
+          placeholder="Status Filter Strategy"></app-select>
+      </div>
+      <div class="filter">
+        <div class="d-flex">
+          <app-input placeholder="Bees Acc Id"
+                     (onChangeEnd)="reloadFilters()"
+                     [(ngModel)]="query.beesAccountId"></app-input>
+          <button
+            type="button"
+            (click)="pickBeesAccId()"
+            class="ms-1 btn btn-sm btn-outline-warning">
+            Pick
+          </button>
+        </div>
+      </div>
+      <div class="filter">
+        <div class="d-flex">
+          <app-input placeholder="DDC Id"
+                     (onChangeEnd)="reloadFilters()"
+                     [(ngModel)]="query.deliveryCenterId"></app-input>
+          <button
+            type="button"
+            (click)="pickDDCId()"
+            class="ms-1 btn btn-sm btn-outline-warning">
+            Pick
+          </button>
+        </div>
+      </div>
+      <div class="filter">
+        <div>
+          <mat-datepicker #startDeliveryDatePicker></mat-datepicker>
+          <div class="d-flex">
+            <input
+              class="form-control"
+              placeholder="Delivery Start Date"
+              (dateChange)="deliveryStartDateChange($event.value)"
+              [matDatepicker]="startDeliveryDatePicker"
+              [(ngModel)]="query.startDeliveryDate" />
+            <div class="p-1">
+              <i class="fa fa-calendar-days"
+                 style="font-size: 1.5rem;"
+                 (click)="startDeliveryDatePicker.open()"
+                 aria-hidden="true"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="filter">
+        <div>
+          <mat-datepicker #endDeliveryDatePicker></mat-datepicker>
+          <div class="d-flex">
+            <input
+              class="form-control"
+              placeholder="Delivery End Date"
+              (dateChange)="deliveryEndDateChange($event.value)"
+              [matDatepicker]="endDeliveryDatePicker"
+              [(ngModel)]="query.endDeliveryDate" />
+            <div class="p-1">
+              <i class="fa fa-calendar-days"
+                 style="font-size: 1.5rem;"
+                 (click)="endDeliveryDatePicker.open()"
+                 aria-hidden="true"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="filter">
+        <app-input
+          placeholder="Order ID"
+          [clearOnChangeEnd]="true"
+          (onChangeEnd)="addOrderId($event)"></app-input>
+        <div *ngFor="let orderId of query.orderIds" class="d-flex justify-content-between">
+          <span>{{ orderId }}</span>
+          <span (click)="removeOrderId(orderId)"><i class="fa-solid fa-x"></i></span>
+        </div>
+      </div>
+      <div class="filter">
+        <app-input placeholder="Vendor Order ID"
+                   (onChangeEnd)="reloadFilters()"
+                   [(ngModel)]="query.vendorOrderNumber"></app-input>
+      </div>
+      <div class="filter">
+        <app-select-search
+          placeholder="Order By"
+          [payload]="orderByOptions"
+          (selectionChange)="addOrderBy($event?.objRef)"
+          [clearOnSelect]="true"></app-select-search>
+        <div *ngFor="let orderBy of query.orderBy" class="d-flex justify-content-between">
+          <span>{{ orderBy }}</span>
+          <span (click)="removeOrderBy(orderBy)"><i class="fa-solid fa-x"></i></span>
+        </div>
+      </div>
+      <div class="filter">
+        <app-select
+          [(ngModel)]="query.sort"
+          [options]="orderDirections"
+          (onChange)="query.sort = $event; reloadFilters()"
+          placeholder="Order Direction"></app-select>
+      </div>
+      <div class="filter">
+        <div>
+          <mat-datepicker #updatedSinceDatePicker></mat-datepicker>
+          <div class="d-flex">
+            <input
+              class="form-control"
+              placeholder="Updated Since"
+              (dateChange)="updatedSinceDateChange($event.value)"
+              [matDatepicker]="updatedSinceDatePicker"
+              [(ngModel)]="query.updatedSince" />
+            <div class="p-1">
+              <i class="fa fa-calendar-days"
+                 style="font-size: 1.5rem;"
+                 (click)="updatedSinceDatePicker.open()"
+                 aria-hidden="true"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="filter">
+        <div class="d-flex">
+          <app-input placeholder="Vendor Acc ID"
+                     (onChangeEnd)="reloadFilters()"
+                     [(ngModel)]="query.vendorAccountId"></app-input>
+          <button
+            type="button"
+            (click)="pickVendorAccId()"
+            class="ms-1 btn btn-sm btn-outline-warning">
+            Pick
+          </button>
+        </div>
+      </div>
+      <div class="filter">
+        <app-input placeholder="Vendor ID"
+                   (onChangeEnd)="reloadFilters()"
+                   [(ngModel)]="query.vendorId"></app-input>
+      </div>
+      <div class="filter">
+        <div>
+          <mat-datepicker #startCreateDatePicker></mat-datepicker>
+          <div class="d-flex">
+            <input
+              class="form-control"
+              placeholder="Start Create Date"
+              (dateChange)="startCreateAtDateChange($event.value)"
+              [matDatepicker]="startCreateDatePicker"
+              [(ngModel)]="query.startCreateAt" />
+            <div class="p-1">
+              <i class="fa fa-calendar-days"
+                 style="font-size: 1.5rem;"
+                 (click)="startCreateDatePicker.open()"
+                 aria-hidden="true"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="filter">
+        <div>
+          <mat-datepicker #endCreateDatePicker></mat-datepicker>
+          <div class="d-flex">
+            <input
+              class="form-control"
+              placeholder="End Create Date"
+              (dateChange)="endCreateAtDateChange($event.value)"
+              [matDatepicker]="endCreateDatePicker" />
+            <div class="p-1">
+              <i class="fa fa-calendar-days"
+                 style="font-size: 1.5rem;"
+                 (click)="endCreateDatePicker.open()"
+                 aria-hidden="true"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="filter">
+        <app-checkbox label="Include Deleted"
+                      [(ngModel)]="query.returnDeletedOrders"
+                      (onChangeEnd)="reloadFilters()"></app-checkbox>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="main">
+    <div *ngIf="fullResponse && !fullResponse.isSuccess">
+      <div class="alert alert-warning d-flex justify-content-between">
+        <p>Request concluded with failure!</p>
+        <button class="btn btn-outline-dark" (click)="openResponseDetailsDialog()">Show Details</button>
+      </div>
+    </div>
+    <p>Showing {{ orders.length }} items on page {{ query.page.page + 1 }}</p>
+    <div>
+      <button [disabled]="query.page.page < 1" (click)="pageChange(query.page.page - 1)"
+              class="btn btn-outline-dark m-1">Prev
+      </button>
+      <button *ngIf="fullResponse?.response?.response?.pagination?.hasNext"
+              (click)="pageChange(query.page.page + 1)"
+              class="btn btn-outline-dark m-1">Next
+      </button>
+      <hr>
+
+      <table class="table table-striped table-hover">
+        <thead>
+        <tr>
+          <th scope="col">Order #</th>
+          <th scope="col">Status</th>
+          <th scope="col">Date</th>
+          <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let order of orders">
+          <th scope="row">
+            <div><strong>{{ order.orderNumber }}</strong></div>
+          </th>
+          <td>
+            <div>{{ order.status }}</div>
+          </td>
+          <td>
+            <div>{{ order.placementDate }}</div>
+          </td>
+          <td style="vertical-align: middle">
+            <div class="d-flex justify-content-around align-items-center">
+              <button class="btn btn-outline-success" (click)="openDetailsDialog(order)">View Details</button>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

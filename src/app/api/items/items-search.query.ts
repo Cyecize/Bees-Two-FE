@@ -44,10 +44,12 @@ export class ItemSearchQueryImpl implements ItemsSearchQuery {
 
     // Adds all non null string fields
     Object.keys(this).forEach((fieldName) => {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       const val = this[fieldName];
 
       if ((typeof val === 'string' && val.trim()) || typeof val === 'boolean') {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         result.push(new BeesParamPayloadImpl(fieldName, this[fieldName]));
       }
