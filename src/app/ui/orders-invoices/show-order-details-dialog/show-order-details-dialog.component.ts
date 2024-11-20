@@ -8,6 +8,8 @@ import { CopyIconComponent } from '../../../shared/components/copy-icon/copy-ico
 import { NgForOf, NgIf, NgOptimizedImage } from '@angular/common';
 import { TooltipSpanComponent } from '../../../shared/components/tooltip-span/tooltip-span.component';
 import { ObjectUtils } from '../../../shared/util/object-utils';
+import { ChangeOrderStatusDialogComponent } from '../change-order-status-dialog/change-order-status-dialog.component';
+import { ChangeOrderStatusDialogPayload } from '../change-order-status-dialog/change-order-status-dialog.payload';
 
 @Component({
   selector: 'app-show-order-details-dialog',
@@ -60,4 +62,15 @@ export class ShowOrderDetailsDialogComponent
   }
 
   boolToYesNo = ObjectUtils.boolToYesNo;
+
+  changeStatus(): void {
+    this.dialogService.open(
+      ChangeOrderStatusDialogComponent,
+      '',
+      new ChangeOrderStatusDialogPayload(
+        this.payload.order,
+        this.payload.selectedEnv!,
+      ),
+    );
+  }
 }
