@@ -244,6 +244,13 @@ const itemRoutes: Routes = [
             './ui/items/upload-item-images/upload-item-images.component'
           ).then((value) => value.UPLOAD_ITEM_IMAGES_ROUTES),
       },
+      {
+        path: AppRoutingPath.ITEMS_ADD_INVENTORY.path,
+        loadChildren: () =>
+          import('./ui/inventory/add-inventory/add-inventory.component').then(
+            (value) => value.ADD_INVENTORY_ROUTES,
+          ),
+      },
     ],
   },
 ];

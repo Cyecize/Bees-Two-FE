@@ -55,8 +55,8 @@ export class SearchItemsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.envSub = this.envOverrideService.envOverride$.subscribe((value) => {
-      this.envOverride = value;
       if (!ObjectUtils.isNil(this.envOverride)) {
+        this.envOverride = value;
         this.reloadFilters();
       }
     });

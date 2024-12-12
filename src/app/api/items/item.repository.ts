@@ -33,8 +33,8 @@ export class ItemRepository {
   public upsertItems(
     data: ItemPayload[],
     envId?: number,
-  ): Observable<BeesResponse<ItemsSearchResponse>> {
-    return this.proxyService.makeRequest<ItemsSearchResponse>({
+  ): Observable<BeesResponse<any>> {
+    return this.proxyService.makeRequest<any>({
       endpoint: Endpoints.ITEMS_V2_RELAY,
       entity: BeesEntity.ITEMS,
       method: RequestMethod.PUT,

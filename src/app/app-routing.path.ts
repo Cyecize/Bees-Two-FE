@@ -33,6 +33,8 @@ export class AppRoutingPath {
   public static readonly ITEMS_SEARCH = new RouteConfig('search', AppRoutingPath.ITEMS);
   public static readonly ITEMS_ADD_RAW = new RouteConfig('add-raw', AppRoutingPath.ITEMS);
   public static readonly ITEMS_UPLOAD_IMAGES = new RouteConfig('upload-images', AppRoutingPath.ITEMS);
+  public static readonly ITEMS_GET_INVENTORY = new RouteConfig('inventory', AppRoutingPath.ITEMS);
+  public static readonly ITEMS_ADD_INVENTORY = new RouteConfig('add-inventory', AppRoutingPath.ITEMS);
   public static readonly ASSORTMENT = new RouteConfig('assortment', null);
   public static readonly ASSORTMENT_INCLUSION_V4 = new RouteConfig('inclusion-v4', AppRoutingPath.ASSORTMENT);
   public static readonly ASSORTMENT_UNAVAILABLE_V3 = new RouteConfig('unavailable-v4', AppRoutingPath.ASSORTMENT);
