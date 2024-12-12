@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import {
   FormArray,
   FormControl,
@@ -10,6 +17,11 @@ import { InputComponent } from '../../../../shared/form-controls/input/input.com
 import { NgForOf, NgIf } from '@angular/common';
 import { RewardSetting } from '../../../../api/rewards/settings/rewards-settings-search.response';
 import { RewardsSettingRulesPayload } from '../../../../api/rewards/settings/payloads/rewards-setting.payload';
+import { DialogService } from '../../../../shared/dialog/dialog.service';
+import { ItemsPickerDialogPayload } from '../../../items/items-picker-dialog/items-picker-dialog.payload';
+import { EnvOverrideService } from '../../../../api/env/env-override.service';
+import { CountryEnvironmentModel } from '../../../../api/env/country-environment.model';
+import { Subscription } from 'rxjs';
 
 interface RulesForm {
   rules: FormArray<FormGroup<RuleForm>>;
@@ -38,7 +50,7 @@ interface ItemForm {
   templateUrl: './rules-form.component.html',
   styleUrls: ['./rules-form.component.scss'],
 })
-export class RulesFormComponent implements OnInit {
+export class RulesFormComponent implements OnInit, OnDestroy {
   form!: FormGroup<RulesForm>;
 
   @Input()
@@ -51,7 +63,23 @@ export class RulesFormComponent implements OnInit {
   formSubmitted: EventEmitter<RewardsSettingRulesPayload> =
     new EventEmitter<RewardsSettingRulesPayload>();
 
+  envOverride!: CountryEnvironmentModel;
+  envSub!: Subscription;
+
+  constructor(
+    private dialogService: DialogService,
+    private envOverrideService: EnvOverrideService,
+  ) {}
+
+  ngOnDestroy() {
+    this.envSub.unsubscribe();
+  }
+
   ngOnInit(): void {
+    this.envSub = this.envOverrideService.envOverride$.subscribe((value) => {
+      this.envOverride = value!;
+    });
+
     this.form = new FormGroup<RulesForm>({
       rules: new FormArray<FormGroup<RuleForm>>([]),
     });
@@ -92,7 +120,7 @@ export class RulesFormComponent implements OnInit {
     return this.rules.at(ruleIndex).get('skus') as FormArray;
   }
 
-  getItems(ruleIndex: number): FormArray {
+  getItems(ruleIndex: number): FormArray<FormGroup<ItemForm>> {
     return this.rules.at(ruleIndex).get('items') as FormArray;
   }
 
@@ -168,5 +196,27 @@ export class RulesFormComponent implements OnInit {
   async onFormSubmit(): Promise<void> {
     // Ensure the form submissions emit the correct structure
     this.formSubmitted.emit(this.form.getRawValue());
+  }
+
+  pickItem(ruleInd: number, itemInd: number): void {
+    const form = this.getItems(ruleInd).at(itemInd);
+    this.dialogService
+      .openItemsPicker(
+        new ItemsPickerDialogPayload(
+          this.envOverride,
+          form.getRawValue().vendorItemId,
+        ),
+      )
+      .subscribe((value) => {
+        if (!value) {
+          return;
+        }
+
+        form.patchValue({
+          itemId: value.id,
+          vendorId: value.vendorId,
+          vendorItemId: value.vendorItemId,
+        });
+      });
   }
 }

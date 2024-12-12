@@ -48,8 +48,11 @@
           <div class="m-1 mt-3">
             <app-input placeholder="Item ID" formControlName="itemId"></app-input>
           </div>
-          <div class="m-1 mt-3">
+          <div class="m-1 mt-3 d-flex">
             <app-input placeholder="Vendor Item ID" formControlName="vendorItemId"></app-input>
+            <button
+              (click)="pickItem(ruleInd, itemInd)"
+              class="btn btn-sm btn-outline-warning m-1">Pick</button>
           </div>
           <div class="m-1 mt-3">
             <app-input placeholder="Vendor ID" formControlName="vendorId"></app-input>

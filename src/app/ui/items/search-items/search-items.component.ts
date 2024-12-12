@@ -55,8 +55,9 @@ export class SearchItemsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.envSub = this.envOverrideService.envOverride$.subscribe((value) => {
-      if (!ObjectUtils.isNil(this.envOverride)) {
+      if (!ObjectUtils.isNil(value)) {
         this.envOverride = value;
+
         this.reloadFilters();
       }
     });
@@ -97,7 +98,6 @@ export class SearchItemsComponent implements OnInit, OnDestroy {
 
   async reloadFilters(): Promise<void> {
     this.query.vendorId = this.envOverride?.vendorId + '';
-
     if (this.query.ids.length > 0 || this.query.itemPlatformIds.length > 0) {
       // If this is not cleared, searching by ID and platform ID will not work!
       this.query.vendorId = '';

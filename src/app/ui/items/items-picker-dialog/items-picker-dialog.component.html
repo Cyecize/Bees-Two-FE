@@ -1,0 +1,94 @@
+<div>
+  <h4>Accounts</h4>
+  <div class="filters-header">
+    <div class="filter">
+      <app-input
+        placeholder="SKUs"
+        [clearOnChangeEnd]="true"
+        (onChangeEnd)="addSKU($event)"></app-input>
+      <div *ngFor="let sku of query.skus" class="d-flex justify-content-between">
+        <span>{{ sku }}</span>
+        <span (click)="removeSKU(sku)"><i class="fa-solid fa-x"></i></span>
+      </div>
+    </div>
+    <div class="filter">
+      <app-input
+        placeholder="Vendor Item IDs"
+        [clearOnChangeEnd]="true"
+        (onChangeEnd)="addVendorItemId($event)"></app-input>
+      <div *ngFor="let vendorItemId of query.vendorItemIds" class="d-flex justify-content-between">
+        <span>{{ vendorItemId }}</span>
+        <span (click)="removeVendorItemId(vendorItemId)"><i class="fa-solid fa-x"></i></span>
+      </div>
+    </div>
+    <div class="filter">
+      <app-input
+        placeholder="IDs (BEES)"
+        [clearOnChangeEnd]="true"
+        (onChangeEnd)="addBeesId($event)"></app-input>
+      <div *ngFor="let beesId of query.ids" class="d-flex justify-content-between">
+        <span>{{ beesId }}</span>
+        <span (click)="removeBeesId(beesId)"><i class="fa-solid fa-x"></i></span>
+      </div>
+    </div>
+    <div class="filter">
+      <app-input
+        placeholder="Platform IDs"
+        [clearOnChangeEnd]="true"
+        (onChangeEnd)="addPlatformId($event)"></app-input>
+      <div *ngFor="let platformId of query.itemPlatformIds" class="d-flex justify-content-between">
+        <span>{{ platformId }}</span>
+        <span (click)="removePlatformId(platformId)"><i class="fa-solid fa-x"></i></span>
+      </div>
+    </div>
+  </div>
+  <hr>
+  <div style="overflow-y: auto; height: 400px;">
+    <p *ngIf="!items.length" class="alert alert-warning">
+      No items found for {{ payload.env.envName }}
+    </p>
+    <div *ngIf="fullResponse && !fullResponse.isSuccess">
+      <div class="alert alert-warning d-flex justify-content-between">
+        <p>Request concluded with failure!</p>
+        <button class="btn btn-outline-dark" (click)="openResponseDetailsDialog()">Show Details</button>
+      </div>
+    </div>
+
+    <p>Showing {{ items.length }} items on page {{ query.page.page + 1 }}</p>
+    <div>
+      <button [disabled]="query.page.page < 1" (click)="pageChanged(query.page.page - 1)"
+              class="btn btn-outline-dark m-1">Prev
+      </button>
+      <button *ngIf="fullResponse?.response?.response?.pagination?.hasNext"
+              (click)="pageChanged(query.page.page + 1)"
+              class="btn btn-outline-dark m-1">Next
+      </button>
+    </div>
+    <table class="table">
+      <thead>
+      <tr>
+        <th scope="col">Vendor Item Id</th>
+        <th scope="col">Name</th>
+        <th scope="col">Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let item of items">
+        <th scope="row">
+          <app-tooltip-span
+            [trimDisplayTextChars]="15"
+            [enableCopy]="true"
+            [tooltipText]="item.vendorItemId"
+            [displayText]="item.vendorItemId"></app-tooltip-span>
+        </th>
+        <td>{{ item.name }}</td>
+        <td>
+          <div class="m-1">
+            <button class="btn btn-outline-info" (click)="selectItem(item)">Choose</button>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

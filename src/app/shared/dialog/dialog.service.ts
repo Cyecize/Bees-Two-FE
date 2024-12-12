@@ -24,6 +24,9 @@ import { PlatformIdType } from '../../api/platformid/platform-id.type';
 import { ContractIdDialogComponent } from '../../ui/platformid/contract-id-dialog/contract-id-dialog.component';
 import { DeliveryCenterIdDialogComponent } from '../../ui/platformid/delivery-center-id-dialog/delivery-center-id-dialog.component';
 import { InventoryPlatformIdDialogComponent } from '../../ui/platformid/inventory-platform-id-dialog/inventory-platform-id-dialog.component';
+import { ItemsPickerDialogPayload } from '../../ui/items/items-picker-dialog/items-picker-dialog.payload';
+import { ItemsPickerDialogComponent } from '../../ui/items/items-picker-dialog/items-picker-dialog.component';
+import { Item } from '../../api/items/item';
 
 @Injectable({ providedIn: 'root' })
 export class DialogService {
@@ -89,6 +92,12 @@ export class DialogService {
       'Pick Bees Account',
       new BeesAccountPickerDialogPayload(env),
     ).afterClosed();
+  }
+
+  public openItemsPicker(
+    payload: ItemsPickerDialogPayload,
+  ): Observable<Item | undefined> {
+    return this.open(ItemsPickerDialogComponent, '', payload).afterClosed();
   }
 
   public openBeesTokenOverrideDialog(
