@@ -39,4 +39,5 @@ export class Endpoints {
   public static readonly CMS_FILES_UPLOAD = '/api/v1';
   public static readonly ORDER_SERVICE_ORDERS_V3 = '/v1/order-service/v3/orders';
   public static readonly CATEGORIES_V3 = '/api/categories/v3';
+  public static readonly CATEGORY_V3 = '/api/categories/v3/:id';
 }

@@ -37,6 +37,7 @@ export class AppRoutingPath {
   public static readonly ITEMS_ADD_INVENTORY = new RouteConfig('add-inventory', AppRoutingPath.ITEMS);
   public static readonly CATEGORIES = new RouteConfig('categories', AppRoutingPath.ITEMS);
   public static readonly CATEGORY_SEARCH_V3 = new RouteConfig('search-v3', AppRoutingPath.CATEGORIES);
+  public static readonly CATEGORY_UPLOAD_IMAGES = new RouteConfig('upload-images', AppRoutingPath.CATEGORIES);
   public static readonly ASSORTMENT = new RouteConfig('assortment', null);
   public static readonly ASSORTMENT_INCLUSION_V4 = new RouteConfig('inclusion-v4', AppRoutingPath.ASSORTMENT);
   public static readonly ASSORTMENT_UNAVAILABLE_V3 = new RouteConfig('unavailable-v4', AppRoutingPath.ASSORTMENT);

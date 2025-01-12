@@ -3,8 +3,8 @@ import { ItemFilenameMatchType } from './item-filename-match-type';
 import { ItemFilenameMatchStrategy } from './item-filename-match-strategy';
 import { Item } from '../item';
 import { FilenameItemGroup } from './dto/filename-item-group';
-import { ItemFilenameUtil } from './item-filename.util';
 import { ItemFilenameMatchResults } from './dto/item-filename-match-results';
+import { FilenameUtil } from "../../../shared/util/filename.util";
 
 interface FieldExtractor {
   getValue(item: Item): string;
@@ -80,7 +80,7 @@ export class ItemFilenameMatchService {
     const fileNamesWithNoItems: string[] = [];
 
     for (const fileName of fileNames) {
-      const fileNameNoExtension = ItemFilenameUtil.trimExtension(fileName);
+      const fileNameNoExtension = FilenameUtil.trimExtension(fileName);
       const matchingItems: Item[] = [];
 
       for (const item of items) {

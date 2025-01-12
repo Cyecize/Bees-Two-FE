@@ -7,6 +7,7 @@ import { BeesEntity } from '../common/bees-entity';
 import { RequestMethod } from '../common/request-method';
 import { CategoryV3Query } from './category-v3.query';
 import { CategoryV3 } from './category-v3';
+import { RouteUtils } from '../../shared/routing/route-utils';
 
 @Injectable({ providedIn: 'root' })
 export class CategoryRepository {
@@ -22,7 +23,21 @@ export class CategoryRepository {
       method: RequestMethod.GET,
       targetEnv: envId,
       queryParams: query.toBeesQueryParams(),
-      headers: query.toBeesHeaderParams()
+      headers: query.toBeesHeaderParams(),
+    });
+  }
+
+  public patchCategoryV3(
+    categoryId: string,
+    body: any,
+    envId?: number,
+  ): Observable<BeesResponse<CategoryV3[]>> {
+    return this.proxyService.makeRequest<CategoryV3[]>({
+      endpoint: RouteUtils.setPathParams(Endpoints.CATEGORY_V3, [categoryId]),
+      entity: BeesEntity.CATEGORIES,
+      method: RequestMethod.PATCH,
+      targetEnv: envId,
+      data: body,
     });
   }
 }

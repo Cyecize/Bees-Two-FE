@@ -261,6 +261,13 @@ const itemRoutes: Routes = [
                 './ui/categories/search-categories/search-categories.component'
               ).then((value) => value.SEARCH_CATEGORIES_ROUTES),
           },
+          {
+            path: AppRoutingPath.CATEGORY_UPLOAD_IMAGES.path,
+            loadChildren: () =>
+              import(
+                './ui/categories/upload-category-images/upload-category-images.component'
+              ).then((value) => value.UPLOAD_CATEGORY_IMAGES_ROUTES),
+          },
         ],
       },
     ],

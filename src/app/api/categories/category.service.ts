@@ -20,4 +20,14 @@ export class CategoryService {
       this.repository.searchCategoriesV3(query, env?.id),
     ).execute();
   }
+
+  public async patchV3(
+    categoryId: string,
+    val: any,
+    env?: CountryEnvironmentModel
+  ): Promise<WrappedResponse<any>> {
+    return await new FieldErrorWrapper(() =>
+      this.repository.patchCategoryV3(categoryId, val, env?.id)
+    ).execute();
+  }
 }

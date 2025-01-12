@@ -1,8 +1,9 @@
 import { CategoryImage } from './models/category-image';
 import { CategoryItem } from './models/category-item';
 import { CategoryTranslation } from './models/category-translation';
+import { Category } from './category';
 
-export interface CategoryV3 {
+export interface CategoryV3 extends Category {
   id: string;
   storeCategoryId?: string;
   name: string;

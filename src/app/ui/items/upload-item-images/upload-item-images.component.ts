@@ -25,13 +25,13 @@ import {
   ItemSearchQueryImpl,
   ItemsSearchQuery,
 } from '../../../api/items/items-search.query';
-import { ItemFilenameUtil } from '../../../api/items/images-upload/item-filename.util';
 import { ItemFilenameMatchService } from '../../../api/items/images-upload/item-filename-match.service';
 import { DialogService } from '../../../shared/dialog/dialog.service';
 import { NgIf } from '@angular/common';
 import { ItemFilenameMatchResults } from '../../../api/items/images-upload/dto/item-filename-match-results';
 import { ItemImageUploadService } from '../../../api/items/images-upload/item-image-upload.service';
 import { StorageType } from '../../../api/storage/storage.type';
+import { FilenameUtil } from "../../../shared/util/filename.util";
 
 interface UploadItemImagesForm {
   zipFile: FormControl<Blob>;
@@ -261,7 +261,7 @@ export class UploadItemImagesComponent implements OnInit, OnDestroy {
     const query: ItemsSearchQuery = new ItemSearchQueryImpl();
     query.page.pageSize = 190;
     const fileNamesNoExt = fileNames.map((fn) =>
-      ItemFilenameUtil.trimExtension(fn),
+      FilenameUtil.trimExtension(fn),
     );
 
     switch (this.form.getRawValue().matchType) {
