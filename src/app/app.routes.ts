@@ -251,6 +251,18 @@ const itemRoutes: Routes = [
             (value) => value.ADD_INVENTORY_ROUTES,
           ),
       },
+      {
+        path: AppRoutingPath.CATEGORIES.path,
+        children: [
+          {
+            path: AppRoutingPath.CATEGORY_SEARCH_V3.path,
+            loadChildren: () =>
+              import(
+                './ui/categories/search-categories/search-categories.component'
+              ).then((value) => value.SEARCH_CATEGORIES_ROUTES),
+          },
+        ],
+      },
     ],
   },
 ];

@@ -12,4 +12,5 @@ export enum BeesEntity {
   CMS_STORAGE = 'CMS_STORAGE',
   ORDERS = 'ORDERS',
   INVENTORY = 'INVENTORY',
+  CATEGORIES = 'CATEGORIES',
 }

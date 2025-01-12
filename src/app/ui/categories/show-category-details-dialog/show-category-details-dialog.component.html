@@ -1,0 +1,213 @@
+<div>
+  <div class="d-flex " style="max-height: 200px; overflow-y: auto;">
+    <table class="table">
+      <thead>
+      </thead>
+      <tbody>
+      <tr>
+        <td>Id</td>
+        <td>
+          <app-tooltip-span
+            [enableCopy]="true"
+            [tooltipText]="payload.category.id"
+            [displayText]="payload.category.id"></app-tooltip-span>
+        </td>
+      </tr>
+      <tr>
+        <td>Name</td>
+        <td>
+          <strong>{{ payload.category.name }}</strong>
+        </td>
+      </tr>
+      <tr *ngIf="payload.category.parentId">
+        <td>Id (Parent)</td>
+        <td>
+          <app-tooltip-span
+            [trimDisplayTextChars]="50"
+            [enableCopy]="true"
+            [tooltipText]="payload.category.parentId"
+            [displayText]="payload.category.parentId"></app-tooltip-span>
+        </td>
+      </tr>
+      <tr *ngIf="payload.category.storeCategoryId">
+        <td>Id (Store Category)</td>
+        <td>
+          <app-tooltip-span
+            [trimDisplayTextChars]="50"
+            [enableCopy]="true"
+            [tooltipText]="payload.category.storeCategoryId"
+            [displayText]="payload.category.storeCategoryId"></app-tooltip-span>
+        </td>
+      </tr>
+      <tr>
+        <td>Enabled</td>
+        <td>
+          {{ boolToYesNo(payload.category.enabled) }}
+        </td>
+      </tr>
+      <tr>
+        <td>Level</td>
+        <td>
+          {{ payload.category.categoryLevel }}
+        </td>
+      </tr>
+      <tr>
+        <td>Sort order</td>
+        <td>
+          {{ payload.category.sortOrder }}
+        </td>
+      </tr>
+      <tr *ngIf="payload.category.restricted">
+        <td>Restricted</td>
+        <td>
+          {{ payload.category.restricted.join(", ") }}
+        </td>
+      </tr>
+      <tr *ngIf="payload.category.link">
+        <td>Link</td>
+        <td>
+          {{ payload.category.link }}
+        </td>
+      </tr>
+      <tr *ngIf="payload.category.urlKey">
+        <td>URL Key</td>
+        <td>
+          {{ payload.category.urlKey }}
+        </td>
+      </tr>
+      <tr *ngIf="payload.category.groups">
+        <td>Groups</td>
+        <td>
+          {{ payload.category.groups.join(", ") }}
+        </td>
+      </tr>
+      <tr *ngIf="payload.category.imageAltText">
+        <td>Img alt text</td>
+        <td>
+          {{ payload.category.imageAltText }}
+        </td>
+      </tr>
+      <tr *ngIf="payload.category.defaultLanguage">
+        <td>Default Language</td>
+        <td>
+          {{ payload.category.defaultLanguage }}
+        </td>
+      </tr>
+      <tr *ngIf="payload.category.translations">
+        <td>Translations</td>
+        <td>
+          {{ JSON.stringify(payload.category.translations, null, 2) }}
+        </td>
+      </tr>
+      <tr *ngIf="payload.category.categories">
+        <td>Child categories</td>
+        <td>
+          <button
+            (click)="showCategories = !showCategories"
+            class="btn btn-outline-info">Show
+          </button>
+        </td>
+      </tr>
+
+      <tr *ngIf="payload.category.items">
+        <td>Items</td>
+        <td>
+          <button
+            (click)="showItems = !showItems"
+            class="btn btn-outline-info">Show
+          </button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+    <div
+      style="height: 400px;"
+      *ngIf="payload.category.image">
+      <img src="{{ payload.category.image.mainImageURL }}"
+           style="max-height: 100%; max-width: 100%;">
+    </div>
+  </div>
+
+  <hr *ngIf="showCategories">
+  <div *ngIf="showCategories" style="overflow-y: auto; max-height: 300px;">
+    <h4>Children of {{ payload.category.name }} ({{ payload.category.categories?.length }})</h4>
+    <table class="table table-striped table-hover">
+      <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Name</th>
+        <th scope="col">Store Identifier</th>
+        <th scope="col">Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let category of childCategories">
+        <th scope="row">
+          <div><strong>{{ category.id }}</strong></div>
+        </th>
+        <td>
+          <div>{{ category.name }}</div>
+        </td>
+        <td>
+          <div>{{ category.storeCategoryId }}</div>
+        </td>
+        <td style="vertical-align: middle">
+          <div class="d-flex justify-content-around align-items-center">
+            <button class="btn btn-outline-success" (click)="openDetailsDialog(category)">View Details</button>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr *ngIf="showItems">
+  <div *ngIf="showItems" style="overflow-y: auto; max-height: 300px;">
+    <table class="table table-striped table-hover">
+      <thead>
+      <tr>
+        <th scope="col">Vendor item ID</th>
+        <th scope="col">Order</th>
+        <th scope="col">Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let item of items">
+        <th scope="row">
+          <div><strong>{{ item.vendorItemId }}</strong></div>
+        </th>
+        <td>
+          <div>{{ item.sortOrder }}</div>
+        </td>
+        <td style="vertical-align: middle">
+          <div class="d-flex justify-content-around align-items-center">
+            <button class="btn">Future (Un-assign)</button>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr *ngIf="showJson">
+  <div *ngIf="showJson" style="overflow-y: auto; max-height: 300px;">
+    <pre>{{ dataJson }}</pre>
+  </div>
+
+  <hr>
+  <div class="text-end">
+    <button class="btn btn-outline-dark m-1" (click)="close(undefined);">Close</button>
+    <button class="btn btn-outline-success m-1" (click)="copy();">Copy JSON</button>
+    <button class="btn btn-outline-secondary m-1"
+            *ngIf="!showJson"
+            (click)="showJson = true">Show JSON
+    </button>
+    <button class="btn btn-outline-dark m-1"
+            *ngIf="showJson"
+            (click)="showJson = false">Hide JSON
+    </button>
+    <button class="btn btn-outline-danger m-1" (click)="delete();">Delete</button>
+    <a class="btn btn-outline-success m-1" [routerLink]="getEditRawRoute()" (click)="close(undefined);">Edit Raw</a>
+    <a class="btn btn-outline-warning m-1" [routerLink]="getEditRoute()" (click)="close(undefined);">Edit</a>
+  </div>
+</div>
