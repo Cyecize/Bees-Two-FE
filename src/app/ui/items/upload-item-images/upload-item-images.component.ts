@@ -31,7 +31,7 @@ import { NgIf } from '@angular/common';
 import { ItemFilenameMatchResults } from '../../../api/items/images-upload/dto/item-filename-match-results';
 import { ItemImageUploadService } from '../../../api/items/images-upload/item-image-upload.service';
 import { StorageType } from '../../../api/storage/storage.type';
-import { FilenameUtil } from "../../../shared/util/filename.util";
+import { FilenameUtil } from '../../../shared/util/filename.util';
 
 interface UploadItemImagesForm {
   zipFile: FormControl<Blob>;

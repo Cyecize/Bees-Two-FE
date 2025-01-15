@@ -8,6 +8,9 @@ import { RequestMethod } from '../common/request-method';
 import { CategoryV3Query } from './category-v3.query';
 import { CategoryV3 } from './category-v3';
 import { RouteUtils } from '../../shared/routing/route-utils';
+import { CategoryV3Payload } from './category-v3.payload';
+import { BeesParamPayloadImpl } from '../proxy/bees-param.payload';
+import { CreatedCategory } from './models/created-category';
 
 @Injectable({ providedIn: 'root' })
 export class CategoryRepository {
@@ -38,6 +41,34 @@ export class CategoryRepository {
       method: RequestMethod.PATCH,
       targetEnv: envId,
       data: body,
+    });
+  }
+
+  public postCategoryV3(
+    storeId: string,
+    payload: CategoryV3Payload[],
+    envId?: number,
+  ): Observable<BeesResponse<CreatedCategory[]>> {
+    return this.proxyService.makeRequest<CategoryV3[]>({
+      endpoint: Endpoints.CATEGORIES_V3,
+      entity: BeesEntity.CATEGORIES,
+      method: RequestMethod.POST,
+      targetEnv: envId,
+      headers: [new BeesParamPayloadImpl('storeId', storeId)],
+      data: payload,
+    });
+  }
+
+  public deleteCategoryV3(
+    categoryIds: string[],
+    envId?: number,
+  ): Observable<BeesResponse<any>> {
+    return this.proxyService.makeRequest<any>({
+      endpoint: Endpoints.CATEGORIES_V3,
+      entity: BeesEntity.CATEGORIES,
+      method: RequestMethod.DELETE,
+      targetEnv: envId,
+      data: { categoryIds: categoryIds },
     });
   }
 }

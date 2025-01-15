@@ -8,6 +8,7 @@ export class Endpoints {
   public static readonly ENVIRONMENTS_COUNTRY_CODES = '/environments/country-codes';
   public static readonly REQUEST = '/request';
   public static readonly REQUEST_MULTILANGUAGE = '/request-multilanguage';
+  public static readonly GET_FILE = '/get-file';
   public static readonly PLATFORM_ID_ENCODE_CONTRACT = '/platform-id/encode/contract';
   public static readonly PLATFORM_ID_ENCODE_DELIVERY_CENTER = '/platform-id/encode/delivery-center';
   public static readonly PLATFORM_ID_ENCODE_INVENTORY = '/platform-id/encode/inventory';

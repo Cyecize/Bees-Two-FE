@@ -2,6 +2,7 @@ import {
   BeesParamPayload,
   BeesParamPayloadImpl,
 } from '../proxy/bees-param.payload';
+import { CategoryGroupType } from './category-group.type';
 
 export interface CategoryV3Query {
   ids: string[];
@@ -10,7 +11,7 @@ export interface CategoryV3Query {
   includeTranslations?: boolean;
   restricted: string[];
   vendorIds: string[];
-  groups: string[];
+  groups: CategoryGroupType[];
 
   toBeesQueryParams(): BeesParamPayload[];
 
@@ -24,7 +25,7 @@ export class CategoryV3QueryImpl implements CategoryV3Query {
   includeTranslations?: boolean = true;
   restricted: string[] = [];
   vendorIds: string[] = [];
-  groups: string[] = [];
+  groups: CategoryGroupType[] = [];
 
   toBeesQueryParams(): BeesParamPayload[] {
     const result: BeesParamPayload[] = [];

@@ -6,7 +6,7 @@ import { NgForOf, NgIf } from '@angular/common';
 import { TooltipSpanComponent } from '../../../shared/components/tooltip-span/tooltip-span.component';
 import { FormsModule } from '@angular/forms';
 import { CountryEnvironmentModel } from '../../../api/env/country-environment.model';
-import { Subscription } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 import { WrappedResponse } from '../../../shared/util/field-error-wrapper';
 import { DialogService } from '../../../shared/dialog/dialog.service';
 import { EnvOverrideService } from '../../../api/env/env-override.service';
@@ -20,6 +20,18 @@ import {
 import { CategoryService } from '../../../api/categories/category.service';
 import { ShowCategoryDetailsDialogComponent } from '../show-category-details-dialog/show-category-details-dialog.component';
 import { ShowCategoryDetailsDialogPayload } from '../show-category-details-dialog/show-category-details-dialog.payload';
+import { CategoryGroupType } from '../../../api/categories/category-group.type';
+import {
+  SelectOptionKey,
+  SelectOptionKvp,
+} from '../../../shared/form-controls/select/select.option';
+import { SelectComponent } from '../../../shared/form-controls/select/select.component';
+import { ShowLoader } from '../../../shared/loader/show.loader.decorator';
+import {
+  JszipService,
+  NameAndUrlPair,
+  NameAndUrlPairImpl,
+} from '../../../shared/util/jszip.service';
 
 @Component({
   selector: 'app-search-categories',
@@ -32,6 +44,7 @@ import { ShowCategoryDetailsDialogPayload } from '../show-category-details-dialo
     TooltipSpanComponent,
     FormsModule,
     CheckboxComponent,
+    SelectComponent,
   ],
   templateUrl: './search-categories.component.html',
   styleUrl: './search-categories.component.scss',
@@ -45,14 +58,22 @@ export class SearchCategoriesComponent implements OnInit, OnDestroy {
   categories: CategoryV3[] = [];
   fullResponse!: WrappedResponse<CategoryV3[]>;
 
+  groups: SelectOptionKey[] = [];
+
   constructor(
     private dialogService: DialogService,
     private envOverrideService: EnvOverrideService,
     private categoryService: CategoryService,
+    private jsZipService: JszipService,
   ) {}
 
   ngOnInit(): void {
     this.query.storeId = 'loading....';
+
+    this.groups = [new SelectOptionKvp('Choose one', null, false)].concat(
+      ...Object.keys(CategoryGroupType).map((val) => new SelectOptionKey(val)),
+    );
+
     this.envSub = this.envOverrideService.envOverride$.subscribe((value) => {
       if (!ObjectUtils.isNil(value)) {
         this.envOverride = value;
@@ -71,6 +92,12 @@ export class SearchCategoriesComponent implements OnInit, OnDestroy {
 
   async reloadFilters(): Promise<void> {
     // This is the place to perform some pre-fetch tasks like resetting pagination
+
+    this.groups = [new SelectOptionKvp('Choose one', null, false)].concat(
+      ...Object.keys(CategoryGroupType)
+        .filter((val) => !this.query.groups.includes(val as CategoryGroupType))
+        .map((val) => new SelectOptionKey(val)),
+    );
 
     await this.fetchData();
   }
@@ -145,16 +172,82 @@ export class SearchCategoriesComponent implements OnInit, OnDestroy {
     this.reloadFilters();
   }
 
-  addGroup(val: string): void {
+  addGroup(val: CategoryGroupType): void {
+    if (!val) {
+      this.query.groups = [];
+      this.reloadFilters();
+      return;
+    }
+
     if (!ObjectUtils.isNil(val) && !this.query.groups.includes(val)) {
       this.query.groups.push(val);
       this.reloadFilters();
     }
   }
 
-  removeGroup(val: string): void {
+  removeGroup(val: CategoryGroupType): void {
     this.query.groups.splice(this.query.groups.indexOf(val), 1);
     this.reloadFilters();
+  }
+
+  async onDeleteAll(): Promise<void> {
+    const confirmed = await firstValueFrom(
+      this.dialogService.openConfirmDialog(
+        `This will remove all categories for ${this.envOverride?.envName}, are you sure?`,
+      ),
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    const allIds = this.categories.map((c) => c.id);
+    await this.doDelete(allIds);
+  }
+
+  @ShowLoader()
+  async onDownloadAllImages(): Promise<void> {
+    const files: NameAndUrlPair[] = [];
+    this.convertCategoryToFile(this.categories, files);
+
+    const blob = await this.jsZipService.downloadAndCompress(files);
+
+    const a = document.createElement('a');
+    const url = window.URL.createObjectURL(blob);
+
+    a.href = url;
+    a.download = 'images.zip';
+    a.click();
+    window.URL.revokeObjectURL(url);
+    a.remove();
+  }
+
+  private convertCategoryToFile(
+    categories: CategoryV3[],
+    files: NameAndUrlPair[],
+  ): void {
+    for (const category of categories) {
+      if (category.image) {
+        files.push(
+          new NameAndUrlPairImpl(
+            category.image.mainImageURL,
+            category.storeCategoryId || category.name,
+          ),
+        );
+      }
+
+      if (category.categories?.length) {
+        this.convertCategoryToFile(category.categories, files);
+      }
+    }
+  }
+
+  @ShowLoader()
+  private async doDelete(ids: string[]): Promise<void> {
+    const response = await this.categoryService.deleteV3(ids);
+    this.dialogService.openRequestResultDialog(response).subscribe((value) => {
+      this.reloadFilters();
+    });
   }
 }
 

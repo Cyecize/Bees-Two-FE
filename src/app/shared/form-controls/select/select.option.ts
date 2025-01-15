@@ -19,5 +19,6 @@ export class SelectOptionKvp implements SelectOption {
   constructor(
     public key: string,
     public value: string | number | null,
+    public disabled?: boolean,
   ) {}
 }

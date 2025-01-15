@@ -65,10 +65,10 @@
       </div>
 
       <div class="filter">
-        <app-input
+        <app-select
           placeholder="Groups"
-          [clearOnChangeEnd]="true"
-          (onChangeEnd)="addGroup($event)"></app-input>
+          [options]="groups"
+          (onChange)="addGroup($event)"></app-select>
         <div *ngFor="let val of query.groups" class="d-flex justify-content-between">
           <span>{{ val }}</span>
           <span (click)="removeGroup(val)"><i class="fa-solid fa-x"></i></span>
@@ -87,7 +87,17 @@
         <button class="btn btn-outline-dark" (click)="openResponseDetailsDialog()">Show Details</button>
       </div>
     </div>
-    <p>Showing {{ categories.length }} Level 0 categories</p>
+    <div class="d-flex justify-content-between">
+      <p>Showing {{ categories.length }} Level 0 categories</p>
+      <div>
+        <button
+          (click)="onDeleteAll()"
+          class="btn btn-danger">Delete All</button>
+        <button
+          (click)="onDownloadAllImages()"
+          class="ms-1 btn btn-info">Download All Images</button>
+      </div>
+    </div>
     <div>
       <hr>
 

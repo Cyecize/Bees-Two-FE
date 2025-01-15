@@ -7,6 +7,8 @@ import {
 } from '../../shared/util/field-error-wrapper';
 import { CategoryV3Query } from './category-v3.query';
 import { CategoryV3 } from './category-v3';
+import { CategoryV3Payload } from './category-v3.payload';
+import { CreatedCategory } from './models/created-category';
 
 @Injectable({ providedIn: 'root' })
 export class CategoryService {
@@ -24,10 +26,29 @@ export class CategoryService {
   public async patchV3(
     categoryId: string,
     val: any,
-    env?: CountryEnvironmentModel
+    env?: CountryEnvironmentModel,
   ): Promise<WrappedResponse<any>> {
     return await new FieldErrorWrapper(() =>
-      this.repository.patchCategoryV3(categoryId, val, env?.id)
+      this.repository.patchCategoryV3(categoryId, val, env?.id),
+    ).execute();
+  }
+
+  public async postV3(
+    storeId: string,
+    payload: CategoryV3Payload[],
+    env?: CountryEnvironmentModel,
+  ): Promise<WrappedResponse<CreatedCategory[]>> {
+    return await new FieldErrorWrapper(() =>
+      this.repository.postCategoryV3(storeId, payload, env?.id),
+    ).execute();
+  }
+
+  public async deleteV3(
+    categoryIds: string[],
+    env?: CountryEnvironmentModel,
+  ): Promise<WrappedResponse<any>> {
+    return await new FieldErrorWrapper(() =>
+      this.repository.deleteCategoryV3(categoryIds, env?.id),
     ).execute();
   }
 }

@@ -32,11 +32,13 @@ import {
 } from '../../../api/categories/category-v3.query';
 import { CategoryFilenameMatchResults } from '../../../api/categories/images-upload/dto/category-filename-match-results';
 import { Category } from '../../../api/categories/category';
+import { InputComponent } from "../../../shared/form-controls/input/input.component";
 
 interface UploadCategoryImagesForm {
   zipFile: FormControl<Blob>;
   matchType: FormControl<CategoryFilenameMatchType>;
   matchStrategy: FormControl<CategoryFilenameMatchStrategy>;
+  fileNameSuffix: FormControl<string | null>;
   storageType: FormControl<StorageType>;
 }
 
@@ -48,6 +50,7 @@ interface UploadCategoryImagesForm {
     SelectComponent,
     EnvOverrideFieldComponent,
     NgIf,
+    InputComponent,
   ],
   templateUrl: './upload-category-images.component.html',
   styleUrl: './upload-category-images.component.scss',
@@ -101,6 +104,7 @@ export class UploadCategoryImagesComponent implements OnInit, OnDestroy {
         nonNullable: true,
         validators: [Validators.required],
       }),
+      fileNameSuffix: new FormControl<string | null>(null),
     });
 
     this.envSub = this.envOverrideService.envOverride$.subscribe((value) => {
@@ -133,6 +137,7 @@ export class UploadCategoryImagesComponent implements OnInit, OnDestroy {
       return;
     }
 
+    const suffix = this.form.getRawValue().fileNameSuffix || '';
     const fileNames = await this.zipService.getFileNames(this.file);
 
     const categories: CategoryV3[] = await this.fetchCategories();
@@ -146,6 +151,7 @@ export class UploadCategoryImagesComponent implements OnInit, OnDestroy {
       this.form.getRawValue().matchType,
       this.form.getRawValue().matchStrategy,
       categories,
+      suffix,
     );
 
     if (fileGroups.nonMatchingFileNames.length) {

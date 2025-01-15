@@ -268,6 +268,13 @@ const itemRoutes: Routes = [
                 './ui/categories/upload-category-images/upload-category-images.component'
               ).then((value) => value.UPLOAD_CATEGORY_IMAGES_ROUTES),
           },
+          {
+            path: AppRoutingPath.CATEGORY_BULK_CREATE.path,
+            loadChildren: () =>
+              import(
+                './ui/categories/bulk-create-categories/bulk-create-categories.component'
+              ).then((value) => value.BULK_CREATE_CATEGORIES_ROUTES),
+          },
         ],
       },
     ],

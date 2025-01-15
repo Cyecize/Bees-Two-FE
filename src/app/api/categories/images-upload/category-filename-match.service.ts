@@ -94,6 +94,7 @@ export class CategoryFilenameMatchService {
     matchType: CategoryFilenameMatchType,
     matchStrategy: CategoryFilenameMatchStrategy,
     categories: Category[],
+    fileNameSuffix: string,
   ): CategoryFilenameMatchResults {
     if (!fieldExtractors.has(matchType)) {
       throw new Error(`Match type ${matchType} not supported!`);
@@ -106,9 +107,10 @@ export class CategoryFilenameMatchService {
     const result: FilenameCategoryGroup[] = [];
     const fileNamesWithNoCategories: string[] = [];
 
-    for (const fileName of fileNames) {
-      const fileNameNoExtension =
-        FilenameUtil.trimExtension(fileName)?.toLowerCase();
+    for (const fn of fileNames) {
+      const fineNameNoExt = (
+        FilenameUtil.trimExtension(fn) + fileNameSuffix
+      ).toLowerCase();
 
       const matchingCategories: Category[] = [];
 
@@ -118,7 +120,7 @@ export class CategoryFilenameMatchService {
             .get(matchStrategy)!
             .test(
               fieldExtractors.get(matchType)!.getValue(category).toLowerCase(),
-              fileNameNoExtension,
+              fineNameNoExt,
             )
         ) {
           continue;
@@ -128,9 +130,9 @@ export class CategoryFilenameMatchService {
       }
 
       if (matchingCategories.length <= 0) {
-        fileNamesWithNoCategories.push(fileName);
+        fileNamesWithNoCategories.push(fn);
       } else {
-        result.push(new FilenameCategoryGroup(fileName, matchingCategories));
+        result.push(new FilenameCategoryGroup(fn, matchingCategories));
       }
     }
 

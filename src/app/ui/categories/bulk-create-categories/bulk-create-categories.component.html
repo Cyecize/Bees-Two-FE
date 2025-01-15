@@ -1,0 +1,98 @@
+<div>
+  <h2>Upload categories in bulk for <strong>{{ envOverride?.envName }}</strong></h2>
+  <div>
+    <app-env-override-field></app-env-override-field>
+  </div>
+  <hr>
+  <div>
+    <button
+      *ngIf="!showJsonForm"
+      (click)="showJsonForm = true"
+      class="btn btn-outline-info">Use JSON
+    </button>
+    <button
+      *ngIf="showJsonForm"
+      (click)="showJsonForm = false"
+      class="btn btn-outline-success">Use CSV
+    </button>
+  </div>
+  <div *ngIf="!showJsonForm">
+    <form [formGroup]="csvForm">
+      <div class="mt-2">
+        <app-input
+          placeholder="Store ID"
+          formControlName="storeId"></app-input>
+      </div>
+      <div class="mt-2">
+        <small>If you wish, you may provide a unique suffix to avoid case where deleted categories exist with your specified store category ID</small>
+        <app-input
+          placeholder="Store Category ID Suffix"
+          formControlName="storeCategoryIdSuffix"></app-input>
+      </div>
+      <hr>
+      <div class="mt-2">
+        <div>
+          <button type="button"
+                  (click)="downloadCsvExample()"
+                  class="btn btn-sm btn-success">Download CSV template
+          </button>
+        </div>
+
+        <div class="mt-1">
+          <label>Choose a CSV file
+            <input formControlName="csvFile" type="file" id="csv-file" (change)="onFileSelected($event)" />
+          </label>
+        </div>
+      </div>
+      <div class="mt-2 text-end">
+        <button
+          class="btn btn-outline-success"
+          [disabled]="!csvForm.valid"
+          (click)="onCsvFormSubmit()">Execute
+        </button>
+      </div>
+    </form>
+  </div>
+  <div *ngIf="showJsonForm">
+    <form [formGroup]="jsonForm">
+      <div class="mt-2">
+        <app-input
+          placeholder="Store ID"
+          formControlName="storeId"></app-input>
+      </div>
+      <div class="mt-2">
+        <small>If you wish, you may provide a unique suffix to avoid case where deleted categories exist with your specified store category ID</small>
+        <app-input
+          placeholder="Store Category ID Suffix"
+          formControlName="storeCategoryIdSuffix"></app-input>
+      </div>
+      <hr>
+      <div class="mt-2">
+        <div>
+          <small>Paste your JSON template here</small>
+          <br>
+          <button type="button"
+                  (click)="showJsonExample()"
+                  class="btn btn-sm btn-outline-info">Show example
+          </button>
+        </div>
+        <textarea class="mt-1 form-control"
+                  rows="10"
+                  placeholder="Json"
+                  formControlName="json"></textarea>
+      </div>
+      <div class="mt-2 text-end">
+        <button
+          class="btn btn-outline-secondary"
+          [disabled]="!jsonForm.valid"
+          (click)="onJsonToCsvConvert()">Convert to CSV
+        </button>
+        <button
+          class="ms-1 btn btn-outline-dark"
+          [disabled]="!jsonForm.valid"
+          (click)="onJsonFormSubmit()">Execute
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

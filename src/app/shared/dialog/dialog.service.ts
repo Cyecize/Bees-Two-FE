@@ -7,8 +7,7 @@ import { map } from 'rxjs/operators';
 import { DialogContentBaseComponent } from './dialogs/dialog-content-base.component';
 import { DialogComponent } from './dialogs/dialog.component';
 import { DialogComponentPayload } from './dialogs/dialog.component.payload';
-import { ConfirmDialogComponent } from './dialogs/confirm-dialog/confirm-dialog.component';
-import { ConfirmDialogPayload } from './dialogs/confirm-dialog/confirm-dialog-payload.model';
+import { ShowCodeDialogComponent } from './dialogs/confirm-dialog/show-code-dialog.component';
 import { WrappedResponse } from '../util/field-error-wrapper';
 import { RequestResultDialogComponent } from './dialogs/request-result-dialog/request-result-dialog.component';
 import { AccountPickerDialogComponent } from '../../ui/accounts-local/account-picker-dialog/account-picker-dialog.component';
@@ -27,6 +26,9 @@ import { InventoryPlatformIdDialogComponent } from '../../ui/platformid/inventor
 import { ItemsPickerDialogPayload } from '../../ui/items/items-picker-dialog/items-picker-dialog.payload';
 import { ItemsPickerDialogComponent } from '../../ui/items/items-picker-dialog/items-picker-dialog.component';
 import { Item } from '../../api/items/item';
+import { ShowCodePayload } from './dialogs/confirm-dialog/show-code-payload.model';
+import { ConfirmDialogPayload } from './dialogs/show-code-dialog/confirm-dialog-payload.model';
+import { ConfirmDialogComponent } from './dialogs/show-code-dialog/confirm-dialog.component';
 
 @Injectable({ providedIn: 'root' })
 export class DialogService {
@@ -57,6 +59,16 @@ export class DialogService {
     return dialogComponentMatDialogRef
       .afterClosed()
       .pipe(map((value) => value || false));
+  }
+
+  public openShowCodeDialog(code: string, title?: string): Observable<void> {
+    const dialogComponentMatDialogRef = this.open(
+      ShowCodeDialogComponent,
+      title || 'Review code',
+      new ShowCodePayload(code),
+    );
+
+    return dialogComponentMatDialogRef.afterClosed();
   }
 
   public openRequestResultDialog(

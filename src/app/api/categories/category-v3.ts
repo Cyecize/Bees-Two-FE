@@ -2,6 +2,7 @@ import { CategoryImage } from './models/category-image';
 import { CategoryItem } from './models/category-item';
 import { CategoryTranslation } from './models/category-translation';
 import { Category } from './category';
+import { CategoryGroupType } from './category-group.type';
 
 export interface CategoryV3 extends Category {
   id: string;
@@ -11,7 +12,7 @@ export interface CategoryV3 extends Category {
   enabled: boolean;
   items?: CategoryItem[];
   categories?: CategoryV3[];
-  groups: string[];
+  groups: CategoryGroupType[];
   image: CategoryImage;
   imageAltText: string;
   link: string;

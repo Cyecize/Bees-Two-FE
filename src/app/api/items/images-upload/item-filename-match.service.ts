@@ -4,7 +4,7 @@ import { ItemFilenameMatchStrategy } from './item-filename-match-strategy';
 import { Item } from '../item';
 import { FilenameItemGroup } from './dto/filename-item-group';
 import { ItemFilenameMatchResults } from './dto/item-filename-match-results';
-import { FilenameUtil } from "../../../shared/util/filename.util";
+import { FilenameUtil } from '../../../shared/util/filename.util';
 
 interface FieldExtractor {
   getValue(item: Item): string;
