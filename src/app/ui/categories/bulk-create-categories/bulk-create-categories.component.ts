@@ -29,6 +29,8 @@ import { Papa } from 'ngx-papaparse';
 import { BulkCreateCategoriesCsvHeaders } from './bulk-create-categories-csv-headers';
 import { ObjectUtils } from '../../../shared/util/object-utils';
 import { CountryEnvironmentLanguageModel } from '../../../api/env/country-environment-language.model';
+import { CustomValidators } from '../../../shared/util/custom-validators';
+import { FileUtils } from '../../../shared/util/file-utils';
 
 interface BulkCreateCategoryCsvForm {
   csvFile: FormControl<Blob>;
@@ -107,7 +109,7 @@ export class BulkCreateCategoriesComponent implements OnInit, OnDestroy {
       }),
       csvFile: new FormControl(null!, {
         nonNullable: true,
-        validators: this.csvFileValidator,
+        validators: CustomValidators.csvFileValidator,
       }),
       storeCategoryIdSuffix: new FormControl<string | null>(null),
     });
@@ -122,19 +124,6 @@ export class BulkCreateCategoriesComponent implements OnInit, OnDestroy {
     });
   }
 
-  private csvFileValidator(control: any): any {
-    const fileName = control.value;
-    if (fileName) {
-      const extension = fileName.split('.').pop().toLowerCase();
-      if (extension !== 'csv') {
-        return { invalidFileType: true };
-      }
-    } else {
-      return { fileRequired: true };
-    }
-    return null;
-  }
-
   ngOnDestroy(): void {
     this.envSub.unsubscribe();
   }
@@ -147,23 +136,10 @@ export class BulkCreateCategoriesComponent implements OnInit, OnDestroy {
   }
 
   downloadCsvExample(): void {
-    this.downloadCsv(
+    FileUtils.downloadCsv(
       exampleBulkCategoriesCreationCsv,
       'BulkCreateCategoriesTemplate.csv',
     );
-  }
-
-  private downloadCsv(csvContent: string, fileName: string): void {
-    const blob = new Blob([csvContent], { type: 'text/csv' });
-
-    const a = document.createElement('a');
-    const url = window.URL.createObjectURL(blob);
-
-    a.href = url;
-    a.download = fileName;
-    a.click();
-    window.URL.revokeObjectURL(url);
-    a.remove();
   }
 
   async onJsonFormSubmit(): Promise<void> {
@@ -178,7 +154,7 @@ export class BulkCreateCategoriesComponent implements OnInit, OnDestroy {
     const csv = this.toCsvFromUserPayload(
       JSON.parse(this.jsonForm.getRawValue().json),
     );
-    this.downloadCsv(csv, 'Categories.csv');
+    FileUtils.downloadCsv(csv, 'Categories.csv');
   }
 
   async onCsvFormSubmit(): Promise<void> {
@@ -187,7 +163,7 @@ export class BulkCreateCategoriesComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const content = await this.readFileAsString();
+    const content = await FileUtils.readFileAsString(this.file);
     const userPayload: UserPayload[] = this.toUserPayload(content);
 
     if (userPayload.length <= 0) {
@@ -582,26 +558,6 @@ export class BulkCreateCategoriesComponent implements OnInit, OnDestroy {
     }
 
     return userPayload;
-  }
-
-  private readFileAsString(): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-
-      reader.onload = (e: ProgressEvent<FileReader>) => {
-        if (typeof reader.result === 'string') {
-          resolve(reader.result);
-        } else {
-          reject(new Error('Error reading file.'));
-        }
-      };
-
-      reader.onerror = () => {
-        reject(new Error('Error reading file.'));
-      };
-
-      reader.readAsText(this.file!);
-    });
   }
 }
 

@@ -32,7 +32,7 @@ import {
 } from '../../../api/categories/category-v3.query';
 import { CategoryFilenameMatchResults } from '../../../api/categories/images-upload/dto/category-filename-match-results';
 import { Category } from '../../../api/categories/category';
-import { InputComponent } from "../../../shared/form-controls/input/input.component";
+import { InputComponent } from '../../../shared/form-controls/input/input.component';
 
 interface UploadCategoryImagesForm {
   zipFile: FormControl<Blob>;

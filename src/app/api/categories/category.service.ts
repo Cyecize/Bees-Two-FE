@@ -9,6 +9,8 @@ import { CategoryV3Query } from './category-v3.query';
 import { CategoryV3 } from './category-v3';
 import { CategoryV3Payload } from './category-v3.payload';
 import { CreatedCategory } from './models/created-category';
+import { ItemSortOrderPair } from './item-assign/dto/category-item-group';
+import { CategoryItem } from './models/category-item';
 
 @Injectable({ providedIn: 'root' })
 export class CategoryService {
@@ -31,6 +33,23 @@ export class CategoryService {
     return await new FieldErrorWrapper(() =>
       this.repository.patchCategoryV3(categoryId, val, env?.id),
     ).execute();
+  }
+
+  async assignItems(
+    id: string,
+    items: ItemSortOrderPair[],
+    vendorId: string,
+    env: CountryEnvironmentModel,
+  ): Promise<WrappedResponse<CategoryV3[]>> {
+    const addedItems: CategoryItem[] = items.map((it) => {
+      return {
+        vendorItemId: it.vendorItemId,
+        vendorId: vendorId,
+        sortOrder: it.sortOrder,
+      };
+    });
+
+    return this.patchV3(id, { addedItems: addedItems }, env);
   }
 
   public async postV3(

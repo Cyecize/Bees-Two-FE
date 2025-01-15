@@ -32,6 +32,8 @@ import { ItemFilenameMatchResults } from '../../../api/items/images-upload/dto/i
 import { ItemImageUploadService } from '../../../api/items/images-upload/item-image-upload.service';
 import { StorageType } from '../../../api/storage/storage.type';
 import { FilenameUtil } from '../../../shared/util/filename.util';
+import { CustomValidators } from '../../../shared/util/custom-validators';
+import { ArrayUtils } from '../../../shared/util/array-utils';
 
 interface UploadItemImagesForm {
   zipFile: FormControl<Blob>;
@@ -87,7 +89,7 @@ export class UploadItemImagesComponent implements OnInit, OnDestroy {
     this.form = new FormGroup<UploadItemImagesForm>({
       zipFile: new FormControl(null!, {
         nonNullable: true,
-        validators: this.zipFileValidator,
+        validators: CustomValidators.zipFileValidator,
       }),
       matchStrategy: new FormControl<ItemFilenameMatchStrategy>(
         ItemFilenameMatchStrategy.EXACT_MATCH,
@@ -171,7 +173,7 @@ export class UploadItemImagesComponent implements OnInit, OnDestroy {
 
     const res: Item[] = [];
 
-    for (const fileNamesBatch of this.splitFilesOnBatches(fileNames)) {
+    for (const fileNamesBatch of ArrayUtils.splitToBatches(fileNames, 100)) {
       const query: ItemsSearchQuery = this.createQuery(fileNamesBatch);
 
       let page = -1;
@@ -286,35 +288,6 @@ export class UploadItemImagesComponent implements OnInit, OnDestroy {
     }
 
     return query;
-  }
-
-  private splitFilesOnBatches(fileNames: string[]): string[][] {
-    const result: string[][] = [];
-
-    //TODO: Update to 100
-    for (let i = 0; i < fileNames.length; i += 100) {
-      //TODO: Update to 100
-      result.push(fileNames.slice(i, i + 100));
-    }
-
-    if (result.length > 1) {
-      console.log(`Splitting request query in ${result.length} batches`);
-    }
-
-    return result;
-  }
-
-  private zipFileValidator(control: any): any {
-    const fileName = control.value;
-    if (fileName) {
-      const extension = fileName.split('.').pop().toLowerCase();
-      if (extension !== 'zip') {
-        return { invalidFileType: true };
-      }
-    } else {
-      return { fileRequired: true };
-    }
-    return null;
   }
 }
 

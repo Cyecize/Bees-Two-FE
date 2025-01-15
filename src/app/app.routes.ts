@@ -275,6 +275,13 @@ const itemRoutes: Routes = [
                 './ui/categories/bulk-create-categories/bulk-create-categories.component'
               ).then((value) => value.BULK_CREATE_CATEGORIES_ROUTES),
           },
+          {
+            path: AppRoutingPath.CATEGORY_BULK_ASSIGN.path,
+            loadChildren: () =>
+              import(
+                './ui/categories/bulk-assign-items/bulk-assign-items.component'
+              ).then((value) => value.BULK_ASSIGN_ITEM_ROUTES),
+          },
         ],
       },
     ],

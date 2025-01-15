@@ -1,0 +1,86 @@
+<div>
+  <h2>Assign items in bulk for <strong>{{ envOverride?.envName }}</strong></h2>
+  <div>
+    <app-env-override-field></app-env-override-field>
+  </div>
+  <hr>
+  <div>
+    <form [formGroup]="form">
+      <div class="mt-2">
+        <app-input
+          placeholder="Vendor ID"
+          formControlName="vendorId"></app-input>
+      </div>
+      <div class="mt-2">
+        <small>The "category" value will be treated like: </small>
+        <div *ngIf="currentMatchType === matchTypes.NAME_TREE">
+          <small>Example name tree: <strong>L1Category__L2Category__L3Category</strong></small>
+        </div>
+        <app-select
+          placeholder="Match By"
+          [options]="matchTypeOptions"
+          formControlName="matchType"></app-select>
+      </div>
+    </form>
+
+    <hr>
+    <div>
+      <button
+        *ngIf="!showJsonForm"
+        (click)="showJsonForm = true"
+        class="btn btn-outline-info">Use JSON
+      </button>
+      <button
+        *ngIf="showJsonForm"
+        (click)="showJsonForm = false"
+        class="btn btn-outline-success">Use CSV
+      </button>
+    </div>
+
+    <div class="mt-1" *ngIf="showJsonForm">
+      <form [formGroup]="jsonForm">
+        <div class="mt-2">
+          <div>
+            <small>Paste your JSON template here</small>
+            <br>
+            <button type="button"
+                    (click)="showJsonExample()"
+                    class="btn btn-sm btn-outline-info">Show example
+            </button>
+          </div>
+          <textarea class="mt-1 form-control"
+                    rows="10"
+                    placeholder="Json"
+                    formControlName="json"></textarea>
+        </div>
+      </form>
+    </div>
+
+    <div class="mt-1" *ngIf="!showJsonForm">
+      <form [formGroup]="csvForm">
+        <div class="mt-2">
+          <div>
+            <button type="button"
+                    (click)="downloadCsvExample()"
+                    class="btn btn-sm btn-success">Download CSV template
+            </button>
+          </div>
+
+          <div class="mt-1">
+            <label>Choose a CSV file
+              <input formControlName="csvFile" type="file" id="csv-file" (change)="onFileSelected($event)" />
+            </label>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="mb-2 mt-2 text-end">
+      <button
+        class="btn btn-outline-success"
+        [disabled]="isFormInvalid()"
+        (click)="onFormSubmit()">Execute
+      </button>
+    </div>
+  </div>
+</div>
