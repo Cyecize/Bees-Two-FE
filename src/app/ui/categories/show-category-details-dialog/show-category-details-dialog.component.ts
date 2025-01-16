@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { firstValueFrom, Observable } from 'rxjs';
 import { RouterLink } from '@angular/router';
 import { ShowCategoryDetailsDialogPayload } from './show-category-details-dialog.payload';
 import { DialogContentBaseComponent } from '../../../shared/dialog/dialogs/dialog-content-base.component';
@@ -10,6 +10,7 @@ import { TooltipSpanComponent } from '../../../shared/components/tooltip-span/to
 import { ObjectUtils } from '../../../shared/util/object-utils';
 import { CategoryV3 } from '../../../api/categories/category-v3';
 import { CategoryItem } from '../../../api/categories/models/category-item';
+import { CategoryService } from '../../../api/categories/category.service';
 
 @Component({
   selector: 'app-show-category-details-dialog',
@@ -37,7 +38,10 @@ export class ShowCategoryDetailsDialogComponent
   items: CategoryItem[] = [];
   showItems = false;
 
-  constructor(private dialogService: DialogService) {
+  constructor(
+    private dialogService: DialogService,
+    private categoryService: CategoryService,
+  ) {
     super();
   }
 
@@ -70,8 +74,27 @@ export class ShowCategoryDetailsDialogComponent
     navigator.clipboard.writeText(this.dataJson);
   }
 
-  delete(): void {
-    alert('bout 2 delete!');
+  async delete(): Promise<void> {
+    const conf = await firstValueFrom(
+      this.dialogService.openConfirmDialog(
+        `You are about to remove category ${this.payload.category.name}`!,
+        'Warning',
+        'Remove',
+      ),
+    );
+
+    if (!conf) {
+      return;
+    }
+
+    const resp = await this.categoryService.deleteV3([
+      this.payload.category.id,
+    ]);
+    if (!resp.isSuccess) {
+      this.dialogService.openRequestResultDialog(resp);
+    } else {
+      this.close(true);
+    }
   }
 
   openDetailsDialog(category: CategoryV3): void {

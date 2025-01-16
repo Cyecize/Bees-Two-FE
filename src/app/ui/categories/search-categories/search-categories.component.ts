@@ -129,11 +129,18 @@ export class SearchCategoriesComponent implements OnInit, OnDestroy {
   }
 
   openDetailsDialog(category: CategoryV3): void {
-    this.dialogService.open(
-      ShowCategoryDetailsDialogComponent,
-      '',
-      new ShowCategoryDetailsDialogPayload(category, this.envOverride),
-    );
+    this.dialogService
+      .open(
+        ShowCategoryDetailsDialogComponent,
+        '',
+        new ShowCategoryDetailsDialogPayload(category, this.envOverride),
+      )
+      .afterClosed()
+      .subscribe((refresh) => {
+        if (refresh) {
+          this.reloadFilters();
+        }
+      });
   }
 
   addId(id: string): void {
