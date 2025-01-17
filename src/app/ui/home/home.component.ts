@@ -9,6 +9,7 @@ import { EnvViewerDialogComponent } from '../env/env-viewer-dialog/env-viewer-di
 import { AppRoutingPath } from '../../app-routing.path';
 import { ShowLoader } from '../../shared/loader/show.loader.decorator';
 import { PlatformIdType } from '../../api/platformid/platform-id.type';
+import { StringReplacerDialog } from '../../shared/dialog/dialogs/string-replacer-dialog/string-replacer-dialog.component';
 
 @Component({
   selector: 'app-home',
@@ -62,6 +63,10 @@ export class HomeComponent implements OnInit {
 
   openPlatformDialog(type: PlatformIdType): void {
     this.dialogService.openPlatformIdDialog(this.currentEnv!, type);
+  }
+
+  openStringReplacerDialog(): void {
+    this.dialogService.open(StringReplacerDialog, '', null);
   }
 }
 
