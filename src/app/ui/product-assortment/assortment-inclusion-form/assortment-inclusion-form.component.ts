@@ -119,12 +119,14 @@ export class AssortmentInclusionFormComponent implements OnInit, OnDestroy {
     this.deliveryCenterIds.removeAt(index);
   }
 
-  addAssortment(val?: string): void {
+  addAssortment(val?: { vendorItemId: string; multiplier?: number }): void {
     this.assortments.push(
       new FormGroup({
-        quantityMultiplier: new FormControl<number | null>(null),
+        quantityMultiplier: new FormControl<number | null>(
+          val?.multiplier || null,
+        ),
         rank: new FormControl<number | null>(null),
-        vendorItemId: new FormControl(val, Validators.required),
+        vendorItemId: new FormControl(val?.vendorItemId, Validators.required),
         deliveryMethods: new FormArray([]),
       }),
     );
@@ -153,7 +155,7 @@ export class AssortmentInclusionFormComponent implements OnInit, OnDestroy {
     }
   }
 
-  bulkAddAssortments(data: any): void {
+  bulkAddAssortments(data: any, qtyMultiplier?: number): void {
     if (ObjectUtils.isNil(data) || !data.trim()) {
       alert('Invalid data, must be comma separated vendor item ids!');
       return;
@@ -163,7 +165,10 @@ export class AssortmentInclusionFormComponent implements OnInit, OnDestroy {
       .split(',')
       .map((val: string) => val.trim())
       .forEach((val: string) => {
-        this.addAssortment(val);
+        this.addAssortment({
+          vendorItemId: val,
+          multiplier: qtyMultiplier,
+        });
       });
   }
 }
