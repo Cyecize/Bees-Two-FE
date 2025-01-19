@@ -45,6 +45,7 @@ import { CategoryWithParent } from '../../../api/categories/category-with-parent
 import { CategoryV3QueryImpl } from '../../../api/categories/category-v3.query';
 import { CategoryV3 } from '../../../api/categories/category-v3';
 import { CategoryItemGroup } from '../../../api/categories/item-assign/dto/category-item-group';
+import { CategoryConstants } from '../../../api/categories/category-constants';
 
 interface BulkItemAssignForm {
   vendorId: FormControl<string>;
@@ -79,6 +80,7 @@ export class BulkAssignItemsComponent implements OnInit, OnDestroy {
 
   private file: File | null = null;
 
+  nameTreeDelimiter = CategoryConstants.CATEGORY_NAME_TREE_DELIMITER;
   matchTypes = CategoryAssignMatchType;
   matchTypeOptions: SelectOption[] = [];
   form!: FormGroup<BulkItemAssignForm>;

@@ -14,7 +14,12 @@
       <div class="mt-2">
         <small>The "category" value will be treated like: </small>
         <div *ngIf="currentMatchType === matchTypes.NAME_TREE">
-          <small>Example name tree: <strong>L1Category__L2Category__L3Category</strong></small>
+          <small>
+            Example name tree:
+            <strong>
+              L1Category{{ nameTreeDelimiter }}L2Category{{ nameTreeDelimiter }}L3Category
+            </strong>
+          </small>
         </div>
         <app-select
           placeholder="Match By"

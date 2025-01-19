@@ -32,6 +32,11 @@ import {
   NameAndUrlPair,
   NameAndUrlPairImpl,
 } from '../../../shared/util/jszip.service';
+import {
+  CategoryItemPair,
+  CategoryItemPairImpl,
+} from '../../../api/categories/item-assign/dto/category-item-pair';
+import { CategoryConstants } from '../../../api/categories/category-constants';
 
 @Component({
   selector: 'app-search-categories',
@@ -277,6 +282,40 @@ export class SearchCategoriesComponent implements OnInit, OnDestroy {
     this.dialogService.openShowCodeDialog(
       JSON.stringify([...vendorItemIds], null, 2),
       `Vendor Item IDs (${vendorItemIds.size})`,
+    );
+  }
+
+  extractAssignedItems(): void {
+    const pairs: CategoryItemPair[] = [];
+
+    const extract = (cats: CategoryV3[], treeName: string): void => {
+      for (const cat of cats) {
+        if (cat.items?.length) {
+          for (const item of cat.items) {
+            pairs.push(
+              new CategoryItemPairImpl(
+                `${treeName}${cat.name}`,
+                item.vendorItemId,
+                item.sortOrder,
+              ),
+            );
+          }
+        }
+
+        if (cat.categories?.length) {
+          extract(
+            cat.categories,
+            `${cat.name}${CategoryConstants.CATEGORY_NAME_TREE_DELIMITER}`,
+          );
+        }
+      }
+    };
+
+    extract(this.categories, '');
+
+    this.dialogService.openShowCodeDialog(
+      JSON.stringify(pairs, null, 2),
+      'Bulk Assign Payload',
     );
   }
 }

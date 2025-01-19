@@ -5,6 +5,7 @@ import { CategoryWithParent } from '../category-with-parent';
 import { CategoryItemMatchResult } from './dto/category-item-match-result';
 import { CategoryItemPair } from './dto/category-item-pair';
 import { CategoryItemGroup } from './dto/category-item-group';
+import { CategoryConstants } from '../category-constants';
 
 interface FieldExtractor {
   getValue(category: CategoryWithParent): string;
@@ -28,7 +29,7 @@ const fieldExtractors = new Map<CategoryAssignMatchType, FieldExtractor>([
         }
         return (
           this.getValue(category.parent!) +
-          `${category.parent ? '__' : ''}${category.name}`
+          `${category.parent ? CategoryConstants.CATEGORY_NAME_TREE_DELIMITER : ''}${category.name}`
         );
       },
     },
