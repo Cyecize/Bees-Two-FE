@@ -143,10 +143,28 @@ export class SearchItemsComponent implements OnInit, OnDestroy {
   }
 
   addSKU(code: string): void {
-    if (!ObjectUtils.isNil(code) && !this.query.skus.includes(code)) {
-      this.query.skus.push(code);
-      this.reloadFilters();
+    if (!ObjectUtils.isNil(code)) {
+      let added = false;
+      for (const sku of code.split(/,\s*/)) {
+        if (this.doAddSku(sku)) {
+          added = true;
+        }
+      }
+
+      if (added) {
+        this.reloadFilters();
+      }
     }
+  }
+
+  private doAddSku(code: string): boolean {
+    code = code.trim();
+    if (!this.query.skus.includes(code)) {
+      this.query.skus.push(code);
+      return true;
+    }
+
+    return false;
   }
 
   removeSKU(code: string): void {
@@ -154,11 +172,29 @@ export class SearchItemsComponent implements OnInit, OnDestroy {
     this.reloadFilters();
   }
 
-  addVendorItemId(id: string): void {
-    if (!ObjectUtils.isNil(id) && !this.query.vendorItemIds.includes(id)) {
-      this.query.vendorItemIds.push(id);
-      this.reloadFilters();
+  addVendorItemId(code: string): void {
+    if (!ObjectUtils.isNil(code)) {
+      let added = false;
+      for (const id of code.split(/,\s*/)) {
+        if (this.doAddVendorItemId(id)) {
+          added = true;
+        }
+      }
+
+      if (added) {
+        this.reloadFilters();
+      }
     }
+  }
+
+  private doAddVendorItemId(id: string): boolean {
+    id = id.trim();
+    if (!this.query.vendorItemIds.includes(id)) {
+      this.query.vendorItemIds.push(id);
+      return true;
+    }
+
+    return false;
   }
 
   removeVendorItemId(id: string): void {

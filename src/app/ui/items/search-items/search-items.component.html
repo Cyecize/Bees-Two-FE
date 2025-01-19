@@ -19,7 +19,7 @@
     <div class="filters-header">
       <div class="filter">
         <app-input
-          placeholder="SKUs"
+          placeholder="SKUs (comma)"
           [clearOnChangeEnd]="true"
           (onChangeEnd)="addSKU($event)"></app-input>
         <div *ngFor="let sku of query.skus" class="d-flex justify-content-between">
@@ -29,7 +29,7 @@
       </div>
       <div class="filter">
         <app-input
-          placeholder="Vendor Item IDs"
+          placeholder="Vendor Item IDs (comma)"
           [clearOnChangeEnd]="true"
           (onChangeEnd)="addVendorItemId($event)"></app-input>
         <div *ngFor="let vendorItemId of query.vendorItemIds" class="d-flex justify-content-between">
