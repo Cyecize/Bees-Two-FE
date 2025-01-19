@@ -256,6 +256,29 @@ export class SearchCategoriesComponent implements OnInit, OnDestroy {
       this.reloadFilters();
     });
   }
+
+  extractAllItems(): void {
+    const vendorItemIds = new Set<string>();
+
+    const extract = (cats: CategoryV3[]): void => {
+      for (const cat of cats) {
+        if (cat.items?.length) {
+          cat.items.forEach((i) => vendorItemIds.add(i.vendorItemId));
+        }
+
+        if (cat.categories?.length) {
+          extract(cat.categories);
+        }
+      }
+    };
+
+    extract(this.categories);
+
+    this.dialogService.openShowCodeDialog(
+      JSON.stringify([...vendorItemIds], null, 2),
+      `Vendor Item IDs (${vendorItemIds.size})`,
+    );
+  }
 }
 
 export const SEARCH_CATEGORIES_ROUTES: Routes = [

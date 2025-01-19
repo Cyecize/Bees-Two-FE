@@ -5,17 +5,26 @@ import { ShowCodePayload } from './show-code-payload.model';
 
 @Component({
   standalone: true,
+  styles: `
+    .show-code-dialog {
+      @media (min-width: 768px) {
+        min-width: 600px;
+      }
+    }
+  `,
   template: `
-    <div class="p-2" style="max-height: 450px; overflow-y: auto">
-      <pre>{{ code }}</pre>
-    </div>
-
-    <div class="d-flex flex-wrap justify-content-end">
-      <div class="p-2">
-        <button (click)="close(false)" class="btn">Close</button>
+    <div class="show-code-dialog">
+      <div class="p-2" style="max-height: 450px; overflow-y: auto">
+        <pre>{{ code }}</pre>
       </div>
-      <div class="p-2">
-        <button class="btn btn-success" (click)="copy()">Copy</button>
+
+      <div class="d-flex flex-wrap justify-content-end">
+        <div class="p-2">
+          <button (click)="close(false)" class="btn">Close</button>
+        </div>
+        <div class="p-2">
+          <button class="btn btn-success" (click)="copy()">Copy</button>
+        </div>
       </div>
     </div>
   `,

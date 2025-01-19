@@ -47,7 +47,7 @@ interface StringReplaceForm {
           ></textarea>
         </div>
 
-        <div class="mt-2">
+        <div class="mt-2 text-end">
           <button
             class="btn btn-outline-success"
             (click)="replaceAndCopy()"
