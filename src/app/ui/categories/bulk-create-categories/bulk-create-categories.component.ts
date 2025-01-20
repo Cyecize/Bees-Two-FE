@@ -31,22 +31,24 @@ import { ObjectUtils } from '../../../shared/util/object-utils';
 import { CountryEnvironmentLanguageModel } from '../../../api/env/country-environment-language.model';
 import { CustomValidators } from '../../../shared/util/custom-validators';
 import { FileUtils } from '../../../shared/util/file-utils';
+import { CheckboxComponent } from '../../../shared/form-controls/checkbox/checkbox.component';
+import { CategoryWithParent } from '../../../api/categories/category-with-parent';
+import { Category } from '../../../api/categories/category';
+import { update } from '@angular-devkit/build-angular/src/tools/esbuild/angular/compilation/parallel-worker';
 
 interface BulkCreateCategoryCsvForm {
   csvFile: FormControl<Blob>;
   storeId: FormControl<string>;
   storeCategoryIdSuffix: FormControl<string | null>;
+  updateExistingCategories: FormControl<boolean>;
 }
 
 interface BulkCreateCategoryJSONForm {
   json: FormControl<string>;
   storeId: FormControl<string>;
   storeCategoryIdSuffix: FormControl<string | null>;
+  updateExistingCategories: FormControl<boolean>;
 }
-
-// interface PayloadValidatorForm {
-//
-// }
 
 interface UserPayload {
   name: string;
@@ -68,6 +70,7 @@ interface UserPayload {
     ReactiveFormsModule,
     SelectComponent,
     InputComponent,
+    CheckboxComponent,
   ],
   templateUrl: './bulk-create-categories.component.html',
   styleUrl: './bulk-create-categories.component.scss',
@@ -100,6 +103,10 @@ export class BulkCreateCategoriesComponent implements OnInit, OnDestroy {
         nonNullable: true,
       }),
       storeCategoryIdSuffix: new FormControl<string | null>(null),
+      updateExistingCategories: new FormControl<boolean>(false, {
+        validators: [Validators.required],
+        nonNullable: true,
+      }),
     });
 
     this.csvForm = new FormGroup<BulkCreateCategoryCsvForm>({
@@ -112,6 +119,10 @@ export class BulkCreateCategoriesComponent implements OnInit, OnDestroy {
         validators: CustomValidators.csvFileValidator,
       }),
       storeCategoryIdSuffix: new FormControl<string | null>(null),
+      updateExistingCategories: new FormControl<boolean>(false, {
+        validators: [Validators.required],
+        nonNullable: true,
+      }),
     });
 
     this.envSub = this.envOverrideService.envOverride$.subscribe((value) => {
@@ -147,6 +158,7 @@ export class BulkCreateCategoriesComponent implements OnInit, OnDestroy {
       JSON.parse(this.jsonForm.getRawValue().json),
       this.jsonForm.controls.storeId.value,
       this.jsonForm.controls.storeCategoryIdSuffix.value,
+      this.jsonForm.controls.updateExistingCategories.value,
     );
   }
 
@@ -187,6 +199,7 @@ export class BulkCreateCategoriesComponent implements OnInit, OnDestroy {
         userPayload,
         this.csvForm.getRawValue().storeId,
         this.csvForm.getRawValue().storeCategoryIdSuffix,
+        this.csvForm.getRawValue().updateExistingCategories,
       );
     }
   }
@@ -196,92 +209,172 @@ export class BulkCreateCategoriesComponent implements OnInit, OnDestroy {
     userPayload: UserPayload[],
     storeId: string,
     storeCategoryIdSuffix: string | null,
+    updateExistingCategories: boolean,
   ): Promise<void> {
-    const level1Payload: CategoryV3Payload[] = this.toBeesPayload(
+    interface NameIdPair {
+      id: string;
+      name: string;
+    }
+    const existingCategories: { id: string; payload: CategoryV3Payload }[] = [];
+
+    console.log('Fetching all existing categories');
+    const flatCategories: CategoryWithParent[] =
+      await this.categoryService.getFlatCategories(this.envOverride);
+
+    const l1 = this.toBeesPayload(
       userPayload,
       null,
       storeCategoryIdSuffix,
+      flatCategories,
     );
 
-    const result = await this.categoryService.postV3(
-      storeId,
-      level1Payload,
-      this.envOverride,
-    );
+    const l1Pairs: NameIdPair[] = [];
 
-    if (!result.isSuccess) {
-      alert('Error during creating of level 1 categories!');
-      this.dialogService.openRequestResultDialog(result);
-      return;
+    if (l1.existingPayloads.length) {
+      existingCategories.push(...l1.existingPayloads);
+      l1Pairs.push(
+        ...l1.existingPayloads.map((pl) => {
+          return {
+            id: pl.id,
+            name: pl.payload.name,
+          };
+        }),
+      );
     }
 
-    console.log('L1 categories created, ', result.response.response);
-
-    const failedCategoryRequests: string[] = [];
-    for (const l1Cat of result.response.response) {
-      const rootCat: UserPayload = userPayload.find(
-        (c) => c.name === l1Cat.name,
-      )!;
-      const level2Payload: CategoryV3Payload[] = this.toBeesPayload(
-        rootCat.childCategories || [],
-        l1Cat.id,
-        storeCategoryIdSuffix,
-      );
-
-      if (level2Payload.length <= 0) {
-        continue;
-      }
-
-      const l2Response = await this.categoryService.postV3(
+    if (l1.newPayloads.length) {
+      const result = await this.categoryService.postV3(
         storeId,
-        level2Payload,
+        l1.newPayloads,
         this.envOverride,
       );
 
-      if (!l2Response.isSuccess) {
-        failedCategoryRequests.push(`${rootCat.name} -> children`);
-        console.error(l2Response);
-        continue;
+      if (!result.isSuccess) {
+        alert('Error during creating of level 1 categories!');
+        this.dialogService.openRequestResultDialog(result);
+        return;
       }
 
-      console.log(
-        `Created level 2 categories for parent '${l1Cat.name}': `,
-        l2Response.response.response,
+      console.log('L1 categories created, ', result.response.response);
+      l1Pairs.push(...result.response.response);
+    }
+
+    const failedCategoryRequests: string[] = [];
+    for (const l1Pair of l1Pairs) {
+      const rootCat: UserPayload = userPayload.find(
+        (c) => c.name === l1Pair.name,
+      )!;
+
+      const l2 = this.toBeesPayload(
+        rootCat.childCategories || [],
+        l1Pair.id,
+        storeCategoryIdSuffix,
+        flatCategories,
       );
 
-      for (const l2Cat of l2Response.response.response) {
-        const l2FullCategory = rootCat.childCategories!.find(
-          (c) => c.name === l2Cat.name,
-        )!;
+      const l2Pairs: NameIdPair[] = [];
 
-        const level3Payload: CategoryV3Payload[] = this.toBeesPayload(
-          l2FullCategory.childCategories || [],
-          l2Cat.id,
-          storeCategoryIdSuffix,
+      if (l2.existingPayloads.length) {
+        existingCategories.push(...l2.existingPayloads);
+        l2Pairs.push(
+          ...l2.existingPayloads.map((pl) => {
+            return {
+              id: pl.id,
+              name: pl.payload.name,
+            };
+          }),
         );
+      }
 
-        if (level3Payload.length <= 0) {
-          continue;
-        }
-
-        const l3Response = await this.categoryService.postV3(
+      if (l2.newPayloads.length) {
+        const l2Response = await this.categoryService.postV3(
           storeId,
-          level3Payload,
+          l2.newPayloads,
           this.envOverride,
         );
 
-        if (!l3Response.isSuccess) {
-          failedCategoryRequests.push(
-            `${rootCat.name} -> ${l2FullCategory.name} -> children`,
-          );
-          console.error(l3Response);
+        if (!l2Response.isSuccess) {
+          failedCategoryRequests.push(`${rootCat.name} -> children`);
+          console.error(l2Response);
           continue;
         }
 
         console.log(
-          `Created level 3 categories for '${rootCat.name}' -> '${l2FullCategory.name}': `,
-          l3Response.response.response,
+          `Created level 2 categories for parent '${l1Pair.name}': `,
+          l2Response.response.response,
         );
+
+        l2Pairs.push(...l2Response.response.response);
+      }
+
+      for (const l2Pair of l2Pairs) {
+        const l2FullCategory = rootCat.childCategories!.find(
+          (c) => c.name === l2Pair.name,
+        )!;
+
+        const l3 = this.toBeesPayload(
+          l2FullCategory.childCategories || [],
+          l2Pair.id,
+          storeCategoryIdSuffix,
+          flatCategories,
+        );
+
+        if (l3.existingPayloads) {
+          existingCategories.push(...l3.existingPayloads);
+        }
+
+        if (l3.newPayloads.length) {
+          const l3Response = await this.categoryService.postV3(
+            storeId,
+            l3.newPayloads,
+            this.envOverride,
+          );
+
+          if (!l3Response.isSuccess) {
+            failedCategoryRequests.push(
+              `${rootCat.name} -> ${l2FullCategory.name} -> children`,
+            );
+            console.error(l3Response);
+            continue;
+          }
+
+          console.log(
+            `Created level 3 categories for '${rootCat.name}' -> '${l2FullCategory.name}': `,
+            l3Response.response.response,
+          );
+        }
+      }
+    }
+
+    if (existingCategories.length) {
+      if (!updateExistingCategories) {
+        this.showExistingSkippedCategories(
+          existingCategories.map((ec) => ec.payload.storeCategoryId!),
+        );
+      } else {
+        console.log(
+          `Updating ${existingCategories.length} existing categories!`,
+        );
+        for (const exCat of existingCategories) {
+          const updateResp = await this.categoryService.patchV3(
+            exCat.id,
+            exCat.payload,
+            this.envOverride,
+          );
+
+          if (!updateResp.isSuccess) {
+            failedCategoryRequests.push(
+              `${exCat.payload.name} (${exCat.payload.storeCategoryId}) -> update`,
+            );
+            console.error(updateResp);
+            continue;
+          }
+
+          console.log(
+            `Updated category '${exCat.payload.name}' (${exCat.payload.storeCategoryId})`,
+            updateResp.response.response,
+          );
+        }
       }
     }
 
@@ -298,6 +391,17 @@ export class BulkCreateCategoriesComponent implements OnInit, OnDestroy {
     }
   }
 
+  private async showExistingSkippedCategories(
+    categories: string[],
+  ): Promise<void> {
+    if (categories.length > 0) {
+      this.dialogService.openShowCodeDialog(
+        JSON.stringify(categories, null, 2),
+        `Not updated existing categories (${categories.length})`,
+      );
+    }
+  }
+
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
@@ -309,14 +413,51 @@ export class BulkCreateCategoriesComponent implements OnInit, OnDestroy {
     userPayload: UserPayload[],
     parentId: string | null,
     storeCategoryIdSuffix: string | null,
-  ): CategoryV3Payload[] {
-    const result: CategoryV3Payload[] = [];
+    flatCategories: Category[],
+  ): {
+    newPayloads: CategoryV3Payload[];
+    existingPayloads: { id: string; payload: CategoryV3Payload }[];
+  } {
+    const newCats: CategoryV3Payload[] = [];
+    const existingCategories: { id: string; payload: CategoryV3Payload }[] = [];
 
     const suffixValue = storeCategoryIdSuffix
       ? `_${storeCategoryIdSuffix}`
       : '';
+
     for (const up of userPayload) {
-      const category: CategoryV3Payload = {
+      let translations: { [langCode: string]: CategoryTranslation } =
+        up.translations || {};
+
+      if (!translations) {
+        translations = {};
+      }
+
+      if (!this.envOverride.singleLanguage) {
+        const defaultLanguage: CountryEnvironmentLanguageModel =
+          this.envOverride.defaultLanguage;
+
+        const secondaryLanguage = this.envOverride.languages.find(
+          (lang) => !lang.defaultLanguage,
+        );
+
+        if (!translations[defaultLanguage.languageCode]) {
+          translations[defaultLanguage.languageCode] = {
+            name: up.name,
+          };
+        }
+
+        if (
+          secondaryLanguage &&
+          !translations[secondaryLanguage.languageCode]
+        ) {
+          translations[secondaryLanguage.languageCode] = {
+            name: up.name,
+          };
+        }
+      }
+
+      const categoryPayload: CategoryV3Payload = {
         groups: ObjectUtils.isNil(parentId) ? up.groups : undefined,
         name: up.name,
         enabled: true,
@@ -325,14 +466,29 @@ export class BulkCreateCategoriesComponent implements OnInit, OnDestroy {
         storeCategoryId: ObjectUtils.isNil(up.storeCategoryId)
           ? undefined
           : `${up.storeCategoryId}${suffixValue}`,
-        translations: up.translations,
+        translations: translations,
         parentId: parentId || undefined,
       };
 
-      result.push(category);
+      if (categoryPayload.storeCategoryId) {
+        const existingCat = flatCategories.find(
+          (fc) => fc.storeCategoryId === categoryPayload.storeCategoryId,
+        );
+        if (existingCat) {
+          existingCategories.push({
+            id: existingCat.id,
+            payload: categoryPayload,
+          });
+        } else {
+          newCats.push(categoryPayload);
+        }
+      }
     }
 
-    return result;
+    return {
+      existingPayloads: existingCategories,
+      newPayloads: newCats,
+    };
   }
 
   private toUserPayload(csvData: string): UserPayload[] {
@@ -538,8 +694,8 @@ export class BulkCreateCategoriesComponent implements OnInit, OnDestroy {
     }
 
     const translation =
-      csvRow[BulkCreateCategoriesCsvHeaders.NAME_TRANSLATION]?.trim();
-    if (translation && !this.envOverride.singleLanguage) {
+      csvRow[BulkCreateCategoriesCsvHeaders.NAME_TRANSLATION]?.trim() || name;
+    if (!this.envOverride.singleLanguage) {
       const defaultLanguage: CountryEnvironmentLanguageModel =
         this.envOverride.defaultLanguage;
 

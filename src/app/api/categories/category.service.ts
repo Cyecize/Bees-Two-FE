@@ -5,12 +5,13 @@ import {
   FieldErrorWrapper,
   WrappedResponse,
 } from '../../shared/util/field-error-wrapper';
-import { CategoryV3Query } from './category-v3.query';
+import { CategoryV3Query, CategoryV3QueryImpl } from './category-v3.query';
 import { CategoryV3 } from './category-v3';
 import { CategoryV3Payload } from './category-v3.payload';
 import { CreatedCategory } from './models/created-category';
 import { ItemSortOrderPair } from './item-assign/dto/category-item-group';
 import { CategoryItem } from './models/category-item';
+import { CategoryWithParent } from './category-with-parent';
 
 @Injectable({ providedIn: 'root' })
 export class CategoryService {
@@ -23,6 +24,43 @@ export class CategoryService {
     return await new FieldErrorWrapper(() =>
       this.repository.searchCategoriesV3(query, env?.id),
     ).execute();
+  }
+
+  public async getFlatCategories(
+    env: CountryEnvironmentModel,
+  ): Promise<CategoryWithParent[]> {
+    const query = new CategoryV3QueryImpl();
+    query.storeId = env.storeId;
+
+    const resp = await this.searchCategoriesV3(query, env);
+
+    if (!resp.isSuccess) {
+      console.log(resp);
+      throw new Error('Error while fetching flat categories!');
+    }
+
+    const flatCats: CategoryWithParent[] = [];
+
+    const loopCategories = (
+      cats: CategoryV3[],
+      parent?: CategoryWithParent,
+    ): void => {
+      for (const cat of cats) {
+        const catWithParent: CategoryWithParent = {
+          ...cat,
+          parent: parent ? parent : null,
+        };
+        flatCats.push(catWithParent);
+
+        if (cat.categories?.length) {
+          loopCategories(cat.categories, catWithParent);
+        }
+      }
+    };
+
+    loopCategories(resp.response.response);
+
+    return flatCats;
   }
 
   public async patchV3(

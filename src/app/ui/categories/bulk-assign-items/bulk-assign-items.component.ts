@@ -365,43 +365,13 @@ export class BulkAssignItemsComponent implements OnInit, OnDestroy {
 
   @ShowLoader()
   private async getFlatCategories(): Promise<CategoryWithParent[]> {
-    const query = new CategoryV3QueryImpl();
-    query.storeId = this.envOverride.storeId;
-
-    const resp = await this.categoryService.searchCategoriesV3(
-      query,
-      this.envOverride,
-    );
-
-    if (!resp.isSuccess) {
-      console.log(resp);
-      this.failWith(
+    try {
+      return await this.categoryService.getFlatCategories(this.envOverride);
+    } catch (err) {
+      return this.failWith(
         'Error while fetching categories (check the console), aborting execution!',
-      );
+      )!;
     }
-
-    const flatCats: CategoryWithParent[] = [];
-
-    const loopCategories = (
-      cats: CategoryV3[],
-      parent?: CategoryWithParent,
-    ): void => {
-      for (const cat of cats) {
-        const catWithParent: CategoryWithParent = {
-          ...cat,
-          parent: parent ? parent : null,
-        };
-        flatCats.push(catWithParent);
-
-        if (cat.categories?.length) {
-          loopCategories(cat.categories, catWithParent);
-        }
-      }
-    };
-
-    loopCategories(resp.response.response);
-
-    return flatCats;
   }
 }
 
