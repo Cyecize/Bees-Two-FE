@@ -1,0 +1,28 @@
+<div>
+  <form [formGroup]="form">
+    <div class="mt-2">
+      <div class="d-flex">
+        <app-input
+          placeholder="Vendor Account ID"
+          formControlName="vendorAccountId"></app-input>
+        <button
+          (click)="pickAccount()"
+          class="ms-1 btn btn-sm btn-outline-warning">Pick From Account
+        </button>
+      </div>
+    </div>
+
+    <div class="mt-2">
+      <app-input
+        placeholder="Price List ID"
+        formControlName="priceListId"></app-input>
+    </div>
+
+    <div class="mt-2 text-end">
+      <button
+        [disabled]="!form.valid"
+        (click)="onFormSubmit()"
+        class="btn btn-outline-success">Proceed</button>
+    </div>
+  </form>
+</div>

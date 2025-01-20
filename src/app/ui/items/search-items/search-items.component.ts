@@ -6,7 +6,7 @@ import { NgForOf, NgIf } from '@angular/common';
 import { TooltipSpanComponent } from '../../../shared/components/tooltip-span/tooltip-span.component';
 import { FormsModule } from '@angular/forms';
 import { CountryEnvironmentModel } from '../../../api/env/country-environment.model';
-import { Subscription } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 import { WrappedResponse } from '../../../shared/util/field-error-wrapper';
 import { DialogService } from '../../../shared/dialog/dialog.service';
 import { EnvOverrideService } from '../../../api/env/env-override.service';
@@ -22,6 +22,16 @@ import { ObjectUtils } from '../../../shared/util/object-utils';
 import { ShowItemDetailsDialogComponent } from '../show-item-details-dialog/show-item-details-dialog.component';
 import { ShowItemDetailsDialogPayload } from '../show-item-details-dialog/show-item-details-dialog.payload';
 import { ShowLoader } from '../../../shared/loader/show.loader.decorator';
+import { ItemsPriceFetchDataCollectDialogResponse } from '../items-price-fetch-data-collect-dialog/items-price-fetch-data-collect-dialog.response';
+import { ItemsPriceFetchDataCollectDialog } from '../items-price-fetch-data-collect-dialog/items-price-fetch-data-collect-dialog.component';
+import { ItemsPriceFetchDataCollectionDialogPayload } from '../items-price-fetch-data-collect-dialog/items-price-fetch-data-collection-dialog.payload';
+import {
+  SingleItemPriceV3Query,
+  SingleItemPriceV3QueryImpl,
+} from '../../../api/price/single-item-price-v3.query';
+import { PriceService } from '../../../api/price/price.service';
+import { SingleItemPriceV3 } from '../../../api/price/single-item-price-v3';
+import { ArrayUtils } from '../../../shared/util/array-utils';
 
 @Component({
   selector: 'app-search-items',
@@ -51,6 +61,7 @@ export class SearchItemsComponent implements OnInit, OnDestroy {
     private dialogService: DialogService,
     private envOverrideService: EnvOverrideService,
     private itemService: ItemService,
+    private priceService: PriceService,
   ) {}
 
   ngOnInit(): void {
@@ -74,26 +85,38 @@ export class SearchItemsComponent implements OnInit, OnDestroy {
 
   @ShowLoader()
   async fetchAllPages(): Promise<void> {
-    const res: Item[] = [];
-    let page = -1;
-    let hasNext = true;
-
-    while (hasNext) {
-      page++;
-      this.query.page.page = page;
-      console.log(`fetching page ${page}`);
-
-      if (!(await this.fetchData())) {
-        alert('Could not load all pages, stopping on page ' + page + 1);
-        return;
-      }
-
-      res.push(...this.items);
-      hasNext = this.fullResponse.response?.response?.pagination?.hasNext;
-    }
-
+    const res = await this.doFetchAllPages();
     alert('Printing JSON in the console!');
     console.log(JSON.stringify(res));
+  }
+
+  private async doFetchAllPages(): Promise<Item[]> {
+    const oldSize = this.query.page.pageSize;
+
+    try {
+      this.query.page.pageSize = 200;
+      const res: Item[] = [];
+      let page = -1;
+      let hasNext = true;
+
+      while (hasNext) {
+        page++;
+        this.query.page.page = page;
+        console.log(`fetching page ${page}`);
+
+        if (!(await this.fetchData())) {
+          alert('Could not load all pages, stopping on page ' + page + 1);
+          return [];
+        }
+
+        res.push(...this.items);
+        hasNext = this.fullResponse.response?.response?.pagination?.hasNext;
+      }
+
+      return res;
+    } finally {
+      this.query.page.pageSize = oldSize;
+    }
   }
 
   async reloadFilters(): Promise<void> {
@@ -239,6 +262,81 @@ export class SearchItemsComponent implements OnInit, OnDestroy {
   removeAgingGroup(group: string): void {
     this.query.agingGroups.splice(this.query.agingGroups.indexOf(group), 1);
     this.reloadFilters();
+  }
+
+  async fetchPrices(): Promise<void> {
+    const data: ItemsPriceFetchDataCollectDialogResponse | undefined =
+      await firstValueFrom(
+        this.dialogService
+          .open(
+            ItemsPriceFetchDataCollectDialog,
+            '',
+            new ItemsPriceFetchDataCollectionDialogPayload(this.envOverride!),
+          )
+          .afterClosed(),
+      );
+
+    if (!data) {
+      return;
+    }
+
+    await this.doFetchPrices(data);
+  }
+
+  @ShowLoader()
+  private async doFetchPrices(
+    data: ItemsPriceFetchDataCollectDialogResponse,
+  ): Promise<void> {
+    const allItems = await this.doFetchAllPages();
+
+    if (!allItems.length) {
+      alert('There are no items!');
+      return;
+    }
+
+    const allPrices: SingleItemPriceV3[] = [];
+
+    let failed = 0;
+    let batchNum = 0;
+    const batchSize = 50;
+    for (const itemBatch of ArrayUtils.splitToBatches(allItems, batchSize)) {
+      const queries: SingleItemPriceV3Query[] = itemBatch.map(
+        (item: Item) =>
+          new SingleItemPriceV3QueryImpl(
+            item.itemPlatformId,
+            data.contractId,
+            data.priceListId,
+          ),
+      );
+
+      console.log(
+        `Querying prices for ${itemBatch.length} items of batch ${batchNum}`,
+      );
+      const resp = await this.priceService.searchPrices(
+        queries,
+        this.envOverride,
+      );
+
+      if (!resp.isSuccess) {
+        console.log(resp);
+        failed++;
+      } else {
+        allPrices.push(...resp.response.response);
+      }
+
+      batchNum++;
+    }
+
+    if (failed > 0) {
+      alert(
+        `Search finished with ${failed} failed batch requests, check the logs!`,
+      );
+    }
+
+    this.dialogService.openShowCodeDialog(
+      JSON.stringify(allPrices, null, 2),
+      `Available prices (${allPrices.length})`,
+    );
   }
 }
 

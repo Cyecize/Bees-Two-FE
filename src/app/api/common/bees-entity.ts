@@ -13,4 +13,5 @@ export enum BeesEntity {
   ORDERS = 'ORDERS',
   INVENTORY = 'INVENTORY',
   CATEGORIES = 'CATEGORIES',
+  PRICES = 'PRICES',
 }

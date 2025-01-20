@@ -41,4 +41,5 @@ export class Endpoints {
   public static readonly ORDER_SERVICE_ORDERS_V3 = '/v1/order-service/v3/orders';
   public static readonly CATEGORIES_V3 = '/api/categories/v3';
   public static readonly CATEGORY_V3 = '/api/categories/v3/:id';
+  public static readonly PRICE_SERVICE_V3 = '/price-service/v3';
 }
