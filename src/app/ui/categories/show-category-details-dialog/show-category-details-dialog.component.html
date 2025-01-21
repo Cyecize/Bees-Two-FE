@@ -99,7 +99,7 @@
           {{ JSON.stringify(payload.category.translations, null, 2) }}
         </td>
       </tr>
-      <tr *ngIf="payload.category.categories">
+      <tr *ngIf="payload.category.categories?.length">
         <td>Child categories</td>
         <td>
           <button
