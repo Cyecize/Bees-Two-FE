@@ -27,6 +27,7 @@ import {
   SelectOption,
   SelectOptionKey,
 } from '../../../shared/form-controls/select/select.option';
+import { DialogService } from '../../../shared/dialog/dialog.service';
 
 interface AssortmentInclusionForm {
   deliveryCenterIds: FormArray<FormControl<string>>;
@@ -61,10 +62,15 @@ export class AssortmentInclusionFormComponent implements OnInit, OnDestroy {
   form!: FormGroup<AssortmentInclusionForm>;
   deliveryMethodOptions: SelectOption[] = [];
 
+  selectedDeliveryMethodsForTemplate: BeesDeliveryMethod[] = [];
+
   @Output()
   formSubmitted = new EventEmitter<AssortmentInclusionFormResult>();
 
-  constructor(private envOverrideService: EnvOverrideService) {}
+  constructor(
+    private envOverrideService: EnvOverrideService,
+    private dialogService: DialogService,
+  ) {}
 
   ngOnInit(): void {
     this.envSub = this.envOverrideService.envOverride$.subscribe((value) => {
@@ -119,15 +125,37 @@ export class AssortmentInclusionFormComponent implements OnInit, OnDestroy {
     this.deliveryCenterIds.removeAt(index);
   }
 
-  addAssortment(val?: { vendorItemId: string; multiplier?: number }): void {
+  addDeliveryMethodTemplate(method: BeesDeliveryMethod): void {
+    if (
+      !ObjectUtils.isNil(method) &&
+      !this.selectedDeliveryMethodsForTemplate.includes(method)
+    ) {
+      this.selectedDeliveryMethodsForTemplate.push(method);
+    }
+  }
+
+  removeDeliveryMethodTemplate(ind: number): void {
+    this.selectedDeliveryMethodsForTemplate.splice(ind, 1);
+  }
+
+  addAssortment(val?: {
+    vendorItemId: string;
+    multiplier?: number;
+    rank?: number;
+    deliveryMethods: BeesDeliveryMethod[];
+  }): void {
     this.assortments.push(
       new FormGroup({
         quantityMultiplier: new FormControl<number | null>(
           val?.multiplier || null,
         ),
-        rank: new FormControl<number | null>(null),
+        rank: new FormControl<number | null>(val?.rank || null),
         vendorItemId: new FormControl(val?.vendorItemId, Validators.required),
-        deliveryMethods: new FormArray([]),
+        deliveryMethods: new FormArray(
+          val?.deliveryMethods.map(
+            (dm) => new FormControl(dm, Validators.required),
+          ) || [],
+        ),
       }),
     );
   }
@@ -146,6 +174,16 @@ export class AssortmentInclusionFormComponent implements OnInit, OnDestroy {
     this.getDeliveryMethods(assortmentIndex).removeAt(methodIndex);
   }
 
+  pickDeliveryCenterId(ind: number): void {
+    this.dialogService
+      .openBeesAccountPicker(this.envOverride!)
+      .subscribe((acc) => {
+        if (acc) {
+          this.deliveryCenterIds.at(ind).patchValue(acc.deliveryCenterId);
+        }
+      });
+  }
+
   async onFormSubmit(): Promise<void> {
     if (this.form.valid) {
       this.formSubmitted.emit({
@@ -155,7 +193,11 @@ export class AssortmentInclusionFormComponent implements OnInit, OnDestroy {
     }
   }
 
-  bulkAddAssortments(data: any, qtyMultiplier?: number): void {
+  bulkAddAssortments(
+    data: any,
+    qtyMultiplier: number | undefined,
+    rank: number | undefined,
+  ): void {
     if (ObjectUtils.isNil(data) || !data.trim()) {
       alert('Invalid data, must be comma separated vendor item ids!');
       return;
@@ -168,6 +210,8 @@ export class AssortmentInclusionFormComponent implements OnInit, OnDestroy {
         this.addAssortment({
           vendorItemId: val,
           multiplier: qtyMultiplier,
+          rank: rank,
+          deliveryMethods: this.selectedDeliveryMethodsForTemplate,
         });
       });
   }

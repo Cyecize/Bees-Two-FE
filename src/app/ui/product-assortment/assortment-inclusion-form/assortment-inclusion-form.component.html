@@ -10,17 +10,50 @@
     <button (click)="addDeliveryCenterId()" class="btn btn-sm btn-outline-dark">
       Add DDC
     </button>
-    <div *ngFor="let ddc of deliveryCenterIds.controls; let ddcId = index"
+    <div *ngFor="let ddc of deliveryCenterIds.controls; let ddcInd = index"
          class="ms-4">
       <div class="m-1 mt-3">
-        <app-input placeholder="DDC" [formControlName]="ddcId"></app-input>
-        (<strong style="cursor:pointer;" (click)="removeDeliveryCenterId(ddcId)">Remove</strong>)
+        <div class="d-flex">
+          <app-input placeholder="DDC" [formControlName]="ddcInd"></app-input>
+          <button
+            (click)="pickDeliveryCenterId(ddcInd)"
+            class="ms-1 btn btn-sm btn-outline-warning">Pick From Account
+          </button>
+        </div>
+        (<strong style="cursor:pointer;" (click)="removeDeliveryCenterId(ddcInd)">Remove</strong>)
       </div>
     </div>
   </div>
 
+  <hr>
   <h5>Assortments</h5>
-  <div formArrayName="assortments">
+  <div class="mt-3">
+    <app-input type="number" #qtyMultiplier placeholder="Quantity Multiplier"></app-input>
+  </div>
+  <div class="mt-3">
+    <app-input type="number" placeholder="Rank" #rank></app-input>
+  </div>
+  <div class="mt-2">
+    <app-select
+      placeholder="Choose a delivery method"
+      [options]="deliveryMethodOptions"
+      (onChange)="addDeliveryMethodTemplate($event)"></app-select>
+    <div *ngFor="let deliveryMethod of selectedDeliveryMethodsForTemplate let j = index"
+         class="d-flex justify-content-between">
+      <span>{{ deliveryMethod }}</span>
+      <span (click)="removeDeliveryMethodTemplate(j)"><i class="fa-solid fa-x"></i></span>
+    </div>
+  </div>
+  <div class="mt-2">
+    <app-input
+      (onChangeEnd)="bulkAddAssortments($event, qtyMultiplier.value, rank.value)"
+      placeholder="Add comma separated vendor item IDs"></app-input>
+  </div>
+
+  <hr>
+  <h6>Assortment forms</h6>
+  <div class="text-end"><i class="fa fa-plus" (click)="addAssortment()"></i></div>
+  <div formArrayName="assortments" class="assortments-container">
     <div *ngFor="let assortment of assortments.controls; let i = index" [formGroupName]="i">
       <h6>Assortment {{ i + 1 }}</h6>
 
@@ -51,23 +84,6 @@
         type="button"
         class="btn btn-sm btn-outline-danger"
         (click)="removeAssortment(i)">Remove Assortment</button>
-    </div>
-
-    <button class="btn btn-sm btn-outline-dark mt-2" (click)="addAssortment()">
-      Add Assortment
-    </button>
-    <hr>
-    <div>
-      <strong>OR</strong>
-      <br>
-      <div class="mt-3">
-        <app-input type="number" #qtyMultiplier placeholder="Quantity Multiplier"></app-input>
-      </div>
-      <div class="mt-2">
-        <app-input
-          (onChangeEnd)="bulkAddAssortments($event, qtyMultiplier.value)"
-          placeholder="Add comma separated vendor item IDs"></app-input>
-      </div>
     </div>
   </div>
 

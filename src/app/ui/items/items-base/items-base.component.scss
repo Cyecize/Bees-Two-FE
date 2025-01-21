@@ -6,6 +6,10 @@
 /* sidebar */
 .sidebar-section {
 
+  @media screen and (min-width: $screen-md) {
+    max-height: 90vh;
+    overflow-y: auto;
+  }
 }
 
 .sidebar-background {

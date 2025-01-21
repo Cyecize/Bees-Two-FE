@@ -40,7 +40,7 @@ export class AppRoutingPath {
   public static readonly CATEGORY_UPLOAD_IMAGES = new RouteConfig('upload-images', AppRoutingPath.CATEGORIES);
   public static readonly CATEGORY_BULK_CREATE = new RouteConfig('bulk-create', AppRoutingPath.CATEGORIES);
   public static readonly CATEGORY_BULK_ASSIGN = new RouteConfig('bulk-assign', AppRoutingPath.CATEGORIES);
-  public static readonly ASSORTMENT = new RouteConfig('assortment', null);
+  public static readonly ASSORTMENT = new RouteConfig('assortment', AppRoutingPath.ITEMS);
   public static readonly ASSORTMENT_INCLUSION_V4 = new RouteConfig('inclusion-v4', AppRoutingPath.ASSORTMENT);
   public static readonly ASSORTMENT_UNAVAILABLE_V3 = new RouteConfig('unavailable-v4', AppRoutingPath.ASSORTMENT);
   public static readonly ASSORTMENT_SEARCH_BY_DDC_V2 = new RouteConfig('search-ddc-v2', AppRoutingPath.ASSORTMENT);
