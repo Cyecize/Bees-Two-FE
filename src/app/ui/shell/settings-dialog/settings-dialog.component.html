@@ -1,0 +1,16 @@
+<div class="setting-dialog">
+  <div *ngIf="!payload">
+    <p class="alert alert-danger">There is no selected environment!</p>
+    <div class="text-end">
+      <button class="btn btn-dark" (click)="close(undefined)">Close</button>
+    </div>
+  </div>
+
+  <div *ngIf="payload">
+    <div>
+      <button (click)="openTemporaryTokenDialog()" class="btn btn-outline-secondary">Temp Token</button>
+      <span *ngIf="tokenExists" class="ms-1">Provided</span>
+    </div>
+  </div>
+
+</div>

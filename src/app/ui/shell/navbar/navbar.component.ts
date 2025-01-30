@@ -9,6 +9,7 @@ import { UserService } from '../../../api/user/user.service';
 import { User } from '../../../api/user/user';
 import { RouterLink } from '@angular/router';
 import { AppRoutingPath } from '../../../app-routing.path';
+import { SettingsDialogComponent } from '../settings-dialog/settings-dialog.component';
 
 @Component({
   selector: 'app-navbar',
@@ -52,7 +53,11 @@ export class NavbarComponent implements OnInit {
     this.dialogService.openAccountPicker(this.selectedEnv, true);
   }
 
-  openTemporaryTokenDialog(): void {
-    this.dialogService.openBeesTokenOverrideDialog(this.selectedEnv);
+  openSettingsDialog(): void {
+    this.dialogService.open(
+      SettingsDialogComponent,
+      'Settings',
+      this.selectedEnv,
+    );
   }
 }

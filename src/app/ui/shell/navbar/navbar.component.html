@@ -46,12 +46,16 @@
         </li>
         <li class="nav-item">
           <div class="nav-link p-1">
-            <button (click)="openTemporaryTokenDialog()" class="btn btn-outline-secondary">Temp Token</button>
+            <button (click)="openSettingsDialog()" class="btn btn-outline-secondary">
+              <i class="fa-solid fa-gear"></i>
+            </button>
           </div>
         </li>
         <li class="nav-item">
           <div class="nav-link p-1">
-            <button (click)="openAccountPicker()" class="btn btn-outline-warning">Saved Accounts</button>
+            <span (click)="openAccountPicker()" class="btn btn-outline-warning">
+              <i class="fa-solid fa-star"></i>
+            </span>
           </div>
         </li>
         <li *ngIf="selectedEnv" class="nav-item">
@@ -63,7 +67,9 @@
         </li>
         <li class="nav-item">
           <div class="nav-link p-1">
-            <button (click)="selectEnv()" class="btn btn-outline-success">Select Environment</button>
+            <button (click)="selectEnv()" class="btn btn-outline-success">
+              <i class="fa-solid fa-repeat"></i>
+            </button>
           </div>
         </li>
       </ul>

@@ -28,6 +28,12 @@ export abstract class DialogContentBaseComponent<TData> {
     );
   }
 
+  gearIcon(): Observable<string> {
+    return new Observable<string>((subscriber) =>
+      subscriber.next('fa-solid fa-gear'),
+    );
+  }
+
   warningTriangleIcon(): Observable<string> {
     return new Observable<string>((subscriber) =>
       subscriber.next('fa fa-exclamation-triangle'),
