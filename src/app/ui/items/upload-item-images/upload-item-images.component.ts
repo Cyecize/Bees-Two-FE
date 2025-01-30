@@ -191,7 +191,7 @@ export class UploadItemImagesComponent implements OnInit, OnDestroy {
 
         if (!wrappedResponse.isSuccess) {
           console.log(wrappedResponse);
-          alert('Could not load all pages, stopping on page' + page + 1);
+          alert('Could not load all pages, stopping on page' + (page + 1));
           this.dialogService.openRequestResultDialog(wrappedResponse);
           throw new Error('Aborting process!');
         }

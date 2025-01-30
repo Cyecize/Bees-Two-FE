@@ -105,7 +105,7 @@ export class SearchItemsComponent implements OnInit, OnDestroy {
         console.log(`fetching page ${page}`);
 
         if (!(await this.fetchData())) {
-          alert('Could not load all pages, stopping on page ' + page + 1);
+          alert('Could not load all pages, stopping on page ' + (page + 1));
           return [];
         }
 
