@@ -11,6 +11,10 @@
       <button (click)="openTemporaryTokenDialog()" class="btn btn-outline-secondary">Temp Token</button>
       <span *ngIf="tokenExists" class="ms-1">Provided</span>
     </div>
+    <hr>
+    <div>
+      <app-checkbox [(ngModel)]="saveNextRequest"
+                    (onChange)="onSaveNextRequestClick($event)" label="Save Next Request"></app-checkbox>
+    </div>
   </div>
-
 </div>

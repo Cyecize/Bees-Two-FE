@@ -14,4 +14,6 @@ export interface ProxyRequestPayload {
   headers?: BeesParamPayload[];
   data?: any;
   formData?: BeesFormDataPayload;
+  saveInHistory?: boolean;
+  templateId?: number;
 }

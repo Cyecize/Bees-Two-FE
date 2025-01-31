@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ProxyRequestPayload } from './proxy-request.payload';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { ProxyRepository } from './proxy.repository';
 import { CountryEnvironmentService } from '../env/country-environment.service';
 import { RequestMethod } from '../common/request-method';
@@ -11,6 +11,10 @@ import { BeesResponsePerLanguage } from './bees-response-per-language';
 
 @Injectable({ providedIn: 'root' })
 export class ProxyService {
+  private readonly saveNextRequest: BehaviorSubject<boolean> =
+    new BehaviorSubject<boolean>(false);
+  public readonly saveNextRequest$ = this.saveNextRequest.asObservable();
+
   constructor(
     private repository: ProxyRepository,
     private countryEnvService: CountryEnvironmentService,
@@ -19,6 +23,7 @@ export class ProxyService {
   public makeRequest<TResponse>(
     payload: ProxyRequestPayload,
   ): Observable<BeesResponse<TResponse>> {
+    this.configureSaveRequest(payload);
     if (!payload.targetEnv) {
       const currentEnv = this.countryEnvService.getCurrentEnv();
       if (!currentEnv) {
@@ -39,6 +44,7 @@ export class ProxyService {
     payload: ProxyRequestPayload,
     transformer: BeesMultilanguageTransformer<TResponse>,
   ): Observable<BeesResponse<TResponse>> {
+    this.configureSaveRequest(payload);
     if (!payload.targetEnv) {
       const currentEnv = this.countryEnvService.getCurrentEnv();
       if (!currentEnv) {
@@ -59,5 +65,17 @@ export class ProxyService {
         return transformer.transform(responses);
       }),
     );
+  }
+
+  public setSaveNextRequest(val: boolean): void {
+    this.saveNextRequest.next(val);
+  }
+
+  private configureSaveRequest(payload: ProxyRequestPayload): void {
+    const save = this.saveNextRequest.value;
+    if (save) {
+      payload.saveInHistory = true;
+      this.setSaveNextRequest(false);
+    }
   }
 }
