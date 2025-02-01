@@ -16,6 +16,11 @@ export class Endpoints {
   public static readonly ACCOUNTS_SEARCH = '/accounts/search';
   public static readonly ACCOUNTS = '/accounts';
   public static readonly ACCOUNT = '/accounts/:id';
+  public static readonly REQUEST_TEMPLATES_SEARCH = '/request-templates/search';
+  public static readonly REQUEST_TEMPLATES = '/request-templates';
+  public static readonly REQUEST_TEMPLATE = '/request-templates/:id';
+  public static readonly REQUEST_HISTORY_SEARCH = '/request-history/search';
+  public static readonly REQUEST_HISTORY = '/request-history/:id';
 
   // Bees endpoints
   public static readonly DATA_INGESTION = '/api/v1/data-ingestion-relay-service/v1';
