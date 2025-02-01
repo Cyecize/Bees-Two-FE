@@ -9,7 +9,7 @@ import { CategoryV3Query } from './category-v3.query';
 import { CategoryV3 } from './category-v3';
 import { RouteUtils } from '../../shared/routing/route-utils';
 import { CategoryV3Payload } from './category-v3.payload';
-import { BeesParamPayloadImpl } from '../proxy/bees-param.payload';
+import { BeesParamImpl } from '../common/bees-param';
 import { CreatedCategory } from './models/created-category';
 
 @Injectable({ providedIn: 'root' })
@@ -54,7 +54,7 @@ export class CategoryRepository {
       entity: BeesEntity.CATEGORIES,
       method: RequestMethod.POST,
       targetEnv: envId,
-      headers: [new BeesParamPayloadImpl('storeId', storeId)],
+      headers: [new BeesParamImpl('storeId', storeId)],
       data: payload,
     });
   }

@@ -1,13 +1,10 @@
 import { DEFAULT_PAGE_SIZE } from '../general.constants';
-import {
-  BeesParamPayload,
-  BeesParamPayloadImpl,
-} from '../../api/proxy/bees-param.payload';
+import { BeesParam, BeesParamImpl } from '../../api/common/bees-param';
 
 export interface PageRequest {
   page: number;
   pageSize: number;
-  toBeesParams(): BeesParamPayload[];
+  toBeesParams(): BeesParam[];
 }
 
 export class PageRequestImpl implements PageRequest {
@@ -19,28 +16,28 @@ export class PageRequestImpl implements PageRequest {
     this.pageSize = pageSize;
   }
 
-  toBeesParams(): BeesParamPayload[] {
+  toBeesParams(): BeesParam[] {
     return [
-      new BeesParamPayloadImpl('page', this.page),
-      new BeesParamPayloadImpl('pageSize', this.pageSize),
+      new BeesParamImpl('page', this.page),
+      new BeesParamImpl('pageSize', this.pageSize),
     ];
   }
 }
 
 export class PageRequestImplV2 extends PageRequestImpl {
-  override toBeesParams(): BeesParamPayload[] {
+  override toBeesParams(): BeesParam[] {
     return [
-      new BeesParamPayloadImpl('page', this.page),
-      new BeesParamPayloadImpl('size', this.pageSize),
+      new BeesParamImpl('page', this.page),
+      new BeesParamImpl('size', this.pageSize),
     ];
   }
 }
 
 export class PageRequestImplV3 extends PageRequestImpl {
-  override toBeesParams(): BeesParamPayload[] {
+  override toBeesParams(): BeesParam[] {
     return [
-      new BeesParamPayloadImpl('page', this.page),
-      new BeesParamPayloadImpl('limit', this.pageSize),
+      new BeesParamImpl('page', this.page),
+      new BeesParamImpl('limit', this.pageSize),
     ];
   }
 }

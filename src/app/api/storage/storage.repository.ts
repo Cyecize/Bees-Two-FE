@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ProxyService } from '../proxy/proxy.service';
-import { BeesParamPayloadImpl } from '../proxy/bees-param.payload';
+import { BeesParamImpl } from '../common/bees-param';
 import { BeesMultipartValuePayload } from '../proxy/bees-multipart-value.payload';
 import { Observable } from 'rxjs';
 import { BeesResponse } from '../proxy/bees-response';
@@ -27,13 +27,13 @@ export class StorageRepository {
       method: RequestMethod.POST,
       targetEnv: env.id,
       headers: [
-        new BeesParamPayloadImpl('Accept', 'application/json'),
-        new BeesParamPayloadImpl(
+        new BeesParamImpl('Accept', 'application/json'),
+        new BeesParamImpl(
           'purpose',
           `${env.countryCode}-images-vendor-${env.vendorId}`,
         ),
-        new BeesParamPayloadImpl('linkExpirationTime', -1),
-        new BeesParamPayloadImpl('title', multipartFile.fileName),
+        new BeesParamImpl('linkExpirationTime', -1),
+        new BeesParamImpl('title', multipartFile.fileName),
       ],
       formData: new MultipartBeesFormDataPayload([
         new BeesMultipartFormParamPayloadImpl('file', multipartFile),
@@ -50,7 +50,7 @@ export class StorageRepository {
       entity: BeesEntity.CMS_STORAGE,
       method: RequestMethod.POST,
       targetEnv: envId,
-      headers: [new BeesParamPayloadImpl('Accept', 'application/json')],
+      headers: [new BeesParamImpl('Accept', 'application/json')],
       formData: new MultipartBeesFormDataPayload([
         new BeesMultipartFormParamPayloadImpl('File', multipartFile),
       ]),

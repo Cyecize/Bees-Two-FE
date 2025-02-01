@@ -1,28 +1,25 @@
-import {
-  BeesParamPayload,
-  BeesParamPayloadImpl,
-} from '../../proxy/bees-param.payload';
+import { BeesParam, BeesParamImpl } from '../../common/bees-param';
 
 export interface SegmentationGroupQuery {
   purposes: string[];
   names: string[];
 
-  toBeesParams(): BeesParamPayload[];
+  toBeesParams(): BeesParam[];
 }
 
 export class SegmentationGroupQueryImpl implements SegmentationGroupQuery {
   purposes: string[] = [];
   names: string[] = [];
 
-  toBeesParams(): BeesParamPayload[] {
-    const res: BeesParamPayload[] = [];
+  toBeesParams(): BeesParam[] {
+    const res: BeesParam[] = [];
 
     if (this.purposes.length) {
-      res.push(new BeesParamPayloadImpl('purposes', this.purposes.join(',')));
+      res.push(new BeesParamImpl('purposes', this.purposes.join(',')));
     }
 
     if (this.names.length) {
-      res.push(new BeesParamPayloadImpl('names', this.names.join(',')));
+      res.push(new BeesParamImpl('names', this.names.join(',')));
     }
 
     return res;

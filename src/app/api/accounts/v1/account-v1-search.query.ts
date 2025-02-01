@@ -2,10 +2,7 @@ import {
   PageRequest,
   PageRequestImpl,
 } from '../../../shared/util/page-request';
-import {
-  BeesParamPayload,
-  BeesParamPayloadImpl,
-} from '../../proxy/bees-param.payload';
+import { BeesParam, BeesParamImpl } from '../../common/bees-param';
 
 export interface AccountV1SearchQuery {
   accountId?: string;
@@ -15,7 +12,7 @@ export interface AccountV1SearchQuery {
   vendorId?: string;
   page: PageRequest;
 
-  toBeesQueryParams(): BeesParamPayload[];
+  toBeesQueryParams(): BeesParam[];
 }
 
 export class AccountV1SearchQueryImpl implements AccountV1SearchQuery {
@@ -26,8 +23,8 @@ export class AccountV1SearchQueryImpl implements AccountV1SearchQuery {
   vendorId?: string;
   page: PageRequest = new PageRequestImpl();
 
-  toBeesQueryParams(): BeesParamPayload[] {
-    const result: BeesParamPayload[] = [];
+  toBeesQueryParams(): BeesParam[] {
+    const result: BeesParam[] = [];
 
     result.push(...this.page.toBeesParams());
 
@@ -38,7 +35,7 @@ export class AccountV1SearchQueryImpl implements AccountV1SearchQuery {
 
       if (typeof val === 'string' && val.trim()) {
         // @ts-ignore
-        result.push(new BeesParamPayloadImpl(fieldName, this[fieldName]));
+        result.push(new BeesParamImpl(fieldName, this[fieldName]));
       }
     });
 

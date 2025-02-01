@@ -1,9 +1,9 @@
-export interface BeesParamPayload {
+export interface BeesParam {
   name: string;
   value?: number | string | boolean;
 }
 
-export class BeesParamPayloadImpl implements BeesParamPayload {
+export class BeesParamImpl implements BeesParam {
   name: string;
   value?: number | string | boolean;
 

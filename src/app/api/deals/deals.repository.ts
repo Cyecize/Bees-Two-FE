@@ -8,7 +8,7 @@ import { ProxyService } from '../proxy/proxy.service';
 import { DealsSearchQuery } from './payloads/deals-search.query';
 import { DealsSearchResponse } from './deals-search.response';
 import { DeleteDealsPayload } from './payloads/delete-deals.payload';
-import { BeesParamPayloadImpl } from '../proxy/bees-param.payload';
+import { BeesParamImpl } from '../common/bees-param';
 import { CountryEnvironmentModel } from '../env/country-environment.model';
 import { CreateDealsPayload } from './payloads/create-deals.payload';
 
@@ -41,8 +41,8 @@ export class DealsRepository {
       targetEnv: env.id,
       data: payload,
       headers: [
-        new BeesParamPayloadImpl('X-Timestamp', new Date().getTime()),
-        new BeesParamPayloadImpl('Timezone', env.timezone),
+        new BeesParamImpl('X-Timestamp', new Date().getTime()),
+        new BeesParamImpl('Timezone', env.timezone),
       ],
     });
   }
@@ -58,8 +58,8 @@ export class DealsRepository {
       targetEnv: env.id,
       data: payload,
       headers: [
-        new BeesParamPayloadImpl('X-Timestamp', new Date().getTime()),
-        new BeesParamPayloadImpl('Timezone', env.timezone),
+        new BeesParamImpl('X-Timestamp', new Date().getTime()),
+        new BeesParamImpl('Timezone', env.timezone),
       ],
     });
   }

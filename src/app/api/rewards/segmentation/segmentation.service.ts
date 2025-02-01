@@ -13,10 +13,7 @@ import {
 } from '../../../shared/util/field-error-wrapper';
 import { SegmentationGroupByAccountModel } from './segmentation-group-by-account.model';
 import { SegmentationGroupPayload } from './segmentation-group.payload';
-import {
-  BeesParamPayload,
-  BeesParamPayloadImpl,
-} from '../../proxy/bees-param.payload';
+import { BeesParam, BeesParamImpl } from '../../common/bees-param';
 import { BeesMultipartFile } from '../../proxy/bees-multipart-value.payload';
 
 @Injectable({ providedIn: 'root' })
@@ -89,21 +86,21 @@ export class SegmentationService {
     authTokenOverride: string,
     env?: CountryEnvironmentModel,
   ): Promise<WrappedResponse<BeesResponse<any>>> {
-    const headers: BeesParamPayload[] = [];
-    headers.push(new BeesParamPayloadImpl('groupName', payload.groupName));
+    const headers: BeesParam[] = [];
+    headers.push(new BeesParamImpl('groupName', payload.groupName));
 
     if (payload.groupId) {
-      headers.push(new BeesParamPayloadImpl('groupId', payload.groupId));
+      headers.push(new BeesParamImpl('groupId', payload.groupId));
     }
 
     if (payload.groupDescription) {
       headers.push(
-        new BeesParamPayloadImpl('groupDescription', payload.groupDescription),
+        new BeesParamImpl('groupDescription', payload.groupDescription),
       );
     }
 
     if (payload.purpose) {
-      headers.push(new BeesParamPayloadImpl('purpose', payload.purpose));
+      headers.push(new BeesParamImpl('purpose', payload.purpose));
     }
 
     const csvHeaders = 'POC_ID,POINTS,QUANTITY';

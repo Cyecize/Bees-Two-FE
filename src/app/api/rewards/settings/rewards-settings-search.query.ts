@@ -5,17 +5,14 @@ import {
   PageRequest,
   PageRequestImpl,
 } from '../../../shared/util/page-request';
-import {
-  BeesParamPayload,
-  BeesParamPayloadImpl,
-} from '../../proxy/bees-param.payload';
+import { BeesParam, BeesParamImpl } from '../../common/bees-param';
 
 export interface RewardsSettingsSearchQuery {
   levels: RewardsSettingLevel[];
   page: PageRequest;
   tiers: RewardsTierLevel[];
   types: RewardsSettingType[];
-  toBeesParams(): BeesParamPayload[];
+  toBeesParams(): BeesParam[];
 }
 
 export class RewardsSettingsSearchQueryImpl
@@ -25,13 +22,13 @@ export class RewardsSettingsSearchQueryImpl
   page: PageRequest = new PageRequestImpl();
   tiers: RewardsTierLevel[] = [];
   types: RewardsSettingType[] = [];
-  toBeesParams(): BeesParamPayload[] {
-    const result: BeesParamPayload[] = [];
+  toBeesParams(): BeesParam[] {
+    const result: BeesParam[] = [];
 
-    result.push(new BeesParamPayloadImpl('levels', this.levels.join(',')));
+    result.push(new BeesParamImpl('levels', this.levels.join(',')));
     result.push(...this.page.toBeesParams());
-    result.push(new BeesParamPayloadImpl('tiers', this.tiers.join(',')));
-    result.push(new BeesParamPayloadImpl('types', this.types.join(',')));
+    result.push(new BeesParamImpl('tiers', this.tiers.join(',')));
+    result.push(new BeesParamImpl('types', this.types.join(',')));
 
     return result;
   }

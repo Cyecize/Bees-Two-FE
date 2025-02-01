@@ -1,6 +1,6 @@
 import { BeesEntity } from '../common/bees-entity';
 import { RequestMethod } from '../common/request-method';
-import { BeesParamPayload } from './bees-param.payload';
+import { BeesParam } from '../common/bees-param';
 import { BeesFormDataPayload } from './bees-form-data.payload';
 
 export interface ProxyRequestPayload {
@@ -10,8 +10,8 @@ export interface ProxyRequestPayload {
   endpoint: string;
   method?: RequestMethod;
   requestTraceId?: string;
-  queryParams?: BeesParamPayload[];
-  headers?: BeesParamPayload[];
+  queryParams?: BeesParam[];
+  headers?: BeesParam[];
   data?: any;
   formData?: BeesFormDataPayload;
   saveInHistory?: boolean;

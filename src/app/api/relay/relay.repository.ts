@@ -4,7 +4,7 @@ import { RelayPayload } from './relay.payload';
 import { Observable } from 'rxjs';
 import { Endpoints } from '../../shared/http/endpoints';
 import { RequestMethod } from '../common/request-method';
-import { BeesParamPayload } from '../proxy/bees-param.payload';
+import { BeesParam } from '../common/bees-param';
 import { BeesResponse } from '../proxy/bees-response';
 
 @Injectable({ providedIn: 'root' })
@@ -14,7 +14,7 @@ export class RelayRepository {
   public call<T>(
     method: RequestMethod,
     data: RelayPayload,
-    headers: BeesParamPayload[],
+    headers: BeesParam[],
     targetEnvId?: number,
   ): Observable<BeesResponse<T>> {
     return this.proxyService.makeRequest<T>({

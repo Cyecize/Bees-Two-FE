@@ -1,7 +1,4 @@
-import {
-  BeesParamPayload,
-  BeesParamPayloadImpl,
-} from '../proxy/bees-param.payload';
+import { BeesParam, BeesParamImpl } from '../common/bees-param';
 import { CategoryGroupType } from './category-group.type';
 
 export interface CategoryV3Query {
@@ -13,9 +10,9 @@ export interface CategoryV3Query {
   vendorIds: string[];
   groups: CategoryGroupType[];
 
-  toBeesQueryParams(): BeesParamPayload[];
+  toBeesQueryParams(): BeesParam[];
 
-  toBeesHeaderParams(): BeesParamPayload[];
+  toBeesHeaderParams(): BeesParam[];
 }
 
 export class CategoryV3QueryImpl implements CategoryV3Query {
@@ -27,8 +24,8 @@ export class CategoryV3QueryImpl implements CategoryV3Query {
   vendorIds: string[] = [];
   groups: CategoryGroupType[] = [];
 
-  toBeesQueryParams(): BeesParamPayload[] {
-    const result: BeesParamPayload[] = [];
+  toBeesQueryParams(): BeesParam[] {
+    const result: BeesParam[] = [];
 
     // Adds all non null string fields
     Object.keys(this)
@@ -44,22 +41,22 @@ export class CategoryV3QueryImpl implements CategoryV3Query {
         ) {
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
-          result.push(new BeesParamPayloadImpl(fieldName, this[fieldName]));
+          result.push(new BeesParamImpl(fieldName, this[fieldName]));
         }
 
         if (Array.isArray(val) && val.length > 0) {
-          result.push(new BeesParamPayloadImpl(fieldName, val.join(',')));
+          result.push(new BeesParamImpl(fieldName, val.join(',')));
         }
       });
 
     return result;
   }
 
-  toBeesHeaderParams(): BeesParamPayload[] {
+  toBeesHeaderParams(): BeesParam[] {
     if (!this.storeId?.trim()) {
       return [];
     }
 
-    return [new BeesParamPayloadImpl('storeId', this.storeId)];
+    return [new BeesParamImpl('storeId', this.storeId)];
   }
 }

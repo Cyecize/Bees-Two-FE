@@ -1,8 +1,5 @@
 import { PageRequest, PageRequestImpl } from '../../shared/util/page-request';
-import {
-  BeesParamPayload,
-  BeesParamPayloadImpl,
-} from '../proxy/bees-param.payload';
+import { BeesParam, BeesParamImpl } from '../common/bees-param';
 
 export interface ItemsSearchQuery {
   skus: string[];
@@ -19,7 +16,7 @@ export interface ItemsSearchQuery {
   page: PageRequest;
   vendorId?: string;
 
-  toBeesQueryParams(): BeesParamPayload[];
+  toBeesQueryParams(): BeesParam[];
 }
 
 export class ItemSearchQueryImpl implements ItemsSearchQuery {
@@ -37,8 +34,8 @@ export class ItemSearchQueryImpl implements ItemsSearchQuery {
   vendorId?: string;
   vendorItemIds: string[] = [];
 
-  toBeesQueryParams(): BeesParamPayload[] {
-    const result: BeesParamPayload[] = [];
+  toBeesQueryParams(): BeesParam[] {
+    const result: BeesParam[] = [];
 
     result.push(...this.page.toBeesParams());
 
@@ -51,11 +48,11 @@ export class ItemSearchQueryImpl implements ItemsSearchQuery {
       if ((typeof val === 'string' && val.trim()) || typeof val === 'boolean') {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        result.push(new BeesParamPayloadImpl(fieldName, this[fieldName]));
+        result.push(new BeesParamImpl(fieldName, this[fieldName]));
       }
 
       if (Array.isArray(val) && val.length > 0) {
-        result.push(new BeesParamPayloadImpl(fieldName, val.join(',')));
+        result.push(new BeesParamImpl(fieldName, val.join(',')));
       }
     });
 

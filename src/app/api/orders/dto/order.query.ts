@@ -6,10 +6,7 @@ import {
 import { OrderOrderbyType } from '../order.orderby.type';
 import { OrderStatusCondition } from '../order-status-condition';
 import { SortDirection } from '../../../shared/util/sort.query';
-import {
-  BeesParamPayload,
-  BeesParamPayloadImpl,
-} from '../../proxy/bees-param.payload';
+import { BeesParam, BeesParamImpl } from '../../common/bees-param';
 
 export interface OrderQuery {
   page: PageRequest; // page and limit
@@ -31,7 +28,7 @@ export interface OrderQuery {
   projection: string[];
   returnDeletedOrders?: boolean;
 
-  toBeesQueryParams(): BeesParamPayload[];
+  toBeesQueryParams(): BeesParam[];
 }
 
 export class OrderQueryImpl implements OrderQuery {
@@ -54,8 +51,8 @@ export class OrderQueryImpl implements OrderQuery {
   projection: string[] = [];
   returnDeletedOrders?: boolean;
 
-  public toBeesQueryParams(): BeesParamPayload[] {
-    const result: BeesParamPayload[] = [];
+  public toBeesQueryParams(): BeesParam[] {
+    const result: BeesParam[] = [];
 
     result.push(...this.page.toBeesParams());
 
@@ -68,11 +65,11 @@ export class OrderQueryImpl implements OrderQuery {
       if ((typeof val === 'string' && val.trim()) || typeof val === 'boolean') {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        result.push(new BeesParamPayloadImpl(fieldName, this[fieldName]));
+        result.push(new BeesParamImpl(fieldName, this[fieldName]));
       }
 
       if (Array.isArray(val) && val.length > 0) {
-        result.push(new BeesParamPayloadImpl(fieldName, val.join(',')));
+        result.push(new BeesParamImpl(fieldName, val.join(',')));
       }
     });
 

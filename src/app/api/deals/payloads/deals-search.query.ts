@@ -2,10 +2,7 @@ import {
   PageRequest,
   PageRequestImplV2,
 } from '../../../shared/util/page-request';
-import {
-  BeesParamPayload,
-  BeesParamPayloadImpl,
-} from '../../proxy/bees-param.payload';
+import { BeesParam, BeesParamImpl } from '../../common/bees-param';
 import { ObjectUtils } from '../../../shared/util/object-utils';
 import { DealOutputType } from '../enums/deal-output-type';
 
@@ -15,7 +12,7 @@ export interface DealsSearchQuery {
   ignoreStartDate?: boolean;
   ignoreEndDate?: boolean;
   body: DealsSearchQueryBody;
-  toBeesQueryParams(): BeesParamPayload[];
+  toBeesQueryParams(): BeesParam[];
 }
 
 export interface DealsSearchQueryBody {
@@ -73,25 +70,21 @@ export class DealsSearchQueryImpl implements DealsSearchQuery {
   ignoreStartDate?: boolean;
   ignoreEndDate?: boolean;
   body: DealsSearchQueryBody = new DealsSearchQueryBodyImpl();
-  toBeesQueryParams(): BeesParamPayload[] {
-    const result: BeesParamPayload[] = [];
+  toBeesQueryParams(): BeesParam[] {
+    const result: BeesParam[] = [];
 
     result.push(...this.page.toBeesParams());
 
     if (this.types.length > 0) {
-      result.push(new BeesParamPayloadImpl('types', this.types.join(',')));
+      result.push(new BeesParamImpl('types', this.types.join(',')));
     }
 
     if (!ObjectUtils.isNil(this.ignoreStartDate)) {
-      result.push(
-        new BeesParamPayloadImpl('ignoreStartDate', this.ignoreStartDate),
-      );
+      result.push(new BeesParamImpl('ignoreStartDate', this.ignoreStartDate));
     }
 
     if (!ObjectUtils.isNil(this.ignoreEndDate)) {
-      result.push(
-        new BeesParamPayloadImpl('ignoreEndDate', this.ignoreEndDate),
-      );
+      result.push(new BeesParamImpl('ignoreEndDate', this.ignoreEndDate));
     }
 
     return result;

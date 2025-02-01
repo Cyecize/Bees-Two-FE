@@ -8,10 +8,7 @@ import { ChallengeMode } from './challenge-mode';
 import { ChallengeSort } from './challenge.sort';
 import { SortDirection } from '../../../shared/util/sort.query';
 import { ChallengeFilterType } from './challenge-filter-type';
-import {
-  BeesParamPayload,
-  BeesParamPayloadImpl,
-} from '../../proxy/bees-param.payload';
+import { BeesParam, BeesParamImpl } from '../../common/bees-param';
 import { ObjectUtils } from '../../../shared/util/object-utils';
 
 export interface ChallengesQuery {
@@ -32,7 +29,7 @@ export interface ChallengesQuery {
   groupIds: string[];
   isDtaas?: boolean;
 
-  toBeesQueryParams(): BeesParamPayload[];
+  toBeesQueryParams(): BeesParam[];
 }
 
 export class ChallengesQueryImpl implements ChallengesQuery {
@@ -53,16 +50,16 @@ export class ChallengesQueryImpl implements ChallengesQuery {
   groupIds: string[] = [];
   isDtaas?: boolean;
 
-  public toBeesQueryParams(): BeesParamPayload[] {
-    const res: BeesParamPayload[] = [];
+  public toBeesQueryParams(): BeesParam[] {
+    const res: BeesParam[] = [];
     res.push(...this.page.toBeesParams());
 
     if (!ObjectUtils.isNil(this.isDtaas)) {
-      res.push(new BeesParamPayloadImpl('isDtaas', this.isDtaas));
+      res.push(new BeesParamImpl('isDtaas', this.isDtaas));
     }
 
     if (!ObjectUtils.isNil(this.withoutFilters)) {
-      res.push(new BeesParamPayloadImpl('withoutFilters', this.withoutFilters));
+      res.push(new BeesParamImpl('withoutFilters', this.withoutFilters));
     }
 
     Object.keys(this).forEach((fieldName) => {
@@ -70,11 +67,11 @@ export class ChallengesQueryImpl implements ChallengesQuery {
       const val = this[fieldName];
 
       if (typeof val === 'string' && val.trim()) {
-        res.push(new BeesParamPayloadImpl(fieldName, val));
+        res.push(new BeesParamImpl(fieldName, val));
       }
 
       if (!ObjectUtils.isNil(val) && val instanceof Array && val.length > 0) {
-        res.push(new BeesParamPayloadImpl(fieldName, val.join(',')));
+        res.push(new BeesParamImpl(fieldName, val.join(',')));
       }
     });
 

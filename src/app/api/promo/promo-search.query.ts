@@ -1,9 +1,6 @@
 import { PageRequest, PageRequestImpl } from '../../shared/util/page-request';
 import { PromoType } from './promo-type';
-import {
-  BeesParamPayload,
-  BeesParamPayloadImpl,
-} from '../proxy/bees-param.payload';
+import { BeesParam, BeesParamImpl } from '../common/bees-param';
 import { ObjectUtils } from '../../shared/util/object-utils';
 
 export interface PromoSearchQuery {
@@ -12,7 +9,7 @@ export interface PromoSearchQuery {
   types: PromoType[];
   query?: string;
   ignoreStartDate?: boolean;
-  toBeesParams(): BeesParamPayload[];
+  toBeesParams(): BeesParam[];
 }
 
 export class PromoSearchQueryImpl implements PromoSearchQuery {
@@ -21,26 +18,22 @@ export class PromoSearchQueryImpl implements PromoSearchQuery {
   types: PromoType[] = [];
   query?: string;
   ignoreStartDate?: boolean;
-  toBeesParams(): BeesParamPayload[] {
-    const result: BeesParamPayload[] = [];
+  toBeesParams(): BeesParam[] {
+    const result: BeesParam[] = [];
 
-    result.push(
-      new BeesParamPayloadImpl('vendorIds', this.vendorIds.join(',')),
-    );
+    result.push(new BeesParamImpl('vendorIds', this.vendorIds.join(',')));
     result.push(...this.page.toBeesParams());
 
     if (this.types.length > 0) {
-      result.push(new BeesParamPayloadImpl('types', this.types.join(',')));
+      result.push(new BeesParamImpl('types', this.types.join(',')));
     }
 
     if (!ObjectUtils.isNil(this.query)) {
-      result.push(new BeesParamPayloadImpl('query', this.query));
+      result.push(new BeesParamImpl('query', this.query));
     }
 
     if (!ObjectUtils.isNil(this.ignoreStartDate)) {
-      result.push(
-        new BeesParamPayloadImpl('ignoreStartDate', this.ignoreStartDate),
-      );
+      result.push(new BeesParamImpl('ignoreStartDate', this.ignoreStartDate));
     }
 
     return result;
