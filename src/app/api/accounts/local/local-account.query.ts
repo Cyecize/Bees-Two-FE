@@ -7,7 +7,7 @@ import {
 export interface LocalAccountQuery {
   page: LocalPageRequest;
   sort: SortQuery;
-  env: number;
+  env: number | null;
   name?: string;
   id?: string;
   beesId?: string;
@@ -16,7 +16,7 @@ export interface LocalAccountQuery {
 }
 
 export class LocalAccountQueryImpl implements LocalAccountQuery {
-  env!: number;
+  env: number | null = null;
   id = '';
   name = '';
   page: LocalPageRequest = new LocalPageRequestImpl();

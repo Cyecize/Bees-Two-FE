@@ -11,6 +11,10 @@
         placeholder="ID (Bees, Vendor, Customer)"
         (onChangeEnd)="idChanged($event)"></app-input>
     </div>
+    <div class="filter d-flex align-items-center">
+      <app-checkbox label="Search all Envs"
+                    (onChange)="allEnvsChange($event)"></app-checkbox>
+    </div>
   </div>
   <hr>
   <div style="overflow-y: auto; height: 400px;">
@@ -24,6 +28,7 @@
         <th scope="col">Name</th>
         <th scope="col">Customer ID</th>
         <th scope="col">Vendor Acc Id</th>
+        <th scope="col" *ngIf="!query.env">Env</th>
         <th scope="col" *ngIf="!payload.hideActions">Actions</th>
       </tr>
       </thead>
@@ -50,6 +55,9 @@
             [enableCopy]="true"
             [tooltipText]="acc.vendorAccountId"
             [displayText]="acc.vendorAccountId"></app-tooltip-span>
+        </td>
+        <td *ngIf="!query.env">
+          {{ acc.env.envName }}
         </td>
         <td *ngIf="!payload.hideActions">
           <div class="m-1">

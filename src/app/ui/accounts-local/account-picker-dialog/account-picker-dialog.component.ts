@@ -14,6 +14,8 @@ import { PaginationComponent } from '../../../shared/components/pagination/pagin
 import { InputComponent } from '../../../shared/form-controls/input/input.component';
 import { TooltipSpanComponent } from '../../../shared/components/tooltip-span/tooltip-span.component';
 import { AccountPickerDialogPayload } from './account-picker-dialog.payload';
+import { CheckboxComponent } from "../../../shared/form-controls/checkbox/checkbox.component";
+import { FormsModule } from "@angular/forms";
 
 @Component({
   selector: 'app-account-picker-dialog',
@@ -24,6 +26,8 @@ import { AccountPickerDialogPayload } from './account-picker-dialog.payload';
     PaginationComponent,
     InputComponent,
     TooltipSpanComponent,
+    CheckboxComponent,
+    FormsModule,
   ],
   templateUrl: './account-picker-dialog.component.html',
   styleUrl: './account-picker-dialog.component.scss',
@@ -60,6 +64,16 @@ export class AccountPickerDialogComponent
 
   nameChanged(name: string): void {
     this.query.name = name;
+    this.reloadFilters();
+  }
+
+  allEnvsChange(val: boolean): void {
+    if (val) {
+      this.query.env = null;
+    } else {
+      this.query.env = this.payload.env.id;
+    }
+
     this.reloadFilters();
   }
 
