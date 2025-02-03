@@ -5,7 +5,9 @@ import { RewardsBaseComponent } from './ui/rewards/rewards-base/rewards-base.com
 import { AccountsBaseComponent } from './ui/accounts/accounts-base/accounts-base.component';
 import { ItemsBaseComponent } from './ui/items/items-base/items-base.component';
 import { OrdersInvoicesBaseComponent } from './ui/orders-invoices/orders-invoices-base/orders-invoices-base.component';
-import { TemplateBaseComponent } from "./ui/template/template-base/template-base.component";
+import { SearchRequestHistory } from './ui/template-history/history/search-request-history/search-request-history';
+import { TemplateBaseComponent } from './ui/template-history/template/template-base/template-base.component';
+import { TemplateAndHistoryBaseComponent } from './ui/template-history/template-and-history-base/template-and-history-base.component';
 
 export const promoRoutes: Routes = [
   {
@@ -333,8 +335,39 @@ const orderInvoiceRoutes: Routes = [
 const templateRoutes: Routes = [
   {
     path: '',
-    component: TemplateBaseComponent,
+    component: TemplateAndHistoryBaseComponent,
     children: [
+      {
+        path: '',
+        loadChildren: () =>
+          import(
+            './shared/components/choose-option-alert/choose-option-alert.component'
+          ).then((value) => value.CHOOSE_OPTION_ALERT_ROUTES),
+      },
+      {
+        path: AppRoutingPath.HISTORY.path,
+        component: SearchRequestHistory,
+      },
+      {
+        path: AppRoutingPath.TEMPLATES.path,
+        component: TemplateBaseComponent,
+        children: [
+          {
+            path: AppRoutingPath.SEARCH_TEMPLATES.path,
+            loadChildren: () =>
+              import(
+                './ui/template-history/template/search-templates/search-templates.component'
+              ).then((val) => val.SEARCH_TEMPLATE_ROUTES),
+          },
+          {
+            path: AppRoutingPath.ADD_TEMPLATE.path,
+            loadChildren: () =>
+              import(
+                './ui/template-history/template/add-template/add-template.component'
+              ).then((val) => val.ADD_TEMPLATE_ROUTES),
+          },
+        ],
+      },
     ],
   },
 ];
@@ -371,7 +404,7 @@ export const routes: Routes = [
     children: orderInvoiceRoutes,
   },
   {
-    path: AppRoutingPath.TEMPLATES.path,
+    path: AppRoutingPath.TEMPLATES_AND_HISTORY.path,
     children: templateRoutes,
   },
   {

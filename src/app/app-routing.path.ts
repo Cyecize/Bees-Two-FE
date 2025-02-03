@@ -46,5 +46,9 @@ export class AppRoutingPath {
   public static readonly ASSORTMENT_SEARCH_BY_DDC_V2 = new RouteConfig('search-ddc-v2', AppRoutingPath.ASSORTMENT);
   public static readonly ORDERS_AND_INVOICES = new RouteConfig('orders-and-invoices', null);
   public static readonly ORDERS_AND_INVOICES_SEARCH_ORDERS = new RouteConfig('search-orders', AppRoutingPath.ORDERS_AND_INVOICES);
-  public static readonly TEMPLATES = new RouteConfig('templates', null);
+  public static readonly TEMPLATES_AND_HISTORY = new RouteConfig('t_a_h', null);
+  public static readonly TEMPLATES = new RouteConfig('templates', AppRoutingPath.TEMPLATES_AND_HISTORY);
+  public static readonly ADD_TEMPLATE = new RouteConfig('add', AppRoutingPath.TEMPLATES);
+  public static readonly SEARCH_TEMPLATES = new RouteConfig('', AppRoutingPath.TEMPLATES);
+  public static readonly HISTORY = new RouteConfig('history', AppRoutingPath.TEMPLATES_AND_HISTORY);
 }

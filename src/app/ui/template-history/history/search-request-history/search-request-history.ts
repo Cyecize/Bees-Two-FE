@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
-import { AppRoutingPath } from '../../../app-routing.path';
+import { AppRoutingPath } from '../../../../app-routing.path';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 
 @Component({
-  selector: 'app-template-base',
+  selector: 'app-search-request-history',
   standalone: true,
   imports: [RouterLinkActive, RouterOutlet, RouterLink],
-  templateUrl: './template-base.component.html',
-  styleUrl: './template-base.component.scss',
+  templateUrl: './search-request-history.html',
+  styleUrl: './search-request-history.scss',
 })
-export class TemplateBaseComponent {
+export class SearchRequestHistory {
   routes = AppRoutingPath;
 }

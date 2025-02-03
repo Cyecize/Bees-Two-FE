@@ -1,0 +1,23 @@
+<div class="container mt-2">
+
+  <ul class="nav nav-tabs">
+    <li class="nav-item">
+      <a class="nav-link"
+         [routerLinkActive]="'active'"
+         [routerLink]="routes.TEMPLATES.toString()">
+        Templates
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link active"
+         [routerLinkActive]="'active'"
+         [routerLink]="routes.HISTORY.toString()">
+        History
+      </a>
+    </li>
+  </ul>
+
+  <div class="mt-2">
+    <router-outlet></router-outlet>
+  </div>
+</div>
