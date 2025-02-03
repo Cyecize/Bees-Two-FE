@@ -14,8 +14,8 @@ import { PaginationComponent } from '../../../shared/components/pagination/pagin
 import { InputComponent } from '../../../shared/form-controls/input/input.component';
 import { TooltipSpanComponent } from '../../../shared/components/tooltip-span/tooltip-span.component';
 import { AccountPickerDialogPayload } from './account-picker-dialog.payload';
-import { CheckboxComponent } from "../../../shared/form-controls/checkbox/checkbox.component";
-import { FormsModule } from "@angular/forms";
+import { CheckboxComponent } from '../../../shared/form-controls/checkbox/checkbox.component';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-account-picker-dialog',
