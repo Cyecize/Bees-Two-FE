@@ -1,1 +1,7 @@
-<p>add-template works!</p>
+<div>
+  <h2>Create a template</h2>
+  <hr>
+  <div class="pb-2">
+    <app-template-form (formSubmitted)="formSubmitted($event)" [errors]="errors"></app-template-form>
+  </div>
+</div>

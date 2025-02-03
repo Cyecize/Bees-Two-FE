@@ -1,0 +1,111 @@
+<form [formGroup]="form">
+  <div class="mt-2">
+    <app-input
+      placeholder="Name"
+      [errors]="errors"
+      formControlName="name"></app-input>
+  </div>
+  <div class="mt-2">
+    <app-select formControlName="entity"
+                placeholder="Entity"
+                [errors]="errors"
+                [options]="entityOptions"></app-select>
+  </div>
+
+  <div class="mt-2">
+    <app-select formControlName="dataIngestionVersion"
+                placeholder="Data Ingestion Version"
+                (onChange)="relayVersionChanges($event)"
+                [errors]="errors"
+                [options]="dataIngestionVersions"></app-select>
+  </div>
+  <div class="mt-2">
+    <app-input
+      placeholder="Endpoint"
+      [disabled]="relayVersion !== null"
+      [errors]="errors"
+      formControlName="endpoint"></app-input>
+  </div>
+  <div class="mt-2">
+    <app-select formControlName="method"
+                placeholder="Method"
+                [errors]="errors"
+                [options]="methodOptions"></app-select>
+  </div>
+  <div class="mt-2">
+    <app-checkbox label="Save In History"
+                  formControlName="saveInHistory"></app-checkbox>
+    <app-field-error [fieldName]="'saveInHistory'" [errors]="errors"></app-field-error>
+  </div>
+  <div class="mt-2">
+    <p>TODO: Test validation error handling for the array items </p>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="d-flex justify-content-between">
+          <p>Headers</p>
+          <i class="fa fa-plus c-pointer" (click)="addHeader()"></i>
+        </div>
+
+        <div formArrayName="headers">
+          <div *ngFor="let ctrl of form.controls.headers.controls; let i = index"
+               [formGroupName]="i"
+                 class="mt-1">
+            <div class="d-flex justify-content-between align-items-center">
+              <app-input
+                formControlName="name"
+                class="m-1"
+                placeholder="Name"></app-input>
+              <app-input
+                formControlName="value"
+                class="m-1"
+                placeholder="Value"></app-input>
+              <i class="fa fa-close c-pointer" (click)="form.controls.headers.removeAt(i)"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="d-flex justify-content-between">
+          <p>Query Params</p>
+          <i class="fa fa-plus c-pointer" (click)="addQueryParam()"></i>
+        </div>
+
+        <div formArrayName="queryParams">
+          <div *ngFor="let ctrl of form.controls.queryParams.controls; let i = index"
+               [formGroupName]="i"
+               class="mt-1">
+            <div class="d-flex justify-content-between align-items-center">
+              <app-input
+                formControlName="name"
+                class="m-1"
+                placeholder="Name"></app-input>
+              <app-input
+                formControlName="value"
+                class="m-1"
+                placeholder="Value"></app-input>
+              <i class="fa fa-close c-pointer" (click)="form.controls.queryParams.removeAt(i)"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <hr>
+  <div class="mt-2">
+    <label for="templatePayload">Template content</label>
+    <textarea
+      rows="10"
+      class="form-control"
+      formControlName="payloadTemplate"
+      placeholder="Angular component HTML code"
+      id="templatePayload"></textarea>
+  </div>
+  <div class="mt-2 text-end">
+    <button (click)="onFormSubmit()"
+            type="submit"
+            class="btn btn-success"
+            [disabled]="!form.valid">
+      Save
+    </button>
+  </div>
+</form>
