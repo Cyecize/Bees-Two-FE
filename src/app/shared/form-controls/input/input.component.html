@@ -3,6 +3,7 @@
          (change)="inputChanged($event); changeEnded($event);"
          (keyup)="inputChanged($event)"
          [value]="value || ''"
+         [disabled]="disabled"
          [name]="formControlName"
          [type]="type" class="form-control"
          [id]="inputId" [placeholder]="placeholder">
