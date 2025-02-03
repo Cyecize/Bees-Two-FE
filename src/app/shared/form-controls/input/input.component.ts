@@ -15,6 +15,7 @@ import {
 } from '@angular/forms';
 import { NgIf } from '@angular/common';
 import { ObjectUtils } from '../../util/object-utils';
+import { StringUtils } from '../../util/string-utils';
 
 @Component({
   selector: 'app-input',
@@ -68,10 +69,10 @@ export class InputComponent implements OnInit, ControlValueAccessor {
 
   ngOnInit(): void {
     const prefix = this.formControlName || '';
-    this.inputId = `${prefix}_${this.getUniqueStr()}`;
+    this.inputId = `${prefix}_${StringUtils.getUniqueStr()}`;
 
     if (this.generateUniqueControlName) {
-      this.formControlName = this.getUniqueStr();
+      this.formControlName = StringUtils.getUniqueStr();
     }
   }
 
@@ -105,10 +106,6 @@ export class InputComponent implements OnInit, ControlValueAccessor {
 
   setDisabledState?(isDisabled: boolean): void {
     this.disabled = isDisabled;
-  }
-
-  private getUniqueStr(): string {
-    return (Math.random().toString(36) + '0000000000').substring(2, 12);
   }
 
   private setValue(val: any): void {

@@ -17,6 +17,7 @@ import { EmptyPage, Page } from '../../util/page';
 import { NgForOf, NgIf } from '@angular/common';
 import { ErrorMessageComponent } from '../../field-error/error-message/error-message.component';
 import { FieldError } from '../../field-error/field-error';
+import { StringUtils } from '../../util/string-utils';
 
 @Component({
   selector: 'app-select-search',
@@ -84,11 +85,11 @@ export class SelectSearchComponent implements OnInit, ControlValueAccessor {
 
   ngOnInit(): void {
     const prefix = this.formControlName || '';
-    this.inputId = `${prefix}_${this.getUniqueStr()}`;
+    this.inputId = `${prefix}_${StringUtils.getUniqueStr()}`;
     this.selectionChange.subscribe((val) => this.onChange.next(val?.value));
 
     if (this.generateUniqueControlName) {
-      this.formControlName = this.getUniqueStr();
+      this.formControlName = StringUtils.getUniqueStr();
     }
   }
 
@@ -153,9 +154,5 @@ export class SelectSearchComponent implements OnInit, ControlValueAccessor {
 
   searchChanged(ev: any): void {
     this.search.next(ev?.target?.value);
-  }
-
-  private getUniqueStr(): string {
-    return (Math.random().toString(36) + '0000000000').substring(2, 12);
   }
 }

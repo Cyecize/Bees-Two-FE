@@ -15,6 +15,7 @@ import {
 } from '@angular/forms';
 import { NgForOf, NgIf } from '@angular/common';
 import { SelectOption } from './select.option';
+import { StringUtils } from '../../util/string-utils';
 
 @Component({
   selector: 'app-select',
@@ -59,7 +60,7 @@ export class SelectComponent implements OnInit, ControlValueAccessor {
 
   ngOnInit(): void {
     const prefix = this.formControlName || '';
-    this.elementId = `${prefix}_${this.getUniqueStr()}`;
+    this.elementId = `${prefix}_${StringUtils.getUniqueStr()}`;
   }
 
   inputChanged(event: any): void {
@@ -88,9 +89,5 @@ export class SelectComponent implements OnInit, ControlValueAccessor {
 
   setDisabledState?(isDisabled: boolean): void {
     this.disabled = isDisabled;
-  }
-
-  private getUniqueStr(): string {
-    return (Math.random().toString(36) + '0000000000').substring(2, 12);
   }
 }

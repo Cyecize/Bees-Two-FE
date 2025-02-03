@@ -9,6 +9,7 @@ import {
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { ErrorMessageComponent } from '../../field-error/error-message/error-message.component';
 import { NgIf } from '@angular/common';
+import { StringUtils } from '../../util/string-utils';
 
 @Component({
   selector: 'app-checkbox',
@@ -50,7 +51,7 @@ export class CheckboxComponent implements OnInit, ControlValueAccessor {
 
   ngOnInit(): void {
     const prefix = this.formControlName || '';
-    this.inputId = `${prefix}_${this.getUniqueStr()}`;
+    this.inputId = `${prefix}_${StringUtils.getUniqueStr()}`;
   }
 
   inputChanged(event: any): void {
@@ -80,9 +81,5 @@ export class CheckboxComponent implements OnInit, ControlValueAccessor {
 
   setDisabledState?(isDisabled: boolean): void {
     this.disabled = isDisabled;
-  }
-
-  private getUniqueStr(): string {
-    return (Math.random().toString(36) + '0000000000').substring(2, 12);
   }
 }
