@@ -5,6 +5,7 @@ import { RewardsBaseComponent } from './ui/rewards/rewards-base/rewards-base.com
 import { AccountsBaseComponent } from './ui/accounts/accounts-base/accounts-base.component';
 import { ItemsBaseComponent } from './ui/items/items-base/items-base.component';
 import { OrdersInvoicesBaseComponent } from './ui/orders-invoices/orders-invoices-base/orders-invoices-base.component';
+import { TemplateBaseComponent } from "./ui/template/template-base/template-base.component";
 
 export const promoRoutes: Routes = [
   {
@@ -329,6 +330,15 @@ const orderInvoiceRoutes: Routes = [
   },
 ];
 
+const templateRoutes: Routes = [
+  {
+    path: '',
+    component: TemplateBaseComponent,
+    children: [
+    ],
+  },
+];
+
 export const routes: Routes = [
   {
     path: AppRoutingPath.HOME.path,
@@ -359,6 +369,10 @@ export const routes: Routes = [
   {
     path: AppRoutingPath.ORDERS_AND_INVOICES.path,
     children: orderInvoiceRoutes,
+  },
+  {
+    path: AppRoutingPath.TEMPLATES.path,
+    children: templateRoutes,
   },
   {
     path: '**',
