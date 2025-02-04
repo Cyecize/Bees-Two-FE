@@ -10,7 +10,6 @@ import { CountryEnvironmentService } from '../../../api/env/country-environment.
 import { RouteNavigator } from '../../../shared/routing/route-navigator.service';
 import { AppRoutingPath } from '../../../app-routing.path';
 import { RewardSetting } from '../../../api/rewards/settings/rewards-settings-search.response';
-import { CountryEnvironmentModel } from '../../../api/env/country-environment.model';
 import { DialogService } from '../../../shared/dialog/dialog.service';
 import { EnvOverrideService } from '../../../api/env/env-override.service';
 

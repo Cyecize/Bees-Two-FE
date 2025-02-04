@@ -19,7 +19,10 @@ import { EnvOverrideFieldComponent } from '../../../env/env-override-field/env-o
 import { ObjectUtils } from '../../../../shared/util/object-utils';
 import { Endpoints } from '../../../../shared/http/endpoints';
 import { NgForOf, NgIf } from '@angular/common';
-import { RequestTemplate } from '../../../../api/template/request-template';
+import {
+  RequestTemplate,
+  RequestTemplateView,
+} from '../../../../api/template/request-template';
 import { SelectOptions } from '../../../../api/common/select-options';
 
 interface TemplateForm {
@@ -56,10 +59,23 @@ interface BeesParamForm {
   styleUrl: './template-form.component.scss',
 })
 export class TemplateFormComponent implements OnInit {
+  private _template!: RequestTemplateView;
   form!: FormGroup<TemplateForm>;
 
   @Input()
   errors: FieldError[] = [];
+
+  @Input({ required: false })
+  set template(template: RequestTemplateView) {
+    this._template = template;
+    if (this.form) {
+      this.populateTemplate(template);
+    }
+  }
+
+  get template(): RequestTemplateView {
+    return this._template;
+  }
 
   entityOptions: SelectOption[] = SelectOptions.beesEntityOptions();
   dataIngestionVersions: SelectOption[] =
@@ -99,6 +115,10 @@ export class TemplateFormComponent implements OnInit {
         nonNullable: true,
       }),
     });
+
+    if (this.template) {
+      this.populateTemplate(this.template);
+    }
   }
 
   get relayVersion(): RelayVersion | null {
@@ -137,6 +157,34 @@ export class TemplateFormComponent implements OnInit {
       }),
       value: new FormControl<string | null>(null),
     });
+  }
+
+  private populateTemplate(template: RequestTemplateView): void {
+    this.form.patchValue({
+      endpoint: template.endpoint,
+      entity: template.entity,
+      name: template.name,
+      method: template.method,
+      payloadTemplate: template.payloadTemplate,
+      dataIngestionVersion: template.dataIngestionVersion,
+      saveInHistory: template.saveInHistory,
+    });
+
+    if (template.headers?.length) {
+      template.headers.forEach((h) => {
+        const headerForm = this.createBeesFormGroup();
+        headerForm.patchValue(h);
+        this.form.controls.headers.push(headerForm);
+      });
+    }
+
+    if (template.queryParams?.length) {
+      template.queryParams.forEach((h) => {
+        const queryParamsForm = this.createBeesFormGroup();
+        queryParamsForm.patchValue(h);
+        this.form.controls.queryParams.push(queryParamsForm);
+      });
+    }
   }
 
   async onFormSubmit(): Promise<void> {

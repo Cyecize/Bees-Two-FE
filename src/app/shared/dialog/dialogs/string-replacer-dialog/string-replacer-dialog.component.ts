@@ -16,15 +16,8 @@ interface StringReplaceForm {
 
 @Component({
   standalone: true,
-  styles: `
-    .string-replacer-dialog {
-      @media (min-width: 768px) {
-        min-width: 600px;
-      }
-    }
-  `,
   template: `
-    <div class="p-2 string-replacer-dialog">
+    <div class="p-2 dialog-content-container">
       <form [formGroup]="form">
         <div class="mt-2">
           <label for="jsonContent">Dictionary (Valid JSON)</label>

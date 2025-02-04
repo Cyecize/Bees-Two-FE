@@ -366,6 +366,13 @@ const templateRoutes: Routes = [
                 './ui/template-history/template/add-template/add-template.component'
               ).then((val) => val.ADD_TEMPLATE_ROUTES),
           },
+          {
+            path: AppRoutingPath.EDIT_TEMPLATE.path,
+            loadChildren: () =>
+              import(
+                './ui/template-history/template/edit-template/edit-template.component'
+              ).then((val) => val.EDIT_TEMPLATE_ROUTES),
+          },
         ],
       },
     ],

@@ -1,0 +1,10 @@
+<div>
+  <h2>Edit Template</h2>
+  <hr>
+  <div class="pb-2">
+    <app-template-form
+      [template]="template"
+      (formSubmitted)="formSubmitted($event)"
+                       [errors]="errors"></app-template-form>
+  </div>
+</div>

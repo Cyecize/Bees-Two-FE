@@ -44,3 +44,9 @@
 .cdk-overlay-container {
   z-index: $zindexDialog;
 }
+
+.dialog-content-container {
+  @media (min-width: $screen-md) {
+    min-width: 600px;
+  }
+}

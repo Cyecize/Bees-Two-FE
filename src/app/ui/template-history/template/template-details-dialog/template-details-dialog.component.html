@@ -1,0 +1,50 @@
+<div class="dialog-content-container">
+  <table class="table">
+    <thead>
+    </thead>
+    <tbody>
+    <tr>
+      <td>Id</td>
+      <td>{{ payload.id }}</td>
+    </tr>
+    <tr>
+      <td>Name</td>
+      <td>{{ payload.name }}</td>
+    </tr>
+    <tr>
+      <td>Entity</td>
+      <td>{{ payload.entity }}</td>
+    </tr>
+    <tr *ngIf="payload.dataIngestionVersion">
+      <td>Data Ingestion Version</td>
+      <td>{{ payload.dataIngestionVersion }}</td>
+    </tr>
+    <tr>
+      <td>Method</td>
+      <td>{{ payload.method }}</td>
+    </tr>
+    <tr>
+      <td>Endpoint</td>
+      <td>{{ payload.endpoint }}</td>
+    </tr>
+    <tr>
+      <td>Owner (User ID)</td>
+      <td>{{ payload.userId }}</td>
+    </tr>
+    <tr>
+      <td>Save in history</td>
+      <td>{{ ObjectUtils.boolToYesNo(payload.saveInHistory) }}</td>
+    </tr>
+
+    </tbody>
+  </table>
+
+  <hr>
+  <div class="text-end">
+    <button class="btn btn-outline-dark m-1" (click)="close(undefined);">Close</button>
+
+    <button class="btn btn-outline-danger m-1" (click)="delete();">Delete</button>
+    <a class="btn btn-outline-warning m-1" [routerLink]="getEditRoute()" (click)="close(false);">Edit</a>
+    <button class="btn btn-outline-success m-1" (click)="openPreview()">Preview</button>
+  </div>
+</div>

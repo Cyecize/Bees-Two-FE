@@ -5,6 +5,7 @@ import { RequestTemplateView } from '../../../../api/template/request-template';
 import { NgForOf } from '@angular/common';
 import { PaginationComponent } from '../../../../shared/components/pagination/pagination.component';
 import { DialogService } from '../../../../shared/dialog/dialog.service';
+import { TemplateDetailsDialogComponent } from '../template-details-dialog/template-details-dialog.component';
 
 @Component({
   selector: 'app-template-list-table',
@@ -35,5 +36,18 @@ export class TemplateListTableComponent {
     this.dialogService.openTemplatePreviewDialog(template);
   }
 
-  openDetailsDialog(template: RequestTemplateView): void {}
+  openDetailsDialog(template: RequestTemplateView): void {
+    this.dialogService
+      .open(
+        TemplateDetailsDialogComponent,
+        `Template details for ${template.name}`,
+        template,
+      )
+      .afterClosed()
+      .subscribe((refresh) => {
+        if (refresh) {
+          this.onPageChange(0);
+        }
+      });
+  }
 }

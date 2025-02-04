@@ -49,6 +49,7 @@ export class AppRoutingPath {
   public static readonly TEMPLATES_AND_HISTORY = new RouteConfig('t_a_h', null);
   public static readonly TEMPLATES = new RouteConfig('templates', AppRoutingPath.TEMPLATES_AND_HISTORY);
   public static readonly ADD_TEMPLATE = new RouteConfig('add', AppRoutingPath.TEMPLATES);
+  public static readonly EDIT_TEMPLATE = new RouteConfig(':id/edit', AppRoutingPath.TEMPLATES);
   public static readonly SEARCH_TEMPLATES = new RouteConfig('', AppRoutingPath.TEMPLATES);
   public static readonly HISTORY = new RouteConfig('history', AppRoutingPath.TEMPLATES_AND_HISTORY);
 }

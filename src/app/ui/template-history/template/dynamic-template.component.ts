@@ -9,7 +9,7 @@ import {
   ɵcompileComponent,
 } from '@angular/core';
 import * as angularCompiler from '@angular/compiler';
-import { NgFor, NgIf } from '@angular/common';
+import { AsyncPipe, NgFor, NgIf } from "@angular/common";
 import { StringUtils } from '../../../shared/util/string-utils';
 import { RequestTemplateView } from '../../../api/template/request-template';
 import { RequestTemplateUtil } from '../../../api/template/request-template.util';
@@ -71,18 +71,24 @@ function getComponentFromTemplate(template: string): any {
   return class ${className} {
 
     valuesPerInd = {};
+    promisesPerInd = {};
 
     constructor() {
     }
 
-    getRandomStr(ind) {
-    if (this.valuesPerInd[ind]) {
-       return this.valuesPerInd[ind];
+   getRandomStr(ind) {
+    if (!this.valuesPerInd[ind]) {
+      this.valuesPerInd[ind] = this.strUtils.getUniqueStr();
+      this.promisesPerInd[ind] = new Promise((res, rej) => {
+        setTimeout( () => {
+          console.log(this.valuesPerInd[ind]);
+          res(this.valuesPerInd[ind]);
+          }, 1500);
+        });
     }
 
-    this.valuesPerInd[ind] = this.strUtils.getUniqueStr();
-    return this.getRandomStr(ind);
-    }
+    return this.promisesPerInd[ind];
+   }
 
     ngOnInit() {
 
@@ -97,8 +103,7 @@ function getComponentFromTemplate(template: string): any {
     template,
     selector: StringUtils.generateRandomClassName(),
     standalone: true,
-
-    imports: [NgFor, NgIf],
+    imports: [NgFor, NgIf, AsyncPipe],
     interpolation: ['%%', '%%'],
     inputs: [
       {

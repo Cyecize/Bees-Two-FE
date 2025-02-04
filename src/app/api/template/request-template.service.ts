@@ -20,11 +20,34 @@ export class RequestTemplateService {
     ).execute();
   }
 
+  public async saveTemplate(
+    templateId: number,
+    template: RequestTemplate,
+  ): Promise<WrappedResponseLocal<RequestTemplateView>> {
+    return await new FieldErrorWrapperLocal(() =>
+      this.repository.update(templateId, template),
+    ).execute();
+  }
+
   async searchTemplates(
     query: RequestTemplateQuery,
   ): Promise<WrappedResponseLocal<Page<RequestTemplateView>>> {
     return await new FieldErrorWrapperLocal(() =>
       this.repository.search(query),
+    ).execute();
+  }
+
+  async deleteTemplate(id: number): Promise<WrappedResponseLocal<void>> {
+    return await new FieldErrorWrapperLocal(() =>
+      this.repository.delete(id),
+    ).execute();
+  }
+
+  async getTemplate(
+    id: number,
+  ): Promise<WrappedResponseLocal<RequestTemplateView>> {
+    return await new FieldErrorWrapperLocal(() =>
+      this.repository.get(id),
     ).execute();
   }
 }
