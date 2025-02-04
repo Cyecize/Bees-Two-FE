@@ -11,11 +11,7 @@ import {
 import { RelayVersion } from '../../../../api/relay/relay.version';
 import { InputComponent } from '../../../../shared/form-controls/input/input.component';
 import { SelectComponent } from '../../../../shared/form-controls/select/select.component';
-import {
-  SelectOption,
-  SelectOptionKey,
-  SelectOptionKvp,
-} from '../../../../shared/form-controls/select/select.option';
+import { SelectOption } from '../../../../shared/form-controls/select/select.option';
 import { ErrorMessageComponent } from '../../../../shared/field-error/error-message/error-message.component';
 import { FieldError } from '../../../../shared/field-error/field-error';
 import { CheckboxComponent } from '../../../../shared/form-controls/checkbox/checkbox.component';
@@ -24,6 +20,7 @@ import { ObjectUtils } from '../../../../shared/util/object-utils';
 import { Endpoints } from '../../../../shared/http/endpoints';
 import { NgForOf, NgIf } from '@angular/common';
 import { RequestTemplate } from '../../../../api/template/request-template';
+import { SelectOptions } from '../../../../api/common/select-options';
 
 interface TemplateForm {
   name: FormControl<string>;
@@ -64,9 +61,10 @@ export class TemplateFormComponent implements OnInit {
   @Input()
   errors: FieldError[] = [];
 
-  entityOptions: SelectOption[] = [];
-  dataIngestionVersions: SelectOption[] = [];
-  methodOptions: SelectOption[] = [];
+  entityOptions: SelectOption[] = SelectOptions.beesEntityOptions();
+  dataIngestionVersions: SelectOption[] =
+    SelectOptions.dataIngestionVersionOptions();
+  methodOptions: SelectOption[] = SelectOptions.methodOptions();
 
   @Output()
   formSubmitted: EventEmitter<RequestTemplate> =
@@ -75,18 +73,6 @@ export class TemplateFormComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    this.entityOptions = [new SelectOptionKvp('Choose one', null)].concat(
-      ...Object.keys(BeesEntity).map((ent) => new SelectOptionKey(ent)),
-    );
-    this.dataIngestionVersions = [
-      new SelectOptionKvp('None (Not using Relay)', null),
-    ].concat(
-      ...Object.keys(RelayVersion).map((rel) => new SelectOptionKey(rel)),
-    );
-    this.methodOptions = Object.keys(RequestMethod).map(
-      (method) => new SelectOptionKey(method),
-    );
-
     this.form = new FormGroup<TemplateForm>({
       name: new FormControl<string>(null!, {
         validators: [Validators.required],

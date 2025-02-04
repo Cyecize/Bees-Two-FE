@@ -1,7 +1,7 @@
 import { BeesEntity } from '../common/bees-entity';
 import { RequestMethod } from '../common/request-method';
 import { BeesParam } from '../common/bees-param';
-import { RelayVersion } from "../relay/relay.version";
+import { RelayVersion } from '../relay/relay.version';
 
 export interface RequestTemplate {
   name: string;

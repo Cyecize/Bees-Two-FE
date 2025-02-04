@@ -1,0 +1,20 @@
+<div class="filters-header" [formGroup]="form">
+  <div class="filter">
+    <app-input
+      formControlName="name"
+      [errors]="errors"
+      placeholder="Name"></app-input>
+  </div>
+  <div class="filter">
+    <app-select formControlName="entity"
+                placeholder="Entity"
+                [errors]="errors"
+                [options]="entityOptions"></app-select>
+  </div>
+  <div class="filter">
+    <app-select formControlName="method"
+                placeholder="Method"
+                [errors]="errors"
+                [options]="methodOptions"></app-select>
+  </div>
+</div>

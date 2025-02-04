@@ -1,1 +1,12 @@
-<p>search-templates works!</p>
+<div>
+  <h2>Search templates</h2>
+  <hr>
+  <div class="pb-2">
+    <app-template-search-filters
+      [errors]="errors"
+      (queryChanged)="onQueryChange($event)"></app-template-search-filters>
+    <hr>
+    <app-template-list-table [templates]="templates"
+                             (pageChanged)="onPageChange($event)"></app-template-list-table>
+  </div>
+</div>

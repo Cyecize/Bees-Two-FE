@@ -9,9 +9,9 @@ import { RequestMethod } from '../common/request-method';
 export interface RequestTemplateQuery {
   page: LocalPageRequest;
   sort: SortQuery;
-  name?: string;
-  entity?: BeesEntity;
-  method?: RequestMethod;
+  name: string | null;
+  entity: BeesEntity | null;
+  method: RequestMethod | null;
 }
 
 export class RequestTemplateQueryImpl implements RequestTemplateQuery {
@@ -21,6 +21,6 @@ export class RequestTemplateQueryImpl implements RequestTemplateQuery {
     direction: SortDirection.DESC,
   };
   name = '';
-  entity = undefined;
-  method = undefined;
+  entity = null;
+  method = null;
 }

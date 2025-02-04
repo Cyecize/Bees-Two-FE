@@ -5,6 +5,8 @@ import {
   FieldErrorWrapperLocal,
   WrappedResponseLocal,
 } from '../../shared/util/field-error-wrapper-local';
+import { RequestTemplateQuery } from './request-template.query';
+import { Page } from '../../shared/util/page';
 
 @Injectable({ providedIn: 'root' })
 export class RequestTemplateService {
@@ -15,6 +17,14 @@ export class RequestTemplateService {
   ): Promise<WrappedResponseLocal<RequestTemplateView>> {
     return await new FieldErrorWrapperLocal(() =>
       this.repository.create(template),
+    ).execute();
+  }
+
+  async searchTemplates(
+    query: RequestTemplateQuery,
+  ): Promise<WrappedResponseLocal<Page<RequestTemplateView>>> {
+    return await new FieldErrorWrapperLocal(() =>
+      this.repository.search(query),
     ).execute();
   }
 }

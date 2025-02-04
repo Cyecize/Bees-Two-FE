@@ -29,6 +29,8 @@ import { Item } from '../../api/items/item';
 import { ShowCodePayload } from './dialogs/confirm-dialog/show-code-payload.model';
 import { ConfirmDialogPayload } from './dialogs/show-code-dialog/confirm-dialog-payload.model';
 import { ConfirmDialogComponent } from './dialogs/show-code-dialog/confirm-dialog.component';
+import { RequestTemplateView } from '../../api/template/request-template';
+import { PreviewTemplateDialogComponent } from '../../ui/template-history/template/preview-template-dialog/preview-template-dialog.component';
 
 @Injectable({ providedIn: 'root' })
 export class DialogService {
@@ -119,6 +121,16 @@ export class DialogService {
       BeesTokenOverrideDialogComponent,
       'Bees Token Override',
       env,
+    ).afterClosed();
+  }
+
+  public openTemplatePreviewDialog(
+    template: RequestTemplateView,
+  ): Observable<any> {
+    return this.open(
+      PreviewTemplateDialogComponent,
+      `Preview ${template.name}`,
+      template,
     ).afterClosed();
   }
 
