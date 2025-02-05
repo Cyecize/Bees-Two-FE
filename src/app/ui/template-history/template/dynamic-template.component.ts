@@ -1,5 +1,4 @@
 import {
-  AfterViewInit,
   ChangeDetectorRef,
   Component,
   EventEmitter,
@@ -14,6 +13,14 @@ import { AsyncPipe, NgFor, NgIf } from '@angular/common';
 import { StringUtils } from '../../../shared/util/string-utils';
 import { RequestTemplateView } from '../../../api/template/request-template';
 import { RequestTemplateUtil } from '../../../api/template/request-template.util';
+import { RequestTemplateArgType } from '../../../api/template/arg/request-template-arg.type';
+import { RequestTemplateArgView } from '../../../api/template/arg/request-template-arg';
+import { firstValueFrom } from 'rxjs';
+import { DialogService } from '../../../shared/dialog/dialog.service';
+import { CountryEnvironmentModel } from '../../../api/env/country-environment.model';
+import { TemplateArgPromptDialogComponent } from './template-arg-prompt-dialog/template-arg-prompt-dialog.component';
+import { TemplateArgPromptDialogPayload } from './template-arg-prompt-dialog/template-arg-prompt-dialog.payload';
+import { TemplateArgsPromptDialogResponse } from './template-arg-prompt-dialog/template-args-prompt-dialog.response';
 
 // This is required in order to retain the angular compiler import as production build removes unneeded imports
 // The import is needed to be present in order to dynamically compile, but not actually used in this component
@@ -21,46 +28,55 @@ const compilerImport = angularCompiler;
 
 @Component({
   selector: 'app-dynamic-template',
-  template: `<ng-template #dynamicContainer></ng-template>
-    <pre><code>{{ payloadPreview }}</code></pre> `,
+  template: `
+    <div style="max-height: 100px; overflow-y: auto">
+      <ng-template #dynamicContainer></ng-template>
+    </div>
+    <pre><code style="overflow-y: auto">{{ payloadPreview }}</code></pre>
+  `,
   standalone: true,
 })
-export class DynamicTemplateComponent implements OnInit, AfterViewInit {
+export class DynamicTemplateComponent implements OnInit {
   @ViewChild('dynamicContainer', { read: ViewContainerRef, static: true })
   dynamicContainer!: ViewContainerRef;
 
   @Input()
-  data!: RequestTemplateView;
+  template!: RequestTemplateView;
+
+  @Input()
+  env!: CountryEnvironmentModel;
 
   payloadPreview: string | null = null;
 
-  constructor(private cdr: ChangeDetectorRef) {}
+  constructor(
+    private cdr: ChangeDetectorRef,
+    private dialogService: DialogService,
+  ) {}
 
-  ngOnInit(): void {
-    if (this.data) {
-      const encodedTemplate = RequestTemplateUtil.encodePayload(
-        this.data.payloadTemplate,
-      );
+  async ngOnInit(): Promise<void> {
+    if (!this.template) {
+      return;
+    }
 
-      if (encodedTemplate) {
-        this.compileTemplate(encodedTemplate);
-      }
+    const encodedTemplate = RequestTemplateUtil.encodePayload(
+      this.template.payloadTemplate,
+    );
+
+    if (encodedTemplate) {
+      await this.compileTemplate(encodedTemplate);
     }
   }
 
-  ngAfterViewInit(): void {
-    // this.cdr.detectChanges(); // Ensure change detection runs
-  }
-
-  private compileTemplate(template: string): void {
+  private async compileTemplate(template: string): Promise<void> {
     const componentReady: EventEmitter<any> = new EventEmitter<any>();
+    const args = await this.retrieveArguments();
+    console.info('Using arguments', args);
 
     const component = getComponentFromTemplate(template);
     const componentRef = this.dynamicContainer.createComponent(component);
-    componentRef.setInput('name', StringUtils.getUniqueStr());
-    componentRef.setInput('age', 26);
     componentRef.setInput('strUtils', StringUtils);
     componentRef.setInput('componentReady', componentReady);
+    componentRef.setInput('arguments', args);
 
     componentReady.subscribe((val) => {
       console.log(val);
@@ -71,6 +87,38 @@ export class DynamicTemplateComponent implements OnInit, AfterViewInit {
         (this.payloadPreview = JSON.stringify(JSON.parse(innerHTML), null, 2)),
       );
     });
+  }
+
+  private async retrieveArguments(): Promise<{ [key: string]: string | null }> {
+    const ctx: { [key: string]: string | null } = {};
+    for (const arg of this.template.arguments) {
+      if (arg.type === RequestTemplateArgType.STATIC) {
+        ctx[arg.keyName] = arg.value;
+      } else if (arg.type === RequestTemplateArgType.PROMPT) {
+        ctx[arg.keyName] = await this.promptArg(arg);
+      } else {
+        throw new Error(`Unsupported arg type ${arg.type}`);
+      }
+    }
+    return ctx;
+  }
+
+  private async promptArg(arg: RequestTemplateArgView): Promise<string | null> {
+    const resp = (await firstValueFrom(
+      this.dialogService
+        .open(
+          TemplateArgPromptDialogComponent,
+          '',
+          new TemplateArgPromptDialogPayload(this.env, arg),
+        )
+        .afterClosed(),
+    )) as TemplateArgsPromptDialogResponse;
+
+    if (!resp) {
+      return await this.promptArg(arg);
+    }
+
+    return resp.value;
   }
 }
 
@@ -96,7 +144,16 @@ function getComponentFromTemplate(template: string): any {
       return this.promisesPerInd[ind];
     }
 
-    ngOnInit() {}
+    ngOnInit() {
+    }
+
+    makeArray(val) {
+      return [].constructor(val);
+    }
+
+    ofNum(val) {
+      return Number(val);
+    }
 
     ngAfterViewChecked() {
       if (!this._templateProcesses) {
@@ -116,19 +173,16 @@ function getComponentFromTemplate(template: string): any {
     selector: StringUtils.generateRandomClassName(),
     standalone: true,
     imports: [NgFor, NgIf, AsyncPipe],
-    interpolation: ['[[', ']]'],
+    interpolation: ['[%', '%]'],
     inputs: [
-      {
-        name: 'name',
-      },
-      {
-        name: 'age',
-      },
       {
         name: 'strUtils',
       },
       {
         name: 'componentReady',
+      },
+      {
+        name: 'arguments',
       },
     ],
   });

@@ -1,0 +1,17 @@
+<div class="dialog-content-container">
+  <div class="mt-1">
+    <h4>{{ payload.arg.name }}</h4>
+    <small>Current environment: {{ payload.env.envName }} {{ payload.env.env }}</small>
+  </div>
+
+  <div class="mt-2">
+    <app-input
+      [(ngModel)]="value"
+      placeholder="Value for {{ payload.arg.keyName }}"></app-input>
+  </div>
+
+  <div class="mt-2 text-end">
+    <button (click)="saveAsNull()" class="btn btn-outline-danger">Save as Null</button>
+    <button (click)="saveAndClose()" class="ms-1 btn btn-outline-success">Save</button>
+  </div>
+</div>

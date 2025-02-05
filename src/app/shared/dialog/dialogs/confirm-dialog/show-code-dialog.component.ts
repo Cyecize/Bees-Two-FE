@@ -5,15 +5,8 @@ import { ShowCodePayload } from './show-code-payload.model';
 
 @Component({
   standalone: true,
-  styles: `
-    .show-code-dialog {
-      @media (min-width: 768px) {
-        min-width: 600px;
-      }
-    }
-  `,
   template: `
-    <div class="show-code-dialog">
+    <div class="dialog-content-container">
       <div class="p-2" style="max-height: 450px; overflow-y: auto">
         <pre>{{ code }}</pre>
       </div>

@@ -8,7 +8,7 @@ export interface RequestTemplateArg {
   name: string;
 }
 
-export interface RequestTemplateArgView {
+export interface RequestTemplateArgView extends RequestTemplateArg {
   id: number;
   templateId: number;
 }
