@@ -24,6 +24,7 @@ import {
   RequestTemplateView,
 } from '../../../../api/template/request-template';
 import { SelectOptions } from '../../../../api/common/select-options';
+import { RequestTemplateArgType } from '../../../../api/template/arg/request-template-arg.type';
 
 interface TemplateForm {
   name: FormControl<string>;
@@ -35,11 +36,20 @@ interface TemplateForm {
   headers: FormArray<FormGroup<BeesParamForm>>;
   payloadTemplate: FormControl<string | null>;
   saveInHistory: FormControl<boolean>;
+  arguments: FormArray<FormGroup<TemplateArgForm>>;
 }
 
 interface BeesParamForm {
   name: FormControl<string>;
   value: FormControl<number | string | boolean | null>;
+}
+
+interface TemplateArgForm {
+  id: FormControl<number | null>;
+  type: FormControl<RequestTemplateArgType>;
+  keyName: FormControl<string>;
+  value: FormControl<string | null>;
+  name: FormControl<string>;
 }
 
 @Component({
@@ -77,10 +87,18 @@ export class TemplateFormComponent implements OnInit {
     return this._template;
   }
 
+  isValueFieldDisabled(ind: number): boolean {
+    return (
+      this.form.controls.arguments.at(ind).controls.type.value ===
+      RequestTemplateArgType.PROMPT
+    );
+  }
+
   entityOptions: SelectOption[] = SelectOptions.beesEntityOptions();
   dataIngestionVersions: SelectOption[] =
     SelectOptions.dataIngestionVersionOptions();
   methodOptions: SelectOption[] = SelectOptions.methodOptions();
+  argTypeOptions = SelectOptions.templateArgTypes();
 
   @Output()
   formSubmitted: EventEmitter<RequestTemplate> =
@@ -114,6 +132,7 @@ export class TemplateFormComponent implements OnInit {
         validators: [Validators.required],
         nonNullable: true,
       }),
+      arguments: new FormArray<FormGroup<TemplateArgForm>>([]),
     });
 
     if (this.template) {
@@ -149,12 +168,38 @@ export class TemplateFormComponent implements OnInit {
     this.form.controls.queryParams.push(this.createBeesFormGroup());
   }
 
+  addTemplateArg(): void {
+    this.form.controls.arguments.push(this.createTemplateArgFormGroup());
+  }
+
   private createBeesFormGroup(): FormGroup<BeesParamForm> {
     return new FormGroup<BeesParamForm>({
       name: new FormControl<string>(null!, {
         validators: [Validators.required],
         nonNullable: true,
       }),
+      value: new FormControl<string | null>(null),
+    });
+  }
+
+  private createTemplateArgFormGroup(): FormGroup<TemplateArgForm> {
+    return new FormGroup<TemplateArgForm>({
+      keyName: new FormControl<string>(null!, {
+        validators: [Validators.required],
+        nonNullable: true,
+      }),
+      type: new FormControl<RequestTemplateArgType>(
+        RequestTemplateArgType.STATIC,
+        {
+          validators: [Validators.required],
+          nonNullable: true,
+        },
+      ),
+      name: new FormControl<string>(null!, {
+        validators: [Validators.required],
+        nonNullable: true,
+      }),
+      id: new FormControl<number | null>(null),
       value: new FormControl<string | null>(null),
     });
   }
@@ -185,9 +230,23 @@ export class TemplateFormComponent implements OnInit {
         this.form.controls.queryParams.push(queryParamsForm);
       });
     }
+
+    if (template.arguments?.length) {
+      template.arguments.forEach((arg) => {
+        const form = this.createTemplateArgFormGroup();
+        form.patchValue(arg);
+        this.form.controls.arguments.push(form);
+      });
+    }
   }
 
   async onFormSubmit(): Promise<void> {
     this.formSubmitted.emit(this.form.getRawValue());
+  }
+
+  onArgTypeChange(i: number, val: RequestTemplateArgType): void {
+    if (val === RequestTemplateArgType.PROMPT) {
+      this.form.controls.arguments.at(i).controls.value.setValue(null);
+    }
   }
 }

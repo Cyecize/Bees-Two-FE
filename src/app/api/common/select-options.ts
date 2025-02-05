@@ -6,6 +6,7 @@ import {
 import { BeesEntity } from './bees-entity';
 import { RelayVersion } from '../relay/relay.version';
 import { RequestMethod } from './request-method';
+import { RequestTemplateArgType } from '../template/arg/request-template-arg.type';
 
 export class SelectOptions {
   public static beesEntityOptions(): SelectOption[] {
@@ -23,6 +24,14 @@ export class SelectOptions {
   public static methodOptions(): SelectOption[] {
     return [new SelectOptionKvp('Choose one', null)].concat(
       ...Object.keys(RequestMethod).map(
+        (method) => new SelectOptionKey(method),
+      ),
+    );
+  }
+
+  public static templateArgTypes(): SelectOption[] {
+    return [new SelectOptionKvp('Choose one', null)].concat(
+      ...Object.keys(RequestTemplateArgType).map(
         (method) => new SelectOptionKey(method),
       ),
     );

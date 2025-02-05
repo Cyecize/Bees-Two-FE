@@ -7,11 +7,11 @@
       <section class="sidebar-item">
         <h4>Templates</h4>
         <ul>
-          <li routerLinkActive="link-active">
-            <a [routerLink]="routes.ADD_TEMPLATE.toString()">New Template</a>
-          </li>
           <li routerLinkActive="link-active" [routerLinkActiveOptions]="{exact: true}">
             <a [routerLink]="routes.SEARCH_TEMPLATES.toString()">Search Templates</a>
+          </li>
+          <li routerLinkActive="link-active">
+            <a [routerLink]="routes.ADD_TEMPLATE.toString()">New Template</a>
           </li>
         </ul>
       </section>
