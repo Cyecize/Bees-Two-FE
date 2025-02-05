@@ -116,7 +116,7 @@ function getComponentFromTemplate(template: string): any {
     selector: StringUtils.generateRandomClassName(),
     standalone: true,
     imports: [NgFor, NgIf, AsyncPipe],
-    interpolation: ['%%', '%%'],
+    interpolation: ['[[', ']]'],
     inputs: [
       {
         name: 'name',

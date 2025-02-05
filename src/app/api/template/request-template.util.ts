@@ -5,8 +5,8 @@ export class RequestTemplateUtil {
     }
 
     return payload
-      .replace(/{/g, "%%'{'%%")
-      .replace(/}/g, "%%'}'%%")
-      .replace(/@/g, "%%'@'%%");
+      .replace(/{/g, "[['{']]")
+      .replace(/}/g, "[['}']]")
+      .replace(/@/g, "[['@']]");
   }
 }
