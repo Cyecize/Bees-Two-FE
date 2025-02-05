@@ -12,9 +12,16 @@ import { MatTooltip } from '@angular/material/tooltip';
 })
 export class TooltipSpanComponent implements OnInit {
   private _displayText!: string;
+  private _tooltipText!: string;
 
   @Input()
-  set displayText(value: string) {
+  set displayText(value: any) {
+    if (!value) {
+      value = '';
+    }
+
+    value = value + '';
+
     this._displayText = value;
 
     if (this.isInit && this.trimDisplayTextChars > 0) {
@@ -32,7 +39,18 @@ export class TooltipSpanComponent implements OnInit {
   trimDisplayTextChars = -1;
 
   @Input()
-  tooltipText!: string;
+  set tooltipText(val: any) {
+    if (!val) {
+      val = '';
+    }
+
+    val = val + '';
+    this._tooltipText = val;
+  }
+
+  get tooltipText(): string {
+    return this._tooltipText;
+  }
 
   @Input()
   enableCopy = false;
