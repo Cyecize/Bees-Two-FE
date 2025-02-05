@@ -1,10 +1,9 @@
 import {
-  ChangeDetectorRef,
   Component,
   EventEmitter,
   Input,
   OnInit,
-  ViewChild,
+  Output,
   ViewContainerRef,
   ɵcompileComponent,
 } from '@angular/core';
@@ -28,65 +27,83 @@ const compilerImport = angularCompiler;
 
 @Component({
   selector: 'app-dynamic-template',
-  template: `
-    <div style="max-height: 100px; overflow-y: auto">
-      <ng-template #dynamicContainer></ng-template>
-    </div>
-    <pre><code style="overflow-y: auto">{{ payloadPreview }}</code></pre>
-  `,
+  template: '',
   standalone: true,
 })
 export class DynamicTemplateComponent implements OnInit {
-  @ViewChild('dynamicContainer', { read: ViewContainerRef, static: true })
-  dynamicContainer!: ViewContainerRef;
-
   @Input()
-  template!: RequestTemplateView;
+  input!: RequestTemplateView;
 
   @Input()
   env!: CountryEnvironmentModel;
 
-  payloadPreview: string | null = null;
+  private template!: RequestTemplateView;
+
+  @Output()
+  processFinished: EventEmitter<RequestTemplateView> =
+    new EventEmitter<RequestTemplateView>();
 
   constructor(
-    private cdr: ChangeDetectorRef,
     private dialogService: DialogService,
+    private viewContainerRef: ViewContainerRef,
   ) {}
 
   async ngOnInit(): Promise<void> {
-    if (!this.template) {
-      return;
+    if (!this.input) {
+      throw new Error('Template is required!');
     }
 
+    // TODO: think of a better deep clone method
+    this.template = JSON.parse(JSON.stringify(this.input));
+
+    const args = await this.retrieveArguments();
+    console.info('Using arguments', args);
+
+    // TODO: extract the logic for simply compiling template into a service
+    // TODO: where user provides inputs like strUtils, etc... as method arg
     const encodedTemplate = RequestTemplateUtil.encodePayload(
       this.template.payloadTemplate,
     );
 
     if (encodedTemplate) {
-      await this.compileTemplate(encodedTemplate);
+      this.template.payloadTemplate = await this.compileTemplate(
+        encodedTemplate,
+        args,
+      );
     }
+
+    if (this.template.endpoint) {
+      this.template.endpoint = await this.compileTemplate(this.template.endpoint, args);
+    }
+
+    for (const header of this.template.headers) {
+      if (header.value) {
+        header.value = await this.compileTemplate(header.value + '', args);
+      }
+    }
+
+    for (const param of this.template.queryParams) {
+      if (param.value) {
+        param.value = await this.compileTemplate(param.value + '', args);
+      }
+    }
+
+    this.processFinished.emit(this.template);
   }
 
-  private async compileTemplate(template: string): Promise<void> {
+  private async compileTemplate(template: string, args: any): Promise<string> {
     const componentReady: EventEmitter<any> = new EventEmitter<any>();
-    const args = await this.retrieveArguments();
-    console.info('Using arguments', args);
 
     const component = getComponentFromTemplate(template);
-    const componentRef = this.dynamicContainer.createComponent(component);
+    const componentRef = this.viewContainerRef.createComponent(component);
     componentRef.setInput('strUtils', StringUtils);
     componentRef.setInput('componentReady', componentReady);
     componentRef.setInput('arguments', args);
+    componentRef.setInput('env', this.env);
 
-    componentReady.subscribe((val) => {
-      console.log(val);
-
-      // Log the inner HTML of the dynamically created component
-      const innerHTML = componentRef.location.nativeElement.innerText;
-      console.log(
-        (this.payloadPreview = JSON.stringify(JSON.parse(innerHTML), null, 2)),
-      );
-    });
+    //TODO: consider treating this or something here as a flag if the compilation went well
+    await firstValueFrom(componentReady);
+    return componentRef.location.nativeElement.innerText;
   }
 
   private async retrieveArguments(): Promise<{ [key: string]: string | null }> {
@@ -183,6 +200,9 @@ function getComponentFromTemplate(template: string): any {
       },
       {
         name: 'arguments',
+      },
+      {
+        name: 'env',
       },
     ],
   });

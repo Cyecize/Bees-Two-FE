@@ -1,0 +1,68 @@
+<div class="dialog-content-container d-none">
+  <app-dynamic-template
+    [env]="currentEnv"
+    [input]="payload"
+    (processFinished)="onProcessFinished($event)"
+  ></app-dynamic-template>
+</div>
+
+<div class="card dialog-content-container">
+  <div class="card-body">
+    <div class="mt-2">
+      <h6>Request Details</h6>
+      <p>
+        <strong class="p-1 {{template.method}}">{{ template.method }}:
+        </strong>
+        <span *ngIf="!processedTemplate">Loading...</span>
+        <code *ngIf="processedTemplate"> {{ processedTemplate.endpoint }}</code>
+      </p>
+      <p>Save In History: <strong>{{ ObjectUtils.boolToYesNo(template.saveInHistory) }}</strong></p>
+      <p><strong>Entity:</strong> {{ template.entity }}</p>
+    </div>
+
+    <div class="mt-2">
+      <h6>Query Parameters</h6>
+      <span *ngIf="!processedTemplate">Loading...</span>
+      <ul class="list-group" *ngIf="processedTemplate">
+        <li class="list-group-item" *ngFor="let param of processedTemplate.queryParams">
+          <div class="d-flex justify-content-between">
+            <strong>{{ param.name }}:</strong>
+            <div class="ps-2 text-start flex-grow-1">
+              <app-tooltip-span
+                [displayText]="param.value"
+                [tooltipText]="param.value"
+                [trimDisplayTextChars]="60"></app-tooltip-span>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="mt-2">
+      <h6>Headers</h6>
+      <span *ngIf="!processedTemplate">Loading...</span>
+      <ul class="list-group" *ngIf="processedTemplate">
+        <li class="list-group-item" *ngFor="let header of processedTemplate.headers">
+          <div class="d-flex justify-content-between">
+            <strong>{{ header.name }}:</strong>
+            <div class="ps-2 text-start flex-grow-1">
+              <app-tooltip-span
+                [displayText]="header.value"
+                [tooltipText]="header.value"
+                [trimDisplayTextChars]="60"></app-tooltip-span>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="mt-2">
+      <h6>JSON Payload</h6>
+              <pre *ngIf="processedTemplate">{{ processedTemplate.payloadTemplate | json }}</pre>
+    </div>
+
+    <div class="mt-2 text-end">
+      <button class="btn btn-secondary">Send Request</button>
+    </div>
+  </div>
+</div>

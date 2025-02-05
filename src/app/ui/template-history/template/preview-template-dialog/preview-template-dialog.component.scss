@@ -1,0 +1,22 @@
+pre {
+  background-color: #f8f9fa;
+  padding: 15px;
+  border-radius: 5px;
+  overflow-x: auto;
+}
+
+.GET {
+  background-color: rgb(25, 135, 84);
+}
+
+.POST {
+  background-color: rgb(255, 193, 7);
+}
+
+.PUT, .PATCH {
+  background-color: rgb(13, 202, 240);
+}
+
+.DELETE {
+  background-color: rgb(220, 53, 69);
+}
