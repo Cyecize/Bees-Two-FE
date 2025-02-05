@@ -2,6 +2,7 @@ import {
   AfterViewInit,
   ChangeDetectorRef,
   Component,
+  EventEmitter,
   Input,
   OnInit,
   ViewChild,
@@ -9,7 +10,7 @@ import {
   ɵcompileComponent,
 } from '@angular/core';
 import * as angularCompiler from '@angular/compiler';
-import { AsyncPipe, NgFor, NgIf } from "@angular/common";
+import { AsyncPipe, NgFor, NgIf } from '@angular/common';
 import { StringUtils } from '../../../shared/util/string-utils';
 import { RequestTemplateView } from '../../../api/template/request-template';
 import { RequestTemplateUtil } from '../../../api/template/request-template.util';
@@ -20,8 +21,8 @@ const compilerImport = angularCompiler;
 
 @Component({
   selector: 'app-dynamic-template',
-  template:
-    ' <pre><code><ng-template #dynamicContainer></ng-template></code></pre>',
+  template: `<ng-template #dynamicContainer></ng-template>
+    <pre><code>{{ payloadPreview }}</code></pre> `,
   standalone: true,
 })
 export class DynamicTemplateComponent implements OnInit, AfterViewInit {
@@ -30,6 +31,8 @@ export class DynamicTemplateComponent implements OnInit, AfterViewInit {
 
   @Input()
   data!: RequestTemplateView;
+
+  payloadPreview: string | null = null;
 
   constructor(private cdr: ChangeDetectorRef) {}
 
@@ -50,18 +53,24 @@ export class DynamicTemplateComponent implements OnInit, AfterViewInit {
   }
 
   private compileTemplate(template: string): void {
+    const componentReady: EventEmitter<any> = new EventEmitter<any>();
+
     const component = getComponentFromTemplate(template);
     const componentRef = this.dynamicContainer.createComponent(component);
     componentRef.setInput('name', StringUtils.getUniqueStr());
     componentRef.setInput('age', 26);
     componentRef.setInput('strUtils', StringUtils);
-    // this.cdr.detectChanges(); // Ensure change detection runs
+    componentRef.setInput('componentReady', componentReady);
 
-    // Wait for the next change detection cycle to get the rendered HTML
-    // setTimeout(() => {
-    //   const componentHtml = componentRef.location.nativeElement.innerHTML;
-    //   console.log('Dynamic Component HTML:', componentHtml);
-    // });
+    componentReady.subscribe((val) => {
+      console.log(val);
+
+      // Log the inner HTML of the dynamically created component
+      const innerHTML = componentRef.location.nativeElement.innerText;
+      console.log(
+        (this.payloadPreview = JSON.stringify(JSON.parse(innerHTML), null, 2)),
+      );
+    });
   }
 }
 
@@ -69,31 +78,34 @@ function getComponentFromTemplate(template: string): any {
   const className = StringUtils.generateRandomClassName();
   const classDefinition = `
   return class ${className} {
-
+    _templateProcesses = null;
     valuesPerInd = {};
     promisesPerInd = {};
 
-    constructor() {
-    }
+    constructor() {}
 
-   getRandomStr(ind) {
-    if (!this.valuesPerInd[ind]) {
-      this.valuesPerInd[ind] = this.strUtils.getUniqueStr();
-      this.promisesPerInd[ind] = new Promise((res, rej) => {
-        setTimeout( () => {
-          console.log(this.valuesPerInd[ind]);
-          res(this.valuesPerInd[ind]);
+    getRandomStr(ind) {
+      if (!this.valuesPerInd[ind]) {
+        this.valuesPerInd[ind] = this.strUtils.getUniqueStr();
+        this.promisesPerInd[ind] = new Promise((res, rej) => {
+          setTimeout(() => {
+            res(this.valuesPerInd[ind]);
           }, 1500);
         });
+      }
+      return this.promisesPerInd[ind];
     }
 
-    return this.promisesPerInd[ind];
-   }
+    ngOnInit() {}
 
-    ngOnInit() {
-
+    ngAfterViewChecked() {
+      if (!this._templateProcesses) {
+        this._templateProcesses = Promise.allSettled(Object.values(this.promisesPerInd));
+        this._templateProcesses.then(() => {
+          setTimeout(() => {this.componentReady.next('all settled');}, 100)
+        });
+      }
     }
-
   }
 `;
 
@@ -114,6 +126,9 @@ function getComponentFromTemplate(template: string): any {
       },
       {
         name: 'strUtils',
+      },
+      {
+        name: 'componentReady',
       },
     ],
   });
