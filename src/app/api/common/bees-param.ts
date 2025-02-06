@@ -9,6 +9,8 @@ export class BeesParamImpl implements BeesParam {
 
   constructor(name: string, value?: number | string | boolean | null) {
     this.name = name;
-    this.value = value || null;
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    this.value = value;
   }
 }
