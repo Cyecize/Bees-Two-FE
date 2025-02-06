@@ -18,6 +18,8 @@ export class RelayService {
     headers: BeesParam[],
     data?: string | null,
     targetEnvId?: number,
+    templateId?: number,
+    saveInHistory?: boolean,
   ): Observable<BeesResponse<T>> {
     return this.repository.call<T>(
       method,
@@ -28,6 +30,8 @@ export class RelayService {
       },
       headers,
       targetEnvId,
+      templateId,
+      saveInHistory,
     );
   }
 }

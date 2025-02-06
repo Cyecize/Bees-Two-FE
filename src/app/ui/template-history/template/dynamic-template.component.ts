@@ -73,7 +73,10 @@ export class DynamicTemplateComponent implements OnInit {
     }
 
     if (this.template.endpoint) {
-      this.template.endpoint = await this.compileTemplate(this.template.endpoint, args);
+      this.template.endpoint = await this.compileTemplate(
+        this.template.endpoint,
+        args,
+      );
     }
 
     for (const header of this.template.headers) {

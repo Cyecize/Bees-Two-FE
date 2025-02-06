@@ -6,9 +6,10 @@ import { DynamicTemplateComponent } from '../dynamic-template.component';
 import { CountryEnvironmentModel } from '../../../../api/env/country-environment.model';
 import { EnvOverrideFieldComponent } from '../../../env/env-override-field/env-override-field.component';
 import { CountryEnvironmentService } from '../../../../api/env/country-environment.service';
-import { JsonPipe, NgClass, NgForOf, NgIf } from "@angular/common";
+import { JsonPipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { ObjectUtils } from '../../../../shared/util/object-utils';
 import { TooltipSpanComponent } from '../../../../shared/components/tooltip-span/tooltip-span.component';
+import { RequestTemplateRunningService } from '../../../../api/template/request-template-running.service';
 
 @Component({
   templateUrl: './preview-template-dialog.component.html',
@@ -32,7 +33,10 @@ export class PreviewTemplateDialogComponent
   template!: RequestTemplateView;
   processedTemplate?: RequestTemplateView;
 
-  constructor(private envService: CountryEnvironmentService) {
+  constructor(
+    private envService: CountryEnvironmentService,
+    private templateRunningService: RequestTemplateRunningService,
+  ) {
     super();
   }
 
@@ -54,5 +58,22 @@ export class PreviewTemplateDialogComponent
 
   onProcessFinished(template: RequestTemplateView): void {
     this.processedTemplate = template;
+  }
+
+  async sendRequest(): Promise<void> {
+    if (!this.processedTemplate) {
+      return;
+    }
+
+    const resp = await this.templateRunningService.runOnce(
+      this.currentEnv,
+      this.processedTemplate,
+    );
+
+    if (resp.isSuccess) {
+      alert('success!');
+    }
+
+    console.log(resp);
   }
 }
