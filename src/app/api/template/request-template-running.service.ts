@@ -40,7 +40,7 @@ export class RequestTemplateRunningService {
     } else {
       response = this.proxyService.makeRequest({
         templateId: template.id,
-        data: template.payloadTemplate,
+        data: JSON.parse(template.payloadTemplate || ''),
         headers: template.headers,
         method: template.method,
         entity: template.entity,
