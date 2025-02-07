@@ -25,6 +25,7 @@ import {
 } from '../../../../api/template/request-template';
 import { SelectOptions } from '../../../../api/common/select-options';
 import { RequestTemplateArgType } from '../../../../api/template/arg/request-template-arg.type';
+import { RequestTemplatePayloadType } from '../../../../api/template/request-template-payload.type';
 
 interface TemplateForm {
   name: FormControl<string>;
@@ -35,6 +36,9 @@ interface TemplateForm {
   queryParams: FormArray<FormGroup<BeesParamForm>>;
   headers: FormArray<FormGroup<BeesParamForm>>;
   payloadTemplate: FormControl<string | null>;
+  payloadType: FormControl<RequestTemplatePayloadType>;
+  preRequestScript: FormControl<string | null>;
+  postRequestScript: FormControl<string | null>;
   saveInHistory: FormControl<boolean>;
   arguments: FormArray<FormGroup<TemplateArgForm>>;
 }
@@ -99,6 +103,7 @@ export class TemplateFormComponent implements OnInit {
     SelectOptions.dataIngestionVersionOptions();
   methodOptions: SelectOption[] = SelectOptions.methodOptions();
   argTypeOptions = SelectOptions.templateArgTypes();
+  templatePayloadTypes = SelectOptions.templatePayloadTypes();
 
   @Output()
   formSubmitted: EventEmitter<RequestTemplate> =
@@ -128,6 +133,15 @@ export class TemplateFormComponent implements OnInit {
       queryParams: new FormArray<FormGroup<BeesParamForm>>([]),
       headers: new FormArray<FormGroup<BeesParamForm>>([]),
       payloadTemplate: new FormControl<string | null>(null),
+      payloadType: new FormControl<RequestTemplatePayloadType>(
+        RequestTemplatePayloadType.ANGULAR_TEMPLATE,
+        {
+          validators: [Validators.required],
+          nonNullable: true,
+        },
+      ),
+      preRequestScript: new FormControl<string | null>(null),
+      postRequestScript: new FormControl<string | null>(null),
       saveInHistory: new FormControl<boolean>(false, {
         validators: [Validators.required],
         nonNullable: true,
@@ -213,6 +227,9 @@ export class TemplateFormComponent implements OnInit {
       payloadTemplate: template.payloadTemplate,
       dataIngestionVersion: template.dataIngestionVersion,
       saveInHistory: template.saveInHistory,
+      preRequestScript: template.preRequestScript,
+      postRequestScript: template.postRequestScript,
+      payloadType: template.payloadType,
     });
 
     if (template.headers?.length) {

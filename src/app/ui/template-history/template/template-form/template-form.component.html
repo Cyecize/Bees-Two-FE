@@ -128,13 +128,38 @@
   </div>
   <hr>
   <div class="mt-2">
+    <app-select formControlName="payloadType"
+                placeholder="Template Content Type"
+                [errors]="errors"
+                [options]="templatePayloadTypes"></app-select>
+  </div>
+  <div class="mt-2">
     <label for="templatePayload"><h4>Template content</h4></label>
     <textarea
       rows="10"
       class="form-control"
       formControlName="payloadTemplate"
-      placeholder="Angular component HTML code with interpolation [%var%]"
+      placeholder="Angular component HTML code with interpolation [%var%] or JS"
       id="templatePayload"></textarea>
+  </div>
+
+  <div class="mt-2">
+    <label for="preRequestScript"><h4>Pre-request script</h4></label>
+    <textarea
+      rows="10"
+      class="form-control"
+      formControlName="preRequestScript"
+      placeholder="JS Code"
+      id="preRequestScript"></textarea>
+  </div>
+  <div class="mt-2">
+    <label for="postRequestScript"><h4>Post-request script</h4></label>
+    <textarea
+      rows="10"
+      class="form-control"
+      formControlName="postRequestScript"
+      placeholder="JS Code"
+      id="postRequestScript"></textarea>
   </div>
   <div class="mt-2 text-end">
     <button (click)="onFormSubmit()"

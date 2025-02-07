@@ -6,6 +6,7 @@ import {
   RequestTemplateArg,
   RequestTemplateArgView,
 } from './arg/request-template-arg';
+import { RequestTemplatePayloadType } from './request-template-payload.type';
 
 export interface RequestTemplate {
   name: string;
@@ -16,6 +17,9 @@ export interface RequestTemplate {
   queryParams: BeesParam[];
   headers: BeesParam[];
   payloadTemplate: string | null;
+  payloadType: RequestTemplatePayloadType;
+  preRequestScript: string | null;
+  postRequestScript: string | null;
   saveInHistory: boolean;
   arguments: RequestTemplateArg[];
 }
