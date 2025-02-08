@@ -2,38 +2,25 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { DialogContentBaseComponent } from '../../../../shared/dialog/dialogs/dialog-content-base.component';
 import { FormsModule } from '@angular/forms';
-import { NgForOf } from '@angular/common';
+import { JsonPipe, NgForOf, NgIf } from '@angular/common';
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 import { DialogService } from '../../../../shared/dialog/dialog.service';
 import { EDITOR_CUSTOM_LIB } from './template-payload-playground-editor.lib';
-import { CancellationToken, editor, languages, Position } from 'monaco-editor';
-import { JavascriptEvalService } from '../../../../api/template/js-eval/javascript-eval.service';
+import {
+  JavascriptEvalService,
+  JsEvalResult,
+} from '../../../../api/template/js-eval/javascript-eval.service';
 import { TemplatePlaygroundDialogPayload } from './template-playground-dialog.payload';
+import { ObjectUtils } from '../../../../shared/util/object-utils';
+import { TemplatePlaygroundDialogResponse } from "./template-playground-dialog.response";
 
 declare const monaco: typeof import('monaco-editor');
 
 @Component({
   standalone: true,
-  template: `
-    <div class="dialog-content-container">
-      <ngx-monaco-editor
-        [options]="editorOptions"
-        [(ngModel)]="userCode"
-        (onInit)="onEditorInit()"
-      ></ngx-monaco-editor>
-
-      <button (click)="onTest()">Test Code</button>
-
-      <div class="output">
-        <h3>Output:</h3>
-        <div *ngFor="let message of output">
-          {{ message }}
-        </div>
-      </div>
-    </div>
-  `,
+  templateUrl: './template-payload-playground-dialog.html',
   styleUrl: './template-payload-playground-dialog.scss',
-  imports: [FormsModule, NgForOf, MonacoEditorModule],
+  imports: [FormsModule, NgForOf, MonacoEditorModule, NgIf, JsonPipe],
 })
 export class TemplatePayloadPlaygroundDialog
   extends DialogContentBaseComponent<TemplatePlaygroundDialogPayload>
@@ -41,6 +28,7 @@ export class TemplatePayloadPlaygroundDialog
 {
   userCode = '';
   output: string[] = [];
+  result: JsEvalResult | null = null;
   editorOptions = {
     theme: 'vs-light',
     language: 'javascript',
@@ -103,18 +91,33 @@ export class TemplatePayloadPlaygroundDialog
     });
   }
 
-  async onTest(): Promise<void> {
+  async onTest(run?: boolean): Promise<void> {
     this.output = [];
+    this.result = null;
 
     const resp = await this.jsEvalService.eval(this.userCode, {
       arguments: this.payload.args,
       env: this.payload.env,
-      run: true,
+      run: run || false,
       onLog: (str) => this.output.push(str),
     });
 
     this.output.push(...resp.errors);
+    this.result = resp;
+  }
 
-    console.log(resp);
+  protected readonly ObjectUtils = ObjectUtils;
+
+  showCode(): void {
+    this.dialogService.openShowCodeDialog(
+      JSON.stringify(this.result?.output, null, 2),
+      'JS Code Output',
+    );
+  }
+
+  saveAndClose(): void {
+    this.close(
+      new TemplatePlaygroundDialogResponse(this.userCode?.trim() || null),
+    );
   }
 }

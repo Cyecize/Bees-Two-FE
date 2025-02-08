@@ -50,3 +50,9 @@
     min-width: 600px;
   }
 }
+
+.dialog-content-container-lg {
+  @media (min-width: $screen-md) {
+    min-width: 70vw;
+  }
+}
