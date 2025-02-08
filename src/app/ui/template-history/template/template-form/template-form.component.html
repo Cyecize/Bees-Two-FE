@@ -134,9 +134,15 @@
                 [options]="templatePayloadTypes"></app-select>
   </div>
   <div class="mt-2">
-    <label for="templatePayload"><h4>Template content</h4></label>
+    <div class="d-flex justify-content-between">
+      <label for="templatePayload"><h4>Template content</h4></label>
+      <button
+        (click)="openTemplateContentPlayground()"
+        class="btn btn-sm btn-info"
+        type="button">Open Playground
+      </button>
+    </div>
     <textarea
-      rows="10"
       class="form-control"
       formControlName="payloadTemplate"
       placeholder="Angular component HTML code with interpolation [%var%] or JS"
@@ -144,18 +150,31 @@
   </div>
 
   <div class="mt-2">
-    <label for="preRequestScript"><h4>Pre-request script</h4></label>
+    <div class="d-flex justify-content-between">
+      <label for="preRequestScript"><h4>Pre-request script</h4></label>
+      <button
+        (click)="openPreRequestScriptPlayground()"
+        class="btn btn-sm btn-info"
+        type="button">Open Playground
+      </button>
+    </div>
+
     <textarea
-      rows="10"
       class="form-control"
       formControlName="preRequestScript"
       placeholder="JS Code"
       id="preRequestScript"></textarea>
   </div>
   <div class="mt-2">
-    <label for="postRequestScript"><h4>Post-request script</h4></label>
+    <div class="d-flex justify-content-between">
+      <label for="postRequestScript"><h4>Post-request script</h4></label>
+      <button
+        (click)="openPostRequestScriptPlayground()"
+        class="btn btn-sm btn-info"
+        type="button">Open Playground
+      </button>
+    </div>
     <textarea
-      rows="10"
       class="form-control"
       formControlName="postRequestScript"
       placeholder="JS Code"

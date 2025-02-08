@@ -26,6 +26,9 @@ import {
 import { SelectOptions } from '../../../../api/common/select-options';
 import { RequestTemplateArgType } from '../../../../api/template/arg/request-template-arg.type';
 import { RequestTemplatePayloadType } from '../../../../api/template/request-template-payload.type';
+import { DialogService } from '../../../../shared/dialog/dialog.service';
+import { TemplatePlaygroundDialogPayload } from '../template-payload-playground-dialog/template-playground-dialog.payload';
+import { CountryEnvironmentService } from '../../../../api/env/country-environment.service';
 
 interface TemplateForm {
   name: FormControl<string>;
@@ -109,7 +112,10 @@ export class TemplateFormComponent implements OnInit {
   formSubmitted: EventEmitter<RequestTemplate> =
     new EventEmitter<RequestTemplate>();
 
-  constructor() {}
+  constructor(
+    private dialogService: DialogService,
+    private envService: CountryEnvironmentService,
+  ) {}
 
   ngOnInit(): void {
     this.form = new FormGroup<TemplateForm>({
@@ -268,5 +274,61 @@ export class TemplateFormComponent implements OnInit {
     if (val === RequestTemplateArgType.PROMPT) {
       this.form.controls.arguments.at(i).controls.value.setValue(null);
     }
+  }
+
+  openTemplateContentPlayground(): void {
+    if (
+      this.form.controls.payloadType.value !==
+      RequestTemplatePayloadType.JAVASCRIPT
+    ) {
+      alert('Please choose JavaScript type!');
+      return;
+    }
+
+    this.dialogService
+      .openCodePlayground(
+        new TemplatePlaygroundDialogPayload(
+          this.form.controls.payloadTemplate.value,
+          this.form.getRawValue().arguments,
+          this.envService.getCurrentEnv()!,
+        ),
+      )
+      .subscribe((res) => {
+        if (res) {
+          this.form.controls.payloadTemplate.patchValue(res.code);
+        }
+      });
+  }
+
+  openPreRequestScriptPlayground(): void {
+    this.dialogService
+      .openCodePlayground(
+        new TemplatePlaygroundDialogPayload(
+          this.form.controls.preRequestScript.value,
+          this.form.getRawValue().arguments,
+          this.envService.getCurrentEnv()!,
+        ),
+      )
+      .subscribe((res) => {
+        if (res) {
+          this.form.controls.preRequestScript.patchValue(res.code);
+        }
+      });
+  }
+
+  openPostRequestScriptPlayground(): void {
+    this.dialogService
+      .openCodePlayground(
+        new TemplatePlaygroundDialogPayload(
+          this.form.controls.postRequestScript.value,
+          this.form.getRawValue().arguments,
+          this.envService.getCurrentEnv()!,
+        ),
+      )
+      .subscribe((res) => {
+        if (res) {
+          this.form.controls.postRequestScript.patchValue(res.code);
+        }
+      });
   }
 }
