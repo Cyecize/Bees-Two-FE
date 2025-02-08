@@ -95,7 +95,7 @@ export class JavascriptEvalService {
         logHandler,
         waitHandler,
         options.env,
-        options.arguments,
+        this.convertArgumentsToObj(options.arguments),
         beesObject,
       );
 
@@ -120,5 +120,16 @@ export class JavascriptEvalService {
     }
 
     return result;
+  }
+
+  private convertArgumentsToObj(args: RequestTemplateArg[]): {
+    [key: string]: RequestTemplateArg;
+  } {
+    const obj: { [key: string]: RequestTemplateArg } = {};
+    for (const arg of args) {
+      obj[arg.keyName] = arg;
+    }
+
+    return obj;
   }
 }

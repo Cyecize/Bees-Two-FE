@@ -35,11 +35,7 @@ export const EDITOR_CUSTOM_LIB = `
         dialogService: DialogService;
       }
 
-      /** Environment variables */
       declare const env: CountryEnvironment;
-
-      /** Function arguments */
-      declare const args: Record<string, any>;
 
       /** Available services */
       declare const bees: Bees;

@@ -73,12 +73,29 @@ export class TemplatePayloadPlaygroundDialog
   private async configureMonaco(): Promise<void> {
     const monaco = (window as any).monaco;
 
-    // Add type definitions for auto-completion
     monaco.languages.typescript.javascriptDefaults.addExtraLib(
       EDITOR_CUSTOM_LIB,
     );
 
-    // Configure compiler options
+    monaco.languages.typescript.javascriptDefaults.addExtraLib(
+      `
+      interface RequestTemplateArg {
+        id: number | null;
+        type: RequestTemplateArgType;
+        keyName: string;
+        value: string | null;
+        name: string;
+      }
+
+      interface Args {
+        ${this.payload.args.map((a) => `${a.keyName}: RequestTemplateArg`)}
+      }
+
+      /** Function arguments */
+      declare const args: Args;
+      `,
+    );
+
     monaco.languages.typescript.javascriptDefaults.setCompilerOptions({
       target: monaco.languages.typescript.ScriptTarget.ES2020,
       allowNonTsExtensions: true,
@@ -92,7 +109,7 @@ export class TemplatePayloadPlaygroundDialog
     const resp = await this.jsEvalService.eval(this.userCode, {
       arguments: this.payload.args,
       env: this.payload.env,
-      run: false,
+      run: true,
       onLog: (str) => this.output.push(str),
     });
 
