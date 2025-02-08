@@ -10,6 +10,7 @@ import { AppRoutingPath } from '../../app-routing.path';
 import { ShowLoader } from '../../shared/loader/show.loader.decorator';
 import { PlatformIdType } from '../../api/platformid/platform-id.type';
 import { StringReplacerDialog } from '../../shared/dialog/dialogs/string-replacer-dialog/string-replacer-dialog.component';
+import { TemplatePayloadPlaygroundDialog } from "../template-history/template/template-payload-playground-dialog";
 
 @Component({
   selector: 'app-home',
@@ -67,6 +68,14 @@ export class HomeComponent implements OnInit {
 
   openStringReplacerDialog(): void {
     this.dialogService.open(StringReplacerDialog, '', null);
+  }
+
+  openPlayground(): void {
+    this.dialogService.open(
+      TemplatePayloadPlaygroundDialog,
+      'Playground',
+      null,
+    );
   }
 }
 
