@@ -253,6 +253,9 @@ export class TemplateFormComponent implements OnInit {
         const form = this.createTemplateArgFormGroup();
         form.patchValue(arg);
         this.form.controls.arguments.push(form);
+        if (form.controls.type.value === RequestTemplateArgType.PROMPT) {
+          form.controls.value.disable();
+        }
       });
     }
   }

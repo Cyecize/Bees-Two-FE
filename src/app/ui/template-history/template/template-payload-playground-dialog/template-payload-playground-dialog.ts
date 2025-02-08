@@ -12,7 +12,7 @@ import {
 } from '../../../../api/template/js-eval/javascript-eval.service';
 import { TemplatePlaygroundDialogPayload } from './template-playground-dialog.payload';
 import { ObjectUtils } from '../../../../shared/util/object-utils';
-import { TemplatePlaygroundDialogResponse } from "./template-playground-dialog.response";
+import { TemplatePlaygroundDialogResponse } from './template-playground-dialog.response';
 
 declare const monaco: typeof import('monaco-editor');
 
