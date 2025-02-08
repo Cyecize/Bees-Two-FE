@@ -4,12 +4,21 @@ ngx-monaco-editor {
   margin: 0;
 }
 
-.output {
-  max-height: 200px;
+.sidebar {
+  max-height: 470px;
   overflow-y: auto;
+
+  .output, .output-logs {
+    max-height: 200px;
+    overflow-y: auto;
+  }
+
+  .output-logs {
+    max-height: 100px;
+  }
 }
 
 .code-container {
-  max-height: 450px;
+  max-height: 480px;
   overflow-y: auto;
 }
