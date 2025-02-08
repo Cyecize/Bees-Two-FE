@@ -31,6 +31,9 @@ import { ConfirmDialogPayload } from './dialogs/show-code-dialog/confirm-dialog-
 import { ConfirmDialogComponent } from './dialogs/show-code-dialog/confirm-dialog.component';
 import { RequestTemplateView } from '../../api/template/request-template';
 import { PreviewTemplateDialogComponent } from '../../ui/template-history/template/preview-template-dialog/preview-template-dialog.component';
+import { TemplatePlaygroundDialogResponse } from '../../ui/template-history/template/template-payload-playground-dialog/template-playground-dialog.response';
+import { TemplatePlaygroundDialogPayload } from '../../ui/template-history/template/template-payload-playground-dialog/template-playground-dialog.payload';
+import { TemplatePayloadPlaygroundDialog } from '../../ui/template-history/template/template-payload-playground-dialog/template-payload-playground-dialog';
 
 @Injectable({ providedIn: 'root' })
 export class DialogService {
@@ -131,6 +134,16 @@ export class DialogService {
       PreviewTemplateDialogComponent,
       `Preview ${template.name}`,
       template,
+    ).afterClosed();
+  }
+
+  public openCodePlayground(
+    payload: TemplatePlaygroundDialogPayload,
+  ): Observable<TemplatePlaygroundDialogResponse> {
+    return this.open(
+      TemplatePayloadPlaygroundDialog,
+      'Playground',
+      payload,
     ).afterClosed();
   }
 

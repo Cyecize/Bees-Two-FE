@@ -10,7 +10,8 @@ import { AppRoutingPath } from '../../app-routing.path';
 import { ShowLoader } from '../../shared/loader/show.loader.decorator';
 import { PlatformIdType } from '../../api/platformid/platform-id.type';
 import { StringReplacerDialog } from '../../shared/dialog/dialogs/string-replacer-dialog/string-replacer-dialog.component';
-import { TemplatePayloadPlaygroundDialog } from "../template-history/template/template-payload-playground-dialog";
+import { TemplatePayloadPlaygroundDialog } from '../template-history/template/template-payload-playground-dialog/template-payload-playground-dialog';
+import { TemplatePlaygroundDialogPayload } from '../template-history/template/template-payload-playground-dialog/template-playground-dialog.payload';
 
 @Component({
   selector: 'app-home',
@@ -63,7 +64,7 @@ export class HomeComponent implements OnInit {
   }
 
   openPlatformDialog(type: PlatformIdType): void {
-    this.dialogService.openPlatformIdDialog(this.currentEnv!, type);
+    this.dialogService.openPlatformIdDialog(this.currentEnv, type);
   }
 
   openStringReplacerDialog(): void {
@@ -71,10 +72,8 @@ export class HomeComponent implements OnInit {
   }
 
   openPlayground(): void {
-    this.dialogService.open(
-      TemplatePayloadPlaygroundDialog,
-      'Playground',
-      null,
+    this.dialogService.openCodePlayground(
+      new TemplatePlaygroundDialogPayload('', [], this.currentEnv),
     );
   }
 }
