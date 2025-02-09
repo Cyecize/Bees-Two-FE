@@ -26,13 +26,43 @@ export const EDITOR_CUSTOM_LIB = `
       }
 
       interface DialogService {
-        openAccountPicker: (env: Env) => Observable<any>
+        openAccountPicker: (env: Env) => Observable<any>;
+        openShowCodeDialog(code: string, title?: string): Observable<void>;
+        async openTemplateArgPrompt(
+          env: CountryEnvironmentModel,
+          arg: RequestTemplateArgView
+        ): Promise<string | null>;
+      }
+
+      interface LocalAccount {
+        name: string;
+        envId: number;
+        env: CountryEnvironmentModel;
+        beesId: string;
+        customerAccountId: string;
+        vendorAccountId: string;
+      }
+
+      interface LocalAccountService {
+        async createFromBeesAccountIfNotExists(
+          env: CountryEnvironmentModel,
+          beesAccount: AccountV1): Promise<LocalAccount | null>;
+      }
+
+      interface AccountV1Service {
+        async findOne(
+          env: CountryEnvironmentModel,
+          vendorAccountId?: string,
+          customerAccountId?: string,
+          ): Promise<AccountV1 | null>;
       }
 
       interface Bees {
         /** RxJS utilities */
         rx: BeesRx;
         dialogService: DialogService;
+        localAccountService: LocalAccountService;
+        accountV1Service: AccountV1Service;
       }
 
       declare const env: CountryEnvironment;

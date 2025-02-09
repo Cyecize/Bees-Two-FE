@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ComponentType } from '@angular/cdk/portal';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
-import { Observable } from 'rxjs';
+import { firstValueFrom, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { DialogContentBaseComponent } from './dialogs/dialog-content-base.component';
 import { DialogComponent } from './dialogs/dialog.component';
@@ -151,15 +151,23 @@ export class DialogService {
     ).afterClosed();
   }
 
-  public openTemplateArgPrompt(
+  public async openTemplateArgPrompt(
     env: CountryEnvironmentModel,
     arg: RequestTemplateArgView,
-  ): Observable<TemplateArgsPromptDialogResponse> {
-    return this.open(
-      TemplateArgPromptDialogComponent,
-      '',
-      new TemplateArgPromptDialogPayload(env, arg),
-    ).afterClosed();
+  ): Promise<string | null> {
+    const resp: TemplateArgsPromptDialogResponse = await firstValueFrom(
+      this.open(
+        TemplateArgPromptDialogComponent,
+        '',
+        new TemplateArgPromptDialogPayload(env, arg),
+      ).afterClosed(),
+    );
+
+    if (!resp) {
+      return await this.openTemplateArgPrompt(env, arg);
+    }
+
+    return resp.value;
   }
 
   public openPlatformIdDialog(

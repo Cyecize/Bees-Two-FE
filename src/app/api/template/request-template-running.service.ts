@@ -313,20 +313,11 @@ export class RequestTemplateRunningService {
     return RequestTemplateArgUtil.convertArgumentsToObj(args);
   }
 
-  // TODO: Consider adding this logic to template scripts
   private async promptArg(
     env: CountryEnvironmentModel,
     arg: RequestTemplateArgView,
   ): Promise<string | null> {
-    const resp = await firstValueFrom(
-      this.dialogService.openTemplateArgPrompt(env, arg),
-    );
-
-    if (!resp) {
-      return await this.promptArg(env, arg);
-    }
-
-    return resp.value;
+    return await this.dialogService.openTemplateArgPrompt(env, arg);
   }
 
   private async compileJsTemplate(

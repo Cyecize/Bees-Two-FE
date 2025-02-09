@@ -4,6 +4,8 @@ import { ObjectUtils } from '../../../shared/util/object-utils';
 import { RequestTemplateArg } from '../arg/request-template-arg';
 import { CountryEnvironmentModel } from '../../env/country-environment.model';
 import { DialogService } from '../../../shared/dialog/dialog.service';
+import { LocalAccountService } from '../../accounts/local/local-account.service';
+import { AccountV1Service } from '../../accounts/v1/account-v1.service';
 
 export interface JsEvalOptions {
   run: boolean;
@@ -23,7 +25,11 @@ export interface JsEvalResult {
 
 @Injectable({ providedIn: 'root' })
 export class JavascriptEvalService {
-  constructor(private dialogService: DialogService) {}
+  constructor(
+    private dialogService: DialogService,
+    private localAccountService: LocalAccountService,
+    private accountV1Service: AccountV1Service,
+  ) {}
 
   public async eval(
     code: string | null,
@@ -45,6 +51,8 @@ export class JavascriptEvalService {
         firstValueFrom,
       },
       dialogService: this.dialogService,
+      localAccountService: this.localAccountService,
+      accountV1Service: this.accountV1Service,
     };
 
     const result: JsEvalResult = {
