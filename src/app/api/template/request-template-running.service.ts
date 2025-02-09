@@ -8,7 +8,7 @@ import { ProxyService } from '../proxy/proxy.service';
 import { RelayService } from '../relay/relay.service';
 import { CountryEnvironmentModel } from '../env/country-environment.model';
 import { RequestTemplateView } from './request-template';
-import { firstValueFrom, Observable, retry } from 'rxjs';
+import { firstValueFrom, Observable } from 'rxjs';
 import { BeesResponse } from '../proxy/bees-response';
 import {
   FieldErrorWrapper,
@@ -20,7 +20,10 @@ import {
   RequestTemplateArgView,
 } from './arg/request-template-arg';
 import { DialogService } from '../../shared/dialog/dialog.service';
-import { JavascriptEvalService } from './js-eval/javascript-eval.service';
+import {
+  JavascriptEvalService,
+  JsEvalResult,
+} from './js-eval/javascript-eval.service';
 import { RequestTemplateArgUtil } from './arg/request-template-arg.util';
 import { BeesParam } from '../common/bees-param';
 import { StringUtils } from '../../shared/util/string-utils';
@@ -55,10 +58,14 @@ export class RequestTemplateRunningService {
   public async runOnce(
     env: CountryEnvironmentModel,
     template: RequestTemplateView,
-  ): Promise<WrappedResponse<BeesResponse<any>>> {
-    let response: Observable<BeesResponse<any>>;
+    context: Map<string, any>,
+  ): Promise<{
+    response: WrappedResponse<BeesResponse<any>>;
+    postRequestResult: JsEvalResult | null;
+  }> {
+    let responseObservable: Observable<BeesResponse<any>>;
     if (template.dataIngestionVersion) {
-      response = this.relayService.send(
+      responseObservable = this.relayService.send(
         template.entity,
         template.method,
         template.dataIngestionVersion,
@@ -69,9 +76,11 @@ export class RequestTemplateRunningService {
         template.saveInHistory,
       );
     } else {
-      response = this.proxyService.makeRequest({
+      responseObservable = this.proxyService.makeRequest({
         templateId: template.id,
-        data: JSON.parse(template.payloadTemplate || ''),
+        data: template.payloadTemplate?.trim()
+          ? JSON.parse(template.payloadTemplate)
+          : null,
         headers: template.headers,
         method: template.method,
         entity: template.entity,
@@ -82,12 +91,40 @@ export class RequestTemplateRunningService {
       });
     }
 
-    return await new FieldErrorWrapper(() => response).execute();
+    const response = await new FieldErrorWrapper(
+      () => responseObservable,
+    ).execute();
+
+    let postRequestResult: JsEvalResult | null = null;
+    if (response.isSuccess && template.postRequestScript?.trim()) {
+      context.set('response', response.response);
+      console.log(`Executing Post-Request script for template ${template.id}`);
+
+      postRequestResult = await this.jsEvalService.eval(
+        template.postRequestScript,
+        {
+          run: true,
+          context: context,
+          arguments: RequestTemplateArgUtil.convertArgumentsToObj(
+            template.arguments,
+          ),
+          env: env,
+          onLog: (str) =>
+            console.log(`Template ${template.id} Post-Request: ${str}`),
+        },
+      );
+    }
+
+    return {
+      postRequestResult,
+      response,
+    };
   }
 
   public async prepareTemplate(
     env: CountryEnvironmentModel,
     template: RequestTemplateView,
+    context: Map<string, any>,
     onLog: (message: string) => void,
   ): Promise<{
     template: RequestTemplateView;
@@ -99,7 +136,6 @@ export class RequestTemplateRunningService {
     template = JSON.parse(JSON.stringify(template));
 
     const args = await this.retrieveArguments(env, template.arguments);
-    const context = new Map<string, any>();
     logEmitter.emit('Retrieved args');
     console.info('Using arguments', args);
 

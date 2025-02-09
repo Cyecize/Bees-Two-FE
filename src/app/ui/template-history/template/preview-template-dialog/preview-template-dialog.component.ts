@@ -9,6 +9,8 @@ import { JsonPipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { ObjectUtils } from '../../../../shared/util/object-utils';
 import { TooltipSpanComponent } from '../../../../shared/components/tooltip-span/tooltip-span.component';
 import { RequestTemplateRunningService } from '../../../../api/template/request-template-running.service';
+import { ShowLoader } from '../../../../shared/loader/show.loader.decorator';
+import { LoaderService } from '../../../../shared/loader/loader.service';
 
 @Component({
   templateUrl: './preview-template-dialog.component.html',
@@ -29,10 +31,13 @@ export class PreviewTemplateDialogComponent
 {
   currentEnv!: CountryEnvironmentModel;
   template!: RequestTemplateView;
+  private context: Map<string, any> = new Map<string, any>();
+  protected readonly ObjectUtils = ObjectUtils;
 
   constructor(
     private envService: CountryEnvironmentService,
     private templateRunningService: RequestTemplateRunningService,
+    private loaderService: LoaderService,
   ) {
     super();
   }
@@ -46,9 +51,14 @@ export class PreviewTemplateDialogComponent
     }
 
     this.templateRunningService
-      .prepareTemplate(this.currentEnv, this.payload, (message) => {
-        console.log(message);
-      })
+      .prepareTemplate(
+        this.currentEnv,
+        this.payload,
+        this.context,
+        (message) => {
+          console.log(message);
+        },
+      )
       .then((value) => {
         if (value.errors.length) {
           console.log(value.errors);
@@ -62,22 +72,31 @@ export class PreviewTemplateDialogComponent
     return super.noIcon();
   }
 
-  protected readonly ObjectUtils = ObjectUtils;
-
   async sendRequest(): Promise<void> {
-    if (!this.template) {
-      return;
+    this.loaderService.show();
+    try {
+      if (!this.template) {
+        return;
+      }
+
+      const resp = await this.templateRunningService.runOnce(
+        this.currentEnv,
+        this.template,
+        this.context,
+      );
+
+      console.log(
+        `Post request result from Template ${this.template.id}`,
+        resp.postRequestResult,
+      );
+
+      if (resp.response.isSuccess) {
+        alert('success!');
+      }
+
+      console.log(resp);
+    } finally {
+      this.loaderService.hide();
     }
-
-    const resp = await this.templateRunningService.runOnce(
-      this.currentEnv,
-      this.template,
-    );
-
-    if (resp.isSuccess) {
-      alert('success!');
-    }
-
-    console.log(resp);
   }
 }
