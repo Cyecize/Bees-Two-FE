@@ -34,6 +34,10 @@ import { PreviewTemplateDialogComponent } from '../../ui/template-history/templa
 import { TemplatePlaygroundDialogResponse } from '../../ui/template-history/template/template-payload-playground-dialog/template-playground-dialog.response';
 import { TemplatePlaygroundDialogPayload } from '../../ui/template-history/template/template-payload-playground-dialog/template-playground-dialog.payload';
 import { TemplatePayloadPlaygroundDialog } from '../../ui/template-history/template/template-payload-playground-dialog/template-payload-playground-dialog';
+import { TemplateArgPromptDialogComponent } from '../../ui/template-history/template/template-arg-prompt-dialog/template-arg-prompt-dialog.component';
+import { TemplateArgPromptDialogPayload } from '../../ui/template-history/template/template-arg-prompt-dialog/template-arg-prompt-dialog.payload';
+import { RequestTemplateArgView } from '../../api/template/arg/request-template-arg';
+import { TemplateArgsPromptDialogResponse } from '../../ui/template-history/template/template-arg-prompt-dialog/template-args-prompt-dialog.response';
 
 @Injectable({ providedIn: 'root' })
 export class DialogService {
@@ -144,6 +148,17 @@ export class DialogService {
       TemplatePayloadPlaygroundDialog,
       'Playground',
       payload,
+    ).afterClosed();
+  }
+
+  public openTemplateArgPrompt(
+    env: CountryEnvironmentModel,
+    arg: RequestTemplateArgView,
+  ): Observable<TemplateArgsPromptDialogResponse> {
+    return this.open(
+      TemplateArgPromptDialogComponent,
+      '',
+      new TemplateArgPromptDialogPayload(env, arg),
     ).afterClosed();
   }
 

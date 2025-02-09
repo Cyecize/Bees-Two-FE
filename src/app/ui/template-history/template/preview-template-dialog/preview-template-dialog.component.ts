@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { DialogContentBaseComponent } from '../../../../shared/dialog/dialogs/dialog-content-base.component';
 import { RequestTemplateView } from '../../../../api/template/request-template';
 import { Observable } from 'rxjs';
-import { DynamicTemplateComponent } from '../dynamic-template.component';
 import { CountryEnvironmentModel } from '../../../../api/env/country-environment.model';
 import { EnvOverrideFieldComponent } from '../../../env/env-override-field/env-override-field.component';
 import { CountryEnvironmentService } from '../../../../api/env/country-environment.service';
@@ -16,7 +15,6 @@ import { RequestTemplateRunningService } from '../../../../api/template/request-
   styleUrl: './preview-template-dialog.component.scss',
   standalone: true,
   imports: [
-    DynamicTemplateComponent,
     EnvOverrideFieldComponent,
     NgClass,
     NgForOf,
@@ -31,7 +29,6 @@ export class PreviewTemplateDialogComponent
 {
   currentEnv!: CountryEnvironmentModel;
   template!: RequestTemplateView;
-  processedTemplate?: RequestTemplateView;
 
   constructor(
     private envService: CountryEnvironmentService,
@@ -41,13 +38,24 @@ export class PreviewTemplateDialogComponent
   }
 
   ngOnInit(): void {
-    this.template = this.payload;
     this.currentEnv = this.envService.getCurrentEnv()!;
     if (!this.currentEnv) {
       alert('Missing env!');
       super.close(null);
       return;
     }
+
+    this.templateRunningService
+      .prepareTemplate(this.currentEnv, this.payload, (message) => {
+        console.log(message);
+      })
+      .then((value) => {
+        if (value.errors.length) {
+          console.log(value.errors);
+        } else {
+          this.template = value.template;
+        }
+      });
   }
 
   getIcon(): Observable<string> {
@@ -56,18 +64,14 @@ export class PreviewTemplateDialogComponent
 
   protected readonly ObjectUtils = ObjectUtils;
 
-  onProcessFinished(template: RequestTemplateView): void {
-    this.processedTemplate = template;
-  }
-
   async sendRequest(): Promise<void> {
-    if (!this.processedTemplate) {
+    if (!this.template) {
       return;
     }
 
     const resp = await this.templateRunningService.runOnce(
       this.currentEnv,
-      this.processedTemplate,
+      this.template,
     );
 
     if (resp.isSuccess) {

@@ -7,9 +7,10 @@ import { DialogService } from '../../../shared/dialog/dialog.service';
 
 export interface JsEvalOptions {
   run: boolean;
-  arguments: RequestTemplateArg[];
+  arguments: { [key: string]: RequestTemplateArg };
   env: CountryEnvironmentModel;
   rawWMessages?: boolean;
+  context: Map<string, any>;
   stringifyJson?: boolean;
   onLog?: (str: string) => void;
 }
@@ -17,7 +18,7 @@ export interface JsEvalOptions {
 export interface JsEvalResult {
   success: boolean;
   errors: string[];
-  output: string | null;
+  output: object | string | null;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -60,6 +61,7 @@ export class JavascriptEvalService {
         'wait',
         'env',
         'args',
+        'context',
         'bees',
         `return (async () => {
           ${code}
@@ -95,7 +97,8 @@ export class JavascriptEvalService {
         logHandler,
         waitHandler,
         options.env,
-        this.convertArgumentsToObj(options.arguments),
+        options.arguments,
+        options.context,
         beesObject,
       );
 
@@ -120,16 +123,5 @@ export class JavascriptEvalService {
     }
 
     return result;
-  }
-
-  private convertArgumentsToObj(args: RequestTemplateArg[]): {
-    [key: string]: RequestTemplateArg;
-  } {
-    const obj: { [key: string]: RequestTemplateArg } = {};
-    for (const arg of args) {
-      obj[arg.keyName] = arg;
-    }
-
-    return obj;
   }
 }

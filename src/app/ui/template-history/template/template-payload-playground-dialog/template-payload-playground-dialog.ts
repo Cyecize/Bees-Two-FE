@@ -13,6 +13,7 @@ import {
 import { TemplatePlaygroundDialogPayload } from './template-playground-dialog.payload';
 import { ObjectUtils } from '../../../../shared/util/object-utils';
 import { TemplatePlaygroundDialogResponse } from './template-playground-dialog.response';
+import { RequestTemplateArgUtil } from '../../../../api/template/arg/request-template-arg.util';
 
 declare const monaco: typeof import('monaco-editor');
 
@@ -96,8 +97,11 @@ export class TemplatePayloadPlaygroundDialog
     this.result = null;
 
     const resp = await this.jsEvalService.eval(this.userCode, {
-      arguments: this.payload.args,
+      arguments: RequestTemplateArgUtil.convertArgumentsToObj(
+        this.payload.args,
+      ),
       env: this.payload.env,
+      context: new Map<string, any>(),
       run: run || false,
       onLog: (str) => this.output.push(str),
     });

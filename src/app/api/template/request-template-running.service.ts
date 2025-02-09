@@ -1,21 +1,52 @@
-import { Injectable } from '@angular/core';
+import {
+  EventEmitter,
+  Injectable,
+  ViewContainerRef,
+  ɵcompileComponent,
+} from '@angular/core';
 import { ProxyService } from '../proxy/proxy.service';
 import { RelayService } from '../relay/relay.service';
 import { CountryEnvironmentModel } from '../env/country-environment.model';
 import { RequestTemplateView } from './request-template';
-import { Observable } from 'rxjs';
+import { firstValueFrom, Observable } from 'rxjs';
 import { BeesResponse } from '../proxy/bees-response';
 import {
   FieldErrorWrapper,
   WrappedResponse,
 } from '../../shared/util/field-error-wrapper';
+import { RequestTemplateArgType } from './arg/request-template-arg.type';
+import {
+  RequestTemplateArg,
+  RequestTemplateArgView,
+} from './arg/request-template-arg';
+import { DialogService } from '../../shared/dialog/dialog.service';
+import { JavascriptEvalService } from './js-eval/javascript-eval.service';
+import { RequestTemplateArgUtil } from './arg/request-template-arg.util';
+import { BeesParam } from '../common/bees-param';
+import { StringUtils } from '../../shared/util/string-utils';
+import { AsyncPipe, NgFor, NgIf } from '@angular/common';
+import { RequestTemplatePayloadType } from './request-template-payload.type';
+import * as angularCompiler from '@angular/compiler';
+import { RequestTemplateUtil } from './request-template.util';
+
+// This is required in order to retain the angular compiler import as production build removes unneeded imports
+// The import is needed to be present in order to dynamically compile, but not actually used in this component
+const compilerImport = angularCompiler;
 
 @Injectable({ providedIn: 'root' })
 export class RequestTemplateRunningService {
+  private viewContainerRef!: ViewContainerRef;
+
   constructor(
     private proxyService: ProxyService,
     private relayService: RelayService,
+    private dialogService: DialogService,
+    private jsEvalService: JavascriptEvalService,
   ) {}
+
+  public setViewContainerRef(viewContainerRef: ViewContainerRef): void {
+    this.viewContainerRef = viewContainerRef;
+  }
 
   /*
   TODO: refactor this as these request now are not aware that there may be multiple envs ran, so this is temporary
@@ -53,4 +84,335 @@ export class RequestTemplateRunningService {
 
     return await new FieldErrorWrapper(() => response).execute();
   }
+
+  public async prepareTemplate(
+    env: CountryEnvironmentModel,
+    template: RequestTemplateView,
+    onLog: (message: string) => void,
+  ): Promise<{
+    template: RequestTemplateView;
+    errors: string[];
+  }> {
+    const logEmitter = new EventEmitter<string>();
+    logEmitter.subscribe(onLog);
+    // Deep cloning the object
+    template = JSON.parse(JSON.stringify(template));
+
+    const args = await this.retrieveArguments(env, template.arguments);
+    const context = new Map<string, any>();
+    logEmitter.emit('Retrieved args');
+    console.info('Using arguments', args);
+
+    const promises: Promise<any>[] = [];
+    const errors: string[] = [];
+
+    if (template.preRequestScript?.trim()) {
+      logEmitter.emit(`Running Pre-Request script for template ${template.id}`);
+      const res = await this.jsEvalService.eval(template.preRequestScript, {
+        context: context,
+        env: env,
+        run: true,
+        arguments: args,
+        onLog: (msg) => logEmitter.emit(`Pre Request: ${msg}`),
+      });
+
+      errors.push(...res.errors);
+
+      if (!res.success) {
+        logEmitter.emit(
+          `Pre-Request failed, stopping execution of template ${template.id}`,
+        );
+        return {
+          template,
+          errors,
+        };
+      }
+
+      logEmitter.emit(
+        `Completed Pre-Request script for template ${template.id}`,
+      );
+    }
+
+    const endpointPromise = this.jsEvalService.eval(
+      'wJson({value: `' + template.endpoint + '`})',
+      {
+        run: true,
+        onLog: (msg) => logEmitter.emit(`Endpoint: ${msg}`),
+        arguments: args,
+        env: env,
+        context: context,
+      },
+    );
+
+    promises.push(endpointPromise);
+    endpointPromise.then((value) => {
+      if (!value.success) {
+        logEmitter.emit('Error while setting endpoint!');
+      } else {
+        template.endpoint = (value.output as any).value;
+        logEmitter.emit(`Setting endpoint as ${template.endpoint}`);
+      }
+
+      errors.push(...value.errors);
+    });
+
+    this.evalAndSetParams(
+      env,
+      template,
+      args,
+      context,
+      template.queryParams,
+      promises,
+      errors,
+      logEmitter,
+    );
+    this.evalAndSetParams(
+      env,
+      template,
+      args,
+      context,
+      template.headers,
+      promises,
+      errors,
+      logEmitter,
+    );
+
+    // eslint-disable-next-line n/no-unsupported-features/es-builtins
+    await Promise.allSettled(promises);
+
+    if (!template.payloadTemplate?.trim()) {
+      return {
+        template,
+        errors,
+      };
+    }
+
+    switch (template.payloadType) {
+      case RequestTemplatePayloadType.ANGULAR_TEMPLATE:
+        template.payloadTemplate = await this.compileAngularTemplate(
+          RequestTemplateUtil.encodePayload(template.payloadTemplate)!,
+          args,
+          context,
+          env,
+        );
+        break;
+      case RequestTemplatePayloadType.JAVASCRIPT:
+        template.payloadTemplate = await this.compileJsTemplate(
+          template,
+          args,
+          context,
+          env,
+          errors,
+          logEmitter,
+        );
+        break;
+      case RequestTemplatePayloadType.PLAIN_TEXT:
+        // Do nothing
+        break;
+      default:
+        throw new Error(
+          `Unsupported template payload type ${template.payloadType}`,
+        );
+    }
+
+    return {
+      template: template,
+      errors: errors,
+    };
+  }
+
+  private evalAndSetParams(
+    env: CountryEnvironmentModel,
+    template: RequestTemplateView,
+    args: { [key: string]: RequestTemplateArg },
+    context: Map<string, any>,
+    params: BeesParam[],
+    promises: Promise<any>[],
+    errors: string[],
+    logEmitter: EventEmitter<string>,
+  ): void {
+    for (const param of params) {
+      const paramPromise = this.jsEvalService.eval(
+        'wJson({value: `' + param.value + '`})',
+        {
+          run: true,
+          onLog: (msg) => logEmitter.emit(`Header (${param.name}): ${msg}`),
+          arguments: args,
+          env: env,
+          context: context,
+        },
+      );
+
+      promises.push(paramPromise);
+      paramPromise.then((value) => {
+        if (!value.success) {
+          logEmitter.emit(`Failed to set value for param ${param.name}!`);
+        } else {
+          param.value = (value.output as any).value;
+          logEmitter.emit(`Setting param ${param.name} as ${param.value}`);
+        }
+
+        errors.push(...value.errors);
+      });
+    }
+  }
+
+  private async retrieveArguments(
+    env: CountryEnvironmentModel,
+    args: RequestTemplateArgView[],
+  ): Promise<{ [key: string]: RequestTemplateArg }> {
+    for (const arg of args) {
+      if (arg.type === RequestTemplateArgType.PROMPT) {
+        arg.value = await this.promptArg(env, arg);
+      }
+    }
+
+    return RequestTemplateArgUtil.convertArgumentsToObj(args);
+  }
+
+  // TODO: Consider adding this logic to template scripts
+  private async promptArg(
+    env: CountryEnvironmentModel,
+    arg: RequestTemplateArgView,
+  ): Promise<string | null> {
+    const resp = await firstValueFrom(
+      this.dialogService.openTemplateArgPrompt(env, arg),
+    );
+
+    if (!resp) {
+      return await this.promptArg(env, arg);
+    }
+
+    return resp.value;
+  }
+
+  private async compileJsTemplate(
+    template: RequestTemplateView,
+    args: { [key: string]: RequestTemplateArg },
+    context: Map<string, any>,
+    env: CountryEnvironmentModel,
+    errors: string[],
+    logEmitter: EventEmitter<string>,
+  ): Promise<string | null> {
+    logEmitter.emit(`Running Template script for template ${template.id}`);
+    const res = await this.jsEvalService.eval(template.payloadTemplate, {
+      context: context,
+      env: env,
+      run: true,
+      stringifyJson: true,
+      arguments: args,
+      onLog: (msg) => logEmitter.emit(`Template: ${msg}`),
+    });
+
+    errors.push(...res.errors);
+
+    if (!res.success) {
+      logEmitter.emit(`Template script failed, for template ${template.id}`);
+    }
+
+    logEmitter.emit(`Completed Template script for template ${template.id}`);
+
+    return res.output as string | null;
+  }
+
+  private async compileAngularTemplate(
+    template: string,
+    args: any,
+    context: Map<string, any>,
+    env: CountryEnvironmentModel,
+  ): Promise<string> {
+    const componentReady: EventEmitter<any> = new EventEmitter<any>();
+
+    const component = getComponentFromTemplate(template);
+    const componentRef = this.viewContainerRef.createComponent(component);
+    componentRef.setInput('strUtils', StringUtils);
+    componentRef.setInput('componentReady', componentReady);
+    componentRef.setInput('args', args);
+    componentRef.setInput('context', context);
+    componentRef.setInput('env', env);
+
+    //TODO: consider treating this or something here as a flag if the compilation went well
+    await firstValueFrom(componentReady);
+    return componentRef.location.nativeElement.innerText;
+  }
+}
+
+function getComponentFromTemplate(template: string): any {
+  const className = StringUtils.generateRandomClassName();
+  const classDefinition = `
+  return class ${className} {
+    _templateProcesses = null;
+    valuesPerInd = {};
+    promisesPerInd = {};
+
+    constructor() {}
+
+    // Because angular templates make tens of calls for the same interpolation, an index
+    // is required to first ensure you don't get new random val on each call and second
+    // when using async, you MUST return only one promise, otherwise if spikes to CPU 100%
+    getRandomStr(ind) {
+      if (!this.valuesPerInd[ind]) {
+        this.valuesPerInd[ind] = this.strUtils.getUniqueStr();
+        this.promisesPerInd[ind] = new Promise((res, rej) => {
+          setTimeout(() => {
+            res(this.valuesPerInd[ind]);
+          }, 1500);
+        });
+      }
+      return this.promisesPerInd[ind];
+    }
+
+    ngOnInit() {
+    }
+
+    makeArray(val) {
+      return [].constructor(val);
+    }
+
+    ofNum(val) {
+      return Number(val);
+    }
+
+    ngAfterViewChecked() {
+      if (!this._templateProcesses) {
+        this._templateProcesses = Promise.allSettled(Object.values(this.promisesPerInd));
+        this._templateProcesses.then(() => {
+          setTimeout(() => {this.componentReady.next('all settled');}, 100)
+        });
+      }
+    }
+  }
+`;
+
+  const MyCustomComponent = new Function(classDefinition)();
+
+  ɵcompileComponent(MyCustomComponent, {
+    template,
+    selector: StringUtils.generateRandomClassName(),
+    standalone: true,
+    imports: [NgFor, NgIf, AsyncPipe],
+    interpolation: ['[%', '%]'],
+    inputs: [
+      {
+        name: 'strUtils',
+      },
+      {
+        name: 'componentReady',
+      },
+      {
+        name: 'args',
+      },
+      {
+        name: 'env',
+      },
+      {
+        name: 'context',
+      },
+      {
+        name: 'dialogService',
+      },
+    ],
+  });
+
+  return MyCustomComponent;
 }

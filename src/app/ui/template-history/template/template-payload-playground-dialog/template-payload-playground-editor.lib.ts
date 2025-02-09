@@ -37,6 +37,9 @@ export const EDITOR_CUSTOM_LIB = `
 
       declare const env: CountryEnvironment;
 
+      /** Shared CTX between Pre-/Post-scripts and template **/
+      declare const context: Map<string, any>;
+
       /** Available services */
       declare const bees: Bees;
     `;
