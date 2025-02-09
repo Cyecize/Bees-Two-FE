@@ -8,7 +8,7 @@ import { ProxyService } from '../proxy/proxy.service';
 import { RelayService } from '../relay/relay.service';
 import { CountryEnvironmentModel } from '../env/country-environment.model';
 import { RequestTemplateView } from './request-template';
-import { firstValueFrom, Observable } from 'rxjs';
+import { firstValueFrom, Observable, retry } from 'rxjs';
 import { BeesResponse } from '../proxy/bees-response';
 import {
   FieldErrorWrapper,
@@ -236,7 +236,10 @@ export class RequestTemplateRunningService {
         'wJson({value: `' + param.value + '`})',
         {
           run: true,
-          onLog: (msg) => logEmitter.emit(`Header (${param.name}): ${msg}`),
+          onLog: (msg) =>
+            logEmitter.emit(
+              `Header (${param.name}) for template ${template.id}: ${msg}`,
+            ),
           arguments: args,
           env: env,
           context: context,
@@ -246,10 +249,14 @@ export class RequestTemplateRunningService {
       promises.push(paramPromise);
       paramPromise.then((value) => {
         if (!value.success) {
-          logEmitter.emit(`Failed to set value for param ${param.name}!`);
+          logEmitter.emit(
+            `Failed to set value for param ${param.name} for template ${template.id}!`,
+          );
         } else {
           param.value = (value.output as any).value;
-          logEmitter.emit(`Setting param ${param.name} as ${param.value}`);
+          logEmitter.emit(
+            `Setting param ${param.name} as ${param.value} for template ${template.id}`,
+          );
         }
 
         errors.push(...value.errors);
@@ -294,6 +301,7 @@ export class RequestTemplateRunningService {
     errors: string[],
     logEmitter: EventEmitter<string>,
   ): Promise<string | null> {
+    this.viewContainerRef.clear();
     logEmitter.emit(`Running Template script for template ${template.id}`);
     const res = await this.jsEvalService.eval(template.payloadTemplate, {
       context: context,
@@ -323,17 +331,31 @@ export class RequestTemplateRunningService {
   ): Promise<string> {
     const componentReady: EventEmitter<any> = new EventEmitter<any>();
 
-    const component = getComponentFromTemplate(template);
-    const componentRef = this.viewContainerRef.createComponent(component);
-    componentRef.setInput('strUtils', StringUtils);
-    componentRef.setInput('componentReady', componentReady);
-    componentRef.setInput('args', args);
-    componentRef.setInput('context', context);
-    componentRef.setInput('env', env);
+    try {
+      const component = getComponentFromTemplate(template);
+      const componentRef = this.viewContainerRef.createComponent(component);
 
-    //TODO: consider treating this or something here as a flag if the compilation went well
-    await firstValueFrom(componentReady);
-    return componentRef.location.nativeElement.innerText;
+      // Give a hard timeout of 5s and force clear the component in case this function freezes.
+      setTimeout(() => {
+        this.viewContainerRef.clear();
+      }, 5_000);
+
+      componentRef.setInput('strUtils', StringUtils);
+      componentRef.setInput('componentReady', componentReady);
+      componentRef.setInput('args', args);
+      componentRef.setInput('context', context);
+      componentRef.setInput('env', env);
+
+      //TODO: consider treating this or something here as a flag if the compilation went well
+      // This also will freeze if there is a problem with the template
+      await firstValueFrom(componentReady);
+
+      return componentRef.location.nativeElement.innerText;
+    } finally {
+      // This is necessary since if the component has invalid content, it will keep failing as
+      // the current viewContainerRef is the appRoot, so this component is always refreshed.
+      this.viewContainerRef.clear();
+    }
   }
 }
 

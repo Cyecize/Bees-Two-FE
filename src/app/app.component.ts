@@ -1,4 +1,10 @@
-import { Component, Injector, OnInit, ViewContainerRef } from '@angular/core';
+import {
+  Component,
+  Injector,
+  OnInit,
+  ViewChild,
+  ViewContainerRef,
+} from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { DialogService } from './shared/dialog/dialog.service';
 import { LoaderComponent } from './shared/loader/loader.component';
@@ -21,6 +27,12 @@ export class AppComponent implements OnInit {
   title = 'eu-saas-bees-two-fe';
   user?: User;
 
+  @ViewChild('dynamicTemplateContainer', {
+    read: ViewContainerRef,
+    static: true,
+  })
+  viewContainerRef!: ViewContainerRef;
+
   private static injector: Injector;
 
   constructor(
@@ -29,11 +41,9 @@ export class AppComponent implements OnInit {
     private loaderService: LoaderService,
     private authService: AuthenticationService,
     private userService: UserService,
-    requestTemplateRunningService: RequestTemplateRunningService,
-    private viewContainerRef: ViewContainerRef,
+    private requestTemplateRunningService: RequestTemplateRunningService,
   ) {
     AppComponent.injector = injector;
-    requestTemplateRunningService.setViewContainerRef(viewContainerRef);
   }
 
   public static getInjector(): Injector {
@@ -43,5 +53,8 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.authService.init();
     this.userService.currentUser$.subscribe((usr) => (this.user = usr));
+    this.requestTemplateRunningService.setViewContainerRef(
+      this.viewContainerRef,
+    );
   }
 }
