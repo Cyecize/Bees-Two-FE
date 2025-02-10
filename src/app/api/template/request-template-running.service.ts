@@ -60,44 +60,53 @@ export class RequestTemplateRunningService {
     template: RequestTemplateView,
     context: Map<string, any>,
   ): Promise<{
-    response: WrappedResponse<BeesResponse<any>>;
+    response: WrappedResponse<BeesResponse<any>> | null;
     postRequestResult: JsEvalResult | null;
   }> {
-    let responseObservable: Observable<BeesResponse<any>>;
-    if (template.dataIngestionVersion) {
-      responseObservable = this.relayService.send(
-        template.entity,
-        template.method!,
-        template.dataIngestionVersion,
-        template.headers,
-        template.payloadTemplate,
-        env.id,
-        template.id,
-        template.saveInHistory,
-      );
-    } else {
-      responseObservable = this.proxyService.makeRequest({
-        templateId: template.id,
-        data: template.payloadTemplate?.trim()
-          ? JSON.parse(template.payloadTemplate)
-          : null,
-        headers: template.headers,
-        method: template.method!,
-        entity: template.entity,
-        saveInHistory: template.saveInHistory,
-        targetEnv: env.id,
-        endpoint: template.endpoint!,
-        queryParams: template.queryParams,
-      });
+    let response = null;
+
+    if (template.makeRequest) {
+      let responseObservable: Observable<BeesResponse<any>>;
+      if (template.dataIngestionVersion) {
+        responseObservable = this.relayService.send(
+          template.entity,
+          template.method!,
+          template.dataIngestionVersion,
+          template.headers,
+          template.payloadTemplate,
+          env.id,
+          template.id,
+          template.saveInHistory,
+        );
+      } else {
+        responseObservable = this.proxyService.makeRequest({
+          templateId: template.id,
+          data: template.payloadTemplate?.trim()
+            ? JSON.parse(template.payloadTemplate)
+            : null,
+          headers: template.headers,
+          method: template.method!,
+          entity: template.entity,
+          saveInHistory: template.saveInHistory,
+          targetEnv: env.id,
+          endpoint: template.endpoint!,
+          queryParams: template.queryParams,
+        });
+      }
+
+      response = await new FieldErrorWrapper(
+        () => responseObservable,
+      ).execute();
+
+      context.set('response', response.response);
     }
 
-    const response = await new FieldErrorWrapper(
-      () => responseObservable,
-    ).execute();
-
     let postRequestResult: JsEvalResult | null = null;
-    if (response.isSuccess && template.postRequestScript?.trim()) {
-      context.set('response', response.response);
+
+    if (
+      (response?.isSuccess || !template.makeRequest) &&
+      template.postRequestScript?.trim()
+    ) {
       console.log(`Executing Post-Request script for template ${template.id}`);
 
       postRequestResult = await this.jsEvalService.eval(

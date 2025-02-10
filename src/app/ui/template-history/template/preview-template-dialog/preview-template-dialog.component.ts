@@ -9,7 +9,6 @@ import { JsonPipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { ObjectUtils } from '../../../../shared/util/object-utils';
 import { TooltipSpanComponent } from '../../../../shared/components/tooltip-span/tooltip-span.component';
 import { RequestTemplateRunningService } from '../../../../api/template/request-template-running.service';
-import { ShowLoader } from '../../../../shared/loader/show.loader.decorator';
 import { LoaderService } from '../../../../shared/loader/loader.service';
 
 @Component({
@@ -90,8 +89,8 @@ export class PreviewTemplateDialogComponent
         resp.postRequestResult,
       );
 
-      if (resp.response.isSuccess) {
-        alert('success!');
+      if (this.template.makeRequest && !resp.response!.isSuccess) {
+        alert('Fail!');
       }
 
       console.log(resp);
