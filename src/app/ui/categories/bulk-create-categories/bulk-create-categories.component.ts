@@ -34,7 +34,6 @@ import { FileUtils } from '../../../shared/util/file-utils';
 import { CheckboxComponent } from '../../../shared/form-controls/checkbox/checkbox.component';
 import { CategoryWithParent } from '../../../api/categories/category-with-parent';
 import { Category } from '../../../api/categories/category';
-import { update } from '@angular-devkit/build-angular/src/tools/esbuild/angular/compilation/parallel-worker';
 
 interface BulkCreateCategoryCsvForm {
   csvFile: FormControl<Blob>;
