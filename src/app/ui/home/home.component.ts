@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { RouterLink, Routes } from '@angular/router';
 import { CountryEnvironmentService } from '../../api/env/country-environment.service';
 import { DialogService } from '../../shared/dialog/dialog.service';
-import { EnvPickerDialogComponent } from '../env/env-picker-dialog/env-picker-dialog.component';
 import { CountryEnvironmentModel } from '../../api/env/country-environment.model';
 import { NgIf } from '@angular/common';
 import { EnvViewerDialogComponent } from '../env/env-viewer-dialog/env-viewer-dialog.component';
@@ -10,7 +9,6 @@ import { AppRoutingPath } from '../../app-routing.path';
 import { ShowLoader } from '../../shared/loader/show.loader.decorator';
 import { PlatformIdType } from '../../api/platformid/platform-id.type';
 import { StringReplacerDialog } from '../../shared/dialog/dialogs/string-replacer-dialog/string-replacer-dialog.component';
-import { TemplatePayloadPlaygroundDialog } from '../template-history/template/template-payload-playground-dialog/template-payload-playground-dialog';
 import { TemplatePlaygroundDialogPayload } from '../template-history/template/template-payload-playground-dialog/template-playground-dialog.payload';
 
 @Component({
@@ -31,7 +29,7 @@ export class HomeComponent implements OnInit {
   ) {}
 
   openEnvDialog(): void {
-    this.dialogService.open(EnvPickerDialogComponent, '', null);
+    this.dialogService.openEnvPicker();
   }
 
   ngOnInit(): void {

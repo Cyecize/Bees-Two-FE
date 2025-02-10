@@ -47,6 +47,7 @@ export class CheckboxComponent implements OnInit, ControlValueAccessor {
 
   inputId!: string;
 
+  @Input()
   value: any;
 
   ngOnInit(): void {

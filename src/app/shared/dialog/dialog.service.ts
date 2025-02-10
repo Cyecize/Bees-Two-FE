@@ -38,6 +38,9 @@ import { TemplateArgPromptDialogComponent } from '../../ui/template-history/temp
 import { TemplateArgPromptDialogPayload } from '../../ui/template-history/template/template-arg-prompt-dialog/template-arg-prompt-dialog.payload';
 import { RequestTemplateArgView } from '../../api/template/arg/request-template-arg';
 import { TemplateArgsPromptDialogResponse } from '../../ui/template-history/template/template-arg-prompt-dialog/template-args-prompt-dialog.response';
+import { EnvPickerDialogResult } from '../../ui/env/env-picker-dialog/env-picker-dialog.result';
+import { EnvPickerDialogComponent } from '../../ui/env/env-picker-dialog/env-picker-dialog.component';
+import { EnvPickerDialogPayload } from '../../ui/env/env-picker-dialog/env-picker-dialog.payload';
 
 @Injectable({ providedIn: 'root' })
 export class DialogService {
@@ -188,5 +191,25 @@ export class DialogService {
       default:
         throw new Error(`Unsupported ${type} type of platform ID!`);
     }
+  }
+
+  public openEnvPicker(
+    multiselect?: boolean,
+  ): Observable<EnvPickerDialogResult | null> {
+    return this.open(
+      EnvPickerDialogComponent,
+      '',
+      new EnvPickerDialogPayload(multiselect || false),
+    ).afterClosed();
+  }
+
+  public async openEnvPickerMultiselect(): Promise<CountryEnvironmentModel[]> {
+    const res = await firstValueFrom(this.openEnvPicker(true));
+
+    if (!res) {
+      return this.openEnvPickerMultiselect();
+    }
+
+    return res.envs;
   }
 }

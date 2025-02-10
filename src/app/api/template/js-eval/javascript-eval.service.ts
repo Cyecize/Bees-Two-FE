@@ -6,7 +6,7 @@ import { CountryEnvironmentModel } from '../../env/country-environment.model';
 import { DialogService } from '../../../shared/dialog/dialog.service';
 import { LocalAccountService } from '../../accounts/local/local-account.service';
 import { AccountV1Service } from '../../accounts/v1/account-v1.service';
-import { CountryEnvironmentService } from "../../env/country-environment.service";
+import { CountryEnvironmentService } from '../../env/country-environment.service';
 
 export interface JsEvalOptions {
   run: boolean;

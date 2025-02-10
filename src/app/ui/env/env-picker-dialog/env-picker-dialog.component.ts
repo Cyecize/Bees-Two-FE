@@ -30,6 +30,9 @@ import { Env } from '../../../api/env/env';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination.component';
 import { ShowLoader } from '../../../shared/loader/show.loader.decorator';
 import { AddEnvDialogComponent } from '../add-env-dialog/add-env-dialog.component';
+import { EnvPickerDialogPayload } from './env-picker-dialog.payload';
+import { CheckboxComponent } from '../../../shared/form-controls/checkbox/checkbox.component';
+import { EnvPickerDialogResult } from './env-picker-dialog.result';
 
 @Component({
   selector: 'app-env-picker-dialog',
@@ -40,12 +43,13 @@ import { AddEnvDialogComponent } from '../add-env-dialog/add-env-dialog.componen
     SelectSearchComponent,
     InputComponent,
     PaginationComponent,
+    CheckboxComponent,
   ],
   templateUrl: './env-picker-dialog.component.html',
   styleUrl: './env-picker-dialog.component.scss',
 })
 export class EnvPickerDialogComponent
-  extends DialogContentBaseComponent<any>
+  extends DialogContentBaseComponent<EnvPickerDialogPayload>
   implements OnInit
 {
   private readonly PAGE_SIZE = 5;
@@ -59,6 +63,12 @@ export class EnvPickerDialogComponent
 
   envsPage: Page<CountryEnvironmentModel> = new EmptyPage();
   countryCodes: Page<SelectSearchItem<string>> = new EmptyPage();
+
+  selectedEnvs: Map<number, CountryEnvironmentModel> = new Map<
+    number,
+    CountryEnvironmentModel
+  >();
+  selectAll = false;
 
   constructor(
     private envService: CountryEnvironmentService,
@@ -150,14 +160,46 @@ export class EnvPickerDialogComponent
     this.reloadFilters();
   }
 
-  pageChanged(page: number): void {
+  onSelectCountryEnvironment(
+    selected: boolean,
+    env: CountryEnvironmentModel,
+  ): void {
+    if (selected) {
+      this.selectedEnvs.set(env.id, env);
+    } else {
+      this.selectedEnvs.delete(env.id);
+    }
+  }
+
+  onSelectAllChange(selectAll: boolean): void {
+    if (selectAll) {
+      this.selectedEnvs.clear();
+    }
+
+    this.selectAll = selectAll;
+  }
+
+  getSelectionNumber(): number {
+    if (this.selectAll) {
+      return this.envsPage.totalElements;
+    }
+
+    return this.selectedEnvs.size;
+  }
+
+  async pageChanged(page: number): Promise<void> {
     this.query.page.pageNumber = page;
-    this.fetchCountryEnvironments();
+    const selectCopy = this.selectedEnvs;
+    this.selectedEnvs = new Map<number, CountryEnvironmentModel>();
+    await this.fetchCountryEnvironments();
+
+    this.selectedEnvs = selectCopy;
   }
 
   private async reloadFilters(): Promise<void> {
     this.query.page.pageNumber = 0;
     this.countryCodeQuery.page.pageNumber = 0;
+    this.selectedEnvs.clear();
 
     if (await this.fetchCountryEnvironments()) {
       await this.fetchCountryCodes();
@@ -193,6 +235,23 @@ export class EnvPickerDialogComponent
       res.response.totalPages,
       res.response.pageable,
     );
+  }
+
+  @ShowLoader()
+  async closeWithSelection(): Promise<void> {
+    if (!this.selectAll) {
+      this.close(
+        new EnvPickerDialogResult(Array.from(this.selectedEnvs.values())),
+      );
+      return;
+    }
+
+    this.query.page.pageNumber = 0;
+    this.query.page.pageSize = this.envsPage.totalElements + 1;
+
+    await this.fetchCountryEnvironments();
+
+    this.close(new EnvPickerDialogResult(this.envsPage.content));
   }
 
   protected readonly alert = alert;

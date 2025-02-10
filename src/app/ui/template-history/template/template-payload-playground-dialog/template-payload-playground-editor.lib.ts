@@ -29,16 +29,17 @@ export const EDITOR_CUSTOM_LIB = `
         openAccountPicker: (env: Env) => Observable<any>;
         openShowCodeDialog(code: string, title?: string): Observable<void>;
         async openTemplateArgPrompt(
-          env: CountryEnvironmentModel,
+          env: CountryEnvironment,
           arg: RequestTemplateArgView,
           textarea?: boolean
         ): Promise<string | null>;
+        async openEnvPickerMultiselect(): Promise<CountryEnvironment[]>;
       }
 
       interface LocalAccount {
         name: string;
         envId: number;
-        env: CountryEnvironmentModel;
+        env: CountryEnvironment;
         beesId: string;
         customerAccountId: string;
         vendorAccountId: string;
@@ -46,13 +47,13 @@ export const EDITOR_CUSTOM_LIB = `
 
       interface LocalAccountService {
         async createFromBeesAccountIfNotExists(
-          env: CountryEnvironmentModel,
+          env: CountryEnvironment,
           beesAccount: AccountV1): Promise<LocalAccount | null>;
       }
 
       interface AccountV1Service {
         async findOne(
-          env: CountryEnvironmentModel,
+          env: CountryEnvironment,
           vendorAccountId?: string,
           customerAccountId?: string,
           ): Promise<AccountV1 | null>;
@@ -61,7 +62,7 @@ export const EDITOR_CUSTOM_LIB = `
       interface CountryEnvironmentService {
         async createEnv(
           payload: CountryEnvironmentPayload,
-          ): Promise<WrappedResponseLocal<CountryEnvironmentModel>>;
+          ): Promise<WrappedResponseLocal<CountryEnvironment>>;
       }
 
       interface Bees {

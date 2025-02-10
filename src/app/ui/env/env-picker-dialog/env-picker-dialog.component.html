@@ -5,7 +5,7 @@
 
   <div class="d-flex justify-content-between">
     <h4>Environments</h4>
-    <span style="cursor: pointer;" (click)="openAddEnvDialog()">
+    <span *ngIf="!payload.multiselect" style="cursor: pointer;" (click)="openAddEnvDialog()">
       <i class="fa-solid fa-plus"></i>
     </span>
   </div>
@@ -71,6 +71,11 @@
         <th scope="col">Name</th>
         <th scope="col">ENV</th>
         <th scope="col">Actions</th>
+        <th scope="col" *ngIf="payload.multiselect">
+          <app-checkbox
+            (onChange)="onSelectAllChange($event)"
+            label="All"></app-checkbox>
+        </th>
       </tr>
       </thead>
       <tbody>
@@ -80,23 +85,31 @@
         <td>{{ env.env }}</td>
         <td>
           <div class="d-flex">
-            <div class="m-1">
+            <div *ngIf="!payload.multiselect" class="m-1">
               <button
                 *ngIf="!currentEnv || (currentEnv && currentEnv.id !== env.id)"
                 class="btn btn-outline-success"
                 (click)="selectEnv(env)">
-                Select
+                <i class="fa fa-circle-play"></i>
               </button>
               <button
                 *ngIf="currentEnv && currentEnv.id === env.id"
                 class="btn btn-success"
-                disabled>Select
+                disabled>
+                <i class="fa fa-circle-check"></i>
               </button>
             </div>
             <div class="m-1">
-              <button class="btn btn-outline-info" (click)="viewEnvDetails(env)">View more</button>
+              <button class="btn btn-outline-info" (click)="viewEnvDetails(env)">
+                <i class="fa fa-info"></i>
+              </button>
             </div>
           </div>
+        </td>
+        <td *ngIf="payload.multiselect">
+          <app-checkbox *ngIf="!selectAll"
+                        [value]="selectedEnvs.has(env.id)"
+                        (onChange)="onSelectCountryEnvironment($event, env)"></app-checkbox>
         </td>
       </tr>
       </tbody>
@@ -104,5 +117,10 @@
     <app-pagination
       (pageChange)="pageChanged($event)"
       [pagination]="pageToPagination(envsPage)"></app-pagination>
+    <div *ngIf="payload.multiselect" class="text-end">
+      <button (click)="closeWithSelection()" class="btn btn-outline-dark">
+        Select ({{ getSelectionNumber() }})
+      </button>
+    </div>
   </div>
 </div>
