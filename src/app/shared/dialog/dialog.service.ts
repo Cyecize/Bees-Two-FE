@@ -154,17 +154,18 @@ export class DialogService {
   public async openTemplateArgPrompt(
     env: CountryEnvironmentModel,
     arg: RequestTemplateArgView,
+    textarea?: boolean,
   ): Promise<string | null> {
     const resp: TemplateArgsPromptDialogResponse = await firstValueFrom(
       this.open(
         TemplateArgPromptDialogComponent,
         '',
-        new TemplateArgPromptDialogPayload(env, arg),
+        new TemplateArgPromptDialogPayload(env, arg, textarea || false),
       ).afterClosed(),
     );
 
     if (!resp) {
-      return await this.openTemplateArgPrompt(env, arg);
+      return await this.openTemplateArgPrompt(env, arg, textarea);
     }
 
     return resp.value;

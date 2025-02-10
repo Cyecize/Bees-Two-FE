@@ -5,5 +5,6 @@ export class TemplateArgPromptDialogPayload {
   constructor(
     public env: CountryEnvironmentModel,
     public arg: RequestTemplateArgView,
+    public textarea: boolean,
   ) {}
 }

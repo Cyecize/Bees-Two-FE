@@ -4,10 +4,17 @@
     <small>Current environment: {{ payload.env.envName }} {{ payload.env.env }}</small>
   </div>
 
-  <div class="mt-2">
+  <div *ngIf="!payload.textarea" class="mt-2">
     <app-input
       [(ngModel)]="value"
       placeholder="Value for {{ payload.arg.keyName }}"></app-input>
+  </div>
+
+  <div *ngIf="payload.textarea" class="mt-2">
+    <textarea
+      class="form-control"
+      [(ngModel)]="value"
+      placeholder="Value for {{ payload.arg.keyName }}"></textarea>
   </div>
 
   <div class="mt-2 text-end">

@@ -30,7 +30,8 @@ export const EDITOR_CUSTOM_LIB = `
         openShowCodeDialog(code: string, title?: string): Observable<void>;
         async openTemplateArgPrompt(
           env: CountryEnvironmentModel,
-          arg: RequestTemplateArgView
+          arg: RequestTemplateArgView,
+          textarea?: boolean
         ): Promise<string | null>;
       }
 
