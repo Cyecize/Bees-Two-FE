@@ -67,7 +67,7 @@ export class RequestTemplateRunningService {
     if (template.dataIngestionVersion) {
       responseObservable = this.relayService.send(
         template.entity,
-        template.method,
+        template.method!,
         template.dataIngestionVersion,
         template.headers,
         template.payloadTemplate,
@@ -82,11 +82,11 @@ export class RequestTemplateRunningService {
           ? JSON.parse(template.payloadTemplate)
           : null,
         headers: template.headers,
-        method: template.method,
+        method: template.method!,
         entity: template.entity,
         saveInHistory: template.saveInHistory,
         targetEnv: env.id,
-        endpoint: template.endpoint,
+        endpoint: template.endpoint!,
         queryParams: template.queryParams,
       });
     }

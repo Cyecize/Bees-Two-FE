@@ -29,13 +29,15 @@ import { RequestTemplatePayloadType } from '../../../../api/template/request-tem
 import { DialogService } from '../../../../shared/dialog/dialog.service';
 import { TemplatePlaygroundDialogPayload } from '../template-payload-playground-dialog/template-playground-dialog.payload';
 import { CountryEnvironmentService } from '../../../../api/env/country-environment.service';
+import { StringUtils } from '../../../../shared/util/string-utils';
 
 interface TemplateForm {
   name: FormControl<string>;
   entity: FormControl<BeesEntity>;
   dataIngestionVersion: FormControl<RelayVersion | null>;
-  endpoint: FormControl<string>;
-  method: FormControl<RequestMethod>;
+  endpoint: FormControl<string | null>;
+  method: FormControl<RequestMethod | null>;
+  makeRequest: FormControl<boolean>;
   queryParams: FormArray<FormGroup<BeesParamForm>>;
   headers: FormArray<FormGroup<BeesParamForm>>;
   payloadTemplate: FormControl<string | null>;
@@ -128,14 +130,12 @@ export class TemplateFormComponent implements OnInit {
         nonNullable: true,
       }),
       dataIngestionVersion: new FormControl<RelayVersion | null>(null!),
-      endpoint: new FormControl<string>(null!, {
-        validators: [Validators.required],
+      endpoint: new FormControl<string | null>(null),
+      makeRequest: new FormControl<boolean>(true, {
+        validators: Validators.required,
         nonNullable: true,
       }),
-      method: new FormControl<RequestMethod>(RequestMethod.POST, {
-        validators: [Validators.required],
-        nonNullable: true,
-      }),
+      method: new FormControl<RequestMethod | null>(RequestMethod.POST),
       queryParams: new FormArray<FormGroup<BeesParamForm>>([]),
       headers: new FormArray<FormGroup<BeesParamForm>>([]),
       payloadTemplate: new FormControl<string | null>(null),
@@ -236,6 +236,7 @@ export class TemplateFormComponent implements OnInit {
       preRequestScript: template.preRequestScript,
       postRequestScript: template.postRequestScript,
       payloadType: template.payloadType,
+      makeRequest: template.makeRequest,
     });
 
     if (template.headers?.length) {
@@ -267,7 +268,10 @@ export class TemplateFormComponent implements OnInit {
   }
 
   async onFormSubmit(): Promise<void> {
-    this.formSubmitted.emit(this.form.getRawValue());
+    const template: RequestTemplate = this.form.getRawValue();
+    template.endpoint = StringUtils.trimToNull(template.endpoint);
+
+    this.formSubmitted.emit(template);
   }
 
   onArgTypeChange(i: number, val: RequestTemplateArgType): void {
@@ -330,5 +334,22 @@ export class TemplateFormComponent implements OnInit {
           this.form.controls.postRequestScript.patchValue(res.code);
         }
       });
+  }
+
+  onMakeRequestChange(makeRequest: boolean): void {
+    if (makeRequest) {
+      // TODO: Fix this, currently nulls accepted and UI does not always show the warning underscore
+      this.form.controls.endpoint.addValidators([Validators.required]);
+      this.form.controls.method.addValidators([Validators.required]);
+      this.form.controls.entity.setValue(null!);
+    } else {
+      this.form.controls.endpoint.clearValidators();
+      this.form.controls.method.clearValidators();
+
+      this.form.controls.endpoint.setValue(null);
+      this.form.controls.method.setValue(null);
+      this.form.controls.dataIngestionVersion.setValue(null);
+      this.form.controls.entity.setValue(BeesEntity.NON_REQUEST_TEMPLATE);
+    }
   }
 }

@@ -12,8 +12,9 @@ export interface RequestTemplate {
   name: string;
   entity: BeesEntity;
   dataIngestionVersion: RelayVersion | null;
-  endpoint: string;
-  method: RequestMethod;
+  makeRequest: boolean;
+  endpoint: string | null;
+  method: RequestMethod | null;
   queryParams: BeesParam[];
   headers: BeesParam[];
   payloadTemplate: string | null;

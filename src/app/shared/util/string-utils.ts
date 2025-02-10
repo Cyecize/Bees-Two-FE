@@ -28,4 +28,13 @@ export class StringUtils {
   public static getUniqueStr(): string {
     return (Math.random().toString(36) + '0000000000').substring(2, 12);
   }
+
+  public static trimToNull(endpoint: string | null): string | null {
+    const trimmed = endpoint?.trim();
+    if (!trimmed) {
+      return null;
+    }
+
+    return trimmed;
+  }
 }

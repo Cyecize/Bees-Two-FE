@@ -6,37 +6,44 @@
       formControlName="name"></app-input>
   </div>
   <div class="mt-2">
-    <app-select formControlName="entity"
-                placeholder="Entity"
-                [errors]="errors"
-                [options]="entityOptions"></app-select>
+    <app-checkbox label="Make Request"
+                  (onChange)="onMakeRequestChange($event)"
+                  formControlName="makeRequest"></app-checkbox>
+    <app-field-error [fieldName]="'makeRequest'" [errors]="errors"></app-field-error>
   </div>
-
-  <div class="mt-2">
-    <app-select formControlName="dataIngestionVersion"
-                placeholder="Data Ingestion Version"
-                (onChange)="relayVersionChanges($event)"
-                [errors]="errors"
-                [options]="dataIngestionVersions"></app-select>
-  </div>
-  <div class="mt-2">
-    <app-input
-      placeholder="Endpoint"
-      [disabled]="relayVersion !== null"
-      [errors]="errors"
-      formControlName="endpoint"></app-input>
-  </div>
-  <div class="mt-2">
-    <app-select formControlName="method"
-                placeholder="Method"
-                [errors]="errors"
-                [options]="methodOptions"></app-select>
-  </div>
-  <div class="mt-2">
-    <app-checkbox label="Save In History"
-                  formControlName="saveInHistory"></app-checkbox>
-    <app-field-error [fieldName]="'saveInHistory'" [errors]="errors"></app-field-error>
-  </div>
+  <ng-container *ngIf="form.controls.makeRequest.value">
+    <div class="mt-2">
+      <app-select formControlName="entity"
+                  placeholder="Entity"
+                  [errors]="errors"
+                  [options]="entityOptions"></app-select>
+    </div>
+    <div class="mt-2">
+      <app-select formControlName="dataIngestionVersion"
+                  placeholder="Data Ingestion Version"
+                  (onChange)="relayVersionChanges($event)"
+                  [errors]="errors"
+                  [options]="dataIngestionVersions"></app-select>
+    </div>
+    <div class="mt-2">
+      <app-input
+        placeholder="Endpoint"
+        [disabled]="relayVersion !== null"
+        [errors]="errors"
+        formControlName="endpoint"></app-input>
+    </div>
+    <div class="mt-2">
+      <app-select formControlName="method"
+                  placeholder="Method"
+                  [errors]="errors"
+                  [options]="methodOptions"></app-select>
+    </div>
+    <div class="mt-2">
+      <app-checkbox label="Save In History"
+                    formControlName="saveInHistory"></app-checkbox>
+      <app-field-error [fieldName]="'saveInHistory'" [errors]="errors"></app-field-error>
+    </div>
+  </ng-container>
   <hr>
   <div class="mt-2">
     <p>TODO: Test validation error handling for the array items </p>
@@ -184,8 +191,9 @@
   <div class="mt-2 text-end">
     <button (click)="onFormSubmit()"
             type="submit"
+            [disabled]="!form.valid"
             class="btn btn-success"
-            [disabled]="!form.valid">
+           >
       Save
     </button>
   </div>
