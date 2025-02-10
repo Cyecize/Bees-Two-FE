@@ -58,12 +58,19 @@ export const EDITOR_CUSTOM_LIB = `
           ): Promise<AccountV1 | null>;
       }
 
+      interface CountryEnvironmentService {
+        async createEnv(
+          payload: CountryEnvironmentPayload,
+          ): Promise<WrappedResponseLocal<CountryEnvironmentModel>>;
+      }
+
       interface Bees {
         /** RxJS utilities */
         rx: BeesRx;
         dialogService: DialogService;
         localAccountService: LocalAccountService;
         accountV1Service: AccountV1Service;
+        envService: CountryEnvironmentService;
       }
 
       declare const env: CountryEnvironment;
