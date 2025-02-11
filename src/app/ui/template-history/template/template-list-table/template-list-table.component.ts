@@ -6,6 +6,8 @@ import { NgForOf } from '@angular/common';
 import { PaginationComponent } from '../../../../shared/components/pagination/pagination.component';
 import { DialogService } from '../../../../shared/dialog/dialog.service';
 import { TemplateDetailsDialogComponent } from '../template-details-dialog/template-details-dialog.component';
+import { MultienvTemplateRunnerDialogComponent } from '../multienv-template-runner-dialog/multienv-template-runner-dialog.component';
+import { MultienvTemplateRunnerDialogPayload } from '../multienv-template-runner-dialog/multienv-template-runner-dialog.payload';
 
 @Component({
   selector: 'app-template-list-table',
@@ -49,5 +51,13 @@ export class TemplateListTableComponent {
           this.onPageChange(0);
         }
       });
+  }
+
+  openMultiRunner(template: RequestTemplateView): void {
+    this.dialogService.open(
+      MultienvTemplateRunnerDialogComponent,
+      '',
+      new MultienvTemplateRunnerDialogPayload(template),
+    );
   }
 }
