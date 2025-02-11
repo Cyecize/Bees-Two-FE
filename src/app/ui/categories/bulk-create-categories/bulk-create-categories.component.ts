@@ -481,6 +481,8 @@ export class BulkCreateCategoriesComponent implements OnInit, OnDestroy {
         } else {
           newCats.push(categoryPayload);
         }
+      } else {
+        newCats.push(categoryPayload);
       }
     }
 
