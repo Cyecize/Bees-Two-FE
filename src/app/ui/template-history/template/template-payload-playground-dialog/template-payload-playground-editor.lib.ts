@@ -1,3 +1,5 @@
+import { Observable } from "rxjs";
+
 export const EDITOR_CUSTOM_LIB = `
       /** Output function */
       declare const w: (message: string) => void;
@@ -65,6 +67,10 @@ export const EDITOR_CUSTOM_LIB = `
           ): Promise<WrappedResponseLocal<CountryEnvironment>>;
       }
 
+      interface HttpClient {
+         get<TResponse>(url: string, options = {}): Observable<TResponse>
+      }
+
       interface Bees {
         /** RxJS utilities */
         rx: BeesRx;
@@ -72,6 +78,7 @@ export const EDITOR_CUSTOM_LIB = `
         localAccountService: LocalAccountService;
         accountV1Service: AccountV1Service;
         envService: CountryEnvironmentService;
+        http: HttpClient;
       }
 
       declare const env: CountryEnvironment;

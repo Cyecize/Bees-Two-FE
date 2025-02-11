@@ -7,6 +7,8 @@ import { DialogService } from '../../../shared/dialog/dialog.service';
 import { LocalAccountService } from '../../accounts/local/local-account.service';
 import { AccountV1Service } from '../../accounts/v1/account-v1.service';
 import { CountryEnvironmentService } from '../../env/country-environment.service';
+import { HttpClient } from "@angular/common/http";
+import { HttpClientSecuredService } from "../../../shared/http/http-client-secured.service";
 
 export interface JsEvalOptions {
   run: boolean;
@@ -31,6 +33,7 @@ export class JavascriptEvalService {
     private localAccountService: LocalAccountService,
     private accountV1Service: AccountV1Service,
     private envService: CountryEnvironmentService,
+    private http: HttpClientSecuredService,
   ) {}
 
   public async eval(
@@ -56,6 +59,7 @@ export class JavascriptEvalService {
       localAccountService: this.localAccountService,
       accountV1Service: this.accountV1Service,
       envService: this.envService,
+      http: this.http,
     };
 
     const result: JsEvalResult = {
