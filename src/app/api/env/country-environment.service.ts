@@ -4,7 +4,10 @@ import { BehaviorSubject, firstValueFrom } from 'rxjs';
 import { CountryEnvironmentModel } from './country-environment.model';
 import { STORAGE_SELECTED_ENV_ID_NAME } from '../../shared/general.constants';
 import { ObjectUtils } from '../../shared/util/object-utils';
-import { CountryEnvironmentQuery } from './country-environment.query';
+import {
+  CountryEnvironmentQuery,
+  CountryEnvironmentQueryImpl,
+} from './country-environment.query';
 import {
   FieldErrorWrapperLocal,
   WrappedResponseLocal,
@@ -13,6 +16,7 @@ import { Page } from '../../shared/util/page';
 import { CountryCodeQuery } from './country-code.query';
 import { CountryEnvironmentPayload } from './country-environment.payload';
 import { EnvToken } from './env-token';
+import { CountryEnvironmentCredsPayload } from './country-environment-creds.payload';
 
 @Injectable({ providedIn: 'root' })
 export class CountryEnvironmentService {
@@ -38,6 +42,29 @@ export class CountryEnvironmentService {
     ).execute();
   }
 
+  public async findByVendorId(
+    vendorId: string,
+  ): Promise<CountryEnvironmentModel[]> {
+    const query: CountryEnvironmentQuery = new CountryEnvironmentQueryImpl();
+    query.vendorId = vendorId;
+
+    // TODO: 100 is a lot, but consider adding a while or
+    query.page.pageSize = 100;
+
+    const envs: CountryEnvironmentModel[] = [];
+
+    const resp = await this.searchEnvs(query);
+
+    if (!resp.isSuccess) {
+      console.log(resp);
+      throw new Error('Could not fetch environments!');
+    }
+
+    envs.push(...resp.response.content);
+
+    return envs;
+  }
+
   public async searchCountryCodes(
     query: CountryCodeQuery,
   ): Promise<WrappedResponseLocal<Page<string>>> {
@@ -52,6 +79,20 @@ export class CountryEnvironmentService {
     return await new FieldErrorWrapperLocal(() =>
       this.repository.createEnv(payload),
     ).execute();
+  }
+
+  public async updateCreds(
+    payload: CountryEnvironmentCredsPayload,
+  ): Promise<boolean> {
+    const resp = await new FieldErrorWrapperLocal(() =>
+      this.repository.updateCreds(payload),
+    ).execute();
+
+    if (!resp.isSuccess) {
+      console.error(resp);
+    }
+
+    return resp.isSuccess;
   }
 
   public async getToken(

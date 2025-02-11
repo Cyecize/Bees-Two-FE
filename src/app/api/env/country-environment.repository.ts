@@ -9,6 +9,7 @@ import { CountryCodeQuery } from './country-code.query';
 import { CountryEnvironmentPayload } from './country-environment.payload';
 import { EnvToken } from './env-token';
 import { RouteUtils } from '../../shared/routing/route-utils';
+import { CountryEnvironmentCredsPayload } from './country-environment-creds.payload';
 
 @Injectable({ providedIn: 'root' })
 export class CountryEnvironmentRepository {
@@ -39,6 +40,13 @@ export class CountryEnvironmentRepository {
   ): Observable<CountryEnvironmentModel> {
     return this.http.post<CountryEnvironmentPayload, CountryEnvironmentModel>(
       Endpoints.ENVIRONMENTS,
+      payload,
+    );
+  }
+
+  public updateCreds(payload: CountryEnvironmentCredsPayload): Observable<any> {
+    return this.http.put<CountryEnvironmentCredsPayload, any>(
+      Endpoints.ENVIRONMENT_CREDS,
       payload,
     );
   }

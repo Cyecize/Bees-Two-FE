@@ -1,4 +1,5 @@
-import { Observable } from "rxjs";
+import { Observable } from 'rxjs';
+import { CountryEnvironmentCredsPayload } from '../../../../api/env/country-environment-creds.payload';
 
 export const EDITOR_CUSTOM_LIB = `
       /** Output function */
@@ -33,7 +34,7 @@ export const EDITOR_CUSTOM_LIB = `
         async openTemplateArgPrompt(
           env: CountryEnvironment,
           arg: RequestTemplateArgView,
-          textarea?: boolean
+          textarea?: boolean;
         ): Promise<string | null>;
         async openEnvPickerMultiselect(): Promise<CountryEnvironment[]>;
       }
@@ -61,10 +62,19 @@ export const EDITOR_CUSTOM_LIB = `
           ): Promise<AccountV1 | null>;
       }
 
+      interface CountryEnvironmentCredsPayload {
+        envId: string;
+        clientId: string;
+        clientSecret: string;
+      }
+
       interface CountryEnvironmentService {
         async createEnv(
           payload: CountryEnvironmentPayload,
           ): Promise<WrappedResponseLocal<CountryEnvironment>>;
+
+        async findByVendorId(vendorId: string): Promise<CountryEnvironment[]>;
+        async updateCreds(payload: CountryEnvironmentCredsPayload): Promise<boolean>;
       }
 
       interface HttpClient {
