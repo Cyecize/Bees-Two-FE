@@ -1,5 +1,8 @@
 import { RequestTemplateArgType } from './request-template-arg.type';
 
+/**
+ * @monaco
+ */
 export interface RequestTemplateArg {
   id: number | null;
   type: RequestTemplateArgType;

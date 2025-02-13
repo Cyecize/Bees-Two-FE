@@ -14,6 +14,7 @@ import { TemplatePlaygroundDialogPayload } from './template-playground-dialog.pa
 import { ObjectUtils } from '../../../../shared/util/object-utils';
 import { TemplatePlaygroundDialogResponse } from './template-playground-dialog.response';
 import { RequestTemplateArgUtil } from '../../../../api/template/arg/request-template-arg.util';
+import { GENERATED_EDITOR_LIB } from './generated-editor-lib';
 
 declare const monaco: typeof import('monaco-editor');
 
@@ -63,19 +64,15 @@ export class TemplatePayloadPlaygroundDialog
     const monaco = (window as any).monaco;
 
     monaco.languages.typescript.javascriptDefaults.addExtraLib(
+      GENERATED_EDITOR_LIB,
+    );
+
+    monaco.languages.typescript.javascriptDefaults.addExtraLib(
       EDITOR_CUSTOM_LIB,
     );
 
     monaco.languages.typescript.javascriptDefaults.addExtraLib(
       `
-      interface RequestTemplateArg {
-        id: number | null;
-        type: RequestTemplateArgType;
-        keyName: string;
-        value: string | null;
-        name: string;
-      }
-
       interface Args {
         ${this.payload.args.map((a) => `${a.keyName}: RequestTemplateArg`)}
       }
@@ -88,7 +85,8 @@ export class TemplatePayloadPlaygroundDialog
     monaco.languages.typescript.javascriptDefaults.setCompilerOptions({
       target: monaco.languages.typescript.ScriptTarget.ES2020,
       allowNonTsExtensions: true,
-      lib: ['es2020'],
+      lib: ['es2020', 'dom'],
+      typeRoots: ['node_modules/@types'],
     });
   }
 

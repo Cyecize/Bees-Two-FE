@@ -91,6 +91,10 @@ export interface Contact {
   value?: string;
 }
 
+/**
+ * @monaco
+ * @monaco_include_deps
+ */
 export interface AccountV1 {
   country: string;
   updatedAt: string;

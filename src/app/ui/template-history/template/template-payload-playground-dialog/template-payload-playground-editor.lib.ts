@@ -8,19 +8,6 @@ export const EDITOR_CUSTOM_LIB = `
       declare const log: (message: string) => void;
       declare const wait: async (timeMs: number) => Promise<void>;
 
-      interface CountryEnvironment {
-        id: number;
-        envName: string;
-        env: Env;
-        countryCode: string;
-        vendorId: string;
-        storeId: string;
-        timezone: string;
-        defaultLanguage: CountryEnvironmentLanguageModel;
-        languages: CountryEnvironmentLanguageModel[];
-        singleLanguage: boolean;
-      }
-
       interface BeesRx {
         /** Observable constructor */
         Observable: typeof Observable;
@@ -32,48 +19,33 @@ export const EDITOR_CUSTOM_LIB = `
         openAccountPicker: (env: Env) => Observable<any>;
         openShowCodeDialog(code: string, title?: string): Observable<void>;
         async openTemplateArgPrompt(
-          env: CountryEnvironment,
+          env: CountryEnvironmentModel,
           arg: RequestTemplateArgView,
           textarea?: boolean;
         ): Promise<string | null>;
-        async openEnvPickerMultiselect(): Promise<CountryEnvironment[]>;
-      }
-
-      interface LocalAccount {
-        name: string;
-        envId: number;
-        env: CountryEnvironment;
-        beesId: string;
-        customerAccountId: string;
-        vendorAccountId: string;
+        async openEnvPickerMultiselect(): Promise<CountryEnvironmentModel[]>;
       }
 
       interface LocalAccountService {
         async createFromBeesAccountIfNotExists(
-          env: CountryEnvironment,
+          env: CountryEnvironmentModel,
           beesAccount: AccountV1): Promise<LocalAccount | null>;
       }
 
       interface AccountV1Service {
         async findOne(
-          env: CountryEnvironment,
+          env: CountryEnvironmentModel,
           vendorAccountId?: string,
           customerAccountId?: string,
           ): Promise<AccountV1 | null>;
       }
 
-      interface CountryEnvironmentCredsPayload {
-        envId: string;
-        clientId: string;
-        clientSecret: string;
-      }
-
       interface CountryEnvironmentService {
         async createEnv(
           payload: CountryEnvironmentPayload,
-          ): Promise<WrappedResponseLocal<CountryEnvironment>>;
+          ): Promise<WrappedResponseLocal<CountryEnvironmentModel>>;
 
-        async findByVendorId(vendorId: string): Promise<CountryEnvironment[]>;
+        async findByVendorId(vendorId: string): Promise<CountryEnvironmentModel[]>;
         async updateCreds(payload: CountryEnvironmentCredsPayload): Promise<boolean>;
       }
 
@@ -91,7 +63,7 @@ export const EDITOR_CUSTOM_LIB = `
         http: HttpClient;
       }
 
-      declare const env: CountryEnvironment;
+      declare const env: CountryEnvironmentModel;
 
       /** Shared CTX between Pre-/Post-scripts and template **/
       declare const context: Map<string, any>;

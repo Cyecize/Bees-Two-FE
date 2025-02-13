@@ -1,6 +1,9 @@
 import { Env } from './env';
 import { CountryEnvironmentLanguageModel } from './country-environment-language.model';
 
+/**
+ * @monaco
+ */
 export interface CountryEnvironmentModel {
   id: number;
   envName: string;
