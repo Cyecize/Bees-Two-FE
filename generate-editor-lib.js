@@ -35,6 +35,7 @@ function processFile(content) {
   // Second pass: Find dependencies of marked interfaces
   let added;
   do {
+    console.log(Array.from(allInterfaces.keys()));
     added = false;
     Array.from(interfacesToIncludeDeps).forEach((interfaceName) => {
       const node = allInterfaces.get(interfaceName);
@@ -42,7 +43,9 @@ function processFile(content) {
 
       ts.forEachChild(node, (member) => {
         if (ts.isPropertySignature(member) && member.type) {
-          const typeName = member.type.getText(sourceFile);
+          // By splitting by [, array type suffix is removed and it can then be
+          // found in the interfaces collection
+          const typeName = member.type.getText(sourceFile).split('[')[0];
           if (
             allInterfaces.has(typeName) &&
             !interfacesToInclude.has(typeName)
@@ -91,6 +94,9 @@ function processFile(content) {
  *
  * To include its dependencies, add this comment too:
  *  @monaco_include_deps
+ *
+ * To run the script, execute the following command from the project root:
+ * node .\generate-editor-lib.js
  *
  */
 const typeFiles = [
