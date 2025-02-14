@@ -1,5 +1,7 @@
 import { Observable } from 'rxjs';
 import { CountryEnvironmentCredsPayload } from '../../../../api/env/country-environment-creds.payload';
+import { GenericPickerOption } from '../../../../shared/dialog/dialogs/generic-picker-dialog/generic-picker.option';
+import { LocalAccount } from '../../../../api/accounts/local/local-account';
 
 export const EDITOR_CUSTOM_LIB = `
       /** Output function */
@@ -7,6 +9,13 @@ export const EDITOR_CUSTOM_LIB = `
       declare const wJson: (data: any) => void;
       declare const log: (message: string) => void;
       declare const wait: async (timeMs: number) => Promise<void>;
+
+      interface Observable<T> {
+        subscribe(next?: (value: T) => void, error?: (error: any) => void, complete?: () => void): { unsubscribe: () => void };
+        pipe(...operations: any[]): Observable<any>;
+      }
+
+      declare function firstValueFrom<T>(observable: Observable<T>): Promise<T>;
 
       interface BeesRx {
         /** Observable constructor */
@@ -16,7 +25,7 @@ export const EDITOR_CUSTOM_LIB = `
       }
 
       interface DialogService {
-        openAccountPicker: (env: Env) => Observable<any>;
+        openAccountPicker: (env: Env) => Observable<LocalAccount>;
         openShowCodeDialog(code: string, title?: string): Observable<void>;
         async openTemplateArgPrompt(
           env: CountryEnvironmentModel,
@@ -24,6 +33,7 @@ export const EDITOR_CUSTOM_LIB = `
           textarea?: boolean;
         ): Promise<string | null>;
         async openEnvPickerMultiselect(): Promise<CountryEnvironmentModel[]>;
+        async openGenericMultiselect<T>(options: GenericPickerOption<T>[], title?: string): Promise<T[]>;
       }
 
       interface LocalAccountService {
