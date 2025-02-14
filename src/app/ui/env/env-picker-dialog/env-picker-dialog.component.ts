@@ -254,6 +254,5 @@ export class EnvPickerDialogComponent
     this.close(new EnvPickerDialogResult(this.envsPage.content));
   }
 
-  protected readonly alert = alert;
   protected readonly pageToPagination = pageToPagination;
 }

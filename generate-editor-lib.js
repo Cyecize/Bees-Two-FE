@@ -60,7 +60,7 @@ function processFile(content) {
 
   // Generate output without imports/exports
   const printer = ts.createPrinter();
-  let output = [];
+  const output = [];
 
   ts.forEachChild(sourceFile, (node) => {
     if (ts.isImportDeclaration(node) || ts.isExportDeclaration(node)) return;
@@ -105,6 +105,8 @@ const typeFiles = [
   "./src/app/api/env/country-environment.model.ts",
   "./src/app/api/env/country-environment-creds.payload.ts",
   "./src/app/api/template/arg/request-template-arg.ts",
+  "./src/app/shared/dialog/dialogs/generic-picker-dialog/generic-picker.option.ts",
+  "./src/app/shared/dialog/dialogs/generic-picker-dialog/generic-picker-response.impl.ts",
 ];
 
 let combinedTypes = "";

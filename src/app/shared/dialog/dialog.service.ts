@@ -41,6 +41,9 @@ import { TemplateArgsPromptDialogResponse } from '../../ui/template-history/temp
 import { EnvPickerDialogResult } from '../../ui/env/env-picker-dialog/env-picker-dialog.result';
 import { EnvPickerDialogComponent } from '../../ui/env/env-picker-dialog/env-picker-dialog.component';
 import { EnvPickerDialogPayload } from '../../ui/env/env-picker-dialog/env-picker-dialog.payload';
+import { GenericPickerOption } from './dialogs/generic-picker-dialog/generic-picker.option';
+import { GenericPickerDialogComponent } from './dialogs/generic-picker-dialog/generic-picker-dialog.component';
+import { GenericPickerResponse } from './dialogs/generic-picker-dialog/generic-picker-response.impl';
 
 @Injectable({ providedIn: 'root' })
 export class DialogService {
@@ -211,5 +214,24 @@ export class DialogService {
     }
 
     return res.envs;
+  }
+
+  public async openGenericMultiselect<T>(
+    options: GenericPickerOption<T>[],
+    title?: string,
+  ): Promise<T[]> {
+    const res: GenericPickerResponse<T> = await firstValueFrom(
+      this.open(
+        GenericPickerDialogComponent,
+        title || 'Select Items',
+        options,
+      ).afterClosed(),
+    );
+
+    if (!res) {
+      return await this.openGenericMultiselect(options, title);
+    }
+
+    return res.items;
   }
 }
