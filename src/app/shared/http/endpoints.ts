@@ -48,4 +48,6 @@ export class Endpoints {
   public static readonly CATEGORIES_V3 = '/api/categories/v3';
   public static readonly CATEGORY_V3 = '/api/categories/v3/:id';
   public static readonly PRICE_SERVICE_V3 = '/price-service/v3';
+  public static readonly GROW_ORGANIZATIONS = '/api/bees-grow-organizations-service/v1/organizations';
+  public static readonly GROW_ORGANIZATION = '/api/bees-grow-organizations-service/v1/organizations/:id';
 }

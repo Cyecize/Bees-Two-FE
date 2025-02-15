@@ -105,8 +105,14 @@ const typeFiles = [
   "./src/app/api/env/country-environment.model.ts",
   "./src/app/api/env/country-environment-creds.payload.ts",
   "./src/app/api/template/arg/request-template-arg.ts",
+  "./src/app/api/grow/grow-organization.ts",
+  "./src/app/api/grow/grow-organization.payload.ts",
+  "./src/app/api/grow/grow-group.payload.ts",
   "./src/app/shared/dialog/dialogs/generic-picker-dialog/generic-picker.option.ts",
   "./src/app/shared/dialog/dialogs/generic-picker-dialog/generic-picker-response.impl.ts",
+  "./src/app/api/env/token/bees-token.ts",
+  "./src/app/api/grow/grow.service.ts",
+  "./src/app/api/proxy/bees-response.ts",
 ];
 
 let combinedTypes = "";
@@ -116,6 +122,9 @@ typeFiles.forEach((file) => {
 });
 
 fs.writeFileSync(
-  path.resolve(__dirname, "./src/app/ui/template-history/template/template-payload-playground-dialog/generated-editor-lib.ts"),
+  path.resolve(
+    __dirname,
+    './src/app/ui/template-history/template/template-payload-playground-dialog/generated-editor-lib.ts',
+  ),
   `export const GENERATED_EDITOR_LIB = ${JSON.stringify(combinedTypes)};`,
 );

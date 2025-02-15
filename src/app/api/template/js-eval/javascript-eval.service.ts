@@ -9,6 +9,7 @@ import { AccountV1Service } from '../../accounts/v1/account-v1.service';
 import { CountryEnvironmentService } from '../../env/country-environment.service';
 import { HttpClient } from '@angular/common/http';
 import { HttpClientSecuredService } from '../../../shared/http/http-client-secured.service';
+import { GrowService } from "../../grow/grow.service";
 
 export interface JsEvalOptions {
   run: boolean;
@@ -34,6 +35,7 @@ export class JavascriptEvalService {
     private accountV1Service: AccountV1Service,
     private envService: CountryEnvironmentService,
     private http: HttpClientSecuredService,
+    private growService: GrowService,
   ) {}
 
   public async eval(
@@ -60,6 +62,7 @@ export class JavascriptEvalService {
       accountV1Service: this.accountV1Service,
       envService: this.envService,
       http: this.http,
+      grow: this.growService,
     };
 
     const result: JsEvalResult = {

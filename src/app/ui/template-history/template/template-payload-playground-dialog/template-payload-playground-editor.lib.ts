@@ -2,6 +2,11 @@ import { Observable } from 'rxjs';
 import { CountryEnvironmentCredsPayload } from '../../../../api/env/country-environment-creds.payload';
 import { GenericPickerOption } from '../../../../shared/dialog/dialogs/generic-picker-dialog/generic-picker.option';
 import { LocalAccount } from '../../../../api/accounts/local/local-account';
+import { CountryEnvironmentModel } from "../../../../api/env/country-environment.model";
+import { BeesToken } from "../../../../api/env/token/bees-token";
+import { ErrorResponse } from "../../../../api/proxy/error-response";
+import { BeesResponse } from "../../../../api/proxy/bees-response";
+import { WrappedResponse } from "../../../../shared/util/field-error-wrapper";
 
 export const EDITOR_CUSTOM_LIB = `
       /** Output function */
@@ -17,6 +22,12 @@ export const EDITOR_CUSTOM_LIB = `
 
       declare function firstValueFrom<T>(observable: Observable<T>): Promise<T>;
 
+      interface WrappedResponse<T> {
+        isSuccess: boolean;
+        errorResp?: ErrorResponse;
+        response: BeesResponse<T>;
+      }
+
       interface BeesRx {
         /** Observable constructor */
         Observable: typeof Observable;
@@ -27,6 +38,8 @@ export const EDITOR_CUSTOM_LIB = `
       interface DialogService {
         openAccountPicker: (env: Env) => Observable<LocalAccount>;
         openShowCodeDialog(code: string, title?: string): Observable<void>;
+        openBeesTokenOverrideDialog(env: CountryEnvironmentModel): Observable<BeesToken>;
+        openRequestResultDialog(response: WrappedResponse<any>): Observable<boolean>;
         async openTemplateArgPrompt(
           env: CountryEnvironmentModel,
           arg: RequestTemplateArgView,
@@ -34,6 +47,7 @@ export const EDITOR_CUSTOM_LIB = `
         ): Promise<string | null>;
         async openEnvPickerMultiselect(): Promise<CountryEnvironmentModel[]>;
         async openGenericMultiselect<T>(options: GenericPickerOption<T>[], title?: string): Promise<T[]>;
+
       }
 
       interface LocalAccountService {
@@ -71,6 +85,7 @@ export const EDITOR_CUSTOM_LIB = `
         accountV1Service: AccountV1Service;
         envService: CountryEnvironmentService;
         http: HttpClient;
+        grow: IGrowService;
       }
 
       declare const env: CountryEnvironmentModel;

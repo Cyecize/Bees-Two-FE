@@ -1,3 +1,6 @@
+/**
+ * @monaco
+ */
 export interface BeesToken {
   token: string;
   expires: Date;

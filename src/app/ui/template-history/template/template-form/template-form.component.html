@@ -43,61 +43,61 @@
                     formControlName="saveInHistory"></app-checkbox>
       <app-field-error [fieldName]="'saveInHistory'" [errors]="errors"></app-field-error>
     </div>
-  </ng-container>
-  <hr>
-  <div class="mt-2">
-    <p>TODO: Test validation error handling for the array items </p>
-    <div class="row">
-      <div class="col-md-6">
-        <div class="d-flex justify-content-between">
-          <h4>Headers</h4>
-          <i class="fa fa-plus c-pointer" (click)="addHeader()"></i>
-        </div>
+    <hr>
+    <div class="mt-2">
+      <p>TODO: Test validation error handling for the array items </p>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="d-flex justify-content-between">
+            <h4>Headers</h4>
+            <i class="fa fa-plus c-pointer" (click)="addHeader()"></i>
+          </div>
 
-        <div formArrayName="headers">
-          <div *ngFor="let ctrl of form.controls.headers.controls; let i = index"
-               [formGroupName]="i"
+          <div formArrayName="headers">
+            <div *ngFor="let ctrl of form.controls.headers.controls; let i = index"
+                 [formGroupName]="i"
                  class="mt-1">
-            <div class="d-flex justify-content-between align-items-center">
-              <app-input
-                formControlName="name"
-                class="m-1"
-                placeholder="Name"></app-input>
-              <app-input
-                formControlName="value"
-                class="m-1"
-                placeholder="Value"></app-input>
-              <i class="fa fa-close c-pointer" (click)="form.controls.headers.removeAt(i)"></i>
+              <div class="d-flex justify-content-between align-items-center">
+                <app-input
+                  formControlName="name"
+                  class="m-1"
+                  placeholder="Name"></app-input>
+                <app-input
+                  formControlName="value"
+                  class="m-1"
+                  placeholder="Value"></app-input>
+                <i class="fa fa-close c-pointer" (click)="form.controls.headers.removeAt(i)"></i>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="col-md-6">
-        <div class="d-flex justify-content-between">
-          <h4>Query Params</h4>
-          <i class="fa fa-plus c-pointer" (click)="addQueryParam()"></i>
-        </div>
+        <div class="col-md-6">
+          <div class="d-flex justify-content-between">
+            <h4>Query Params</h4>
+            <i class="fa fa-plus c-pointer" (click)="addQueryParam()"></i>
+          </div>
 
-        <div formArrayName="queryParams">
-          <div *ngFor="let ctrl of form.controls.queryParams.controls; let i = index"
-               [formGroupName]="i"
-               class="mt-1">
-            <div class="d-flex justify-content-between align-items-center">
-              <app-input
-                formControlName="name"
-                class="m-1"
-                placeholder="Name"></app-input>
-              <app-input
-                formControlName="value"
-                class="m-1"
-                placeholder="Value"></app-input>
-              <i class="fa fa-close c-pointer" (click)="form.controls.queryParams.removeAt(i)"></i>
+          <div formArrayName="queryParams">
+            <div *ngFor="let ctrl of form.controls.queryParams.controls; let i = index"
+                 [formGroupName]="i"
+                 class="mt-1">
+              <div class="d-flex justify-content-between align-items-center">
+                <app-input
+                  formControlName="name"
+                  class="m-1"
+                  placeholder="Name"></app-input>
+                <app-input
+                  formControlName="value"
+                  class="m-1"
+                  placeholder="Value"></app-input>
+                <i class="fa fa-close c-pointer" (click)="form.controls.queryParams.removeAt(i)"></i>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
+  </ng-container>
   <div class="mt-2">
 
     <div class="d-flex justify-content-between">
