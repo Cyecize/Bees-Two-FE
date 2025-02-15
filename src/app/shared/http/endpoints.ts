@@ -50,4 +50,6 @@ export class Endpoints {
   public static readonly PRICE_SERVICE_V3 = '/price-service/v3';
   public static readonly GROW_ORGANIZATIONS = '/api/bees-grow-organizations-service/v1/organizations';
   public static readonly GROW_ORGANIZATION = '/api/bees-grow-organizations-service/v1/organizations/:id';
+  public static readonly GROW_GROUPS = '/api/bees-grow-organizations-service/v1/organizations/:id/groups';
+  public static readonly GROW_GROUP = '/api/bees-grow-organizations-service/v1/organizations/:orgId/groups/:groupId';
 }

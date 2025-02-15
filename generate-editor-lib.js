@@ -113,6 +113,7 @@ const typeFiles = [
   "./src/app/api/env/token/bees-token.ts",
   "./src/app/api/grow/grow.service.ts",
   "./src/app/api/proxy/bees-response.ts",
+  "./src/app/api/grow/grow-group.ts",
 ];
 
 let combinedTypes = "";

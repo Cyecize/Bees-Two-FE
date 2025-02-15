@@ -1,3 +1,5 @@
+import { GrowGroupKpi, GrowGroupMission } from './grow-group';
+
 /**
  * @monaco
  * @monaco_include_deps
@@ -10,26 +12,13 @@ export interface GrowGroupPayload {
   missions: GrowGroupMission[];
   userIds: string[];
   targetKpi: GrowGroupKpi[];
-  vendors: GrowGroupVendor[];
+  vendors: GrowGroupVendorPayload[];
 }
 
-export interface GrowGroupMission {
-  missionId: string;
-  missionKey: string;
-  type: string;
-}
-
-export interface GrowGroupVendor {
+export interface GrowGroupVendorPayload {
   id: string;
   segmentations: {
     key: string;
     values: string[];
   }[];
-}
-
-export interface GrowGroupKpi {
-  daily: number;
-  invisible: boolean;
-  monthly: number;
-  type: string;
 }

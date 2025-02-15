@@ -7,6 +7,8 @@ import {
 } from '../../shared/util/field-error-wrapper';
 import { CountryEnvironmentModel } from '../env/country-environment.model';
 import { GrowOrganizationPayload } from './grow-organization.payload';
+import { GrowGroup } from './grow-group';
+import { GrowGroupPayload } from './grow-group.payload';
 
 /**
  * @monaco
@@ -18,15 +20,35 @@ interface IGrowService {
     userEmail?: string,
   ): Promise<WrappedResponse<GrowOrganization[]>>;
 
-  convertOrgToOrgPayload(
-    org: GrowOrganization,
-  ): GrowOrganizationPayload;
+  convertOrgToOrgPayload(org: GrowOrganization): GrowOrganizationPayload;
 
   updateOrg(
     tempToken: string,
     orgId: string,
     env: CountryEnvironmentModel,
     payload: GrowOrganizationPayload,
+  ): Promise<WrappedResponse<any>>;
+
+  getGroups(
+    tempToken: string,
+    orgId: string,
+    env: CountryEnvironmentModel,
+    userEmail?: string,
+  ): Promise<WrappedResponse<GrowGroup[]>>;
+
+  createGroup(
+    tempToken: string,
+    orgId: string,
+    env: CountryEnvironmentModel,
+    payload: GrowGroupPayload,
+  ): Promise<WrappedResponse<any>>;
+
+  updateGroup(
+    tempToken: string,
+    orgId: string,
+    groupId: string,
+    env: CountryEnvironmentModel,
+    payload: GrowGroupPayload,
   ): Promise<WrappedResponse<any>>;
 }
 
@@ -64,6 +86,40 @@ export class GrowService implements IGrowService {
   ): Promise<WrappedResponse<any>> {
     return await new FieldErrorWrapper(() =>
       this.growRepository.putOrganization(orgId, payload, env.id, tempToken),
+    ).execute();
+  }
+
+  async createGroup(
+    tempToken: string,
+    orgId: string,
+    env: CountryEnvironmentModel,
+    payload: GrowGroupPayload,
+  ): Promise<WrappedResponse<any>> {
+    return await new FieldErrorWrapper(() =>
+      this.growRepository.postGroup(orgId, payload, env.id, tempToken),
+    ).execute();
+  }
+
+  async getGroups(
+    tempToken: string,
+    orgId: string,
+    env: CountryEnvironmentModel,
+    userEmail?: string,
+  ): Promise<WrappedResponse<GrowGroup[]>> {
+    return await new FieldErrorWrapper(() =>
+      this.growRepository.searchGroups(orgId, userEmail, env.id, tempToken),
+    ).execute();
+  }
+
+  async updateGroup(
+    tempToken: string,
+    orgId: string,
+    groupId: string,
+    env: CountryEnvironmentModel,
+    payload: GrowGroupPayload,
+  ): Promise<WrappedResponse<any>> {
+    return await new FieldErrorWrapper(() =>
+      this.growRepository.putGroup(orgId, groupId, payload, env.id, tempToken),
     ).execute();
   }
 }
