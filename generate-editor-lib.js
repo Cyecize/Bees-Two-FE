@@ -114,6 +114,9 @@ const typeFiles = [
   "./src/app/api/grow/grow.service.ts",
   "./src/app/api/proxy/bees-response.ts",
   "./src/app/api/grow/grow-group.ts",
+  "./src/app/api/accounts/contracts/bees-contract.ts",
+  "./src/app/api/accounts/contracts/bees-contract.service.ts",
+  "./src/app/shared/util/page.ts",
 ];
 
 let combinedTypes = "";

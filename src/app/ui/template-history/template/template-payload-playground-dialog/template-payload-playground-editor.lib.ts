@@ -83,6 +83,7 @@ export const EDITOR_CUSTOM_LIB = `
         dialogService: DialogService;
         localAccountService: LocalAccountService;
         accountV1Service: AccountV1Service;
+        beesContractService: IBeesContractService;
         envService: CountryEnvironmentService;
         http: HttpClient;
         grow: IGrowService;

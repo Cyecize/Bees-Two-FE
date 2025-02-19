@@ -1,5 +1,8 @@
 import { LocalPageRequest, LocalPageRequestImpl } from './page-request';
 
+/**
+ * @monaco
+ */
 export interface Pagination {
   page: number;
   pageSize: number;
@@ -14,6 +17,9 @@ export class EmptyPagination implements Pagination {
   totalPages = 1;
 }
 
+/**
+ * @monaco
+ */
 export interface PaginationV2 {
   page: number;
   pageSize: number;
@@ -28,6 +34,14 @@ export class EmptyPaginationV2 implements PaginationV2 {
   totalPage = 1;
 }
 
+/**
+ * @monaco
+ */
+export interface PageWithPagination<T> {
+  content: T[];
+  pagination: Pagination;
+}
+
 export function v2ToV1Pagination(v2Page: PaginationV2): Pagination {
   const page = new EmptyPagination();
   page.totalElements = v2Page.totalElements;
@@ -38,6 +52,9 @@ export function v2ToV1Pagination(v2Page: PaginationV2): Pagination {
   return page;
 }
 
+/**
+ * @monaco
+ */
 export interface HasNextPagination {
   hasNext: boolean;
   page: number;
@@ -48,6 +65,9 @@ export class EmptyHasNextPagination implements HasNextPagination {
   page = 0;
 }
 
+/**
+ * @monaco
+ */
 export interface HasMorePagination {
   hasMore: boolean;
   page: number;
@@ -58,6 +78,9 @@ export class EmptyHasMorePagination implements HasMorePagination {
   page = 0;
 }
 
+/**
+ * @monaco
+ */
 export interface Page<T> {
   content: T[];
   totalPages: number;

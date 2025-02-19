@@ -1,4 +1,4 @@
-export interface Owner {
+export interface BeesAccountOwner {
   email?: string;
   firstName?: string;
   lastName?: string;
@@ -15,7 +15,7 @@ export interface Credit {
   consumption?: number;
 }
 
-export interface Address {
+export interface BeesAccountAddress {
   address?: string;
   city?: string;
   state?: string;
@@ -47,7 +47,7 @@ export interface Supervisor {
   phone?: string;
 }
 
-export interface Representative {
+export interface BeesAccountRepresentative {
   email?: string;
   name?: string;
   phone?: string;
@@ -61,7 +61,7 @@ export interface TermPeriod {
   days?: number;
 }
 
-export interface PaymentTerm {
+export interface BeesAccountPaymentTerm {
   type?: string;
   termPeriods?: TermPeriod[];
 }
@@ -74,13 +74,13 @@ export interface LiquorLicense {
   type?: string;
 }
 
-export interface MinimumOrder {
+export interface BeesAccountMinimumOrder {
   type?: string;
   value?: number;
   paymentMethods?: string[];
 }
 
-export interface MaximumOrder {
+export interface BeesAccountMaximumOrder {
   type?: string;
   value?: number;
   paymentMethods?: string[];
@@ -103,22 +103,22 @@ export interface AccountV1 {
   vendorAccountId: string;
   customerAccountId: string;
   credit?: Credit;
-  deliveryAddress?: Address;
-  billingAddress?: Address;
+  deliveryAddress?: BeesAccountAddress;
+  billingAddress?: BeesAccountAddress;
   deliveryCenterId?: string;
   deliveryScheduleId?: string;
   deliveryWindows?: DeliveryWindow[];
   liquorLicense?: LiquorLicense[];
   name: string;
-  owner?: Owner;
+  owner?: BeesAccountOwner;
   paymentMethods: string[];
   priceListId?: string;
   salesRepresentative?: SalesRepresentative;
   status: string;
   taxId?: string | null;
-  paymentTerms?: PaymentTerm[];
-  minimumOrder?: MinimumOrder;
-  maximumOrder?: MaximumOrder;
+  paymentTerms?: BeesAccountPaymentTerm[];
+  minimumOrder?: BeesAccountMinimumOrder;
+  maximumOrder?: BeesAccountMaximumOrder;
   segment?: string;
   channel?: string;
   subSegment?: string;
@@ -133,7 +133,7 @@ export interface AccountV1 {
   legalName?: string;
   displayName?: string;
   timezone?: string;
-  representatives?: Representative[];
+  representatives?: BeesAccountRepresentative[];
   hasEmptiesLoan?: boolean;
   hasOverprice?: boolean;
   hasPONumberRequirement?: boolean;

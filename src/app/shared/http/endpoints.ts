@@ -38,6 +38,7 @@ export class Endpoints {
   public static readonly DEAL_SERVICE_V3 = '/deal-service/v3';
   public static readonly DEAL_RELAY_V3 = '/deal-relay/v3';
   public static readonly ACCOUNT_V1 = '/v1/accounts/';
+  public static readonly CONTRACTS_V2 = '/accounts/v2/contracts';
   public static readonly DELIVERY_WINDOWS_V1 = '/v1/account-relay/delivery-windows';
   public static readonly ITEMS_V2 = '/api/items/items/v2';
   public static readonly ITEMS_V2_RELAY = '/api/item-relay/v2/items';
