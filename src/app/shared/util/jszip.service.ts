@@ -45,13 +45,22 @@ export class JszipService {
     const zip = new JSZip();
 
     const imagePromises = files.map(async (f, index) => {
-      const response: HttpResponse<Blob> = await firstValueFrom(
-        this.http.get(Endpoints.GET_FILE, {
-          params: { url: f.url },
-          responseType: 'blob',
-          observe: 'response',
-        }),
-      );
+      let response: HttpResponse<Blob>;
+
+      try {
+        response = await firstValueFrom(
+          this.http.get(Endpoints.GET_FILE, {
+            params: { url: f.url },
+            responseType: 'blob',
+            observe: 'response',
+          }),
+        );
+      } catch (err) {
+        console.warn(
+          `Image ${f.name} with URL: ${f.url} failed to return body!`,
+        );
+        return;
+      }
 
       if (!response.body || !response.ok) {
         console.warn(
