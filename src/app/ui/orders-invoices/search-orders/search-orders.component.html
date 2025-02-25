@@ -212,6 +212,14 @@
 
   <hr>
 
+  <div>
+    <button
+      (click)="fetchAllPages()"
+      class="btn btn-outline-info">Fetch All</button>
+  </div>
+
+  <hr>
+
   <div class="main">
     <div *ngIf="fullResponse && !fullResponse.isSuccess">
       <div class="alert alert-warning d-flex justify-content-between">

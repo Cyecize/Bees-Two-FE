@@ -41,6 +41,7 @@ import {
 } from '../../../shared/form-controls/select-search/select-search.item';
 import { ShowOrderDetailsDialogComponent } from '../show-order-details-dialog/show-order-details-dialog.component';
 import { ShowOrderDetailsDialogPayload } from '../show-order-details-dialog/show-order-details-dialog.payload';
+import { ShowLoader } from '../../../shared/loader/show.loader.decorator';
 
 @Component({
   selector: 'app-search-orders',
@@ -145,6 +146,48 @@ export class SearchOrdersComponent implements OnInit, OnDestroy {
     }
 
     return false;
+  }
+
+  @ShowLoader()
+  async fetchAllPages(): Promise<void> {
+    const res = await this.doFetchAllPages();
+    alert('Printing JSON in the console!');
+    console.log(JSON.stringify(res));
+
+    this.dialogService.openShowCodeDialog(
+      JSON.stringify(res, null, 2),
+      'Orders',
+    );
+  }
+
+  private async doFetchAllPages(): Promise<Order[]> {
+    const oldSize = this.query.page.pageSize;
+
+    try {
+      this.query.page.pageSize = 200;
+      const res: Order[] = [];
+      let page = -1;
+      let hasNext = true;
+
+      while (hasNext) {
+        page++;
+        this.query.page.page = page;
+        console.log(`fetching page ${page}`);
+
+        if (!(await this.fetchData())) {
+          alert('Could not load all pages, stopping on page ' + (page + 1));
+          return [];
+        }
+
+        res.push(...this.orders);
+        hasNext =
+          this.fullResponse.response?.response?.pagination.hasNext || false;
+      }
+
+      return res;
+    } finally {
+      this.query.page.pageSize = oldSize;
+    }
   }
 
   openResponseDetailsDialog(): void {
