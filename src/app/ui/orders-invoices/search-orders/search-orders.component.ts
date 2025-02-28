@@ -154,9 +154,12 @@ export class SearchOrdersComponent implements OnInit, OnDestroy {
     alert('Printing JSON in the console!');
     console.log(JSON.stringify(res));
 
+    console.log(`Found ${res.length} orders`);
+    console.log('Filters: ', this.query);
+
     this.dialogService.openShowCodeDialog(
       JSON.stringify(res, null, 2),
-      'Orders',
+      `Orders (${res.length})`,
     );
   }
 
