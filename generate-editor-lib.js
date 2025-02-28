@@ -117,6 +117,10 @@ const typeFiles = [
   "./src/app/api/accounts/contracts/bees-contract.ts",
   "./src/app/api/accounts/contracts/bees-contract.service.ts",
   "./src/app/shared/util/page.ts",
+  "./src/app/api/orders/order.service.ts",
+  "./src/app/api/orders/dto/order.query.ts",
+  "./src/app/api/common/bees-param.ts",
+  "./src/app/shared/util/page-request.ts",
 ];
 
 let combinedTypes = "";

@@ -1,3 +1,6 @@
+/**
+ * @monaco
+ */
 export interface BeesParam {
   name: string;
   value: number | string | boolean | null;

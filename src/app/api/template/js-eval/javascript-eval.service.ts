@@ -11,6 +11,7 @@ import { HttpClient } from '@angular/common/http';
 import { HttpClientSecuredService } from '../../../shared/http/http-client-secured.service';
 import { GrowService } from '../../grow/grow.service';
 import { BeesContractService } from '../../accounts/contracts/bees-contract.service';
+import { OrderService } from "../../orders/order.service";
 
 export interface JsEvalOptions {
   run: boolean;
@@ -38,6 +39,7 @@ export class JavascriptEvalService {
     private http: HttpClientSecuredService,
     private growService: GrowService,
     private beesContractService: BeesContractService,
+    private orderService: OrderService,
   ) {}
 
   public async eval(
@@ -66,6 +68,7 @@ export class JavascriptEvalService {
       http: this.http,
       grow: this.growService,
       beesContractService: this.beesContractService,
+      orderService: this.orderService,
     };
 
     const result: JsEvalResult = {

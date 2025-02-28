@@ -1,6 +1,9 @@
 import { DEFAULT_PAGE_SIZE } from '../general.constants';
 import { BeesParam, BeesParamImpl } from '../../api/common/bees-param';
 
+/**
+ * @monaco
+ */
 export interface PageRequest {
   page: number;
   pageSize: number;
@@ -42,6 +45,9 @@ export class PageRequestImplV3 extends PageRequestImpl {
   }
 }
 
+/**
+ * @monaco
+ */
 export interface LocalPageRequest {
   pageNumber: number;
   pageSize: number;

@@ -126,6 +126,7 @@ export class SearchOrdersComponent implements OnInit, OnDestroy {
     await this.fetchData();
   }
 
+  @ShowLoader()
   private async fetchData(): Promise<boolean> {
     const response = await this.orderService.searchOrders(
       this.query,
@@ -164,33 +165,7 @@ export class SearchOrdersComponent implements OnInit, OnDestroy {
   }
 
   private async doFetchAllPages(): Promise<Order[]> {
-    const oldSize = this.query.page.pageSize;
-
-    try {
-      this.query.page.pageSize = 200;
-      const res: Order[] = [];
-      let page = -1;
-      let hasNext = true;
-
-      while (hasNext) {
-        page++;
-        this.query.page.page = page;
-        console.log(`fetching page ${page}`);
-
-        if (!(await this.fetchData())) {
-          alert('Could not load all pages, stopping on page ' + (page + 1));
-          return [];
-        }
-
-        res.push(...this.orders);
-        hasNext =
-          this.fullResponse.response?.response?.pagination.hasNext || false;
-      }
-
-      return res;
-    } finally {
-      this.query.page.pageSize = oldSize;
-    }
+    return this.orderService.fetchAllPages(this.query, this.envOverride);
   }
 
   openResponseDetailsDialog(): void {

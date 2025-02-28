@@ -8,6 +8,9 @@ import { OrderStatusCondition } from '../order-status-condition';
 import { SortDirection } from '../../../shared/util/sort.query';
 import { BeesParam, BeesParamImpl } from '../../common/bees-param';
 
+/**
+ * @monaco
+ */
 export interface OrderQuery {
   page: PageRequest; // page and limit
   orderStatus: OrderStatus;
