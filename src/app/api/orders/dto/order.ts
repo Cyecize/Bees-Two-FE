@@ -1,5 +1,9 @@
 import { OrderStatus } from '../order.status';
 
+/**
+ * @monaco
+ * @monaco_include_deps
+ */
 export interface Order {
   orderNumber: string;
   beesAccountId: string;
