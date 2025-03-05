@@ -11,12 +11,12 @@
   </div>
   <hr class="mt-1 mb-1">
   <div>
-    <div class="filters">
+    <div [formGroup]="queryForm" class="filters">
       <div class="main-filters-header">
         <div class="filter">
           <app-select-search
-            [generateUniqueControlName]="true"
             placeholder="Country"
+            formControlName="countryCode"
             [payload]="countryCodes"
             (pageChange)="countryCodeDropdownPageChange($event)"
             (search)="countryCodeDropdownSearch($event)"
@@ -26,20 +26,24 @@
         <div class="filter">
           <app-input
             (onChangeEnd)="envNameChanged($event)"
-            [generateUniqueControlName]="true"
+            formControlName="envName"
             placeholder="Name">
           </app-input>
         </div>
         <div class="filter">
           <app-select-search
-            [generateUniqueControlName]="true"
+            formControlName="env"
             placeholder="Environment"
             [payload]="envs"
             (selectionChange)="envSelected($event)"></app-select-search>
         </div>
       </div>
       <div class="text-end">
-        <small class="btn btn-sm btn-outline-info"
+        <small class="btn btn-sm btn-outline-danger"
+               (click)="clearFilters()">
+          Clear
+        </small>
+        <small class="btn btn-sm btn-outline-info ms-1"
                (click)="showMoreFilters = !showMoreFilters">
           More filters
         </small>
@@ -48,14 +52,14 @@
         <div class="filter">
           <app-input
             (onChangeEnd)="vendorIdChanged($event)"
-            [generateUniqueControlName]="true"
+            formControlName="vendorId"
             placeholder="Vendor ID">
           </app-input>
         </div>
         <div class="filter">
           <app-input
             (onChangeEnd)="storeIdChanged($event)"
-            [generateUniqueControlName]="true"
+            formControlName="storeId"
             placeholder="Store ID">
           </app-input>
         </div>

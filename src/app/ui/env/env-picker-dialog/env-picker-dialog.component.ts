@@ -1,4 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { DialogContentBaseComponent } from '../../../shared/dialog/dialogs/dialog-content-base.component';
 import { Observable } from 'rxjs';
 import { CountryEnvironmentService } from '../../../api/env/country-environment.service';
@@ -33,6 +39,16 @@ import { AddEnvDialogComponent } from '../add-env-dialog/add-env-dialog.componen
 import { EnvPickerDialogPayload } from './env-picker-dialog.payload';
 import { CheckboxComponent } from '../../../shared/form-controls/checkbox/checkbox.component';
 import { EnvPickerDialogResult } from './env-picker-dialog.result';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { EnvPickerDialogService } from './env-picker-dialog.service';
+
+interface EnvQueryForm {
+  envName: FormControl<string | null>;
+  env: FormControl<Env | null>;
+  countryCode: FormControl<string | null>;
+  vendorId: FormControl<string | null>;
+  storeId: FormControl<string | null>;
+}
 
 @Component({
   selector: 'app-env-picker-dialog',
@@ -44,13 +60,14 @@ import { EnvPickerDialogResult } from './env-picker-dialog.result';
     InputComponent,
     PaginationComponent,
     CheckboxComponent,
+    ReactiveFormsModule,
   ],
   templateUrl: './env-picker-dialog.component.html',
   styleUrl: './env-picker-dialog.component.scss',
 })
 export class EnvPickerDialogComponent
   extends DialogContentBaseComponent<EnvPickerDialogPayload>
-  implements OnInit
+  implements OnInit, OnDestroy
 {
   private readonly PAGE_SIZE = 5;
   currentEnv!: CountryEnvironmentModel;
@@ -60,6 +77,7 @@ export class EnvPickerDialogComponent
 
   query: CountryEnvironmentQuery = new CountryEnvironmentQueryImpl();
   countryCodeQuery: CountryCodeQuery = new CountryCodeQueryImpl(this.query);
+  queryForm!: FormGroup<EnvQueryForm>;
 
   envsPage: Page<CountryEnvironmentModel> = new EmptyPage();
   countryCodes: Page<SelectSearchItem<string>> = new EmptyPage();
@@ -73,11 +91,28 @@ export class EnvPickerDialogComponent
   constructor(
     private envService: CountryEnvironmentService,
     private dialogService: DialogService,
+    private envDialogService: EnvPickerDialogService,
+    private cd: ChangeDetectorRef,
   ) {
     super();
   }
 
   async ngOnInit(): Promise<void> {
+    this.queryForm = new FormGroup({
+      env: new FormControl<Env | null>(null),
+      envName: new FormControl<string | null>(null),
+      countryCode: new FormControl<string | null>(null),
+      storeId: new FormControl<string | null>(null),
+      vendorId: new FormControl<string | null>(null),
+    });
+
+    await this.fetchCountryCodes();
+
+    const savedQuery = this.envDialogService.getQuery();
+    if (savedQuery) {
+      this.query = savedQuery;
+    }
+
     this.setTitle('Choose Environment');
     this.envService.selectedEnv$.subscribe((value) => {
       if (value) {
@@ -94,7 +129,14 @@ export class EnvPickerDialogComponent
     );
 
     this.query.page.pageSize = this.PAGE_SIZE;
+
+    this.cd.detectChanges();
+    this.queryForm.patchValue(this.query);
     await this.reloadFilters();
+  }
+
+  ngOnDestroy(): void {
+    this.envDialogService.setQuery(this.query);
   }
 
   getIcon(): Observable<string> {
@@ -123,7 +165,7 @@ export class EnvPickerDialogComponent
   countryCodeDropdownSearch(val: string): void {
     this.countryCodeQuery.page.pageNumber = 0;
     this.countryCodeQuery.countryCode = val;
-    this.query.countryCode = undefined;
+    this.query.countryCode = null;
     this.fetchCountryCodes();
   }
 
@@ -133,7 +175,7 @@ export class EnvPickerDialogComponent
   }
 
   countryCodeChanged(code: SelectSearchItem<string>): void {
-    this.query.countryCode = code.objRef;
+    this.query.countryCode = code.objRef!;
     if (!code.objRef) {
       this.countryCodeQuery.countryCode = undefined;
     }
@@ -255,4 +297,11 @@ export class EnvPickerDialogComponent
   }
 
   protected readonly pageToPagination = pageToPagination;
+
+  async clearFilters(): Promise<void> {
+    this.query = new CountryEnvironmentQueryImpl();
+    this.query.page.pageSize = this.PAGE_SIZE;
+    this.queryForm.patchValue(this.query);
+    await this.reloadFilters();
+  }
 }
