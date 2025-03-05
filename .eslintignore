@@ -2,3 +2,4 @@ build/
 **.html
 src/app/app-routing.path.ts
 src/app/shared/http/endpoints.ts
+src/app/ui/template-history/template/template-payload-playground-dialog/generated-editor-lib.ts

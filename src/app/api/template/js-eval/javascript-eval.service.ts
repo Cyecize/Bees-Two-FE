@@ -11,7 +11,7 @@ import { HttpClient } from '@angular/common/http';
 import { HttpClientSecuredService } from '../../../shared/http/http-client-secured.service';
 import { GrowService } from '../../grow/grow.service';
 import { BeesContractService } from '../../accounts/contracts/bees-contract.service';
-import { OrderService } from "../../orders/order.service";
+import { OrderService } from '../../orders/order.service';
 
 export interface JsEvalOptions {
   run: boolean;

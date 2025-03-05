@@ -6,7 +6,7 @@ import {
   WrappedResponse,
 } from '../../shared/util/field-error-wrapper';
 import { OrderSearchResult } from './dto/order-search-result';
-import { OrderQuery, OrderQueryImpl } from "./dto/order.query";
+import { OrderQuery, OrderQueryImpl } from './dto/order.query';
 import { BeesEntity } from '../common/bees-entity';
 import { RequestMethod } from '../common/request-method';
 import { RelayVersion } from '../relay/relay.version';
