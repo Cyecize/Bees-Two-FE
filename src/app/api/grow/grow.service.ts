@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { GrowRepository } from './grow.repository';
-import { GrowOrganization } from './grow-organization';
+import { GrowOrganization } from './dto/grow-organization';
 import {
   FieldErrorWrapper,
   WrappedResponse,
 } from '../../shared/util/field-error-wrapper';
 import { CountryEnvironmentModel } from '../env/country-environment.model';
-import { GrowOrganizationPayload } from './grow-organization.payload';
-import { GrowGroup } from './grow-group';
-import { GrowGroupPayload } from './grow-group.payload';
+import { GrowOrganizationPayload } from './dto/grow-organization.payload';
+import { GrowGroup } from './dto/grow-group';
+import { GrowGroupPayload } from './dto/grow-group.payload';
 
 /**
  * @monaco

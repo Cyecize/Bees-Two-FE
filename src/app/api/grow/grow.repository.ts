@@ -2,15 +2,15 @@ import { Injectable } from '@angular/core';
 import { ProxyService } from '../proxy/proxy.service';
 import { Observable } from 'rxjs';
 import { BeesResponse } from '../proxy/bees-response';
-import { GrowOrganization } from './grow-organization';
+import { GrowOrganization } from './dto/grow-organization';
 import { Endpoints } from '../../shared/http/endpoints';
 import { BeesEntity } from '../common/bees-entity';
 import { RequestMethod } from '../common/request-method';
-import { GrowOrganizationPayload } from './grow-organization.payload';
+import { GrowOrganizationPayload } from './dto/grow-organization.payload';
 import { RouteUtils } from '../../shared/routing/route-utils';
-import { GrowGroup } from './grow-group';
+import { GrowGroup } from './dto/grow-group';
 import { BeesParam, BeesParamImpl } from '../common/bees-param';
-import { GrowGroupPayload } from './grow-group.payload';
+import { GrowGroupPayload } from './dto/grow-group.payload';
 
 @Injectable({ providedIn: 'root' })
 export class GrowRepository {
