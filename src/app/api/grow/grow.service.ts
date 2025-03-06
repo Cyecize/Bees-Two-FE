@@ -9,6 +9,7 @@ import { CountryEnvironmentModel } from '../env/country-environment.model';
 import { GrowOrganizationPayload } from './dto/grow-organization.payload';
 import { GrowGroup } from './dto/grow-group';
 import { GrowGroupPayload } from './dto/grow-group.payload';
+import { GrowUserPayload } from './dto/grow-user.payload';
 
 /**
  * @monaco
@@ -49,6 +50,12 @@ interface IGrowService {
     groupId: string,
     env: CountryEnvironmentModel,
     payload: GrowGroupPayload,
+  ): Promise<WrappedResponse<any>>;
+
+  createUser(
+    tempToken: string,
+    env: CountryEnvironmentModel,
+    payload: GrowUserPayload[],
   ): Promise<WrappedResponse<any>>;
 }
 
@@ -120,6 +127,16 @@ export class GrowService implements IGrowService {
   ): Promise<WrappedResponse<any>> {
     return await new FieldErrorWrapper(() =>
       this.growRepository.putGroup(orgId, groupId, payload, env.id, tempToken),
+    ).execute();
+  }
+
+  public async createUser(
+    tempToken: string,
+    env: CountryEnvironmentModel,
+    payload: GrowUserPayload[],
+  ): Promise<WrappedResponse<any>> {
+    return await new FieldErrorWrapper(() =>
+      this.growRepository.postUser(payload, env.id, tempToken),
     ).execute();
   }
 }

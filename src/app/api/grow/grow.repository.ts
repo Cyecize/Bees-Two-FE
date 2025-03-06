@@ -11,6 +11,7 @@ import { RouteUtils } from '../../shared/routing/route-utils';
 import { GrowGroup } from './dto/grow-group';
 import { BeesParam, BeesParamImpl } from '../common/bees-param';
 import { GrowGroupPayload } from './dto/grow-group.payload';
+import { GrowUserPayload } from './dto/grow-user.payload';
 
 @Injectable({ providedIn: 'root' })
 export class GrowRepository {
@@ -97,6 +98,21 @@ export class GrowRepository {
       }),
       entity: BeesEntity.GROW,
       method: RequestMethod.PUT,
+      targetEnv: envId,
+      authTokenOverride: authTokenOverride,
+      data: payload,
+    });
+  }
+
+  public postUser(
+    payload: GrowUserPayload[],
+    envId?: number,
+    authTokenOverride?: string,
+  ): Observable<any> {
+    return this.proxyService.makeRequest<any>({
+      endpoint: Endpoints.GROW_USERS,
+      entity: BeesEntity.GROW,
+      method: RequestMethod.POST,
       targetEnv: envId,
       authTokenOverride: authTokenOverride,
       data: payload,

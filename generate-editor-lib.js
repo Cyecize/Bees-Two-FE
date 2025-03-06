@@ -122,6 +122,7 @@ const typeFiles = [
   "./src/app/api/common/bees-param.ts",
   "./src/app/shared/util/page-request.ts",
   "./src/app/api/orders/dto/order.ts",
+  "./src/app/api/grow/dto/grow-user.payload.ts",
 ];
 
 let combinedTypes = "";

@@ -1,4 +1,5 @@
 export const environment = {
-  backendUrl: 'http://localhost:8080',
+  backendUrl: 'https://bees-two-be.cyecize.fun',
+  // backendUrl: 'http://localhost:8080',
   apiUrl: '',
 };
