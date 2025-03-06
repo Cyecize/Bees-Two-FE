@@ -11,7 +11,7 @@ export interface Order {
   status: OrderStatus;
   previousStatus: OrderStatus | null;
   channel: string;
-  audit: any;
+  audit: OrderAudit;
   delivery: any;
   cancellation?: any;
   combos: any[];
@@ -30,6 +30,11 @@ export interface Order {
   orderProperties: any[];
   deleted: boolean;
   purchaseId?: number;
+}
+
+export interface OrderAudit {
+  createAt: string;
+  updateAt: string;
 }
 
 export interface OrderVendorData {
