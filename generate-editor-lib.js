@@ -123,6 +123,8 @@ const typeFiles = [
   "./src/app/shared/util/page-request.ts",
   "./src/app/api/orders/dto/order.ts",
   "./src/app/api/grow/dto/grow-user.payload.ts",
+  "./src/app/api/vendor/vendor-v2.ts",
+  "./src/app/api/vendor/vendor-v2.service.ts",
 ];
 
 let combinedTypes = "";

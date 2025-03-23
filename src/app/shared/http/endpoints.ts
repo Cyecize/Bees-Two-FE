@@ -55,4 +55,5 @@ export class Endpoints {
   public static readonly GROW_GROUPS = '/api/bees-grow-organizations-service/v1/organizations/:id/groups';
   public static readonly GROW_GROUP = '/api/bees-grow-organizations-service/v1/organizations/:orgId/groups/:groupId';
   public static readonly GROW_USERS = '/api/oncustomer-b2c-users/users';
+  public static readonly VENDORS_V2 = '/vendors/v2/';
 }
