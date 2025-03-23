@@ -32,31 +32,33 @@ function processFile(content) {
     }
   });
 
-  // Second pass: Find dependencies of marked interfaces
-  let added;
-  do {
-    console.log(Array.from(allInterfaces.keys()));
-    added = false;
-    Array.from(interfacesToIncludeDeps).forEach((interfaceName) => {
-      const node = allInterfaces.get(interfaceName);
-      if (!node) return;
+  // Second pass: Find dependencies of marked interfaces using a queue for Breadth-First Search
+  const queue = Array.from(interfacesToIncludeDeps);
+  const processed = new Set();
 
-      ts.forEachChild(node, (member) => {
-        if (ts.isPropertySignature(member) && member.type) {
-          // By splitting by [, array type suffix is removed and it can then be
-          // found in the interfaces collection
-          const typeName = member.type.getText(sourceFile).split('[')[0];
-          if (
-            allInterfaces.has(typeName) &&
-            !interfacesToInclude.has(typeName)
-          ) {
-            interfacesToInclude.add(typeName);
-            added = true;
-          }
+  while (queue.length > 0) {
+    const interfaceName = queue.shift();
+
+    if (processed.has(interfaceName)) {
+      continue;
+    }
+    processed.add(interfaceName);
+
+    const node = allInterfaces.get(interfaceName);
+    if (!node) continue;
+
+    ts.forEachChild(node, (member) => {
+      if (ts.isPropertySignature(member) && member.type) {
+        // By splitting by [, array type suffix is removed and it can then be
+        // found in the interfaces collection
+        const typeName = member.type.getText(sourceFile).split("[")[0];
+        if (allInterfaces.has(typeName) && !interfacesToInclude.has(typeName)) {
+          interfacesToInclude.add(typeName);
+          queue.push(typeName);
         }
-      });
+      }
     });
-  } while (added);
+  }
 
   // Generate output without imports/exports
   const printer = ts.createPrinter();
@@ -136,7 +138,7 @@ typeFiles.forEach((file) => {
 fs.writeFileSync(
   path.resolve(
     __dirname,
-    './src/app/ui/template-history/template/template-payload-playground-dialog/generated-editor-lib.ts',
+    "./src/app/ui/template-history/template/template-payload-playground-dialog/generated-editor-lib.ts",
   ),
   `export const GENERATED_EDITOR_LIB = ${JSON.stringify(combinedTypes)};`,
 );
