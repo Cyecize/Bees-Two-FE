@@ -34,7 +34,16 @@ export class FieldErrorWrapperLocal<T> {
   }
 }
 
-export class WrappedResponseLocal<T> {
+/**
+ * @monaco
+ */
+export interface IWrappedResponseLocal<T> {
+  isSuccess: boolean;
+  errors: FieldError[];
+  response?: T;
+}
+
+export class WrappedResponseLocal<T> implements IWrappedResponseLocal<T> {
   constructor(
     public readonly isSuccess: boolean,
     public readonly errors: FieldError[],

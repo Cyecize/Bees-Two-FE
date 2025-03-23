@@ -105,6 +105,7 @@ const typeFiles = [
   "./src/app/api/accounts/local/local-account.ts",
   "./src/app/api/accounts/v1/account-v1.ts",
   "./src/app/api/env/country-environment.model.ts",
+  "./src/app/api/env/country-environment-language.model.ts",
   "./src/app/api/env/country-environment-creds.payload.ts",
   "./src/app/api/template/arg/request-template-arg.ts",
   "./src/app/api/grow/dto/grow-organization.ts",
@@ -127,6 +128,9 @@ const typeFiles = [
   "./src/app/api/grow/dto/grow-user.payload.ts",
   "./src/app/api/vendor/vendor-v2.ts",
   "./src/app/api/vendor/vendor-v2.service.ts",
+  "./src/app/api/env/country-environment.service.ts",
+  "./src/app/shared/util/field-error-wrapper-local.ts",
+  "./src/app/shared/field-error/field-error.ts",
 ];
 
 let combinedTypes = "";

@@ -51,6 +51,16 @@ export class CountryEnvironmentRepository {
     );
   }
 
+  public update(
+    id: number,
+    env: CountryEnvironmentModel,
+  ): Observable<CountryEnvironmentModel> {
+    return this.http.put<CountryEnvironmentModel, CountryEnvironmentModel>(
+      RouteUtils.setPathParams(Endpoints.ENVIRONMENT, [id]),
+      env,
+    );
+  }
+
   public getToken(envId: number): Observable<EnvToken> {
     return this.http.get<EnvToken>(
       RouteUtils.setPathParams(Endpoints.ENVIRONMENT_TOKEN, [envId]),

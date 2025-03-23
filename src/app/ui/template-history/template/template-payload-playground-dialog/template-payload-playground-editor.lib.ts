@@ -64,15 +64,6 @@ export const EDITOR_CUSTOM_LIB = `
           ): Promise<AccountV1 | null>;
       }
 
-      interface CountryEnvironmentService {
-        async createEnv(
-          payload: CountryEnvironmentPayload,
-          ): Promise<WrappedResponseLocal<CountryEnvironmentModel>>;
-
-        async findByVendorId(vendorId: string): Promise<CountryEnvironmentModel[]>;
-        async updateCreds(payload: CountryEnvironmentCredsPayload): Promise<boolean>;
-      }
-
       interface HttpClient {
          get<TResponse>(url: string, options = {}): Observable<TResponse>
       }
@@ -84,7 +75,7 @@ export const EDITOR_CUSTOM_LIB = `
         localAccountService: LocalAccountService;
         accountV1Service: AccountV1Service;
         beesContractService: IBeesContractService;
-        envService: CountryEnvironmentService;
+        envService: ICountryEnvironmentService;
         orderService: IOrderService;
         http: HttpClient;
         grow: IGrowService;

@@ -10,6 +10,7 @@ import {
 } from './country-environment.query';
 import {
   FieldErrorWrapperLocal,
+  IWrappedResponseLocal,
   WrappedResponseLocal,
 } from '../../shared/util/field-error-wrapper-local';
 import { Page } from '../../shared/util/page';
@@ -18,8 +19,23 @@ import { CountryEnvironmentPayload } from './country-environment.payload';
 import { EnvToken } from './env-token';
 import { CountryEnvironmentCredsPayload } from './country-environment-creds.payload';
 
+/**
+ * @monaco
+ */
+interface ICountryEnvironmentService {
+  createEnv(
+    payload: CountryEnvironmentPayload,
+  ): Promise<WrappedResponseLocal<CountryEnvironmentModel>>;
+
+  findByVendorId(vendorId: string): Promise<CountryEnvironmentModel[]>;
+  updateCreds(payload: CountryEnvironmentCredsPayload): Promise<boolean>;
+  save(
+    env: CountryEnvironmentModel,
+  ): Promise<IWrappedResponseLocal<CountryEnvironmentModel>>;
+}
+
 @Injectable({ providedIn: 'root' })
-export class CountryEnvironmentService {
+export class CountryEnvironmentService implements ICountryEnvironmentService {
   private readonly selectedEnvSubject =
     new BehaviorSubject<CountryEnvironmentModel | null>(null);
   public readonly selectedEnv$ = this.selectedEnvSubject.asObservable();
@@ -93,6 +109,15 @@ export class CountryEnvironmentService {
     }
 
     return resp.isSuccess;
+  }
+
+  public async save(
+    env: CountryEnvironmentModel,
+  ): Promise<WrappedResponseLocal<CountryEnvironmentModel>> {
+    const id = env.id;
+    return await new FieldErrorWrapperLocal(() =>
+      this.repository.update(id, env),
+    ).execute();
   }
 
   public async getToken(

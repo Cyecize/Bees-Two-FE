@@ -7,7 +7,6 @@ import { DialogService } from '../../../shared/dialog/dialog.service';
 import { LocalAccountService } from '../../accounts/local/local-account.service';
 import { AccountV1Service } from '../../accounts/v1/account-v1.service';
 import { CountryEnvironmentService } from '../../env/country-environment.service';
-import { HttpClient } from '@angular/common/http';
 import { HttpClientSecuredService } from '../../../shared/http/http-client-secured.service';
 import { GrowService } from '../../grow/grow.service';
 import { BeesContractService } from '../../accounts/contracts/bees-contract.service';
