@@ -14,6 +14,7 @@ import {
   FieldErrorWrapper,
   WrappedResponse,
 } from '../../shared/util/field-error-wrapper';
+import { Promo } from './promo';
 
 @Injectable({ providedIn: 'root' })
 export class PromoService {
@@ -27,6 +28,18 @@ export class PromoService {
     env?: CountryEnvironmentModel,
   ): Promise<BeesResponse<PromoSearchResponse>> {
     return firstValueFrom(this.promoRepository.searchPromos(query, env?.id));
+  }
+
+  public async deletePromo(
+    promo: Promo,
+    env?: CountryEnvironmentModel,
+  ): Promise<BeesResponse<any>> {
+    return firstValueFrom(
+      this.promoRepository.deletePromo(
+        [promo.vendorUniqueIds.vendorPromotionId],
+        env?.id,
+      ),
+    );
   }
 
   public async addPromo(

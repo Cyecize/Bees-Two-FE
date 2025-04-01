@@ -7,6 +7,7 @@ import { BeesEntity } from '../common/bees-entity';
 import { RequestMethod } from '../common/request-method';
 import { PromoSearchQuery } from './promo-search.query';
 import { PromoSearchResponse } from './promo-search.response';
+import { BeesParamImpl } from '../common/bees-param';
 
 @Injectable({ providedIn: 'root' })
 export class PromoRepository {
@@ -22,6 +23,22 @@ export class PromoRepository {
       method: RequestMethod.GET,
       targetEnv: envId,
       queryParams: query.toBeesParams(),
+    });
+  }
+
+  public deletePromo(
+    vendorPromotionIds: string[],
+    envId?: number,
+  ): Observable<BeesResponse<any>> {
+    return this.proxyService.makeRequest<BeesResponse<any>>({
+      endpoint: Endpoints.PROMOTION_RELAY_V3,
+      entity: BeesEntity.PROMOTIONS,
+      method: RequestMethod.DELETE,
+      headers: [new BeesParamImpl('X-Timestamp', Date.now())],
+      data: {
+        vendorPromotionIds: vendorPromotionIds,
+      },
+      targetEnv: envId,
     });
   }
 }

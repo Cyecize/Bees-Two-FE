@@ -28,6 +28,9 @@ import { Promo } from '../../../../api/promo/promo';
 import { EnvOverrideFieldComponent } from '../../../env/env-override-field/env-override-field.component';
 import { EnvOverrideService } from '../../../../api/env/env-override.service';
 import { Subscription } from 'rxjs';
+import { DialogService } from '../../../../shared/dialog/dialog.service';
+import { ShowPromoDetailsDialogComponent } from '../show-promo-details-dialog/show-promo-details-dialog.component';
+import { ShowPromoDetailsDialogPayload } from '../show-promo-details-dialog/show-promo-details-dialog.payload';
 
 @Component({
   selector: 'app-search-promotions',
@@ -60,6 +63,7 @@ export class SearchPromotionsComponent implements OnInit, OnDestroy {
   constructor(
     private envOverrideService: EnvOverrideService,
     private promoService: PromoService,
+    private dialogService: DialogService,
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -140,7 +144,18 @@ export class SearchPromotionsComponent implements OnInit, OnDestroy {
   }
 
   openDetailsDialog(promo: Promo): void {
-    alert('openingDetails!');
+    this.dialogService
+      .open(
+        ShowPromoDetailsDialogComponent,
+        `Promo: ${promo.title}`,
+        new ShowPromoDetailsDialogPayload(promo, this.selectedEnv!),
+      )
+      .afterClosed()
+      .subscribe((refresh) => {
+        if (refresh) {
+          this.pageChange(0);
+        }
+      });
   }
 }
 

@@ -36,6 +36,7 @@ export class Endpoints {
   public static readonly BEES_SEGMENTATION_ACCOUNT_GROUP = '/segmentation-service/v1/account-groups/:id';
   public static readonly BEES_SEGMENTATION_ACCOUNT_GROUP_GROUP = '/segmentation-service/v1/account-groups/:accId/groups/:groupId';
   public static readonly PROMOTIONS_V3 = '/v1/promotion-service/v3/promotions';
+  public static readonly PROMOTION_RELAY_V3 = '/promotion-relay/v3/promotions';
   public static readonly DEAL_SERVICE_V3 = '/deal-service/v3';
   public static readonly DEAL_RELAY_V3 = '/deal-relay/v3';
   public static readonly ACCOUNT_V1 = '/v1/accounts/';
