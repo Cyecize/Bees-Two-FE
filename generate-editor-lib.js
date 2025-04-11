@@ -131,6 +131,10 @@ const typeFiles = [
   "./src/app/api/env/country-environment.service.ts",
   "./src/app/shared/util/field-error-wrapper-local.ts",
   "./src/app/shared/field-error/field-error.ts",
+  "./src/app/api/items/item.ts",
+  "./src/app/api/items/item.service.ts",
+  "./src/app/api/items/items-search.response.ts",
+  "./src/app/api/items/items-search.query.ts",
 ];
 
 let combinedTypes = "";

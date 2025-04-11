@@ -22,6 +22,10 @@ export interface Package {
   size?: number;
 }
 
+/**
+ * @monaco
+ * @monaco_include_deps
+ */
 export interface Item {
   id: string;
   brandId: string;

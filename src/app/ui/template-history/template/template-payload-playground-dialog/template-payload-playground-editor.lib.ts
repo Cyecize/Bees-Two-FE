@@ -80,6 +80,7 @@ export const EDITOR_CUSTOM_LIB = `
         http: HttpClient;
         grow: IGrowService;
         vendorService: IVendorV2Service;
+        itemService: IItemService;
       }
 
       declare const env: CountryEnvironmentModel;

@@ -1,6 +1,9 @@
 import { PageRequest, PageRequestImpl } from '../../shared/util/page-request';
 import { BeesParam, BeesParamImpl } from '../common/bees-param';
 
+/**
+ * @monaco
+ */
 export interface ItemsSearchQuery {
   skus: string[];
   vendorItemIds: string[];

@@ -5,13 +5,30 @@ import {
   FieldErrorWrapper,
   WrappedResponse,
 } from '../../shared/util/field-error-wrapper';
-import { ItemsSearchQuery } from './items-search.query';
+import { ItemSearchQueryImpl, ItemsSearchQuery } from './items-search.query';
 import { ItemsSearchResponse } from './items-search.response';
 import { ItemPayload } from './item.payload';
 import { Item } from './item';
 
+/**
+ * @monaco
+ */
+interface IItemService {
+  searchItems(
+    query: ItemsSearchQuery,
+    env?: CountryEnvironmentModel,
+  ): Promise<WrappedResponse<ItemsSearchResponse>>;
+
+  saveItems(
+    items: ItemPayload[],
+    env?: CountryEnvironmentModel,
+  ): Promise<WrappedResponse<any>>;
+
+  newSearchQuery(): ItemsSearchQuery;
+}
+
 @Injectable({ providedIn: 'root' })
-export class ItemService {
+export class ItemService implements IItemService {
   constructor(private repository: ItemRepository) {}
 
   public async searchItems(
@@ -39,5 +56,9 @@ export class ItemService {
     return await new FieldErrorWrapper(() =>
       this.repository.upsertItems(items, env?.id),
     ).execute();
+  }
+
+  newSearchQuery(): ItemsSearchQuery {
+    return new ItemSearchQueryImpl();
   }
 }

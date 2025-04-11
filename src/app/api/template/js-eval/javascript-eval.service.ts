@@ -12,6 +12,7 @@ import { GrowService } from '../../grow/grow.service';
 import { BeesContractService } from '../../accounts/contracts/bees-contract.service';
 import { OrderService } from '../../orders/order.service';
 import { VendorV2Service } from '../../vendor/vendor-v2.service';
+import { ItemService } from '../../items/item.service';
 
 export interface JsEvalOptions {
   run: boolean;
@@ -41,6 +42,7 @@ export class JavascriptEvalService {
     private beesContractService: BeesContractService,
     private orderService: OrderService,
     private vendorService: VendorV2Service,
+    private itemService: ItemService,
   ) {}
 
   public async eval(
@@ -71,6 +73,7 @@ export class JavascriptEvalService {
       beesContractService: this.beesContractService,
       orderService: this.orderService,
       vendorService: this.vendorService,
+      itemService: this.itemService,
     };
 
     const result: JsEvalResult = {
