@@ -21,6 +21,7 @@ export class RewardsSettingsRepository {
   public searchSettings(
     query: RewardsSettingsSearchQuery,
     envId?: number,
+    authTokenOverride?: string,
   ): Observable<BeesResponse<RewardsSettingsSearchResponse>> {
     return this.proxyService.makeMultilanguageRequest<RewardsSettingsSearchResponse>(
       {
@@ -29,6 +30,7 @@ export class RewardsSettingsRepository {
         method: RequestMethod.GET,
         targetEnv: envId,
         queryParams: query.toBeesParams(),
+        authTokenOverride: authTokenOverride,
       },
       new RewardsSettingsTransformer(),
     );

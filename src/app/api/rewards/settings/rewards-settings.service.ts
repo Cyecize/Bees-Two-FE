@@ -28,8 +28,11 @@ export class RewardsSettingsService {
   public async searchSettings(
     query: RewardsSettingsSearchQuery,
     env?: CountryEnvironmentModel,
-  ): Promise<BeesResponse<RewardsSettingsSearchResponse>> {
-    return firstValueFrom(this.repository.searchSettings(query, env?.id));
+    tokenOverride?: string,
+  ): Promise<WrappedResponse<RewardsSettingsSearchResponse>> {
+    return new FieldErrorWrapper(() =>
+      this.repository.searchSettings(query, env?.id, tokenOverride),
+    ).execute();
   }
 
   @ShowLoader()
@@ -68,12 +71,13 @@ export class RewardsSettingsService {
     query: RewardsSettingsSearchQuery,
     env?: CountryEnvironmentModel,
     page = 0,
+    tokenOverride?: string,
   ): Promise<RewardSetting | null> {
     query.page.pageSize = 5;
     query.page.page = page;
 
     const resp = await firstValueFrom(
-      this.repository.searchSettings(query, env?.id),
+      this.repository.searchSettings(query, env?.id, tokenOverride),
     );
 
     if (resp.statusCode !== 200) {

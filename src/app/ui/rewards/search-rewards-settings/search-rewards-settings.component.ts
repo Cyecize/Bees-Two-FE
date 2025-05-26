@@ -17,7 +17,7 @@ import {
   RewardsSettingsSearchQueryImpl,
 } from '../../../api/rewards/settings/rewards-settings-search.query';
 import { RewardsSettingLevel } from '../../../api/rewards/settings/enums/rewards-setting-level';
-import { NgForOf } from '@angular/common';
+import { NgForOf, NgIf } from '@angular/common';
 import { RewardsTierLevel } from '../../../api/rewards/rewards-tier-level';
 import { RewardsSettingType } from '../../../api/rewards/settings/enums/rewards-setting-type';
 import { RewardsSettingsService } from '../../../api/rewards/settings/rewards-settings.service';
@@ -34,6 +34,10 @@ import { ShowRewardSettingDialogPayload } from '../show-reward-setting-dialog/sh
 import { EnvOverrideFieldComponent } from '../../env/env-override-field/env-override-field.component';
 import { EnvOverrideService } from '../../../api/env/env-override.service';
 import { Subscription } from 'rxjs';
+import { OverrideAuthTokenFieldComponent } from '../../env/token/override-auth-token-field/override-auth-token-field.component';
+import { WrappedResponse } from '../../../shared/util/field-error-wrapper';
+import { BeesTokenOverrideService } from '../../../api/env/token/bees-token-override.service';
+import { BeesTokenImpl } from '../../../api/env/token/bees-token';
 
 @Component({
   selector: 'app-search-rewards',
@@ -46,6 +50,8 @@ import { Subscription } from 'rxjs';
     RouterLink,
     PaginationComponent,
     EnvOverrideFieldComponent,
+    OverrideAuthTokenFieldComponent,
+    NgIf,
   ],
   templateUrl: './search-rewards-settings.component.html',
   styleUrl: './search-rewards-settings.component.scss',
@@ -65,19 +71,24 @@ export class SearchRewardsSettingsComponent implements OnInit, OnDestroy {
   selectedEnv?: CountryEnvironmentModel;
   envSub!: Subscription;
 
+  fullResponse: WrappedResponse<any> | null = null;
+
   constructor(
     private rewardsSettingsService: RewardsSettingsService,
     private envOverrideService: EnvOverrideService,
     private dialogService: DialogService,
+    private tokenOverrideService: BeesTokenOverrideService,
   ) {}
 
   ngOnInit(): void {
-    this.envSub = this.envOverrideService.envOverride$.subscribe((value) => {
-      if (value) {
-        this.selectedEnv = value;
-        this.reloadFilters();
-      }
-    });
+    this.envSub = this.envOverrideService.envOverride$.subscribe(
+      async (value) => {
+        if (value) {
+          this.selectedEnv = value;
+          this.reloadFilters();
+        }
+      },
+    );
   }
 
   ngOnDestroy(): void {
@@ -179,14 +190,43 @@ export class SearchRewardsSettingsComponent implements OnInit, OnDestroy {
     await this.fetchData();
   }
 
+  openResponseDetailsDialog(): void {
+    this.dialogService.openRequestResultDialog(this.fullResponse!);
+  }
+
+  async onTokenChange(val: string): Promise<void> {
+    if (!val) {
+      return;
+    }
+
+    this.tokenOverrideService.addToken(
+      new BeesTokenImpl(
+        val,
+        new Date(new Date().getTime() + 50 * 60000),
+        this.selectedEnv!.id!,
+      ),
+    );
+    await this.reloadFilters();
+  }
+
   private async fetchData(): Promise<void> {
+    this.fullResponse = null;
+    const beesToken = this.tokenOverrideService.getBeesToken(this.selectedEnv!);
+    let token = undefined;
+    if (beesToken) {
+      token = beesToken.token;
+    }
+
     const response = await this.rewardsSettingsService.searchSettings(
       this.query,
       this.selectedEnv,
+      token,
     );
 
+    this.fullResponse = response;
+
     if (response.response) {
-      this.searchResponse = response.response;
+      this.searchResponse = response.response.response;
     } else {
       this.searchResponse = { content: [], pagination: new EmptyPagination() };
     }
