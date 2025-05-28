@@ -20,4 +20,5 @@ export enum BeesEntity {
   GROW = 'GROW',
   NON_REQUEST_TEMPLATE = 'NON_REQUEST_TEMPLATE',
   VENDOR = 'VENDOR',
+  RATINGS = 'RATINGS',
 }
