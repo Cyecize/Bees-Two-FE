@@ -1,3 +1,6 @@
+/**
+ * @monaco
+ */
 export enum Env {
   SIT_GLOBAL = 'SIT_GLOBAL',
   UAT_EU = 'UAT_EU',

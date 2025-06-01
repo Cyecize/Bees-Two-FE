@@ -1,3 +1,6 @@
+/**
+ * @monaco
+ */
 export enum BeesEntity {
   ACCOUNTS = 'ACCOUNTS',
   CONTRACTS = 'CONTRACTS',

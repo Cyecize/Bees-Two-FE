@@ -10,24 +10,36 @@ function processFile(content) {
     true,
   );
 
-  const interfacesToInclude = new Set();
+  const typesToInclude = new Set(); // Handles interfaces AND enums
   const interfacesToIncludeDeps = new Set();
   const allInterfaces = new Map();
+  const allEnums = new Map(); // Stores enum declarations
 
-  // First pass: Find all interfaces and mark @monaco ones
+  // First pass: Find all interfaces/enums and mark @monaco ones
   ts.forEachChild(sourceFile, (node) => {
+    // Handle interfaces
     if (ts.isInterfaceDeclaration(node)) {
       const name = node.name.text;
       allInterfaces.set(name, node);
 
       const jsDocTags = ts.getJSDocTags(node);
       if (jsDocTags.some((tag) => tag.tagName.text === "monaco")) {
-        interfacesToInclude.add(name);
+        typesToInclude.add(name);
         if (
           jsDocTags.some((tag) => tag.tagName.text === "monaco_include_deps")
         ) {
           interfacesToIncludeDeps.add(name);
         }
+      }
+    }
+    // Handle enums
+    else if (ts.isEnumDeclaration(node)) {
+      const name = node.name.text;
+      allEnums.set(name, node);
+
+      const jsDocTags = ts.getJSDocTags(node);
+      if (jsDocTags.some((tag) => tag.tagName.text === "monaco")) {
+        typesToInclude.add(name);
       }
     }
   });
@@ -52,9 +64,15 @@ function processFile(content) {
         // By splitting by [, array type suffix is removed and it can then be
         // found in the interfaces collection
         const typeName = member.type.getText(sourceFile).split("[")[0];
-        if (allInterfaces.has(typeName) && !interfacesToInclude.has(typeName)) {
-          interfacesToInclude.add(typeName);
+
+        // Include interface dependencies
+        if (allInterfaces.has(typeName) && !typesToInclude.has(typeName)) {
+          typesToInclude.add(typeName);
           queue.push(typeName);
+        }
+        // Include enum dependencies
+        else if (allEnums.has(typeName) && !typesToInclude.has(typeName)) {
+          typesToInclude.add(typeName);
         }
       }
     });
@@ -67,16 +85,23 @@ function processFile(content) {
   ts.forEachChild(sourceFile, (node) => {
     if (ts.isImportDeclaration(node) || ts.isExportDeclaration(node)) return;
 
-    if (
-      ts.isInterfaceDeclaration(node) &&
-      interfacesToInclude.has(node.name.text)
-    ) {
+    // Print included interfaces
+    if (ts.isInterfaceDeclaration(node) && typesToInclude.has(node.name.text)) {
       const interfaceText = printer.printNode(
         ts.EmitHint.Unspecified,
         node,
         sourceFile,
       );
       output.push(interfaceText.replace(/export\s+/g, ""));
+    }
+    // Print included enums
+    else if (ts.isEnumDeclaration(node) && typesToInclude.has(node.name.text)) {
+      const enumText = printer.printNode(
+        ts.EmitHint.Unspecified,
+        node,
+        sourceFile,
+      );
+      output.push(enumText.replace(/export\s+/g, ""));
     }
   });
 
@@ -135,6 +160,8 @@ const typeFiles = [
   "./src/app/api/items/item.service.ts",
   "./src/app/api/items/items-search.response.ts",
   "./src/app/api/items/items-search.query.ts",
+  "./src/app/api/env/env.ts",
+  "./src/app/api/common/bees-entity.ts",
 ];
 
 let combinedTypes = "";

@@ -13,6 +13,8 @@ import { BeesContractService } from '../../accounts/contracts/bees-contract.serv
 import { OrderService } from '../../orders/order.service';
 import { VendorV2Service } from '../../vendor/vendor-v2.service';
 import { ItemService } from '../../items/item.service';
+import { Env } from '../../env/env';
+import { BeesEntity } from '../../common/bees-entity';
 
 export interface JsEvalOptions {
   run: boolean;
@@ -76,6 +78,11 @@ export class JavascriptEvalService {
       itemService: this.itemService,
     };
 
+    const publicEnums = {
+      Env: Env,
+      BeesEntity: BeesEntity,
+    };
+
     const result: JsEvalResult = {
       output: null,
       success: false,
@@ -92,6 +99,7 @@ export class JavascriptEvalService {
         'args',
         'context',
         'bees',
+        ...Object.keys(publicEnums),
         `return (async () => {
           ${code}
         })();`,
@@ -129,6 +137,7 @@ export class JavascriptEvalService {
         options.arguments,
         options.context,
         beesObject,
+        ...Object.values(publicEnums),
       );
 
       let output;
