@@ -1,0 +1,62 @@
+<div [formGroup]="form">
+  <h6>
+    Free Goods
+    (
+    <span
+      *ngIf="!hasFreeGoods()"
+      (click)="addFreeGood()"
+      style="cursor:pointer;">
+                  <i class="fa-solid fa-plus"></i></span>
+
+    <span
+      *ngIf="hasFreeGoods()"
+      (click)="removeFreeGoods()"
+      style="cursor:pointer;">
+                  <i class="fa-solid fa-x"></i></span>
+    )
+  </h6>
+  <div *ngIf="hasFreeGoods()" formGroupName="freeGoods">
+    <div class="mt-1">
+      <div class="mt-1">
+        <app-input type="number" placeholder="Proportion" formControlName="proportion"></app-input>
+      </div>
+      <div class="mt-1">
+        <app-input type="number" placeholder="Proportion Amount" formControlName="proportionAmount"></app-input>
+      </div>
+      <div class="mt-1">
+        <app-checkbox label="Partial" formControlName="partial"></app-checkbox>
+      </div>
+    </div>
+
+    <div class="mt-1 mb-1">
+      <button (click)="addItem()" class="btn btn-sm btn-outline-info">Add Item</button>
+      <div formArrayName="items">
+        <div *ngFor="let item of items.controls; let itemInd = index"
+             [formGroupName]="itemInd">
+          <hr class="mt-2">
+          <div class="mt-1 d-flex align-items-center">
+            <app-input type="number" class="ms-1" placeholder="Quantity" formControlName="quantity"></app-input>
+            <span (click)="removeItem(itemInd)"><i class="fa-solid fa-x"></i></span>
+          </div>
+
+          <div class="mt-2 ms-2">
+            <button
+              (click)="addVendorItem(itemInd)"
+              class="btn btn-sm btn-outline-info">Add Vendor Item</button>
+
+            <div formArrayName="vendorItems">
+              <div *ngFor="let vendorItem of getVendorItems(itemInd).controls; let vendorItemInd = index"
+                   [formGroupName]="vendorItemInd">
+                <div class="mt-1 d-flex align-items-center">
+                  <app-input class="ms-1" placeholder="Vendor Item ID" formControlName="vendorItemId"></app-input>
+                  <app-input class="ms-1" placeholder="Mesaure Unit" formControlName="measureUnit"></app-input>
+                  <app-input type="number" class="ms-1" placeholder="Price" formControlName="price"></app-input>
+                  <span (click)="removeVendorItem(itemInd, vendorItemInd)"><i class="fa-solid fa-x"></i></span>
+                </div>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

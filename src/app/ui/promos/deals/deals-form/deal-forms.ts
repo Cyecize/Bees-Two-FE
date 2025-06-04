@@ -132,6 +132,24 @@ export interface MultiLineItemScaledDiscountOutputRangeItemForm {
   maxQuantity?: FormControl<number | null>;
 }
 
+export interface FreeGoodOutputForm {
+  proportion: FormControl<number | null>;
+  proportionAmount: FormControl<number | null>;
+  partial: FormControl<boolean | null>;
+  items: FormArray<FormGroup<FreeGoodItemForm>>;
+}
+
+export interface FreeGoodItemForm {
+  quantity: FormControl<number | null>;
+  vendorItems: FormArray<FormGroup<FreeGoodItemVendorItemsForm>>;
+}
+
+export interface FreeGoodItemVendorItemsForm {
+  vendorItemId: FormControl<string>;
+  measureUnit: FormControl<string | null>;
+  price: FormControl<number | null>;
+}
+
 export interface DealsForm {
   ids: FormArray<FormControl<string>>;
   type: FormControl<DealIdType>;
@@ -172,4 +190,5 @@ export interface OutputForm {
   palletDiscount?: FormGroup<PalletDiscountOutputForm>;
   lineItemScaledDiscount?: FormGroup<LineItemScaledDiscountOutputForm>;
   multipleLineItemScaledDiscount?: FormGroup<MultiLineItemScaledDiscountOutputForm>;
+  freeGoods?: FormGroup<FreeGoodOutputForm>;
 }

@@ -199,6 +199,12 @@
                 </app-pallet-discount-output-form>
               </div>
               <div class="mt-2">
+                <app-free-good-output-form
+                  [deal]="maybeGetDeal(formInd)"
+                  [form]="getOutputForm(formInd)">
+                </app-free-good-output-form>
+              </div>
+              <div class="mt-2">
                 <h6>TODO: Implement remaining few outputs</h6>
               </div>
             </div>

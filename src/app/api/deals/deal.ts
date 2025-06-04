@@ -130,6 +130,24 @@ export interface MultiLineItemScaledDiscountOutputRangeItem {
   maxQuantity?: number;
 }
 
+export interface FreeGoodOutput {
+  proportion: number;
+  proportionAmount: number;
+  partial: boolean;
+  items: FreeGoodOutputItem[];
+}
+
+export interface FreeGoodOutputItem {
+  quantity: number;
+  vendorItems: FreeGoodOutputItemVendorItem[];
+}
+
+export interface FreeGoodOutputItemVendorItem {
+  vendorItemId: string;
+  measureUnit: string;
+  price: number;
+}
+
 export interface Deal {
   deliveryCenterId?: string;
   contractId: string;
@@ -167,4 +185,5 @@ export interface DealOutput {
   orderTotalDiscount?: OrderTotalDiscountOutput;
   palletDiscount?: PalletDiscountOutput;
   multipleLineItemScaledDiscount?: MultiLineItemScaledDiscountOutput;
+  freeGoods: FreeGoodOutput;
 }

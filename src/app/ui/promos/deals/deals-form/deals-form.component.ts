@@ -54,6 +54,7 @@ import { PalletDiscountOutputFormComponent } from './pallet-discount-output-form
 import { OrderTotalDiscountOutputFormComponent } from './order-total-discount-output-form/order-total-discount-output-form.component';
 import { LineItemScaledDiscountOutputFormComponent } from './line-item-scaled-discount-output-form/line-item-scaled-discount-output-form.component';
 import { MultiLineItemScaledDiscountOutputFormComponent } from './multi-line-item-scaled-discount-output-form/multi-line-item-scaled-discount-output-form.component';
+import { FreeGoodOutputFormComponent } from './free-good-output-form/free-good-output-form.component';
 
 @Component({
   selector: 'app-deals-form',
@@ -80,6 +81,7 @@ import { MultiLineItemScaledDiscountOutputFormComponent } from './multi-line-ite
     OrderTotalDiscountOutputFormComponent,
     LineItemScaledDiscountOutputFormComponent,
     MultiLineItemScaledDiscountOutputFormComponent,
+    FreeGoodOutputFormComponent,
   ],
   templateUrl: './deals-form.component.html',
   styleUrl: './deals-form.component.scss',
