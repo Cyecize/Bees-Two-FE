@@ -13,6 +13,7 @@ import { BeesContractService } from '../../accounts/contracts/bees-contract.serv
 import { OrderService } from '../../orders/order.service';
 import { VendorV2Service } from '../../vendor/vendor-v2.service';
 import { ItemService } from '../../items/item.service';
+import { SharedClientService } from '../../env/sharedclient/shared-client.service';
 import { Env } from '../../env/env';
 import { BeesEntity } from '../../common/bees-entity';
 
@@ -45,6 +46,7 @@ export class JavascriptEvalService {
     private orderService: OrderService,
     private vendorService: VendorV2Service,
     private itemService: ItemService,
+    private sharedClientService: SharedClientService,
   ) {}
 
   public async eval(
@@ -76,6 +78,7 @@ export class JavascriptEvalService {
       orderService: this.orderService,
       vendorService: this.vendorService,
       itemService: this.itemService,
+      sharedClients: this.sharedClientService,
     };
 
     const publicEnums = {

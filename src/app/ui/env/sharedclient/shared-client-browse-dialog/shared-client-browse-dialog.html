@@ -1,0 +1,122 @@
+<div>
+  <div *ngIf="currentEnv">
+    <p class="m-0">Current env: <strong><u>{{ currentEnv.envName }}</u></strong></p>
+  </div>
+
+  <div class="d-flex justify-content-between">
+    <h4>Shared Clients</h4>
+    <span style="cursor: pointer;" (click)="openAddNewClientDialog()">
+      <i class="fa-solid fa-plus"></i>
+    </span>
+  </div>
+  <hr class="mt-1 mb-1">
+  <div>
+    <div [formGroup]="queryForm" class="filters">
+      <!--      <div class="main-filters-header">-->
+      <!--        <div class="filter">-->
+      <!--          <app-select-search-->
+      <!--            placeholder="Country"-->
+      <!--            formControlName="countryCode"-->
+      <!--            [payload]="countryCodes"-->
+      <!--            (pageChange)="countryCodeDropdownPageChange($event)"-->
+      <!--            (search)="countryCodeDropdownSearch($event)"-->
+      <!--            (selectionChange)="countryCodeChanged($event)"-->
+      <!--            [clearOnSelect]="false"></app-select-search>-->
+      <!--        </div>-->
+      <!--        <div class="filter">-->
+      <!--          <app-input-->
+      <!--            (onChangeEnd)="envNameChanged($event)"-->
+      <!--            formControlName="envName"-->
+      <!--            placeholder="Name">-->
+      <!--          </app-input>-->
+      <!--        </div>-->
+      <!--        <div class="filter">-->
+      <!--          <app-select-search-->
+      <!--            formControlName="env"-->
+      <!--            placeholder="Environment"-->
+      <!--            [payload]="envs"-->
+      <!--            (selectionChange)="envSelected($event)"></app-select-search>-->
+      <!--        </div>-->
+      <!--      </div>-->
+      <!--      <div class="text-end">-->
+      <!--        <small class="btn btn-sm btn-outline-danger"-->
+      <!--               (click)="clearFilters()">-->
+      <!--          Clear-->
+      <!--        </small>-->
+      <!--        <small class="btn btn-sm btn-outline-info ms-1"-->
+      <!--               (click)="showMoreFilters = !showMoreFilters">-->
+      <!--          More filters-->
+      <!--        </small>-->
+      <!--      </div>-->
+      <!--      <div *ngIf="showMoreFilters" class="filters-header">-->
+      <!--        <div class="filter">-->
+      <!--          <app-input-->
+      <!--            (onChangeEnd)="vendorIdChanged($event)"-->
+      <!--            formControlName="vendorId"-->
+      <!--            placeholder="Vendor ID">-->
+      <!--          </app-input>-->
+      <!--        </div>-->
+      <!--        <div class="filter">-->
+      <!--          <app-input-->
+      <!--            (onChangeEnd)="storeIdChanged($event)"-->
+      <!--            formControlName="storeId"-->
+      <!--            placeholder="Store ID">-->
+      <!--          </app-input>-->
+      <!--        </div>-->
+      <!--      </div>-->
+    </div>
+  </div>
+  <hr class="mb-0 mt-1">
+  <div style="overflow-y: auto; max-height: 500px;">
+    <table class="table">
+      <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Name</th>
+        <th scope="col">ENV</th>
+        <th scope="col"><i class="fa fa-flag"></i></th>
+        <th scope="col">Vendor</th>
+        <th scope="col">Entities</th>
+        <th scope="col">Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let client of clients.content">
+        <th scope="row">{{ client.id }}</th>
+        <td>{{ client.name }}</td>
+        <td>{{ client.env }}</td>
+        <td>
+          <ng-container *ngIf="client.countryCode">{{ client.countryCode }}</ng-container>
+          <ng-container *ngIf="!client.countryCode">Any</ng-container>
+        </td>
+        <td>
+          <ng-container *ngIf="client.vendorId">
+            <app-tooltip-span
+              [displayText]="client.vendorId"
+              [tooltipText]="client.vendorId"
+              [trimDisplayTextChars]="15"
+              [enableCopy]="true"></app-tooltip-span>
+          </ng-container>
+
+          <ng-container *ngIf="!client.vendorId">Any</ng-container>
+        </td>
+        <td>
+          <small *ngFor="let entity of client.targetEntities" class="d-block">
+            {{ entity }}
+          </small>
+        </td>
+        <td>
+          <div class="m-1">
+            <button class="btn btn-outline-info" (click)="viewClientDetails(client)">
+              <i class="fa fa-info"></i>
+            </button>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+    <app-pagination
+      (pageChange)="pageChanged($event)"
+      [pagination]="pageToPagination(clients)"></app-pagination>
+  </div>
+</div>

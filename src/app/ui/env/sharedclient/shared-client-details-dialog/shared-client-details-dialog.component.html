@@ -1,0 +1,88 @@
+<table class="table">
+  <thead>
+  </thead>
+  <tbody>
+  <tr>
+    <td>Id</td>
+    <td>{{ payload.id }}</td>
+  </tr>
+  <tr>
+    <td>Name</td>
+    <td>{{ payload.name }}</td>
+  </tr>
+  <tr>
+    <td>Env</td>
+    <td>{{ payload.env }}</td>
+  </tr>
+  <tr>
+    <td>Country</td>
+    <td>{{ payload.countryCode || 'Any' }}</td>
+  </tr>
+  <tr>
+    <td>Vendor ID</td>
+    <td *ngIf="payload.vendorId">
+      <app-copy-icon [copyText]="payload.vendorId"></app-copy-icon>
+      {{ payload.vendorId }}
+    </td>
+    <td *ngIf="!payload.vendorId">Any</td>
+  </tr>
+  <tr>
+    <td>Target Entities</td>
+    <td>
+      <span class="d-block" *ngFor="let entity of payload.targetEntities">
+        {{ entity }}
+      </span>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+<div *ngIf="showAssignedEnvironments" style="max-height: 200px; overflow-y: auto;">
+  <hr>
+  <h3>Assigned environments</h3>
+  <table class="table">
+    <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+      <th scope="col">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let env of assignedEnvironments">
+      <th scope="row">{{ env.id }}</th>
+      <td>{{ env.envName }}</td>
+      <td>
+        <div class="d-flex">
+          <div class="m-1">
+            <button class="btn btn-outline-danger" (click)="unAssignEnv(env)">
+              <i class="fa fa fa-x"></i>
+            </button>
+          </div>
+          <div class="m-1">
+            <button class="btn btn-outline-info" (click)="viewEnvDetails(env)">
+              <i class="fa fa-info"></i>
+            </button>
+          </div>
+        </div>
+      </td>
+    </tr>
+    <tr *ngIf="!assignedEnvironments.length">
+      <th>No assigned environments!</th>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="text-end">
+  <button class="btn btn-danger m-1" (click)="deleteClient()">Delete</button>
+  <button class="btn btn-outline-primary m-1"
+          (click)="showAssignedEnvironments = !showAssignedEnvironments">
+    Show Envs
+  </button>
+  <button class="btn btn-outline-dark m-1"
+          (click)="assignNewEnv()">
+    Assign Envs
+  </button>
+  <button class="btn btn-info m-1" (click)="close(null)">Close</button>
+</div>

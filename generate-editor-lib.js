@@ -160,6 +160,11 @@ const typeFiles = [
   "./src/app/api/items/item.service.ts",
   "./src/app/api/items/items-search.response.ts",
   "./src/app/api/items/items-search.query.ts",
+  "./src/app/api/env/sharedclient/shared-client.payload.ts",
+  "./src/app/api/env/sharedclient/shared-client.query.ts",
+  "./src/app/api/env/sharedclient/shared-client.repository.ts",
+  "./src/app/api/env/sharedclient/shared-client.service.ts",
+  "./src/app/api/env/sharedclient/shared-client.ts",
   "./src/app/api/env/env.ts",
   "./src/app/api/common/bees-entity.ts",
 ];

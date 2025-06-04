@@ -1,0 +1,65 @@
+<form [formGroup]="form" class="pe-1" style="overflow-y: auto; max-height: 500px;">
+  <div class="mt-2 ps-1 pe-1">
+    <app-input
+      placeholder="Name"
+      [errors]="errors"
+      formControlName="name"></app-input>
+  </div>
+  <div class="mt-2 ps-1 pe-1">
+    <app-select
+      [options]="envs"
+      [errors]="errors"
+      placeholder="Env"
+      formControlName="env"></app-select>
+  </div>
+  <div class="mt-2 d-flex">
+    <app-input
+      class="m-1"
+      placeholder="Country Code"
+      [errors]="errors"
+      formControlName="countryCode"></app-input>
+    <app-input
+      class="m-1"
+      placeholder="Vendor ID"
+      [errors]="errors"
+      formControlName="vendorId"></app-input>
+  </div>
+  <div class="mt-2 d-flex">
+    <app-input
+      class="m-1"
+      placeholder="Client ID"
+      [errors]="errors"
+      formControlName="clientId"></app-input>
+    <app-input
+      class="m-1"
+      placeholder="Client Secret"
+      [errors]="errors"
+      formControlName="clientSecret"></app-input>
+  </div>
+  <div class="mt-2">
+    <app-select
+      placeholder="Choose a target entity"
+      [options]="targetEntityOptions"
+      (onChange)="addNewEntity($event)"></app-select>
+
+    <div formArrayName="targetEntities">
+      <div class="d-flex align-items-center justify-content-between"
+           [formGroupName]="ind"
+           *ngFor="let ctr of targetEntities.controls; let ind = index">
+        <span>{{ ctr.value }}</span>
+
+        <div>
+          <span (click)="removeEntity(ind)"><i class="fa-solid fa-x"></i></span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="mt-2 text-end">
+    <button
+      class="btn btn-outline-dark"
+      [disabled]="!form.valid"
+      (click)="onFormSubmit()"
+      type="submit">Save
+    </button>
+  </div>
+</form>

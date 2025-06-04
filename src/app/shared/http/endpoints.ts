@@ -22,6 +22,11 @@ export class Endpoints {
   public static readonly REQUEST_TEMPLATE = '/request-templates/:id';
   public static readonly REQUEST_HISTORY_SEARCH = '/request-history/search';
   public static readonly REQUEST_HISTORY = '/request-history/:id';
+  public static readonly SHARED_CLIENTS = '/shared-clients';
+  public static readonly SHARED_CLIENTS_SEARCH = '/shared-clients/search';
+  public static readonly SHARED_CLIENT = '/shared-clients/:id';
+  public static readonly SHARED_CLIENT_ENVIRONMENTS = '/shared-clients/:id/environments';
+  public static readonly SHARED_CLIENT_ENVIRONMENT = '/shared-clients/:id/environments/:envId';
 
   // Bees endpoints
   public static readonly DATA_INGESTION = '/api/v1/data-ingestion-relay-service/v1';

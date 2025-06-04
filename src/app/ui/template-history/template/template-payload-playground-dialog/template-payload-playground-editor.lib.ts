@@ -81,6 +81,7 @@ export const EDITOR_CUSTOM_LIB = `
         grow: IGrowService;
         vendorService: IVendorV2Service;
         itemService: IItemService;
+        sharedClients: ISharedClientService;
       }
 
       declare const env: CountryEnvironmentModel;

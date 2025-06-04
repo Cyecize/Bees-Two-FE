@@ -8,11 +8,18 @@ import { RelayVersion } from '../relay/relay.version';
 import { RequestMethod } from './request-method';
 import { RequestTemplateArgType } from '../template/arg/request-template-arg.type';
 import { RequestTemplatePayloadType } from '../template/request-template-payload.type';
+import { Env } from '../env/env';
 
 export class SelectOptions {
   public static beesEntityOptions(): SelectOption[] {
     return [new SelectOptionKvp('Choose one', null)].concat(
       ...Object.keys(BeesEntity).map((ent) => new SelectOptionKey(ent)),
+    );
+  }
+
+  public static envOptions(): SelectOption[] {
+    return [new SelectOptionKvp('Choose one', null)].concat(
+      ...Object.keys(Env).map((ent) => new SelectOptionKey(ent)),
     );
   }
 

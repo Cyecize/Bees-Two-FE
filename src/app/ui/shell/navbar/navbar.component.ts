@@ -9,6 +9,7 @@ import { User } from '../../../api/user/user';
 import { RouterLink } from '@angular/router';
 import { AppRoutingPath } from '../../../app-routing.path';
 import { SettingsDialogComponent } from '../settings-dialog/settings-dialog.component';
+import { SharedClientBrowseDialog } from '../../env/sharedclient/shared-client-browse-dialog/shared-client-browse-dialog';
 
 @Component({
   selector: 'app-navbar',
@@ -46,6 +47,10 @@ export class NavbarComponent implements OnInit {
 
   selectEnv(): void {
     this.dialogService.openEnvPicker();
+  }
+
+  openSharedClientBrowser(): void {
+    this.dialogService.open(SharedClientBrowseDialog, '', null);
   }
 
   openAccountPicker(): void {
