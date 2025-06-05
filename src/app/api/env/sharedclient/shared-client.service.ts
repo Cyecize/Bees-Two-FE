@@ -46,6 +46,10 @@ interface ISharedClientService {
   ): Promise<IWrappedResponseLocal<SharedClientToken>>;
 
   createQuery(): SharedClientQuery;
+
+  findAllAssignedClients(
+    payload: CountryEnvironmentModel,
+  ): Promise<IWrappedResponseLocal<SharedClient[]>>;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -112,5 +116,13 @@ export class SharedClientService implements ISharedClientService {
 
   public createQuery(): SharedClientQuery {
     return new SharedClientQueryImpl();
+  }
+
+  public async findAllAssignedClients(
+    env: CountryEnvironmentModel,
+  ): Promise<WrappedResponseLocal<SharedClient[]>> {
+    return await new FieldErrorWrapperLocal(() =>
+      this.repository.getAssignedClientsForEnv(env.id),
+    ).execute();
   }
 }

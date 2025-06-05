@@ -111,27 +111,27 @@ export class SharedClientDetailsDialogComponent
           return;
         }
       }
+    }
 
-      let hasFailures = false;
-      for (const env of selectedEnvs) {
-        const resp = await this.sharedClientService.assignEnvironment(
-          this.payload,
-          env,
-        );
+    let hasFailures = false;
+    for (const env of selectedEnvs) {
+      const resp = await this.sharedClientService.assignEnvironment(
+        this.payload,
+        env,
+      );
 
-        if (!resp.isSuccess) {
-          hasFailures = true;
-          console.error(resp.errors);
-        }
+      if (!resp.isSuccess) {
+        hasFailures = true;
+        console.error(resp.errors);
       }
+    }
 
-      await this.fetchAssignedEnvs();
+    await this.fetchAssignedEnvs();
 
-      if (hasFailures) {
-        alert('Not all environments were assigned, check the logs!');
-      } else {
-        alert('Assignment completed!');
-      }
+    if (hasFailures) {
+      alert('Not all environments were assigned, check the logs!');
+    } else {
+      alert('Assignment completed!');
     }
   }
 

@@ -4,6 +4,7 @@ export class Endpoints {
   public static readonly ENVIRONMENTS = '/environments';
   public static readonly ENVIRONMENT = '/environments/:id';
   public static readonly ENVIRONMENT_TOKEN = '/environments/:id/token';
+  public static readonly ENVIRONMENT_SHARED_CLIENTS = '/environments/:id/shared-clients';
   public static readonly ENVIRONMENTS_SEARCH = '/environments/search';
   public static readonly ENVIRONMENT_CREDS = '/environments/creds';
   public static readonly ENVIRONMENTS_COUNTRY_CODES = '/environments/country-codes';

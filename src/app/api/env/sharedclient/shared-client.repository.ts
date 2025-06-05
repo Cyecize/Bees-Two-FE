@@ -67,6 +67,12 @@ export class SharedClientRepository {
     );
   }
 
+  public getAssignedClientsForEnv(envId: number): Observable<SharedClient[]> {
+    return this.http.get<SharedClient[]>(
+      RouteUtils.setPathParams(Endpoints.ENVIRONMENT_SHARED_CLIENTS, [envId]),
+    );
+  }
+
   public getToken(clientId: number): Observable<SharedClientToken> {
     return this.http.get<SharedClientToken>(
       RouteUtils.setPathParams(Endpoints.SHARED_CLIENT_TOKEN, [clientId]),
