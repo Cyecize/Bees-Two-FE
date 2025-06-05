@@ -9,6 +9,7 @@ import { SharedClientService } from '../../../../api/env/sharedclient/shared-cli
 import { CheckboxComponent } from '../../../../shared/form-controls/checkbox/checkbox.component';
 import { EnvViewerDialogComponent } from '../../env-viewer-dialog/env-viewer-dialog.component';
 import { DialogService } from '../../../../shared/dialog/dialog.service';
+import { ShowLoader } from '../../../../shared/loader/show.loader.decorator';
 
 @Component({
   selector: 'app-shared-client-details-dialog',
@@ -142,5 +143,18 @@ export class SharedClientDetailsDialogComponent
     }
 
     this.assignedEnvironments = resp.response;
+  }
+
+  @ShowLoader()
+  async getToken(): Promise<void> {
+    const resp = await this.sharedClientService.getToken(this.payload);
+    if (!resp.isSuccess) {
+      alert('Could not get token, check the console!');
+      console.log(resp.errors);
+    }
+
+    navigator.clipboard
+      .writeText(resp.response.token)
+      .then(() => alert('Token copied to clipboard!'));
   }
 }

@@ -6,12 +6,14 @@ import {
 } from './shared-client.query';
 import {
   FieldErrorWrapperLocal,
+  IWrappedResponseLocal,
   WrappedResponseLocal,
 } from '../../../shared/util/field-error-wrapper-local';
 import { SharedClient } from './shared-client';
 import { Page } from '../../../shared/util/page';
 import { SharedClientPayload } from './shared-client.payload';
 import { CountryEnvironmentModel } from '../country-environment.model';
+import { SharedClientToken } from './shared-client-token';
 
 /**
  * @monaco
@@ -19,25 +21,29 @@ import { CountryEnvironmentModel } from '../country-environment.model';
 interface ISharedClientService {
   search(
     query: SharedClientQuery,
-  ): Promise<WrappedResponseLocal<Page<SharedClient>>>;
+  ): Promise<IWrappedResponseLocal<Page<SharedClient>>>;
 
   create(
     payload: SharedClientPayload,
-  ): Promise<WrappedResponseLocal<SharedClient>>;
+  ): Promise<IWrappedResponseLocal<SharedClient>>;
 
-  delete(client: SharedClient): Promise<WrappedResponseLocal<any>>;
+  delete(client: SharedClient): Promise<IWrappedResponseLocal<any>>;
 
   assignEnvironment(
     client: SharedClient,
     env: CountryEnvironmentModel,
-  ): Promise<WrappedResponseLocal<any>>;
+  ): Promise<IWrappedResponseLocal<any>>;
 
   unAssignEnvironment(
     client: SharedClient,
     env: CountryEnvironmentModel,
-  ): Promise<WrappedResponseLocal<any>>;
+  ): Promise<IWrappedResponseLocal<any>>;
 
-  findAllEnvs(client: SharedClient): Promise<WrappedResponseLocal<any>>;
+  findAllEnvs(client: SharedClient): Promise<IWrappedResponseLocal<any>>;
+
+  getToken(
+    client: SharedClient,
+  ): Promise<IWrappedResponseLocal<SharedClientToken>>;
 
   createQuery(): SharedClientQuery;
 }
@@ -96,7 +102,15 @@ export class SharedClientService implements ISharedClientService {
     ).execute();
   }
 
-  createQuery(): SharedClientQuery {
+  public async getToken(
+    client: SharedClient,
+  ): Promise<WrappedResponseLocal<SharedClientToken>> {
+    return await new FieldErrorWrapperLocal(() =>
+      this.repository.getToken(client.id),
+    ).execute();
+  }
+
+  public createQuery(): SharedClientQuery {
     return new SharedClientQueryImpl();
   }
 }

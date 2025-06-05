@@ -167,6 +167,7 @@ const typeFiles = [
   "./src/app/api/env/sharedclient/shared-client.ts",
   "./src/app/api/env/env.ts",
   "./src/app/api/common/bees-entity.ts",
+  "./src/app/api/env/sharedclient/shared-client-token.ts",
 ];
 
 let combinedTypes = "";

@@ -8,6 +8,7 @@ import { SharedClient } from './shared-client';
 import { SharedClientPayload } from './shared-client.payload';
 import { RouteUtils } from '../../../shared/routing/route-utils';
 import { CountryEnvironmentModel } from '../country-environment.model';
+import { SharedClientToken } from './shared-client-token';
 
 @Injectable({ providedIn: 'root' })
 export class SharedClientRepository {
@@ -63,6 +64,12 @@ export class SharedClientRepository {
       RouteUtils.setPathParams(Endpoints.SHARED_CLIENT_ENVIRONMENTS, [
         clientId,
       ]),
+    );
+  }
+
+  public getToken(clientId: number): Observable<SharedClientToken> {
+    return this.http.get<SharedClientToken>(
+      RouteUtils.setPathParams(Endpoints.SHARED_CLIENT_TOKEN, [clientId]),
     );
   }
 }
