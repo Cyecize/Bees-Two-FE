@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Routes } from '@angular/router';
 import { TemplateFormComponent } from '../template-form/template-form.component';
 import { ShowLoader } from '../../../../shared/loader/show.loader.decorator';
@@ -10,6 +10,10 @@ import { FieldError } from '../../../../shared/field-error/field-error';
 import { RequestTemplateService } from '../../../../api/template/request-template.service';
 import { RouteNavigator } from '../../../../shared/routing/route-navigator.service';
 import { AppRoutingPath } from '../../../../app-routing.path';
+import { UserService } from '../../../../api/user/user.service';
+import { User } from '../../../../api/user/user';
+import { firstValueFrom, Subscription } from 'rxjs';
+import { DialogService } from '../../../../shared/dialog/dialog.service';
 
 @Component({
   selector: 'app-edit-template',
@@ -18,14 +22,18 @@ import { AppRoutingPath } from '../../../../app-routing.path';
   templateUrl: './edit-template.component.html',
   styleUrl: './edit-template.component.scss',
 })
-export class EditTemplateComponent implements OnInit {
+export class EditTemplateComponent implements OnInit, OnDestroy {
   errors: FieldError[] = [];
   template!: RequestTemplateView;
+  currentUser!: User;
+  private subs: Subscription[] = [];
 
   constructor(
     private templateService: RequestTemplateService,
+    private userService: UserService,
     private nav: RouteNavigator,
     private route: ActivatedRoute,
+    private dialogService: DialogService,
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -42,10 +50,29 @@ export class EditTemplateComponent implements OnInit {
     }
 
     this.template = templateResp.response;
+    this.subs.push(
+      this.userService.currentUser$.subscribe((u) => (this.currentUser = u!)),
+    );
+  }
+
+  async formSubmitted(template: RequestTemplate): Promise<void> {
+    if (this.template.userId !== this.currentUser.id) {
+      const conf = await firstValueFrom(
+        this.dialogService.openConfirmDialog(
+          'This template is owned by another person, are you sure you want to make changes?',
+        ),
+      );
+
+      if (!conf) {
+        return;
+      }
+    }
+
+    await this.proceedToSave(template);
   }
 
   @ShowLoader()
-  async formSubmitted(template: RequestTemplate): Promise<void> {
+  private async proceedToSave(template: RequestTemplate): Promise<void> {
     const resp = await this.templateService.saveTemplate(
       this.template.id,
       template,
@@ -55,6 +82,10 @@ export class EditTemplateComponent implements OnInit {
     if (resp.isSuccess) {
       this.nav.navigate(AppRoutingPath.SEARCH_TEMPLATES);
     }
+  }
+
+  ngOnDestroy(): void {
+    this.subs.forEach((sub) => sub.unsubscribe());
   }
 }
 
