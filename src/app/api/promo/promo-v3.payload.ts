@@ -1,5 +1,8 @@
 import { PromoType } from './promo-type';
 
+/**
+ * @monaco
+ */
 export interface PromoV3Payload {
   vendorPromotionId: string;
   title: string;

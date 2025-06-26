@@ -168,6 +168,10 @@ const typeFiles = [
   "./src/app/api/env/env.ts",
   "./src/app/api/common/bees-entity.ts",
   "./src/app/api/env/sharedclient/shared-client-token.ts",
+  "./src/app/api/promo/promo-type.ts",
+  "./src/app/api/promo/promo-search.query.ts",
+  "./src/app/api/promo/promo-v3.payload.ts",
+  "./src/app/api/promo/promo.service.ts",
 ];
 
 let combinedTypes = "";

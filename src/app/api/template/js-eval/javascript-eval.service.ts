@@ -16,6 +16,8 @@ import { ItemService } from '../../items/item.service';
 import { SharedClientService } from '../../env/sharedclient/shared-client.service';
 import { Env } from '../../env/env';
 import { BeesEntity } from '../../common/bees-entity';
+import { PromoType } from '../../promo/promo-type';
+import { PromoService } from '../../promo/promo.service';
 
 export interface JsEvalOptions {
   run: boolean;
@@ -47,6 +49,7 @@ export class JavascriptEvalService {
     private vendorService: VendorV2Service,
     private itemService: ItemService,
     private sharedClientService: SharedClientService,
+    private promoService: PromoService,
   ) {}
 
   public async eval(
@@ -79,11 +82,13 @@ export class JavascriptEvalService {
       vendorService: this.vendorService,
       itemService: this.itemService,
       sharedClients: this.sharedClientService,
+      promoService: this.promoService,
     };
 
     const publicEnums = {
       Env: Env,
       BeesEntity: BeesEntity,
+      PromoType: PromoType,
     };
 
     const result: JsEvalResult = {

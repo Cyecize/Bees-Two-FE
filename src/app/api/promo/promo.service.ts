@@ -3,7 +3,7 @@ import { PromoRepository } from './promo.repository';
 import { CountryEnvironmentModel } from '../env/country-environment.model';
 import { BeesResponse } from '../proxy/bees-response';
 import { firstValueFrom } from 'rxjs';
-import { PromoSearchQuery } from './promo-search.query';
+import { PromoSearchQuery, PromoSearchQueryImpl } from './promo-search.query';
 import { PromoSearchResponse } from './promo-search.response';
 import { PromoV3Payload } from './promo-v3.payload';
 import { RelayService } from '../relay/relay.service';
@@ -16,8 +16,30 @@ import {
 } from '../../shared/util/field-error-wrapper';
 import { Promo } from './promo';
 
+/**
+ * @monaco
+ */
+interface IPromoService {
+  searchPromos(
+    query: PromoSearchQuery,
+    env?: CountryEnvironmentModel,
+  ): Promise<BeesResponse<PromoSearchResponse>>;
+
+  deletePromo(
+    promo: Promo,
+    env?: CountryEnvironmentModel,
+  ): Promise<BeesResponse<any>>;
+
+  addPromo(
+    payload: PromoV3Payload[],
+    env?: CountryEnvironmentModel,
+  ): Promise<WrappedResponse<BeesResponse<any>>>;
+
+  newQuery(): PromoSearchQuery;
+}
+
 @Injectable({ providedIn: 'root' })
-export class PromoService {
+export class PromoService implements IPromoService {
   constructor(
     private promoRepository: PromoRepository,
     private relayService: RelayService,
@@ -56,5 +78,9 @@ export class PromoService {
         env?.id,
       ),
     ).execute();
+  }
+
+  public newQuery(): PromoSearchQuery {
+    return new PromoSearchQueryImpl();
   }
 }

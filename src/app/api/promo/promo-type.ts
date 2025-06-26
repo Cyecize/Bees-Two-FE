@@ -1,3 +1,6 @@
+/**
+ * @monaco
+ */
 export enum PromoType {
   STEPPED_DISCOUNT = 'STEPPED_DISCOUNT',
   STEPPED_FREE_GOOD = 'STEPPED_FREE_GOOD',

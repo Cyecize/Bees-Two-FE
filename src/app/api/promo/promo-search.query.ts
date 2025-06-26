@@ -3,6 +3,9 @@ import { PromoType } from './promo-type';
 import { BeesParam, BeesParamImpl } from '../common/bees-param';
 import { ObjectUtils } from '../../shared/util/object-utils';
 
+/**
+ * @monaco
+ */
 export interface PromoSearchQuery {
   vendorIds: string[];
   page: PageRequest;
