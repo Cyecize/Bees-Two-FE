@@ -15,7 +15,7 @@ import {
 /**
  * @monaco
  */
-interface IBeesContractService {
+export interface IBeesContractService {
   findTopByDdc(
     maxResults: number,
     ddc: string,

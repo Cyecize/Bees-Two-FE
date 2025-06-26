@@ -17,7 +17,7 @@ import { Order } from './dto/order';
 /**
  * @monaco
  */
-interface IOrderService {
+export interface IOrderService {
   searchOrders(
     query: OrderQuery,
     env?: CountryEnvironmentModel,

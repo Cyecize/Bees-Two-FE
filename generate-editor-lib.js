@@ -193,6 +193,13 @@ const typeFiles = [
   "./src/app/api/platformid/platform-id.type.ts",
   "./src/app/shared/dialog/dialog.service.ts",
   "./src/app/ui/items/items-picker-dialog/items-picker-dialog.payload.ts",
+  "./src/app/shared/util/sort.query.ts",
+  "./src/app/api/accounts/local/local-account.query.ts",
+  "./src/app/api/accounts/local/local-account.service.ts",
+  "./src/app/api/accounts/local/create-local-account.payload.ts",
+  "./src/app/api/accounts/v1/account-v1.service.ts",
+  "./src/app/api/accounts/v1/account-v1-search.query.ts",
+  "./src/app/api/template/IBees.ts",
 ];
 
 let combinedTypes = "";

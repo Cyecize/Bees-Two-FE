@@ -9,7 +9,7 @@ import { InventoryPlatformId } from './dto/inventory-platform-id';
 /**
  * @monaco
  */
-interface IPlatformIdService {
+export interface IPlatformIdService {
   encodeContract(
     contractPlatformId: ContractPlatformId,
   ): Promise<EncodedPlatformId>;

@@ -11,8 +11,26 @@ import {
 } from './account-v1-search.query';
 import { AccountV1 } from './account-v1';
 
+/**
+ * @monaco
+ */
+export interface IAccountV1Service {
+  searchAccounts(
+    query: AccountV1SearchQuery,
+    env?: CountryEnvironmentModel,
+  ): Promise<WrappedResponse<AccountV1[]>>;
+
+  findOne(
+    env: CountryEnvironmentModel,
+    vendorAccountId?: string,
+    customerAccountId?: string,
+  ): Promise<AccountV1 | null>;
+
+  newQuery(): AccountV1SearchQuery;
+}
+
 @Injectable({ providedIn: 'root' })
-export class AccountV1Service {
+export class AccountV1Service implements IAccountV1Service {
   constructor(private repository: AccountV1Repository) {}
 
   public async searchAccounts(
@@ -45,5 +63,9 @@ export class AccountV1Service {
     }
 
     return resp.response.response[0];
+  }
+
+  newQuery(): AccountV1SearchQuery {
+    return new AccountV1SearchQueryImpl();
   }
 }

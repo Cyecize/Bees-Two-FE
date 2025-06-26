@@ -14,7 +14,7 @@ import { GrowUserPayload } from './dto/grow-user.payload';
 /**
  * @monaco
  */
-interface IGrowService {
+export interface IGrowService {
   getOrgs(
     tempToken: string,
     env: CountryEnvironmentModel,

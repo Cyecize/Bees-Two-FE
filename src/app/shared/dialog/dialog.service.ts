@@ -51,7 +51,7 @@ import { GenericPickerResponse } from './dialogs/generic-picker-dialog/generic-p
 /**
  * @monaco
  */
-interface IDialogService {
+export interface IDialogService {
   openConfirmDialog(
     message: string,
     title?: string,

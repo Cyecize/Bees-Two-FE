@@ -19,7 +19,7 @@ import { Promo } from './promo';
 /**
  * @monaco
  */
-interface IPromoService {
+export interface IPromoService {
   searchPromos(
     query: PromoSearchQuery,
     env?: CountryEnvironmentModel,

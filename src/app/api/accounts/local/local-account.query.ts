@@ -4,6 +4,9 @@ import {
   LocalPageRequestImpl,
 } from '../../../shared/util/page-request';
 
+/**
+ * @monaco
+ */
 export interface LocalAccountQuery {
   page: LocalPageRequest;
   sort: SortQuery;

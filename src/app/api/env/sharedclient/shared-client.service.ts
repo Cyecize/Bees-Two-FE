@@ -18,7 +18,7 @@ import { SharedClientToken } from './shared-client-token';
 /**
  * @monaco
  */
-interface ISharedClientService {
+export interface ISharedClientService {
   search(
     query: SharedClientQuery,
   ): Promise<IWrappedResponseLocal<Page<SharedClient>>>;

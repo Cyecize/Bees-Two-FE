@@ -1,13 +1,3 @@
-import { Observable } from 'rxjs';
-import { CountryEnvironmentCredsPayload } from '../../../../api/env/country-environment-creds.payload';
-import { GenericPickerOption } from '../../../../shared/dialog/dialogs/generic-picker-dialog/generic-picker.option';
-import { LocalAccount } from '../../../../api/accounts/local/local-account';
-import { CountryEnvironmentModel } from '../../../../api/env/country-environment.model';
-import { BeesToken } from '../../../../api/env/token/bees-token';
-import { ErrorResponse } from '../../../../api/proxy/error-response';
-import { BeesResponse } from '../../../../api/proxy/bees-response';
-import { WrappedResponse } from '../../../../shared/util/field-error-wrapper';
-
 export const EDITOR_CUSTOM_LIB = `
       /** Output function */
       declare const w: (message: string) => void;
@@ -22,63 +12,13 @@ export const EDITOR_CUSTOM_LIB = `
 
       declare function firstValueFrom<T>(observable: Observable<T>): Promise<T>;
 
-      interface WrappedResponse<T> {
-        isSuccess: boolean;
-        errorResp?: ErrorResponse;
-        response: BeesResponse<T>;
-      }
-
-      interface BeesRx {
-        /** Observable constructor */
-        Observable: typeof Observable;
-        /** Convert observable to promise */
-        firstValueFrom: typeof firstValueFrom;
-      }
-
-      interface LocalAccountService {
-        async createFromBeesAccountIfNotExists(
-          env: CountryEnvironmentModel,
-          beesAccount: AccountV1): Promise<LocalAccount | null>;
-      }
-
-      interface AccountV1Service {
-        async findOne(
-          env: CountryEnvironmentModel,
-          vendorAccountId?: string,
-          customerAccountId?: string,
-          ): Promise<AccountV1 | null>;
-      }
-
-      interface HttpClient {
-         get<TResponse>(url: string, options = {}): Observable<TResponse>
-      }
-
-      interface Bees {
-        /** RxJS utilities */
-        rx: BeesRx;
-        dialogService: IDialogService;
-        localAccountService: LocalAccountService;
-        accountV1Service: AccountV1Service;
-        beesContractService: IBeesContractService;
-        envService: ICountryEnvironmentService;
-        orderService: IOrderService;
-        http: HttpClient;
-        grow: IGrowService;
-        vendorService: IVendorV2Service;
-        itemService: IItemService;
-        sharedClients: ISharedClientService;
-        promoService: IPromoService;
-        dealsService: IDealsService;
-        platformIdService: IPlatformIdService;
-      }
-
       declare const env: CountryEnvironmentModel;
 
       /** Shared CTX between Pre-/Post-scripts and template **/
       declare const context: Map<string, any>;
 
       /** Available services */
-      declare const bees: Bees;
+      declare const bees: IBees;
     `;
 
 // Register custom autocomplete

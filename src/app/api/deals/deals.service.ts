@@ -19,7 +19,7 @@ import {
 /**
  * @monaco
  */
-interface IDealsService {
+export interface IDealsService {
   searchDeals(
     query: DealsSearchQuery,
     env?: CountryEnvironmentModel,

@@ -22,7 +22,7 @@ import { CountryEnvironmentCredsPayload } from './country-environment-creds.payl
 /**
  * @monaco
  */
-interface ICountryEnvironmentService {
+export interface ICountryEnvironmentService {
   createEnv(
     payload: CountryEnvironmentPayload,
   ): Promise<WrappedResponseLocal<CountryEnvironmentModel>>;

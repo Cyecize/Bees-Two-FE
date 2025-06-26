@@ -13,7 +13,7 @@ import { Item } from './item';
 /**
  * @monaco
  */
-interface IItemService {
+export interface IItemService {
   searchItems(
     query: ItemsSearchQuery,
     env?: CountryEnvironmentModel,

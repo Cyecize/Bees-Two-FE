@@ -1,0 +1,136 @@
+import { ErrorResponse } from '../proxy/error-response';
+import { BeesResponse } from '../proxy/bees-response';
+import { firstValueFrom, Observable } from 'rxjs';
+import {
+  DialogService,
+  IDialogService,
+} from '../../shared/dialog/dialog.service';
+import { IVendorV2Service, VendorV2Service } from '../vendor/vendor-v2.service';
+import {
+  IPlatformIdService,
+  PlatformIdService,
+} from '../platformid/platform-id.service';
+import { DealsService, IDealsService } from '../deals/deals.service';
+import { IPromoService, PromoService } from '../promo/promo.service';
+import {
+  ISharedClientService,
+  SharedClientService,
+} from '../env/sharedclient/shared-client.service';
+import { IItemService, ItemService } from '../items/item.service';
+import { GrowService, IGrowService } from '../grow/grow.service';
+import { IOrderService, OrderService } from '../orders/order.service';
+import {
+  CountryEnvironmentService,
+  ICountryEnvironmentService,
+} from '../env/country-environment.service';
+import {
+  ILocalAccountService,
+  LocalAccountService,
+} from '../accounts/local/local-account.service';
+import {
+  AccountV1Service,
+  IAccountV1Service,
+} from '../accounts/v1/account-v1.service';
+import {
+  BeesContractService,
+  IBeesContractService,
+} from '../accounts/contracts/bees-contract.service';
+import { Injectable } from '@angular/core';
+import { HttpClientSecuredService } from '../../shared/http/http-client-secured.service';
+import { Env } from '../env/env';
+import { BeesEntity } from '../common/bees-entity';
+import { PromoType } from '../promo/promo-type';
+import { DealOutputType } from '../deals/enums/deal-output-type';
+import { DealAccumulationType } from '../deals/enums/deal-accumulation-type';
+import { DealDiscountType } from '../deals/enums/deal-discount-type';
+import { DealComboType } from '../deals/enums/deal-combo-type';
+import { DealType } from '../deals/enums/deal-type';
+import { DealIdType } from '../deals/enums/deal-id-type';
+import { PlatformIdType } from '../platformid/platform-id.type';
+import { SortDirection } from '../../shared/util/sort.query';
+
+interface WrappedResponse<T> {
+  isSuccess: boolean;
+  errorResp?: ErrorResponse;
+  response: BeesResponse<T>;
+}
+
+interface BeesRx {
+  /** Observable constructor */
+  Observable: typeof Observable;
+  /** Convert observable to promise */
+  firstValueFrom: typeof firstValueFrom;
+}
+
+interface HttpClient {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  get<TResponse>(url: string, options = {}): Observable<TResponse>;
+}
+
+/**
+ * This is where you can add a service that you'd wish to expose to the playground.
+ * @monaco
+ * @monaco_include_deps
+ */
+interface IBees {
+  /** RxJS utilities */
+  rx: BeesRx;
+  dialogService: IDialogService;
+  localAccountService: ILocalAccountService;
+  accountV1Service: IAccountV1Service;
+  beesContractService: IBeesContractService;
+  envService: ICountryEnvironmentService;
+  orderService: IOrderService;
+  http: HttpClient;
+  grow: IGrowService;
+  vendorService: IVendorV2Service;
+  itemService: IItemService;
+  sharedClients: ISharedClientService;
+  promoService: IPromoService;
+  dealsService: IDealsService;
+  platformIdService: IPlatformIdService;
+}
+
+@Injectable({ providedIn: 'root' })
+export class Bees implements IBees {
+  rx = {
+    Observable,
+    firstValueFrom,
+  };
+
+  constructor(
+    public dialogService: DialogService,
+    public localAccountService: LocalAccountService,
+    public accountV1Service: AccountV1Service,
+    public envService: CountryEnvironmentService,
+    public http: HttpClientSecuredService,
+    public grow: GrowService,
+    public beesContractService: BeesContractService,
+    public orderService: OrderService,
+    public vendorService: VendorV2Service,
+    public itemService: ItemService,
+    public sharedClients: SharedClientService,
+    public promoService: PromoService,
+    public dealsService: DealsService,
+    public platformIdService: PlatformIdService,
+  ) {}
+}
+
+/**
+ * Add your enum here, so that it is available for use on ROOT level in the payground.
+ * eg. bees.someService.someMethod(Env.SIT_GLOBAL)
+ */
+export const publicEnums = {
+  Env: Env,
+  BeesEntity: BeesEntity,
+  PromoType: PromoType,
+  DealOutputType: DealOutputType,
+  DealAccumulationType: DealAccumulationType,
+  DealDiscountType: DealDiscountType,
+  DealComboType: DealComboType,
+  DealType: DealType,
+  DealIdType: DealIdType,
+  PlatformIdType: PlatformIdType,
+  SortDirection: SortDirection,
+};

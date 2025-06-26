@@ -11,8 +11,24 @@ import { CreateLocalAccountPayload } from './create-local-account.payload';
 import { CountryEnvironmentModel } from '../../env/country-environment.model';
 import { AccountV1 } from '../v1/account-v1';
 
+/**
+ * @monaco
+ */
+export interface ILocalAccountService {
+  searchAccounts(query: LocalAccountQuery): Promise<Page<LocalAccount>>;
+
+  createAccount(payload: CreateLocalAccountPayload): Promise<LocalAccount>;
+
+  createFromBeesAccountIfNotExists(
+    env: CountryEnvironmentModel,
+    beesAccount: AccountV1,
+  ): Promise<LocalAccount | null>;
+
+  newQuery(): LocalAccountQuery;
+}
+
 @Injectable({ providedIn: 'root' })
-export class LocalAccountService {
+export class LocalAccountService implements ILocalAccountService {
   constructor(private repository: LocalAccountRepository) {}
 
   public async searchAccounts(
@@ -49,5 +65,9 @@ export class LocalAccountService {
     };
 
     return await this.createAccount(payload);
+  }
+
+  newQuery(): LocalAccountQuery {
+    return new LocalAccountQueryImpl();
   }
 }

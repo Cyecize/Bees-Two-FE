@@ -1,3 +1,6 @@
+/**
+ * @monaco
+ */
 export interface CreateLocalAccountPayload {
   name: string;
   envId: number;

@@ -1,32 +1,9 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { filter, firstValueFrom, Observable } from 'rxjs';
+import { filter } from 'rxjs';
 import { ObjectUtils } from '../../../shared/util/object-utils';
 import { RequestTemplateArg } from '../arg/request-template-arg';
 import { CountryEnvironmentModel } from '../../env/country-environment.model';
-import { DialogService } from '../../../shared/dialog/dialog.service';
-import { LocalAccountService } from '../../accounts/local/local-account.service';
-import { AccountV1Service } from '../../accounts/v1/account-v1.service';
-import { CountryEnvironmentService } from '../../env/country-environment.service';
-import { HttpClientSecuredService } from '../../../shared/http/http-client-secured.service';
-import { GrowService } from '../../grow/grow.service';
-import { BeesContractService } from '../../accounts/contracts/bees-contract.service';
-import { OrderService } from '../../orders/order.service';
-import { VendorV2Service } from '../../vendor/vendor-v2.service';
-import { ItemService } from '../../items/item.service';
-import { SharedClientService } from '../../env/sharedclient/shared-client.service';
-import { Env } from '../../env/env';
-import { BeesEntity } from '../../common/bees-entity';
-import { PromoType } from '../../promo/promo-type';
-import { PromoService } from '../../promo/promo.service';
-import { DealsService } from '../../deals/deals.service';
-import { DealOutputType } from '../../deals/enums/deal-output-type';
-import { DealAccumulationType } from '../../deals/enums/deal-accumulation-type';
-import { DealDiscountType } from '../../deals/enums/deal-discount-type';
-import { DealComboType } from '../../deals/enums/deal-combo-type';
-import { DealType } from '../../deals/enums/deal-type';
-import { DealIdType } from '../../deals/enums/deal-id-type';
-import { PlatformIdService } from '../../platformid/platform-id.service';
-import { PlatformIdType } from '../../platformid/platform-id.type';
+import { Bees, publicEnums } from '../IBees';
 
 export interface JsEvalOptions {
   run: boolean;
@@ -46,22 +23,7 @@ export interface JsEvalResult {
 
 @Injectable({ providedIn: 'root' })
 export class JavascriptEvalService {
-  constructor(
-    private dialogService: DialogService,
-    private localAccountService: LocalAccountService,
-    private accountV1Service: AccountV1Service,
-    private envService: CountryEnvironmentService,
-    private http: HttpClientSecuredService,
-    private growService: GrowService,
-    private beesContractService: BeesContractService,
-    private orderService: OrderService,
-    private vendorService: VendorV2Service,
-    private itemService: ItemService,
-    private sharedClientService: SharedClientService,
-    private promoService: PromoService,
-    private dealsService: DealsService,
-    private platformIdService: PlatformIdService,
-  ) {}
+  constructor(private bees: Bees) {}
 
   public async eval(
     code: string | null,
@@ -76,40 +38,6 @@ export class JavascriptEvalService {
         .pipe(filter((val) => !ObjectUtils.isNil(val)))
         .subscribe(options.onLog);
     }
-
-    const beesObject = {
-      rx: {
-        Observable,
-        firstValueFrom,
-      },
-      dialogService: this.dialogService,
-      localAccountService: this.localAccountService,
-      accountV1Service: this.accountV1Service,
-      envService: this.envService,
-      http: this.http,
-      grow: this.growService,
-      beesContractService: this.beesContractService,
-      orderService: this.orderService,
-      vendorService: this.vendorService,
-      itemService: this.itemService,
-      sharedClients: this.sharedClientService,
-      promoService: this.promoService,
-      dealsService: this.dealsService,
-      platformIdService: this.platformIdService,
-    };
-
-    const publicEnums = {
-      Env: Env,
-      BeesEntity: BeesEntity,
-      PromoType: PromoType,
-      DealOutputType: DealOutputType,
-      DealAccumulationType: DealAccumulationType,
-      DealDiscountType: DealDiscountType,
-      DealComboType: DealComboType,
-      DealType: DealType,
-      DealIdType: DealIdType,
-      PlatformIdType: PlatformIdType,
-    };
 
     const result: JsEvalResult = {
       output: null,
@@ -164,7 +92,7 @@ export class JavascriptEvalService {
         options.env,
         options.arguments,
         options.context,
-        beesObject,
+        this.bees,
         ...Object.values(publicEnums),
       );
 
