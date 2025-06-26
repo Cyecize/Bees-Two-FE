@@ -183,6 +183,8 @@ const typeFiles = [
   "./src/app/api/deals/enums/deal-type.ts",
   "./src/app/api/deals/enums/deal-id-type.ts",
   "./src/app/api/deals/payloads/create-deals.payload.ts",
+  "./src/app/api/promo/promo.ts",
+  "./src/app/api/promo/promo-search.response.ts",
 ];
 
 let combinedTypes = "";

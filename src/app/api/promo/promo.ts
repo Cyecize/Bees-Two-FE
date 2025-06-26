@@ -1,5 +1,9 @@
 import { PromoType } from './promo-type';
 
+/**
+ * @monaco
+ * @monaco_include_deps
+ */
 export interface Promo {
   description: string;
   endDate: string;
