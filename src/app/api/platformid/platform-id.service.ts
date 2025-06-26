@@ -6,8 +6,27 @@ import { EncodedPlatformId } from './dto/encoded-platform-id';
 import { DeliveryCenterPlatformId } from './dto/delivery-center-platform-id';
 import { InventoryPlatformId } from './dto/inventory-platform-id';
 
+/**
+ * @monaco
+ */
+interface IPlatformIdService {
+  encodeContract(
+    contractPlatformId: ContractPlatformId,
+  ): Promise<EncodedPlatformId>;
+
+  encodeDeliveryCenterId(
+    contractPlatformId: DeliveryCenterPlatformId,
+  ): Promise<EncodedPlatformId>;
+
+  encodeInventoryId(
+    contractPlatformId: InventoryPlatformId,
+  ): Promise<EncodedPlatformId>;
+
+  decodeContractString(platformId: string): Promise<ContractPlatformId>;
+}
+
 @Injectable({ providedIn: 'root' })
-export class PlatformIdService {
+export class PlatformIdService implements IPlatformIdService {
   constructor(private repository: PlatformIdRepository) {}
 
   public async encodeContract(
@@ -34,7 +53,9 @@ export class PlatformIdService {
     );
   }
 
-  public async decodeString(platformId: string): Promise<ContractPlatformId> {
+  public async decodeContractString(
+    platformId: string,
+  ): Promise<ContractPlatformId> {
     return await firstValueFrom(this.repository.decodeContractId(platformId));
   }
 }

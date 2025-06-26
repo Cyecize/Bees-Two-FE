@@ -84,6 +84,7 @@ export const EDITOR_CUSTOM_LIB = `
         sharedClients: ISharedClientService;
         promoService: IPromoService;
         dealsService: IDealsService;
+        platformIdService: IPlatformIdService;
       }
 
       declare const env: CountryEnvironmentModel;

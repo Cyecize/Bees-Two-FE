@@ -1,3 +1,6 @@
+/**
+ * @monaco
+ */
 export interface InventoryPlatformId {
   vendorId: string;
   vendorAccountId: string | null;

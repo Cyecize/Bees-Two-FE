@@ -25,6 +25,7 @@ import { DealDiscountType } from '../../deals/enums/deal-discount-type';
 import { DealComboType } from '../../deals/enums/deal-combo-type';
 import { DealType } from '../../deals/enums/deal-type';
 import { DealIdType } from '../../deals/enums/deal-id-type';
+import { PlatformIdService } from '../../platformid/platform-id.service';
 
 export interface JsEvalOptions {
   run: boolean;
@@ -58,6 +59,7 @@ export class JavascriptEvalService {
     private sharedClientService: SharedClientService,
     private promoService: PromoService,
     private dealsService: DealsService,
+    private platformIdService: PlatformIdService,
   ) {}
 
   public async eval(
@@ -92,6 +94,7 @@ export class JavascriptEvalService {
       sharedClients: this.sharedClientService,
       promoService: this.promoService,
       dealsService: this.dealsService,
+      platformIdService: this.platformIdService,
     };
 
     const publicEnums = {

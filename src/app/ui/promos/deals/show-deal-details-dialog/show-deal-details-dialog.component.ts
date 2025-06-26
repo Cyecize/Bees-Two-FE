@@ -46,7 +46,7 @@ export class ShowDealDetailsDialogComponent
     const queryBody = this.payload.query.body;
 
     if (queryBody.contractId?.trim()) {
-      const contract = await this.platformIdService.decodeString(
+      const contract = await this.platformIdService.decodeContractString(
         queryBody.contractId,
       );
       dealIdBundle = {

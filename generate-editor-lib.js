@@ -185,6 +185,11 @@ const typeFiles = [
   "./src/app/api/deals/payloads/create-deals.payload.ts",
   "./src/app/api/promo/promo.ts",
   "./src/app/api/promo/promo-search.response.ts",
+  "./src/app/api/platformid/platform-id.service.ts",
+  "./src/app/api/platformid/dto/contract-platform-id.ts",
+  "./src/app/api/platformid/dto/encoded-platform-id.ts",
+  "./src/app/api/platformid/dto/delivery-center-platform-id.ts",
+  "./src/app/api/platformid/dto/inventory-platform-id.ts",
 ];
 
 let combinedTypes = "";
