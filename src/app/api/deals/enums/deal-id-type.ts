@@ -1,3 +1,6 @@
+/**
+ * @monaco
+ */
 export enum DealIdType {
   ACCOUNT = 'ACCOUNT',
   VENDOR = 'VENDOR',

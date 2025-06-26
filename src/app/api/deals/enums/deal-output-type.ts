@@ -1,3 +1,6 @@
+/**
+ * @monaco
+ */
 export enum DealOutputType {
   PALLET_DISCOUNT = 'PALLET_DISCOUNT',
   REGULAR_DISCOUNT = 'REGULAR_DISCOUNT',

@@ -4,6 +4,9 @@ import {
 } from '../../shared/util/page';
 import { Deal } from './deal';
 
+/**
+ * @monaco
+ */
 export interface DealsSearchResponse {
   deals: Deal[];
   pagination: HasMorePagination;

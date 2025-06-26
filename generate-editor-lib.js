@@ -172,6 +172,17 @@ const typeFiles = [
   "./src/app/api/promo/promo-search.query.ts",
   "./src/app/api/promo/promo-v3.payload.ts",
   "./src/app/api/promo/promo.service.ts",
+  "./src/app/api/deals/deal.ts",
+  "./src/app/api/deals/deals-search.response.ts",
+  "./src/app/api/deals/payloads/deals-search.query.ts",
+  "./src/app/api/deals/enums/deal-output-type.ts",
+  "./src/app/api/deals/enums/deal-accumulation-type.ts",
+  "./src/app/api/deals/enums/deal-discount-type.ts",
+  "./src/app/api/deals/enums/deal-combo-type.ts",
+  "./src/app/api/deals/deals.service.ts",
+  "./src/app/api/deals/enums/deal-type.ts",
+  "./src/app/api/deals/enums/deal-id-type.ts",
+  "./src/app/api/deals/payloads/create-deals.payload.ts",
 ];
 
 let combinedTypes = "";

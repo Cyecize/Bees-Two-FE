@@ -1,3 +1,6 @@
+/**
+ * @monaco
+ */
 export enum DealType {
   PRICE_REDUCTION = 'PRICE_REDUCTION',
   REFERRAL_COUPON = 'REFERRAL_COUPON',

@@ -18,6 +18,13 @@ import { Env } from '../../env/env';
 import { BeesEntity } from '../../common/bees-entity';
 import { PromoType } from '../../promo/promo-type';
 import { PromoService } from '../../promo/promo.service';
+import { DealsService } from '../../deals/deals.service';
+import { DealOutputType } from '../../deals/enums/deal-output-type';
+import { DealAccumulationType } from '../../deals/enums/deal-accumulation-type';
+import { DealDiscountType } from '../../deals/enums/deal-discount-type';
+import { DealComboType } from '../../deals/enums/deal-combo-type';
+import { DealType } from '../../deals/enums/deal-type';
+import { DealIdType } from '../../deals/enums/deal-id-type';
 
 export interface JsEvalOptions {
   run: boolean;
@@ -50,6 +57,7 @@ export class JavascriptEvalService {
     private itemService: ItemService,
     private sharedClientService: SharedClientService,
     private promoService: PromoService,
+    private dealsService: DealsService,
   ) {}
 
   public async eval(
@@ -83,12 +91,19 @@ export class JavascriptEvalService {
       itemService: this.itemService,
       sharedClients: this.sharedClientService,
       promoService: this.promoService,
+      dealsService: this.dealsService,
     };
 
     const publicEnums = {
       Env: Env,
       BeesEntity: BeesEntity,
       PromoType: PromoType,
+      DealOutputType: DealOutputType,
+      DealAccumulationType: DealAccumulationType,
+      DealDiscountType: DealDiscountType,
+      DealComboType: DealComboType,
+      DealType: DealType,
+      DealIdType: DealIdType,
     };
 
     const result: JsEvalResult = {

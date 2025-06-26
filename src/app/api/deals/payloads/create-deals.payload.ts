@@ -2,6 +2,10 @@ import { DealIdType } from '../enums/deal-id-type';
 import { DealAccumulationType } from '../enums/deal-accumulation-type';
 import { DealType } from '../enums/deal-type';
 
+/**
+ * @monaco
+ * @monaco_include_deps
+ */
 export interface CreateDealsPayload {
   ids: string[];
   type: DealIdType;

@@ -1,3 +1,6 @@
+/**
+ * @monaco
+ */
 export enum DealAccumulationType {
   ADD = 'ADD',
   COMPOSE = 'COMPOSE',

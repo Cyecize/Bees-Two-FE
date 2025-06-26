@@ -1,3 +1,6 @@
+/**
+ * @monaco
+ */
 export enum DealDiscountType {
   PERCENT_OFF = 'PERCENT_OFF',
   '%' = '%',

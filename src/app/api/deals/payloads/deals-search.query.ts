@@ -6,6 +6,10 @@ import { BeesParam, BeesParamImpl } from '../../common/bees-param';
 import { ObjectUtils } from '../../../shared/util/object-utils';
 import { DealOutputType } from '../enums/deal-output-type';
 
+/**
+ * @monaco
+ * @monaco_include_deps
+ */
 export interface DealsSearchQuery {
   types: DealOutputType[];
   page: PageRequest;

@@ -148,6 +148,10 @@ export interface FreeGoodOutputItemVendorItem {
   price: number;
 }
 
+/**
+ * @monaco
+ * @monaco_include_deps
+ */
 export interface Deal {
   deliveryCenterId?: string;
   contractId: string;
