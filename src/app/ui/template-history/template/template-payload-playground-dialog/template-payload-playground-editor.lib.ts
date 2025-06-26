@@ -35,21 +35,6 @@ export const EDITOR_CUSTOM_LIB = `
         firstValueFrom: typeof firstValueFrom;
       }
 
-      interface DialogService {
-        openAccountPicker: (env: Env) => Observable<LocalAccount>;
-        openShowCodeDialog(code: string, title?: string): Observable<void>;
-        openBeesTokenOverrideDialog(env: CountryEnvironmentModel): Observable<BeesToken>;
-        openRequestResultDialog(response: WrappedResponse<any>): Observable<boolean>;
-        async openTemplateArgPrompt(
-          env: CountryEnvironmentModel,
-          arg: RequestTemplateArgView,
-          textarea?: boolean;
-        ): Promise<string | null>;
-        async openEnvPickerMultiselect(): Promise<CountryEnvironmentModel[]>;
-        async openGenericMultiselect<T>(options: GenericPickerOption<T>[], title?: string): Promise<T[]>;
-
-      }
-
       interface LocalAccountService {
         async createFromBeesAccountIfNotExists(
           env: CountryEnvironmentModel,
@@ -71,7 +56,7 @@ export const EDITOR_CUSTOM_LIB = `
       interface Bees {
         /** RxJS utilities */
         rx: BeesRx;
-        dialogService: DialogService;
+        dialogService: IDialogService;
         localAccountService: LocalAccountService;
         accountV1Service: AccountV1Service;
         beesContractService: IBeesContractService;

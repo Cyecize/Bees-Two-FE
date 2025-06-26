@@ -23,7 +23,10 @@ import { PlatformIdType } from '../../api/platformid/platform-id.type';
 import { ContractIdDialogComponent } from '../../ui/platformid/contract-id-dialog/contract-id-dialog.component';
 import { DeliveryCenterIdDialogComponent } from '../../ui/platformid/delivery-center-id-dialog/delivery-center-id-dialog.component';
 import { InventoryPlatformIdDialogComponent } from '../../ui/platformid/inventory-platform-id-dialog/inventory-platform-id-dialog.component';
-import { ItemsPickerDialogPayload } from '../../ui/items/items-picker-dialog/items-picker-dialog.payload';
+import {
+  IItemsPickerDialogPayload,
+  ItemsPickerDialogPayload,
+} from '../../ui/items/items-picker-dialog/items-picker-dialog.payload';
 import { ItemsPickerDialogComponent } from '../../ui/items/items-picker-dialog/items-picker-dialog.component';
 import { Item } from '../../api/items/item';
 import { ShowCodePayload } from './dialogs/confirm-dialog/show-code-payload.model';
@@ -45,8 +48,56 @@ import { GenericPickerOption } from './dialogs/generic-picker-dialog/generic-pic
 import { GenericPickerDialogComponent } from './dialogs/generic-picker-dialog/generic-picker-dialog.component';
 import { GenericPickerResponse } from './dialogs/generic-picker-dialog/generic-picker-response.impl';
 
+/**
+ * @monaco
+ */
+interface IDialogService {
+  openConfirmDialog(
+    message: string,
+    title?: string,
+    confirmMessage?: string,
+  ): Observable<boolean>;
+
+  openAccountPicker(
+    env: CountryEnvironmentModel,
+    hideActions?: boolean,
+  ): Observable<LocalAccount>;
+
+  openBeesAccountPicker(env: CountryEnvironmentModel): Observable<AccountV1>;
+
+  openItemsPicker(
+    payload: IItemsPickerDialogPayload,
+  ): Observable<Item | undefined>;
+
+  openShowCodeDialog(code: string, title?: string): Observable<void>;
+
+  openRequestResultDialog(response: WrappedResponse<any>): Observable<boolean>;
+
+  openBeesTokenOverrideDialog(
+    env: CountryEnvironmentModel,
+  ): Observable<BeesToken>;
+
+  openTemplateArgPrompt(
+    env: CountryEnvironmentModel,
+    arg: RequestTemplateArgView,
+    textarea?: boolean,
+  ): Promise<string | null>;
+
+  openPlatformIdDialog(
+    env: CountryEnvironmentModel,
+    type: PlatformIdType,
+  ): void;
+
+  openEnvPickerMultiselect(): Promise<CountryEnvironmentModel[]>;
+
+  openGenericMultiselect<T>(
+    options: GenericPickerOption<T>[],
+    title?: string,
+  ): Promise<T[]>;
+}
+
 @Injectable({ providedIn: 'root' })
-export class DialogService {
+export class DialogService implements IDialogService {
   constructor(private matService: MatDialog) {}
 
   public open(
@@ -122,7 +173,7 @@ export class DialogService {
   }
 
   public openItemsPicker(
-    payload: ItemsPickerDialogPayload,
+    payload: IItemsPickerDialogPayload,
   ): Observable<Item | undefined> {
     return this.open(ItemsPickerDialogComponent, '', payload).afterClosed();
   }

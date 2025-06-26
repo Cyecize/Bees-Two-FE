@@ -26,6 +26,7 @@ import { DealComboType } from '../../deals/enums/deal-combo-type';
 import { DealType } from '../../deals/enums/deal-type';
 import { DealIdType } from '../../deals/enums/deal-id-type';
 import { PlatformIdService } from '../../platformid/platform-id.service';
+import { PlatformIdType } from '../../platformid/platform-id.type';
 
 export interface JsEvalOptions {
   run: boolean;
@@ -107,6 +108,7 @@ export class JavascriptEvalService {
       DealComboType: DealComboType,
       DealType: DealType,
       DealIdType: DealIdType,
+      PlatformIdType: PlatformIdType,
     };
 
     const result: JsEvalResult = {

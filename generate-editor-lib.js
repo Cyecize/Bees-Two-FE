@@ -190,6 +190,9 @@ const typeFiles = [
   "./src/app/api/platformid/dto/encoded-platform-id.ts",
   "./src/app/api/platformid/dto/delivery-center-platform-id.ts",
   "./src/app/api/platformid/dto/inventory-platform-id.ts",
+  "./src/app/api/platformid/platform-id.type.ts",
+  "./src/app/shared/dialog/dialog.service.ts",
+  "./src/app/ui/items/items-picker-dialog/items-picker-dialog.payload.ts",
 ];
 
 let combinedTypes = "";

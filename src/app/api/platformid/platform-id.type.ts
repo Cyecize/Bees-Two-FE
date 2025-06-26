@@ -1,3 +1,6 @@
+/**
+ * @monaco
+ */
 export enum PlatformIdType {
   COMBO = 'COMBO',
   CONTRACT = 'CONTRACT',

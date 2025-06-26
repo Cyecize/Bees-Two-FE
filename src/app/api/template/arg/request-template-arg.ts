@@ -11,6 +11,9 @@ export interface RequestTemplateArg {
   name: string;
 }
 
+/**
+ * @monaco
+ */
 export interface RequestTemplateArgView extends RequestTemplateArg {
   id: number;
   templateId: number;

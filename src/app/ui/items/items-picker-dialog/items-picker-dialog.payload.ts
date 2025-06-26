@@ -6,3 +6,11 @@ export class ItemsPickerDialogPayload {
     public readonly vendorItemId?: string,
   ) {}
 }
+
+/**
+ * @monaco
+ */
+export interface IItemsPickerDialogPayload {
+  env: CountryEnvironmentModel;
+  vendorItemId?: string;
+}
