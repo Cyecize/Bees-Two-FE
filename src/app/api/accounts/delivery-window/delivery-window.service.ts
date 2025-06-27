@@ -7,8 +7,18 @@ import {
 } from '../../../shared/util/field-error-wrapper';
 import { DeliveryWindowPayload } from './delivery-window.payload';
 
+/**
+ * @monaco
+ */
+export interface IDeliveryWindowService {
+  createDeliveryWindow(
+    payload: DeliveryWindowPayload,
+    env?: CountryEnvironmentModel,
+  ): Promise<WrappedResponse<any>>;
+}
+
 @Injectable({ providedIn: 'root' })
-export class DeliveryWindowService {
+export class DeliveryWindowService implements IDeliveryWindowService {
   constructor(private deliveryWindowRepository: DeliveryWindowRepository) {}
 
   public async createDeliveryWindow(

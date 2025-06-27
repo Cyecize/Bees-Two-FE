@@ -1,3 +1,6 @@
+/**
+ * @monaco
+ */
 export interface DeliveryWindowPayload {
   deliveryScheduleId: string;
   startDate: string;

@@ -71,6 +71,10 @@ import {
   ISegmentationService,
   SegmentationService,
 } from '../rewards/segmentation/segmentation.service';
+import {
+  DeliveryWindowService,
+  IDeliveryWindowService,
+} from '../accounts/delivery-window/delivery-window.service';
 
 /**
  * @monaco
@@ -119,6 +123,7 @@ interface IBees {
   rewardsSettingsService: IRewardsSettingsService;
   challengeService: IChallengeService;
   segmentationService: ISegmentationService;
+  deliveryWindowService: IDeliveryWindowService;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -146,6 +151,7 @@ export class Bees implements IBees {
     public rewardsSettingsService: RewardsSettingsService,
     public challengeService: ChallengeService,
     public segmentationService: SegmentationService,
+    public deliveryWindowService: DeliveryWindowService,
   ) {}
 }
 
