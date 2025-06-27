@@ -1,5 +1,4 @@
 import { LoaderService } from './loader.service';
-import { AppComponent } from '../../app.component';
 
 export const ShowLoader = (): any => {
   return (
@@ -11,8 +10,7 @@ export const ShowLoader = (): any => {
 
     descriptor.value = async function (...args: any[]) {
       // access the loader
-      const loader =
-        AppComponent.getInjector().get<LoaderService>(LoaderService);
+      const loader = LoaderService.instance;
 
       loader.show();
       try {
