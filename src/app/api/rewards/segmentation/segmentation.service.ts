@@ -3,10 +3,16 @@ import { SegmentationRepository } from './segmentation.repository';
 import { CountryEnvironmentModel } from '../../env/country-environment.model';
 import { BeesResponse } from '../../proxy/bees-response';
 import { firstValueFrom } from 'rxjs';
-import { SegmentationGroupQuery } from './segmentation-group.query';
+import {
+  SegmentationGroupQuery,
+  SegmentationGroupQueryImpl,
+} from './segmentation-group.query';
 import { SegmentationGroupModel } from './segmentation-group.model';
 import { SegmentationGroupByAccountSearchResponse } from './segmentation-group-by-account.search-response';
-import { SegmentationGroupByAccountQuery } from './segmentation-group-by-account.query';
+import {
+  SegmentationGroupByAccountQuery,
+  SegmentationGroupByAccountQueryImpl,
+} from './segmentation-group-by-account.query';
 import {
   FieldErrorWrapper,
   WrappedResponse,
@@ -16,8 +22,56 @@ import { SegmentationGroupPayload } from './segmentation-group.payload';
 import { BeesParam, BeesParamImpl } from '../../common/bees-param';
 import { BeesMultipartFile } from '../../proxy/bees-multipart-value.payload';
 
+/**
+ * @monaco
+ */
+export interface ISegmentationService {
+  searchGroups(
+    query: SegmentationGroupQuery,
+    env?: CountryEnvironmentModel,
+  ): Promise<BeesResponse<SegmentationGroupModel[]>>;
+
+  searchGroupsByAccount(
+    query: SegmentationGroupByAccountQuery,
+    env?: CountryEnvironmentModel,
+  ): Promise<BeesResponse<SegmentationGroupByAccountSearchResponse>>;
+
+  getAccountGroup(
+    accountId: string,
+    env?: CountryEnvironmentModel,
+  ): Promise<BeesResponse<SegmentationGroupByAccountModel>>;
+
+  deleteGroup(
+    groupId: string,
+    authTokenOverride: string,
+    env?: CountryEnvironmentModel,
+  ): Promise<WrappedResponse<BeesResponse<any>>>;
+
+  deleteAccountGroup(
+    accountId: string,
+    authTokenOverride: string,
+    env?: CountryEnvironmentModel,
+  ): Promise<WrappedResponse<BeesResponse<any>>>;
+
+  deleteAccountGroupGroup(
+    accountId: string,
+    groupId: string,
+    authTokenOverride: string,
+    env?: CountryEnvironmentModel,
+  ): Promise<WrappedResponse<BeesResponse<any>>>;
+
+  upsertGroup(
+    payload: SegmentationGroupPayload,
+    authTokenOverride: string,
+    env?: CountryEnvironmentModel,
+  ): Promise<WrappedResponse<BeesResponse<any>>>;
+
+  newGroupQuery(): SegmentationGroupQuery;
+  newGroupPerAccountQuery(): SegmentationGroupByAccountQuery;
+}
+
 @Injectable({ providedIn: 'root' })
-export class SegmentationService {
+export class SegmentationService implements ISegmentationService {
   constructor(private repository: SegmentationRepository) {}
 
   public async searchGroups(
@@ -122,5 +176,13 @@ export class SegmentationService {
         env?.id,
       ),
     ).execute();
+  }
+
+  newGroupQuery(): SegmentationGroupQuery {
+    return new SegmentationGroupQueryImpl();
+  }
+
+  newGroupPerAccountQuery(): SegmentationGroupByAccountQuery {
+    return new SegmentationGroupByAccountQueryImpl();
   }
 }

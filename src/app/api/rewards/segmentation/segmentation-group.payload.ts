@@ -1,3 +1,7 @@
+/**
+ * @monaco
+ * @monaco_include_deps
+ */
 export interface SegmentationGroupPayload {
   groupId: string | null;
   groupName: string;

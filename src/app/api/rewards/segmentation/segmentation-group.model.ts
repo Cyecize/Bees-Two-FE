@@ -1,3 +1,6 @@
+/**
+ * @monaco
+ */
 export interface SegmentationGroupModel {
   id: string;
   name: string;

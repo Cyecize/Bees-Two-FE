@@ -4,6 +4,9 @@ import {
 } from '../../../shared/util/page-request';
 import { BeesParam, BeesParamImpl } from '../../common/bees-param';
 
+/**
+ * @monaco
+ */
 export interface SegmentationGroupByAccountQuery {
   page: PageRequest;
   accountIds: string[];

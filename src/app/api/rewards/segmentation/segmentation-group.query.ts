@@ -1,5 +1,8 @@
 import { BeesParam, BeesParamImpl } from '../../common/bees-param';
 
+/**
+ * @monaco
+ */
 export interface SegmentationGroupQuery {
   purposes: string[];
   names: string[];
