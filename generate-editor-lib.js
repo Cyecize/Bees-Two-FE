@@ -2,6 +2,7 @@ const ts = require("typescript");
 const fs = require("fs");
 const path = require("path");
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 function processFile(content) {
   const sourceFile = ts.createSourceFile(
     "temp.ts",
@@ -109,7 +110,7 @@ function processFile(content) {
 }
 
 /**
- * This script has the purpose to scan the specified files
+ * This script has the purpose to scan the specified files (or paths)
  * and extract interfaces, that are intended to be exposed to the JavasScript playground,
  * which uses monaco editor, which intern has capability of showing suggestions.
  * The suggestions are passed as string in the form of Typescript types.
@@ -126,87 +127,78 @@ function processFile(content) {
  * node .\generate-editor-lib.js
  *
  */
-const typeFiles = [
-  "./src/app/api/accounts/local/local-account.ts",
-  "./src/app/api/accounts/v1/account-v1.ts",
-  "./src/app/api/env/country-environment.model.ts",
-  "./src/app/api/env/country-environment-language.model.ts",
-  "./src/app/api/env/country-environment-creds.payload.ts",
-  "./src/app/api/template/arg/request-template-arg.ts",
-  "./src/app/api/grow/dto/grow-organization.ts",
-  "./src/app/api/grow/dto/grow-organization.payload.ts",
-  "./src/app/api/grow/dto/grow-group.payload.ts",
-  "./src/app/shared/dialog/dialogs/generic-picker-dialog/generic-picker.option.ts",
-  "./src/app/shared/dialog/dialogs/generic-picker-dialog/generic-picker-response.impl.ts",
-  "./src/app/api/env/token/bees-token.ts",
-  "./src/app/api/grow/grow.service.ts",
-  "./src/app/api/proxy/bees-response.ts",
-  "./src/app/api/grow/dto/grow-group.ts",
-  "./src/app/api/accounts/contracts/bees-contract.ts",
-  "./src/app/api/accounts/contracts/bees-contract.service.ts",
-  "./src/app/shared/util/page.ts",
-  "./src/app/api/orders/order.service.ts",
-  "./src/app/api/orders/dto/order.query.ts",
-  "./src/app/api/common/bees-param.ts",
-  "./src/app/shared/util/page-request.ts",
-  "./src/app/api/orders/dto/order.ts",
-  "./src/app/api/grow/dto/grow-user.payload.ts",
-  "./src/app/api/vendor/vendor-v2.ts",
-  "./src/app/api/vendor/vendor-v2.service.ts",
-  "./src/app/api/env/country-environment.service.ts",
-  "./src/app/shared/util/field-error-wrapper-local.ts",
-  "./src/app/shared/field-error/field-error.ts",
-  "./src/app/api/items/item.ts",
-  "./src/app/api/items/item.service.ts",
-  "./src/app/api/items/items-search.response.ts",
-  "./src/app/api/items/items-search.query.ts",
-  "./src/app/api/env/sharedclient/shared-client.payload.ts",
-  "./src/app/api/env/sharedclient/shared-client.query.ts",
-  "./src/app/api/env/sharedclient/shared-client.repository.ts",
-  "./src/app/api/env/sharedclient/shared-client.service.ts",
-  "./src/app/api/env/sharedclient/shared-client.ts",
-  "./src/app/api/env/env.ts",
-  "./src/app/api/common/bees-entity.ts",
-  "./src/app/api/env/sharedclient/shared-client-token.ts",
-  "./src/app/api/promo/promo-type.ts",
-  "./src/app/api/promo/promo-search.query.ts",
-  "./src/app/api/promo/promo-v3.payload.ts",
-  "./src/app/api/promo/promo.service.ts",
-  "./src/app/api/deals/deal.ts",
-  "./src/app/api/deals/deals-search.response.ts",
-  "./src/app/api/deals/payloads/deals-search.query.ts",
-  "./src/app/api/deals/enums/deal-output-type.ts",
-  "./src/app/api/deals/enums/deal-accumulation-type.ts",
-  "./src/app/api/deals/enums/deal-discount-type.ts",
-  "./src/app/api/deals/enums/deal-combo-type.ts",
-  "./src/app/api/deals/deals.service.ts",
-  "./src/app/api/deals/enums/deal-type.ts",
-  "./src/app/api/deals/enums/deal-id-type.ts",
-  "./src/app/api/deals/payloads/create-deals.payload.ts",
-  "./src/app/api/promo/promo.ts",
-  "./src/app/api/promo/promo-search.response.ts",
-  "./src/app/api/platformid/platform-id.service.ts",
-  "./src/app/api/platformid/dto/contract-platform-id.ts",
-  "./src/app/api/platformid/dto/encoded-platform-id.ts",
-  "./src/app/api/platformid/dto/delivery-center-platform-id.ts",
-  "./src/app/api/platformid/dto/inventory-platform-id.ts",
-  "./src/app/api/platformid/platform-id.type.ts",
-  "./src/app/shared/dialog/dialog.service.ts",
-  "./src/app/ui/items/items-picker-dialog/items-picker-dialog.payload.ts",
-  "./src/app/shared/util/sort.query.ts",
-  "./src/app/api/accounts/local/local-account.query.ts",
-  "./src/app/api/accounts/local/local-account.service.ts",
-  "./src/app/api/accounts/local/create-local-account.payload.ts",
-  "./src/app/api/accounts/v1/account-v1.service.ts",
-  "./src/app/api/accounts/v1/account-v1-search.query.ts",
-  "./src/app/api/template/IBees.ts",
-];
+
+const typeFiles = ['./src/app/*'];
+
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+function getTSFilesRecursive(dirPath) {
+  let results = [];
+  const entries = fs.readdirSync(dirPath, { withFileTypes: true });
+
+  for (const entry of entries) {
+    const fullPath = path.join(dirPath, entry.name);
+
+    if (entry.isDirectory()) {
+      results = results.concat(getTSFilesRecursive(fullPath));
+    } else if (entry.isFile() && fullPath.endsWith('.ts')) {
+      results.push(fullPath);
+    }
+  }
+
+  return results;
+}
+
+function revertToRelative(paths) {
+  return paths.map((f) => '.' + f.replace(__dirname, '').replaceAll('\\', '/'));
+}
+
+/**
+ * Convert file patterns to concrete file paths
+ */
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+function expandFilePatterns(patterns) {
+  const expandedFiles = [];
+
+  for (const pattern of patterns) {
+    const fullPattern = path.resolve(__dirname, pattern);
+
+    if (pattern.includes('*') && fs.existsSync(path.dirname(fullPattern))) {
+      const baseDir = path.dirname(fullPattern);
+      const filesInDir = revertToRelative(getTSFilesRecursive(baseDir));
+
+      expandedFiles.push(...filesInDir);
+    } else if (pattern.endsWith(path.sep) && fs.existsSync(fullPattern)) {
+      expandedFiles.push(...revertToRelative(getTSFilesRecursive(fullPattern)));
+    } else if (fs.existsSync(fullPattern)) {
+      expandedFiles.push(pattern);
+    } else {
+      console.warn(`File not found: ${pattern}`);
+    }
+  }
+
+  return [...new Set(expandedFiles)];
+}
+
+const allFiles = expandFilePatterns(typeFiles);
 
 let combinedTypes = "";
-typeFiles.forEach((file) => {
-  const content = fs.readFileSync(path.resolve(__dirname, file), "utf8");
-  combinedTypes += processFile(content) + " ";
+let processedFilesCount = 0;
+allFiles.forEach((file) => {
+  const content = fs.readFileSync(file, "utf8");
+
+  const processedFileTypes = processFile(content) + " ";
+  if (processedFileTypes.trim().length < 1) {
+    console.log(`File ${file} is empty`);
+    return;
+  } else {
+    console.log(`Processed file ${file}`);
+    processedFilesCount++;
+  }
+
+  combinedTypes += processedFileTypes;
 });
+
+console.log(`Processed ${processedFilesCount} files`);
 
 fs.writeFileSync(
   path.resolve(
