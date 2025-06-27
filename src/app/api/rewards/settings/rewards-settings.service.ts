@@ -21,8 +21,41 @@ import {
   WrappedResponse,
 } from '../../../shared/util/field-error-wrapper';
 
+/**
+ * @monaco
+ */
+export interface IRewardsSettingsService {
+  searchSettings(
+    query: RewardsSettingsSearchQuery,
+    env?: CountryEnvironmentModel,
+    tokenOverride?: string,
+  ): Promise<WrappedResponse<RewardsSettingsSearchResponse>>;
+
+  upsert(
+    formOutput: RewardsSettingsFormOutput,
+  ): Promise<WrappedResponse<BeesResponse<any>>>;
+
+  findById(
+    settingId: string,
+    tier: RewardsTierLevel,
+    level: RewardsSettingLevel,
+    type: RewardsSettingType,
+    env?: CountryEnvironmentModel,
+  ): Promise<RewardSetting | null>;
+
+  searchOne(
+    settingId: string,
+    query: RewardsSettingsSearchQuery,
+    env?: CountryEnvironmentModel,
+    page?: number,
+    tokenOverride?: string,
+  ): Promise<RewardSetting | null>;
+
+  newQuery(): RewardsSettingsSearchQuery;
+}
+
 @Injectable({ providedIn: 'root' })
-export class RewardsSettingsService {
+export class RewardsSettingsService implements IRewardsSettingsService {
   constructor(private repository: RewardsSettingsRepository) {}
 
   public async searchSettings(
@@ -66,7 +99,7 @@ export class RewardsSettingsService {
     return await this.searchOne(settingId, query, env);
   }
 
-  private async searchOne(
+  public async searchOne(
     settingId: string,
     query: RewardsSettingsSearchQuery,
     env?: CountryEnvironmentModel,
@@ -98,5 +131,9 @@ export class RewardsSettingsService {
     }
 
     return await this.searchOne(settingId, query, env, page + 1);
+  }
+
+  newQuery(): RewardsSettingsSearchQuery {
+    return new RewardsSettingsSearchQueryImpl();
   }
 }

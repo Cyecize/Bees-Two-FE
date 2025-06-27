@@ -48,7 +48,19 @@ import { DealType } from '../deals/enums/deal-type';
 import { DealIdType } from '../deals/enums/deal-id-type';
 import { PlatformIdType } from '../platformid/platform-id.type';
 import { SortDirection } from '../../shared/util/sort.query';
+import { RewardsSettingCalculationType } from '../rewards/settings/enums/rewards-setting-calculation-type';
+import { RewardsSettingEarnType } from '../rewards/settings/enums/rewards-setting-earn-type';
+import { RewardsSettingLevel } from '../rewards/settings/enums/rewards-setting-level';
+import { RewardsSettingType } from '../rewards/settings/enums/rewards-setting-type';
+import {
+  IRewardsSettingsService,
+  RewardsSettingsService,
+} from '../rewards/settings/rewards-settings.service';
+import { RewardsTierLevel } from '../rewards/rewards-tier-level';
 
+/**
+ * @monaco
+ */
 interface WrappedResponse<T> {
   isSuccess: boolean;
   errorResp?: ErrorResponse;
@@ -90,6 +102,7 @@ interface IBees {
   promoService: IPromoService;
   dealsService: IDealsService;
   platformIdService: IPlatformIdService;
+  rewardsSettingsService: IRewardsSettingsService;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -114,6 +127,7 @@ export class Bees implements IBees {
     public promoService: PromoService,
     public dealsService: DealsService,
     public platformIdService: PlatformIdService,
+    public rewardsSettingsService: RewardsSettingsService,
   ) {}
 }
 
@@ -133,4 +147,9 @@ export const publicEnums = {
   DealIdType: DealIdType,
   PlatformIdType: PlatformIdType,
   SortDirection: SortDirection,
+  RewardsSettingCalculationType,
+  RewardsSettingEarnType,
+  RewardsSettingLevel,
+  RewardsSettingType,
+  RewardsTierLevel,
 };

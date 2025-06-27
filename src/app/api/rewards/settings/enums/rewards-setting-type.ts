@@ -1,3 +1,6 @@
+/**
+ * @monaco
+ */
 export enum RewardsSettingType {
   DEFAULT_CONFIGURATION = 'DEFAULT_CONFIGURATION',
   FILTER = 'FILTER',

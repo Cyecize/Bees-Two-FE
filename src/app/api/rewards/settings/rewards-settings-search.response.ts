@@ -5,6 +5,10 @@ import { RewardsTierLevel } from '../rewards-tier-level';
 import { RewardsSettingCalculationType } from './enums/rewards-setting-calculation-type';
 import { RewardsSettingEarnType } from './enums/rewards-setting-earn-type';
 
+/**
+ * @monaco
+ * @monaco_include_deps
+ */
 export interface RewardsSettingsSearchResponse {
   content: RewardSetting[];
   pagination: Pagination;

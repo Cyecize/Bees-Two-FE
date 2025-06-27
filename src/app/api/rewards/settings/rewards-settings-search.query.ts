@@ -7,6 +7,9 @@ import {
 } from '../../../shared/util/page-request';
 import { BeesParam, BeesParamImpl } from '../../common/bees-param';
 
+/**
+ * @monaco
+ */
 export interface RewardsSettingsSearchQuery {
   levels: RewardsSettingLevel[];
   page: PageRequest;

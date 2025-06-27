@@ -44,6 +44,9 @@ export interface MetaForm {
   tier: FormControl<RewardsTierLevel>;
 }
 
+/**
+ * @monaco
+ */
 export interface RewardsSettingsFormOutput {
   meta: RewardsSettingMetaPayload;
   setting: RewardsSettingPayload;
