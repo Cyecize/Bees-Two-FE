@@ -3,6 +3,9 @@ import { ChallengeFilterType } from './challenge-filter-type';
 import { ChallengeMode } from './challenge-mode';
 import { ChallengeType } from './challenge-type';
 
+/**
+ * @monaco
+ */
 export interface Challenge {
   id: string;
   title: string;

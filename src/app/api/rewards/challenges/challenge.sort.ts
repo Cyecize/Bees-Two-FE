@@ -1,3 +1,6 @@
+/**
+ * @monaco
+ */
 export enum ChallengeSort {
   ID = 'ID',
   TITLE = 'TITLE',

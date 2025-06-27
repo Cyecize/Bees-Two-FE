@@ -1,3 +1,6 @@
+/**
+ * @monaco
+ */
 export enum ChallengeExecutionMethod {
   TAKE_PHOTO = 'TAKE_PHOTO',
   MARK_COMPLETE = 'MARK_COMPLETE',

@@ -1,3 +1,6 @@
+/**
+ * @monaco
+ */
 export enum ChallengeType {
   EXECUTION_COOLER = 'EXECUTION_COOLER',
   EXECUTION_SHELVES = 'EXECUTION_SHELVES',

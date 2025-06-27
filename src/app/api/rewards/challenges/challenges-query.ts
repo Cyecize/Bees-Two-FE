@@ -11,6 +11,9 @@ import { ChallengeFilterType } from './challenge-filter-type';
 import { BeesParam, BeesParamImpl } from '../../common/bees-param';
 import { ObjectUtils } from '../../../shared/util/object-utils';
 
+/**
+ * @monaco
+ */
 export interface ChallengesQuery {
   paginationModel?: ChallengePaginationModel; //TODO: header
   acceptLanguage?: string; //TODO: header

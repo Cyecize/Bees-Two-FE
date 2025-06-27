@@ -57,6 +57,16 @@ import {
   RewardsSettingsService,
 } from '../rewards/settings/rewards-settings.service';
 import { RewardsTierLevel } from '../rewards/rewards-tier-level';
+import { ChallengeSort } from '../rewards/challenges/challenge.sort';
+import { ChallengeExecutionMethod } from '../rewards/challenges/challenge-execution-method';
+import { ChallengeFilterType } from '../rewards/challenges/challenge-filter-type';
+import { ChallengeMode } from '../rewards/challenges/challenge-mode';
+import { ChallengePaginationModel } from '../rewards/challenges/challenge-pagination-model';
+import { ChallengeType } from '../rewards/challenges/challenge-type';
+import {
+  ChallengeService,
+  IChallengeService,
+} from '../rewards/challenges/challenge.service';
 
 /**
  * @monaco
@@ -103,6 +113,7 @@ interface IBees {
   dealsService: IDealsService;
   platformIdService: IPlatformIdService;
   rewardsSettingsService: IRewardsSettingsService;
+  challengeService: IChallengeService;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -128,6 +139,7 @@ export class Bees implements IBees {
     public dealsService: DealsService,
     public platformIdService: PlatformIdService,
     public rewardsSettingsService: RewardsSettingsService,
+    public challengeService: ChallengeService,
   ) {}
 }
 
@@ -152,4 +164,10 @@ export const publicEnums = {
   RewardsSettingLevel,
   RewardsSettingType,
   RewardsTierLevel,
+  ChallengeSort,
+  ChallengeExecutionMethod,
+  ChallengeFilterType,
+  ChallengeMode,
+  ChallengePaginationModel,
+  ChallengeType,
 };

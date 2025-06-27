@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ChallengeRepository } from './challenge.repository';
 import { CountryEnvironmentModel } from '../../env/country-environment.model';
-import { ChallengesQuery } from './challenges-query';
+import { ChallengesQuery, ChallengesQueryImpl } from './challenges-query';
 import { ChallengesSearchResponse } from './challenges-search.response';
 import {
   FieldErrorWrapper,
@@ -9,8 +9,26 @@ import {
 } from '../../../shared/util/field-error-wrapper';
 import { ChallengeMode } from './challenge-mode';
 
+/**
+ * @monaco
+ */
+export interface IChallengeService {
+  searchChallenges(
+    query: ChallengesQuery,
+    env?: CountryEnvironmentModel,
+  ): Promise<WrappedResponse<ChallengesSearchResponse>>;
+
+  cancelChallenge(
+    challengeId: string,
+    tokenOverride: string,
+    env?: CountryEnvironmentModel,
+  ): Promise<WrappedResponse<any>>;
+
+  newQuery(): ChallengesQuery;
+}
+
 @Injectable({ providedIn: 'root' })
-export class ChallengeService {
+export class ChallengeService implements IChallengeService {
   constructor(private repository: ChallengeRepository) {}
 
   public async searchChallenges(
@@ -35,5 +53,9 @@ export class ChallengeService {
         env?.id,
       ),
     ).execute();
+  }
+
+  newQuery(): ChallengesQuery {
+    return new ChallengesQueryImpl();
   }
 }
