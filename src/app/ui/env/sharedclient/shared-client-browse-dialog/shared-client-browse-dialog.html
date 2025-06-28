@@ -77,6 +77,7 @@
         <th scope="col"><i class="fa fa-flag"></i></th>
         <th scope="col">Vendor</th>
         <th scope="col">Entities</th>
+        <th scope="col">Methods</th>
         <th scope="col">Actions</th>
       </tr>
       </thead>
@@ -103,6 +104,11 @@
         <td>
           <small *ngFor="let entity of client.targetEntities" class="d-block">
             {{ entity }}
+          </small>
+        </td>
+        <td>
+          <small *ngFor="let method of client.requestMethods" class="d-block">
+            {{ method }}
           </small>
         </td>
         <td>

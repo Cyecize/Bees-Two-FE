@@ -18,6 +18,8 @@ import { BeesEntity } from '../../../../api/common/bees-entity';
 import { FieldError } from '../../../../shared/field-error/field-error';
 import { SelectSearchComponent } from '../../../../shared/form-controls/select-search/select-search.component';
 import { SelectOptions } from '../../../../api/common/select-options';
+import { SharedClientSupportedMethod } from '../../../../api/env/sharedclient/shared-client-supported-method';
+import { ErrorMessageComponent } from '../../../../shared/field-error/error-message/error-message.component';
 
 @Component({
   selector: 'app-shared-client-form',
@@ -29,6 +31,7 @@ import { SelectOptions } from '../../../../api/common/select-options';
     NgForOf,
     NgIf,
     SelectSearchComponent,
+    ErrorMessageComponent,
   ],
   templateUrl: './shared-client-form.component.html',
   styleUrl: './shared-client-form.component.scss',
@@ -38,6 +41,8 @@ export class SharedClientFormComponent implements OnInit {
   envs: SelectOption[] = SelectOptions.envOptions();
 
   targetEntityOptions: SelectOption[] = SelectOptions.beesEntityOptions();
+  supportedMethodsOptions: SelectOption[] =
+    SelectOptions.sharedClientSupportedMethodsOptions();
 
   @Input()
   payload?: SharedClient;
@@ -74,11 +79,16 @@ export class SharedClientFormComponent implements OnInit {
         [],
         Validators.required,
       ),
+      requestMethods: new FormArray<FormControl<SharedClientSupportedMethod>>(
+        [],
+        Validators.required,
+      ),
     });
 
     if (this.payload) {
       this.form.patchValue(this.payload);
-      //TODO: Patch the entities too?
+      // TODO: Patch the entities too?
+      // TODO: Patch the request methods too?
     }
   }
 
@@ -98,5 +108,21 @@ export class SharedClientFormComponent implements OnInit {
 
   removeEntity(ind: number): void {
     this.form.controls.targetEntities.removeAt(ind);
+  }
+
+  get requestMethods(): FormArray<FormControl<SharedClientSupportedMethod>> {
+    return this.form.controls.requestMethods;
+  }
+
+  addNewMethod(method: SharedClientSupportedMethod): void {
+    this.requestMethods.push(
+      new FormControl<SharedClientSupportedMethod>(method, {
+        nonNullable: true,
+      }),
+    );
+  }
+
+  removeMethod(ind: number): void {
+    this.requestMethods.removeAt(ind);
   }
 }

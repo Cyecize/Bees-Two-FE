@@ -1,3 +1,4 @@
+<app-field-error [errors]="errors" [fieldName]="''"></app-field-error>
 <form [formGroup]="form" class="pe-1" style="overflow-y: auto; max-height: 500px;">
   <div class="mt-2 ps-1 pe-1">
     <app-input
@@ -42,6 +43,9 @@
       [options]="targetEntityOptions"
       (onChange)="addNewEntity($event)"></app-select>
 
+    <app-field-error [errors]="errors"
+                     [fieldName]="'targetEntities'"></app-field-error>
+
     <div formArrayName="targetEntities">
       <div class="d-flex align-items-center justify-content-between"
            [formGroupName]="ind"
@@ -50,6 +54,27 @@
 
         <div>
           <span (click)="removeEntity(ind)"><i class="fa-solid fa-x"></i></span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="mt-2">
+    <app-select
+      placeholder="Select supported methods"
+      [options]="supportedMethodsOptions"
+      (onChange)="addNewMethod($event)"></app-select>
+
+    <app-field-error [errors]="errors"
+                     [fieldName]="'requestMethods'"></app-field-error>
+
+    <div formArrayName="requestMethods">
+      <div class="d-flex align-items-center justify-content-between"
+           [formGroupName]="ind"
+           *ngFor="let ctr of requestMethods.controls; let ind = index">
+        <span>{{ ctr.value }}</span>
+
+        <div>
+          <span (click)="removeMethod(ind)"><i class="fa-solid fa-x"></i></span>
         </div>
       </div>
     </div>

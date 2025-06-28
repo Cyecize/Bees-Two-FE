@@ -1,6 +1,7 @@
 import { FormArray, FormControl } from '@angular/forms';
 import { BeesEntity } from '../../../../api/common/bees-entity';
 import { Env } from '../../../../api/env/env';
+import { SharedClientSupportedMethod } from '../../../../api/env/sharedclient/shared-client-supported-method';
 
 export interface SharedClientForm {
   name: FormControl<string>;
@@ -10,4 +11,5 @@ export interface SharedClientForm {
   vendorId: FormControl<string | null>;
   env: FormControl<Env>;
   targetEntities: FormArray<FormControl<BeesEntity>>;
+  requestMethods: FormArray<FormControl<SharedClientSupportedMethod>>;
 }
