@@ -75,6 +75,7 @@ import {
   DeliveryWindowService,
   IDeliveryWindowService,
 } from '../accounts/delivery-window/delivery-window.service';
+import { IPriceService, PriceService } from '../price/price.service';
 
 /**
  * @monaco
@@ -124,6 +125,7 @@ interface IBees {
   challengeService: IChallengeService;
   segmentationService: ISegmentationService;
   deliveryWindowService: IDeliveryWindowService;
+  priceService: IPriceService;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -152,6 +154,7 @@ export class Bees implements IBees {
     public challengeService: ChallengeService,
     public segmentationService: SegmentationService,
     public deliveryWindowService: DeliveryWindowService,
+    public priceService: PriceService,
   ) {}
 }
 

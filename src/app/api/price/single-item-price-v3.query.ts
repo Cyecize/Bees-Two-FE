@@ -1,3 +1,6 @@
+/**
+ * @monaco
+ */
 export interface SingleItemPriceV3Query {
   // Platform ID
   itemId: string;

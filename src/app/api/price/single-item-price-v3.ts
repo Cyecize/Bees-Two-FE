@@ -1,5 +1,9 @@
 import { PriceType } from './price.type';
 
+/**
+ * @monaco
+ * @monaco_include_deps
+ */
 export interface SingleItemPriceV3 {
   vendorItemId: string;
   sku: string;

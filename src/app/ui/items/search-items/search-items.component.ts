@@ -294,49 +294,20 @@ export class SearchItemsComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const allPrices: SingleItemPriceV3[] = [];
-
-    let failed = 0;
-    let batchNum = 0;
-    const batchSize = 50;
-    for (const itemBatch of ArrayUtils.splitToBatches(allItems, batchSize)) {
-      const queries: SingleItemPriceV3Query[] = itemBatch.map(
-        (item: Item) =>
-          new SingleItemPriceV3QueryImpl(
-            item.itemPlatformId,
-            data.contractId,
-            data.priceListId,
-          ),
-      );
-
-      console.log(
-        `Querying prices for ${itemBatch.length} items of batch ${batchNum}`,
-      );
-      const resp = await this.priceService.searchPrices(
-        queries,
-        this.envOverride,
-      );
-
-      if (!resp.isSuccess) {
-        console.log(resp);
-        failed++;
-      } else {
-        allPrices.push(...resp.response.response);
-      }
-
-      batchNum++;
-    }
-
-    if (failed > 0) {
-      alert(
-        `Search finished with ${failed} failed batch requests, check the logs!`,
-      );
-    }
-
-    this.dialogService.openShowCodeDialog(
-      JSON.stringify(allPrices, null, 2),
-      `Available prices (${allPrices.length})`,
+    const pricesResp = await this.priceService.fetchAllPrices(
+      allItems,
+      data.contractId,
+      data.priceListId,
+      this.envOverride,
     );
+
+    if (!pricesResp.hasErrors) {
+      const allPrices = pricesResp.prices;
+      this.dialogService.openShowCodeDialog(
+        JSON.stringify(allPrices, null, 2),
+        `Available prices (${allPrices.length})`,
+      );
+    }
   }
 }
 
