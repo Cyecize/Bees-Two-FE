@@ -44,6 +44,12 @@
                   type="button"
                   class="m-1 btn btn-sm btn-outline-dark">Raw JSON
           </button>
+          <button [disabled]="raw"
+                  (click)="openRawFormWithFormGroupData()"
+                  *ngIf="!raw"
+                  type="button"
+                  class="m-1 btn btn-sm btn-outline-dark">Raw JSON (Transfer UI Form)
+          </button>
           <button [disabled]="!raw"
                   (click)="raw = false"
                   type="button"

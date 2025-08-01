@@ -300,4 +300,9 @@ export class DealsFormComponent implements OnInit, OnDestroy {
   maybeGetDeal(formInd: number): Deal | undefined {
     return this.deals[formInd];
   }
+
+  openRawFormWithFormGroupData(): void {
+    this.rawJson = JSON.stringify(this.form.getRawValue(), null, 2);
+    this.raw = true;
+  }
 }
