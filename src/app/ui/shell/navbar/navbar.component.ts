@@ -54,7 +54,7 @@ export class NavbarComponent implements OnInit {
   }
 
   openAccountPicker(): void {
-    this.dialogService.openAccountPicker(this.selectedEnv, true);
+    this.dialogService.openAccountPicker(this.selectedEnv, true, true);
   }
 
   openSettingsDialog(): void {

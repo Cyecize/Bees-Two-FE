@@ -30,6 +30,9 @@
         <th scope="col">Vendor Acc Id</th>
         <th scope="col" *ngIf="!query.env">Env</th>
         <th scope="col" *ngIf="!payload.hideActions">Actions</th>
+        <th scope="col" class="text-center" *ngIf="payload.showDetailsButton">
+          <i class="fa fa-info"></i>
+        </th>
       </tr>
       </thead>
       <tbody>
@@ -61,7 +64,14 @@
         </td>
         <td *ngIf="!payload.hideActions">
           <div class="m-1">
-            <button class="btn btn-outline-info" (click)="selectAccount(acc)">Choose</button>
+            <button class="btn btn-outline-primary" (click)="selectAccount(acc)">Choose</button>
+          </div>
+        </td>
+        <td *ngIf="payload.showDetailsButton">
+          <div class="m-1">
+            <button class="btn btn-outline-info" (click)="showBeesAccount(acc)">
+              <i class="fa fa-info"></i>
+            </button>
           </div>
         </td>
       </tr>

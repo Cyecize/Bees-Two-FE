@@ -47,6 +47,8 @@ import { EnvPickerDialogPayload } from '../../ui/env/env-picker-dialog/env-picke
 import { GenericPickerOption } from './dialogs/generic-picker-dialog/generic-picker.option';
 import { GenericPickerDialogComponent } from './dialogs/generic-picker-dialog/generic-picker-dialog.component';
 import { GenericPickerResponse } from './dialogs/generic-picker-dialog/generic-picker-response.impl';
+import { ShowAccountDetailsDialogComponent } from '../../ui/accounts/show-account-details-dialog/show-account-details-dialog.component';
+import { ShowAccountDetailsDialogPayload } from '../../ui/accounts/show-account-details-dialog/show-account-details-dialog.payload';
 
 /**
  * @monaco
@@ -94,6 +96,11 @@ export interface IDialogService {
     options: GenericPickerOption<T>[],
     title?: string,
   ): Promise<T[]>;
+
+  openAccountV1Details(
+    account: AccountV1,
+    env?: CountryEnvironmentModel,
+  ): Promise<any>;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -154,11 +161,12 @@ export class DialogService implements IDialogService {
   public openAccountPicker(
     env: CountryEnvironmentModel,
     hideActions?: boolean,
+    showDetailsButton?: boolean,
   ): Observable<LocalAccount> {
     return this.open(
       AccountPickerDialogComponent,
       '',
-      new AccountPickerDialogPayload(env, hideActions),
+      new AccountPickerDialogPayload(env, hideActions, showDetailsButton),
     ).afterClosed();
   }
 
@@ -284,5 +292,16 @@ export class DialogService implements IDialogService {
     }
 
     return res.items;
+  }
+
+  public async openAccountV1Details(
+    account: AccountV1,
+    env?: CountryEnvironmentModel,
+  ): Promise<any> {
+    this.open(
+      ShowAccountDetailsDialogComponent,
+      '',
+      new ShowAccountDetailsDialogPayload(account, env),
+    );
   }
 }

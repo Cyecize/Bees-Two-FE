@@ -4,5 +4,6 @@ export class AccountPickerDialogPayload {
   constructor(
     public readonly env: CountryEnvironmentModel,
     public readonly hideActions?: boolean,
+    public readonly showDetailsButton: boolean = true,
   ) {}
 }

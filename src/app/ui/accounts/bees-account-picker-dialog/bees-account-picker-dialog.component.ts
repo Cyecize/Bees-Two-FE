@@ -65,14 +65,17 @@ export class BeesAccountPickerDialogComponent
     this.close(account);
   }
 
-  idChanged(id: string): void {
+  async idChanged(id: string): Promise<void> {
     this.query.accountId = id;
-    this.reloadFilters();
+    await this.reloadFilters();
+    if (this.accounts.length === 1) {
+      this.selectAccount(this.accounts[0]);
+    }
   }
 
-  reloadFilters(): void {
+  async reloadFilters(): Promise<void> {
     this.query.page.page = 0;
-    this.fetch();
+    await this.fetch();
   }
 
   private async fetch(): Promise<void> {

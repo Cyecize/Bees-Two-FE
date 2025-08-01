@@ -112,11 +112,7 @@ export class SearchAccountsComponent implements OnInit, OnDestroy {
   }
 
   openDetailsDialog(account: AccountV1): void {
-    this.dialogService.open(
-      ShowAccountDetailsDialogComponent,
-      '',
-      new ShowAccountDetailsDialogPayload(account, this.envOverride),
-    );
+    void this.dialogService.openAccountV1Details(account, this.envOverride!);
   }
 
   pickAccount(): void {

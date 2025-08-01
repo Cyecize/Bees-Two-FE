@@ -16,6 +16,8 @@ import { TooltipSpanComponent } from '../../../shared/components/tooltip-span/to
 import { AccountPickerDialogPayload } from './account-picker-dialog.payload';
 import { CheckboxComponent } from '../../../shared/form-controls/checkbox/checkbox.component';
 import { FormsModule } from '@angular/forms';
+import { AccountV1Service } from '../../../api/accounts/v1/account-v1.service';
+import { ShowLoader } from '../../../shared/loader/show.loader.decorator';
 
 @Component({
   selector: 'app-account-picker-dialog',
@@ -43,6 +45,7 @@ export class AccountPickerDialogComponent
   constructor(
     private localAccountService: LocalAccountService,
     private dialogService: DialogService,
+    private accountV1Service: AccountV1Service,
   ) {
     super();
   }
@@ -100,4 +103,19 @@ export class AccountPickerDialogComponent
   }
 
   protected pageToPagination = pageToPagination;
+
+  @ShowLoader()
+  async showBeesAccount(localAccount: LocalAccount): Promise<void> {
+    const account = await this.accountV1Service.findOne(
+      this.payload.env,
+      localAccount.vendorAccountId,
+    );
+
+    if (!account) {
+      alert('Could not fetch this account from BEES!');
+      return;
+    }
+
+    void this.dialogService.openAccountV1Details(account, this.payload.env);
+  }
 }
