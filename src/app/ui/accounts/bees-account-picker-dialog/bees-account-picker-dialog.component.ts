@@ -52,7 +52,7 @@ export class BeesAccountPickerDialogComponent
       .openAccountPicker(this.payload.env)
       .subscribe((value) => {
         if (value) {
-          this.idChanged(value.beesId);
+          this.idChanged(value.beesId, true);
         }
       });
   }
@@ -65,10 +65,10 @@ export class BeesAccountPickerDialogComponent
     this.close(account);
   }
 
-  async idChanged(id: string): Promise<void> {
+  async idChanged(id: string, autoChoose?: boolean): Promise<void> {
     this.query.accountId = id;
     await this.reloadFilters();
-    if (this.accounts.length === 1) {
+    if (this.accounts.length === 1 && autoChoose) {
       this.selectAccount(this.accounts[0]);
     }
   }
@@ -93,4 +93,11 @@ export class BeesAccountPickerDialogComponent
   }
 
   protected pageToPagination = pageToPagination;
+
+  inputChanged(val: string): void {
+    if (!val?.trim()) {
+      return;
+    }
+    void this.idChanged(val.trim(), false);
+  }
 }
