@@ -64,6 +64,7 @@ export class ConditionLineItemFormComponent implements OnInit {
           [],
           Validators.required,
         ),
+        minimumAmount: new FormControl<number | null>(null),
       }),
     );
   }

@@ -95,6 +95,12 @@
                 type="number"
                 formControlName="priority"
                 placeholder="Priority"></app-input>
+
+              <app-input
+                class="m-1 ms-0"
+                type="number"
+                formControlName="score"
+                placeholder="Score"></app-input>
             </div>
             <div class="mt-2">
               <app-checkbox label="Enforced" formControlName="enforced"></app-checkbox>
@@ -109,6 +115,15 @@
             <div class="mt-2">
               <app-checkbox label="Hidden on Deals" formControlName="hiddenOnDeals"></app-checkbox>
             </div>
+            <div class="mt-2">
+              <app-checkbox label="Personalized (Reset on edit)" formControlName="personalized"></app-checkbox>
+            </div>
+            <div class="mt-2">
+              <app-select
+                placeholder="Type deal"
+                [options]="dealTypes"
+                formControlName="type"></app-select>
+            </div>
 
             <div formGroupName="conditions">
               <h5 class="mt-2">Conditions</h5>
@@ -118,6 +133,18 @@
               <div class="mt-2 d-flex">
                 <app-input class="m-1 ms-0" placeholder="Coupon Code" formControlName="couponCode"></app-input>
                 <app-input class="m-1" placeholder="Payment Method" formControlName="paymentMethod"></app-input>
+              </div>
+              <div class="mt-2">
+                <app-condition-charge-type-form
+                  [deal]="maybeGetDeal(formInd)"
+                  [form]="getConditionsForm(formInd)">
+                </app-condition-charge-type-form>
+              </div>
+              <div class="mt-2">
+                <app-condition-payment-terms-form
+                  [deal]="maybeGetDeal(formInd)"
+                  [form]="getConditionsForm(formInd)">
+                </app-condition-payment-terms-form>
               </div>
               <div class="mt-2">
                 <app-condition-delivery-date-form
@@ -145,6 +172,11 @@
                 <app-condition-amounts-form
                   [deal]="maybeGetDeal(formInd)"
                   [form]="getConditionsForm(formInd)"></app-condition-amounts-form>
+              </div>
+              <div class="mt-2">
+                <app-condition-fixed-combo-form
+                  [deal]="maybeGetDeal(formInd)"
+                  [form]="getConditionsForm(formInd)"></app-condition-fixed-combo-form>
               </div>
             </div>
 
@@ -205,7 +237,22 @@
                 </app-free-good-output-form>
               </div>
               <div class="mt-2">
-                <h6>TODO: Implement remaining few outputs</h6>
+                <app-scaled-free-goods-output-form
+                  [deal]="maybeGetDeal(formInd)"
+                  [form]="getOutputForm(formInd)">
+                </app-scaled-free-goods-output-form>
+              </div>
+              <div class="mt-2">
+                <app-output-charge-discount-output-form
+                  [deal]="maybeGetDeal(formInd)"
+                  [form]="getOutputForm(formInd)">
+                </app-output-charge-discount-output-form>
+              </div>
+              <div class="mt-2">
+                <app-output-manual-discount-output-form
+                  [deal]="maybeGetDeal(formInd)"
+                  [form]="getOutputForm(formInd)">
+                </app-output-manual-discount-output-form>
               </div>
             </div>
             <hr class="mt-2">

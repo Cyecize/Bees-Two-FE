@@ -4,7 +4,7 @@ import { DealsFormComponent } from '../../deals/deals-form/deals-form.component'
 import { CheckboxComponent } from '../../../../shared/form-controls/checkbox/checkbox.component';
 import { ConditionAmountsFormComponent } from '../../deals/deals-form/condition-amounts-form/condition-amounts-form.component';
 import { ConditionDatetimeSimulationFormComponent } from '../../deals/deals-form/condition-datetime-simulation-form/condition-datetime-simulation-form.component';
-import { ConditionDeliveryDateFormComponent } from '../../deals/deals-form/condition-delivery-date-form/condition-delivery-date-form.component';
+import { ConditionChargeTypeFormComponent } from '../../deals/deals-form/condition-charge-type-form/condition-charge-type-form.component';
 import { ConditionLineItemFormComponent } from '../../deals/deals-form/condition-line-item-form/condition-line-item-form.component';
 import { EnvOverrideFieldComponent } from '../../../env/env-override-field/env-override-field.component';
 import { InputComponent } from '../../../../shared/form-controls/input/input.component';
@@ -56,7 +56,7 @@ export interface PromoV3Form {
     CheckboxComponent,
     ConditionAmountsFormComponent,
     ConditionDatetimeSimulationFormComponent,
-    ConditionDeliveryDateFormComponent,
+    ConditionChargeTypeFormComponent,
     ConditionLineItemFormComponent,
     EnvOverrideFieldComponent,
     InputComponent,

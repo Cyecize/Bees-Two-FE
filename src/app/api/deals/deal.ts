@@ -6,12 +6,18 @@ import { DealConditionAmountField } from './enums/deal-condition-amount-field';
 import { DealDiscountType } from './enums/deal-discount-type';
 import { DealComboType } from './enums/deal-combo-type';
 import { DealOrderTotalApplyTo } from './enums/deal-order-total-apply-to';
+import { DealRangeTriggerType } from './enums/deal-range-trigger-type';
+import { DealManualDiscountApplyTo } from './enums/deal-manual-discount-apply-to';
+import { DealType } from './enums/deal-type';
+import { DealChargeType } from './enums/deal-charge-type';
 
 export interface LineItemDealCondition {
   vendorItemIds: string[];
   minimumQuantity?: number;
+  minimumAmount?: number;
   sharedMinimumQuantity?: boolean;
   crossDiscount?: boolean;
+  multipleConditionItems: boolean;
 }
 
 export interface SimulationDateTimeCondition {
@@ -31,6 +37,15 @@ export interface AmountCondition {
   value: number;
 }
 
+export interface FixedComboItemsCondition {
+  vendorItemId: string;
+  quantity: number;
+}
+
+export interface FixedComboCondition {
+  items: FixedComboItemsCondition[];
+}
+
 export interface MultipleLineItemCondition {
   items: MultipleLineItemItemCondition[];
 }
@@ -39,6 +54,7 @@ export interface MultipleLineItemItemCondition {
   vendorItemIds: string[];
   minimumQuantity?: number;
   minimumAmount?: number;
+  maxQuantity?: number;
 }
 
 export interface LineItemOutput {
@@ -113,6 +129,7 @@ export interface LineItemScaledDiscountOutputRange {
 }
 
 export interface MultiLineItemScaledDiscountOutput {
+  rangeTriggerType: DealRangeTriggerType;
   ranges: MultiLineItemScaledDiscountOutputRange[];
 }
 
@@ -137,6 +154,19 @@ export interface FreeGoodOutput {
   items: FreeGoodOutputItem[];
 }
 
+export interface ScaledFreeGoodOutput {
+  rangeTriggerType: DealRangeTriggerType;
+  partial: boolean;
+  ranges: LineItemScaledFreeGoodsRange[];
+}
+
+export interface LineItemScaledFreeGoodsRange {
+  from: number;
+  to?: number;
+  proportion?: number;
+  items: FreeGoodOutputItem[];
+}
+
 export interface FreeGoodOutputItem {
   quantity: number;
   vendorItems: FreeGoodOutputItemVendorItem[];
@@ -146,6 +176,41 @@ export interface FreeGoodOutputItemVendorItem {
   vendorItemId: string;
   measureUnit: string;
   price: number;
+}
+
+export interface FixedComboOutput {
+  price: number;
+  originalPrice: number;
+  type: DealDiscountType;
+  value: number;
+  items: FixedComboItemOutput[];
+  freeGoods: FixedComboFreeGoodOutput[];
+}
+
+export interface FixedComboItemOutput {
+  vendorItemId: number;
+  vendorComboItemId: number;
+  price: number;
+}
+
+export interface FixedComboFreeGoodOutput {
+  vendorItemId: string;
+  vendorComboItemId: string;
+  price: number;
+  quantity: number;
+  measureUnit: string;
+}
+
+export interface ChargeDiscountOutput {
+  type: DealDiscountType;
+  discountValue: number;
+  discountMaximumOrderValue: number;
+}
+
+export interface ManualDiscountOutput {
+  maximum: number;
+  type: DealDiscountType;
+  applyTo: DealManualDiscountApplyTo;
 }
 
 /**
@@ -160,6 +225,8 @@ export interface Deal {
   accumulationType?: DealAccumulationType;
   priority?: number;
   level?: number;
+  score?: number;
+  personalized?: boolean;
   timezone: string;
   vendorId: string;
   hiddenOnBrowse: boolean;
@@ -169,15 +236,23 @@ export interface Deal {
   enableVariantGroupingAndConversion: boolean;
   conditions?: DealConditions;
   output: DealOutput;
+  type?: DealType;
+  deletedAt?: string;
 }
 
 export interface DealConditions {
-  //TODO: Define all fields
+  paymentMethod?: string;
+  paymentTerms?: number[];
   lineItem?: LineItemDealCondition;
   simulationDateTime?: SimulationDateTimeCondition;
   deliveryDate?: DeliveryDateCondition[];
   amounts?: AmountCondition[];
   multipleLineItem?: MultipleLineItemCondition;
+  couponCode?: string;
+  firstOrder?: boolean;
+  fixedCombo?: FixedComboCondition;
+  chargeType?: DealChargeType[];
+  excludedVendorItemIds?: string[];
 }
 
 export interface DealOutput {
@@ -189,5 +264,9 @@ export interface DealOutput {
   orderTotalDiscount?: OrderTotalDiscountOutput;
   palletDiscount?: PalletDiscountOutput;
   multipleLineItemScaledDiscount?: MultiLineItemScaledDiscountOutput;
-  freeGoods: FreeGoodOutput;
+  freeGoods?: FreeGoodOutput;
+  scaledFreeGoods?: ScaledFreeGoodOutput;
+  fixedCombo?: FixedComboOutput;
+  chargeDiscount?: ChargeDiscountOutput;
+  manualDiscount?: ManualDiscountOutput;
 }

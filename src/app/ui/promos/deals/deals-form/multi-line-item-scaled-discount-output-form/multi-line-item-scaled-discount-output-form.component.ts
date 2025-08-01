@@ -20,11 +20,13 @@ import {
 import {
   SelectOption,
   SelectOptionKey,
+  SelectOptionKvp,
 } from '../../../../../shared/form-controls/select/select.option';
 import { DealDiscountType } from '../../../../../api/deals/enums/deal-discount-type';
 import { InputComponent } from '../../../../../shared/form-controls/input/input.component';
 import { NgForOf, NgIf } from '@angular/common';
 import { SelectComponent } from '../../../../../shared/form-controls/select/select.component';
+import { DealRangeTriggerType } from '../../../../../api/deals/enums/deal-range-trigger-type';
 
 @Component({
   selector: 'app-multi-line-item-scaled-discount-output-form',
@@ -47,12 +49,21 @@ export class MultiLineItemScaledDiscountOutputFormComponent implements OnInit {
   deal?: Deal;
 
   types: SelectOption[] = [];
+  triggerTypes: SelectOption[] = [];
 
   ngOnInit(): void {
     const chooseOne = [new SelectOptionKey('Choose one', true)];
 
     this.types = chooseOne.concat(
       Object.keys(DealDiscountType).map((val) => new SelectOptionKey(val)),
+    );
+
+    this.triggerTypes = [
+      new SelectOptionKvp('Choose one (Optionally)', null),
+    ].concat(
+      Object.keys(DealRangeTriggerType).map(
+        (value) => new SelectOptionKey(value),
+      ),
     );
 
     if (this.deal) {
@@ -67,6 +78,7 @@ export class MultiLineItemScaledDiscountOutputFormComponent implements OnInit {
         ranges: new FormArray<
           FormGroup<MultiLineItemScaledDiscountOutputRangeForm>
         >([], Validators.required),
+        rangeTriggerType: new FormControl<DealRangeTriggerType | null>(null),
       }),
     );
   }

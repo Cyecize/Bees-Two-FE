@@ -138,6 +138,18 @@
                    (onChangeEnd)="reloadFilters()"
                    [(ngModel)]="query.body.paymentMethod"></app-input>
       </div>
+      <div class="filter">
+        <app-input type="number"
+                   placeholder="Payment Term"
+                   (onChangeEnd)="reloadFilters()"
+                   [(ngModel)]="query.body.paymentTerm"></app-input>
+      </div>
+      <div class="filter">
+        <app-input type="text"
+                   placeholder="Account Tier"
+                   (onChangeEnd)="reloadFilters()"
+                   [(ngModel)]="query.body.accountTier"></app-input>
+      </div>
     </div>
   </div>
 

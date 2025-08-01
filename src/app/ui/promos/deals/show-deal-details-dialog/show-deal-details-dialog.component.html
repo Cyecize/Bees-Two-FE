@@ -8,5 +8,8 @@
   <button class="btn btn-outline-dark m-1" (click)="close(undefined);">Close</button>
   <button class="btn btn-outline-success m-1" (click)="copy();">Copy</button>
   <button class="btn btn-outline-danger m-1" (click)="delete();">Delete</button>
-  <a class="btn btn-outline-warning m-1" [routerLink]="editRoute" (click)="close(undefined);">Edit</a>
+  <a class="btn btn-outline-warning m-1"
+     [routerLink]="editRoute"
+     [queryParams]="editRouteQueryParams"
+     (click)="close(undefined);">Edit</a>
 </div>

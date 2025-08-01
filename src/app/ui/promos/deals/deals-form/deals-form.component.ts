@@ -28,22 +28,17 @@ import { SelectComponent } from '../../../../shared/form-controls/select/select.
 import {
   SelectOption,
   SelectOptionKey,
+  SelectOptionKvp,
 } from '../../../../shared/form-controls/select/select.option';
 import { InputComponent } from '../../../../shared/form-controls/input/input.component';
 import { Deal } from '../../../../api/deals/deal';
 import { DialogService } from '../../../../shared/dialog/dialog.service';
 import { DealAccumulationType } from '../../../../api/deals/enums/deal-accumulation-type';
 import { CheckboxComponent } from '../../../../shared/form-controls/checkbox/checkbox.component';
-import {
-  ConditionsForm,
-  DealForm,
-  DealsForm,
-  DeliveryDateForm,
-  OutputForm,
-} from './deal-forms';
+import { ConditionsForm, DealForm, DealsForm, OutputForm } from './deal-forms';
 import { ConditionLineItemFormComponent } from './condition-line-item-form/condition-line-item-form.component';
 import { ConditionDatetimeSimulationFormComponent } from './condition-datetime-simulation-form/condition-datetime-simulation-form.component';
-import { ConditionDeliveryDateFormComponent } from './condition-delivery-date-form/condition-delivery-date-form.component';
+import { ConditionChargeTypeFormComponent } from './condition-charge-type-form/condition-charge-type-form.component';
 import { ConditionAmountsFormComponent } from './condition-amounts-form/condition-amounts-form.component';
 import { MultipleLineItemConditionFormComponent } from './multiple-line-item-condition-form/multiple-line-item-condition-form.component';
 import { OutputLineItemFormComponent } from './output-line-item-form/output-line-item-form.component';
@@ -55,6 +50,14 @@ import { OrderTotalDiscountOutputFormComponent } from './order-total-discount-ou
 import { LineItemScaledDiscountOutputFormComponent } from './line-item-scaled-discount-output-form/line-item-scaled-discount-output-form.component';
 import { MultiLineItemScaledDiscountOutputFormComponent } from './multi-line-item-scaled-discount-output-form/multi-line-item-scaled-discount-output-form.component';
 import { FreeGoodOutputFormComponent } from './free-good-output-form/free-good-output-form.component';
+import { DealType } from '../../../../api/deals/enums/deal-type';
+import { ConditionFixedComboFormComponent } from './condition-fixed-combo-form/condition-fixed-combo-form.component';
+import { ScaledFreeGoodsOutputFormComponent } from './scaled-free-goods-output-form/scaled-free-goods-output-form.component';
+import { OutputChargeDiscountFormComponent } from './output-charge-discount-form/output-charge-discount-form.component';
+import { ConditionDeliveryDateFormComponent } from './condition-delivery-date-form/condition-delivery-date-form.component';
+import { ConditionPaymentTermsFormComponent } from './condition-payment-terms-form/condition-payment-terms-form.component';
+import { OutputManualDiscountFormComponent } from './output-manual-discount-form/output-manual-discount-form.component';
+import { PlatformIdService } from '../../../../api/platformid/platform-id.service';
 
 @Component({
   selector: 'app-deals-form',
@@ -70,7 +73,7 @@ import { FreeGoodOutputFormComponent } from './free-good-output-form/free-good-o
     CheckboxComponent,
     ConditionLineItemFormComponent,
     ConditionDatetimeSimulationFormComponent,
-    ConditionDeliveryDateFormComponent,
+    ConditionChargeTypeFormComponent,
     ConditionAmountsFormComponent,
     MultipleLineItemConditionFormComponent,
     OutputLineItemFormComponent,
@@ -82,6 +85,12 @@ import { FreeGoodOutputFormComponent } from './free-good-output-form/free-good-o
     LineItemScaledDiscountOutputFormComponent,
     MultiLineItemScaledDiscountOutputFormComponent,
     FreeGoodOutputFormComponent,
+    ConditionFixedComboFormComponent,
+    ScaledFreeGoodsOutputFormComponent,
+    OutputChargeDiscountFormComponent,
+    ConditionDeliveryDateFormComponent,
+    ConditionPaymentTermsFormComponent,
+    OutputManualDiscountFormComponent,
   ],
   templateUrl: './deals-form.component.html',
   styleUrl: './deals-form.component.scss',
@@ -94,6 +103,7 @@ export class DealsFormComponent implements OnInit, OnDestroy {
 
   form!: FormGroup<DealsForm>;
   dealIdTypes: SelectOption[] = [];
+  dealTypes: SelectOption[] = [];
   accumulationTypeOptions: SelectOption[] = [];
 
   @Input()
@@ -107,10 +117,7 @@ export class DealsFormComponent implements OnInit, OnDestroy {
   }
 
   @Input()
-  dealIdType!: DealIdType;
-
-  @Input()
-  dealIdValue!: string;
+  dealContractId?: string;
 
   raw = false;
 
@@ -122,11 +129,16 @@ export class DealsFormComponent implements OnInit, OnDestroy {
   constructor(
     private envOverrideService: EnvOverrideService,
     private dialogService: DialogService,
+    private platformIdService: PlatformIdService,
   ) {}
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.dealIdTypes = Object.keys(DealIdType).map(
       (key) => new SelectOptionKey(key),
+    );
+
+    this.dealTypes = [new SelectOptionKvp('Choose (Optionally)', null)].concat(
+      ...Object.keys(DealType).map((key) => new SelectOptionKey(key)),
     );
 
     this.accumulationTypeOptions = [
@@ -150,9 +162,13 @@ export class DealsFormComponent implements OnInit, OnDestroy {
       this.envOverride = value;
     });
 
-    if (this.dealIdType) {
-      this.form.controls.type.setValue(this.dealIdType);
-      this.addId(this.dealIdValue);
+    // TODO: Investigate if anyway possible to determine the original id type of a deal when it was ingested.
+    if (this.dealContractId) {
+      const platformId = await this.platformIdService.decodeContractString(
+        this.dealContractId,
+      );
+      this.form.controls.type.setValue(DealIdType.ACCOUNT);
+      this.addId(platformId.vendorAccountId);
     }
   }
 
@@ -230,43 +246,51 @@ export class DealsFormComponent implements OnInit, OnDestroy {
   }
 
   addDeal(deal?: Deal): void {
-    this.form.controls.deals.push(
-      new FormGroup<DealForm>({
-        accumulationType: new FormControl<DealAccumulationType | null>(
-          deal?.accumulationType || null,
-        ),
-        enableVariantGroupingAndConversion: new FormControl<boolean | null>(
-          deal?.enableVariantGroupingAndConversion || null,
-        ),
-        enforced: new FormControl<boolean | null>(deal?.enforced || null),
-        hiddenOnBrowse: new FormControl<boolean | null>(
-          deal?.hiddenOnBrowse || null,
-        ),
-        hiddenOnDeals: new FormControl<boolean | null>(
-          deal?.hiddenOnDeals || null,
-        ),
-        priority: new FormControl<number | null>(deal?.priority || null),
-        level: new FormControl<number | null>(deal?.level || null),
-        vendorDealId: new FormControl<string>(deal?.vendorDealId || '', {
+    const dealForm = new FormGroup<DealForm>({
+      accumulationType: new FormControl<DealAccumulationType | null>(
+        deal?.accumulationType || null,
+      ),
+      enableVariantGroupingAndConversion: new FormControl<boolean | null>(
+        deal?.enableVariantGroupingAndConversion || null,
+      ),
+      enforced: new FormControl<boolean | null>(deal?.enforced || null),
+      hiddenOnBrowse: new FormControl<boolean | null>(
+        deal?.hiddenOnBrowse || null,
+      ),
+      hiddenOnDeals: new FormControl<boolean | null>(
+        deal?.hiddenOnDeals || null,
+      ),
+      priority: new FormControl<number | null>(deal?.priority || null),
+      level: new FormControl<number | null>(deal?.level || null),
+      vendorDealId: new FormControl<string>(deal?.vendorDealId || '', {
+        validators: Validators.required,
+        nonNullable: true,
+      }),
+      vendorPromotionId: new FormControl<string>(
+        deal?.vendorPromotionId || '',
+        {
           validators: Validators.required,
           nonNullable: true,
-        }),
-        vendorPromotionId: new FormControl<string>(
-          deal?.vendorPromotionId || '',
-          {
-            validators: Validators.required,
-            nonNullable: true,
-          },
+        },
+      ),
+      conditions: new FormGroup<ConditionsForm>({
+        couponCode: new FormControl<string | null>(
+          deal?.conditions?.couponCode || null,
         ),
-        conditions: new FormGroup<ConditionsForm>({
-          couponCode: new FormControl<string | null>(null),
-          deliveryDate: new FormArray<FormGroup<DeliveryDateForm>>([]),
-          firstOrder: new FormControl<boolean | null>(null),
-          paymentMethod: new FormControl<string | null>(null),
-        }),
-        output: new FormGroup<OutputForm>({}),
+        firstOrder: new FormControl<boolean | null>(
+          deal?.conditions?.firstOrder || null,
+        ),
+        paymentMethod: new FormControl<string | null>(
+          deal?.conditions?.paymentMethod || null,
+        ),
       }),
-    );
+      output: new FormGroup<OutputForm>({}),
+      personalized: new FormControl<boolean | null>(deal?.personalized || null),
+      score: new FormControl<number | null>(deal?.score || null),
+      type: new FormControl<DealType | null>(deal?.type || null),
+    });
+
+    this.form.controls.deals.push(dealForm);
   }
 
   removeDeal(dealInd: number): void {

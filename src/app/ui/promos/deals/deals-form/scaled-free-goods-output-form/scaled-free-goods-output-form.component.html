@@ -1,0 +1,97 @@
+<div [formGroup]="form">
+  <h6>
+    Scaled Free Goods
+    (
+    <span
+      *ngIf="!hasScaledFreeGoods()"
+      (click)="addScaledFreeGoods()"
+      style="cursor:pointer;">
+                  <i class="fa-solid fa-plus"></i></span>
+
+    <span
+      *ngIf="hasScaledFreeGoods()"
+      (click)="removeScaledFreeGoods()"
+      style="cursor:pointer;">
+                  <i class="fa-solid fa-x"></i></span>
+    )
+  </h6>
+  <div *ngIf="hasScaledFreeGoods()" formGroupName="scaledFreeGoods">
+    <div class="mt-1">
+      <div class="mt-1">
+        <app-checkbox label="Partial" formControlName="partial"></app-checkbox>
+      </div>
+      <div class="mt-1">
+        <app-select
+          [options]="rangeTriggerTypes"
+          placeholder="Range Trigger Type"
+          formControlName="rangeTriggerType"></app-select>
+      </div>
+    </div>
+
+    <div class="mt-1 mb-1">
+      <button (click)="addRange()" class="btn btn-sm btn-outline-info">Add Range</button>
+      <div formArrayName="ranges">
+        <div *ngFor="let lineItem of ranges.controls; let rangeInd = index"
+             [formGroupName]="rangeInd">
+          <hr class="mt-2">
+          <div class="mt-1 d-flex align-items-center justify-content-between">
+            <app-input type="number" class="ms-1" placeholder="From" formControlName="from"></app-input>
+            <app-input type="number" class="ms-1" placeholder="To" formControlName="to"></app-input>
+            <app-input type="number" placeholder="Proportion" formControlName="proportion"></app-input>
+            <span (click)="removeRange(rangeInd)"><i class="fa-solid fa-x"></i></span>
+          </div>
+          <div class="ps-5 pe-5 mt-1">
+            <button (click)="addRangeItem(rangeInd)"
+                    class="btn btn-sm btn-outline-info">Add Range Item
+            </button>
+            <div formArrayName="items">
+              <div *ngFor="let rangeItem of getRangeItems(rangeInd).controls; let itemRangeInd = index"
+                   [formGroupName]="itemRangeInd">
+                <hr class="mt-2">
+                <div class="mt-1 d-flex align-items-center justify-content-between">
+                  <app-input type="number" class="ms-1" placeholder="Quantity" formControlName="quantity"></app-input>
+                  <span (click)="removeRangeItem(rangeInd, itemRangeInd)"><i class="fa-solid fa-x"></i></span>
+                </div>
+                <div class="ps-5 pe-5 mt-1">
+                  <button (click)="createVendorItemRange(rangeInd, itemRangeInd)"
+                          class="btn btn-sm btn-outline-info">Add Vendor Item
+                  </button>
+                  <div formArrayName="vendorItems">
+                    <div
+                      *ngFor="let rangeItem of getItemFromRange(rangeInd, itemRangeInd).controls.vendorItems.controls; let vendorItemInd = index"
+                      [formGroupName]="vendorItemInd">
+                      <hr class="mt-2">
+                      <div class="mt-1 d-flex align-items-center justify-content-between">
+                        <app-input
+                          type="text"
+                          class="ms-1"
+                          placeholder="Vendor Item ID"
+                          formControlName="vendorItemId"></app-input>
+
+                        <app-input
+                          type="number"
+                          class="ms-1"
+                          placeholder="Price"
+                          formControlName="price"></app-input>
+
+                        <app-input
+                          type="text"
+                          class="ms-1"
+                          placeholder="Measure Unit"
+                          formControlName="measureUnit"></app-input>
+
+                        <span (click)="removeVendorItem(rangeInd, itemRangeInd, vendorItemInd)">
+                          <i class="fa-solid fa-x"></i>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,46 @@
+<div [formGroup]="form">
+  <h6>
+    Fixed Combo
+    (
+    <span
+      *ngIf="!hasFixedCombo()"
+      (click)="addFixedCombo()"
+      style="cursor:pointer;">
+                  <i class="fa-solid fa-plus"></i></span>
+
+    <span
+      *ngIf="hasFixedCombo()"
+      (click)="removeFixedCombo()"
+      style="cursor:pointer;">
+                  <i class="fa-solid fa-x"></i></span>
+    )
+  </h6>
+  <div *ngIf="hasFixedCombo()" formGroupName="fixedCombo">
+    <div class="mt-1">
+      <button (click)="addItem()" class="btn btn-sm btn-outline-success">Add Item</button>
+    </div>
+    <div class="mt-1" formArrayName="items">
+      <div class="d-flex flex-wrap justify-content-start">
+        <div *ngFor="let id of items.controls; let itemInd = index"
+             class="ms-4">
+          <div
+            class="m-1 mt-3 d-flex justify-content-between align-items-center"
+            [formGroupName]="itemInd">
+            <app-input
+              placeholder="Vendor Item Id"
+              formControlName="vendorItemId"></app-input>
+
+            <app-input
+              type="number"
+              placeholder="Quantity"
+              formControlName="quantity"></app-input>
+
+            <span class="m-1">
+              (<strong style="cursor:pointer;" (click)="removeItem(itemInd)">X</strong>)
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

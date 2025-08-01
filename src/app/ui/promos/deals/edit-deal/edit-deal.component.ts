@@ -10,14 +10,12 @@ import { Subscription } from 'rxjs';
 import { RouteNavigator } from '../../../../shared/routing/route-navigator.service';
 import { CountryEnvironmentService } from '../../../../api/env/country-environment.service';
 import { AppRoutingPath } from '../../../../app-routing.path';
-import { DealIdType } from '../../../../api/deals/enums/deal-id-type';
 import { ShowLoader } from '../../../../shared/loader/show.loader.decorator';
 import {
   DealsSearchQuery,
   DealsSearchQueryImpl,
 } from '../../../../api/deals/payloads/deals-search.query';
 import { Deal } from '../../../../api/deals/deal';
-import { PlatformIdService } from '../../../../api/platformid/platform-id.service';
 
 @Component({
   selector: 'app-edit-deal',
@@ -31,23 +29,19 @@ export class EditDealComponent implements OnInit, OnDestroy {
   private envSub!: Subscription;
 
   deals: Deal[] = [];
-  dealType!: DealIdType;
-  dealIdValue!: string;
+  query!: DealsSearchQuery;
 
   constructor(
     private dealService: DealsService,
     private dialogService: DialogService,
     private envOverrideService: EnvOverrideService,
     private envService: CountryEnvironmentService,
-    private platformIdService: PlatformIdService,
     private nav: RouteNavigator,
     private route: ActivatedRoute,
   ) {}
 
   async ngOnInit(): Promise<void> {
     const envId = Number(this.route.snapshot.params['envId']);
-    this.dealType = this.route.snapshot.params['idType'] as DealIdType;
-    this.dealIdValue = this.route.snapshot.params['idValue'] as string;
     const vendorDealId = this.route.snapshot.params['vendorDealId'] as string;
 
     const env = await this.envService.findById(envId);
@@ -59,7 +53,9 @@ export class EditDealComponent implements OnInit, OnDestroy {
 
     this.envOverrideService.setEnv(env);
 
-    if (!(await this.loadDeal(vendorDealId, env))) {
+    if (
+      !(await this.loadDeal(vendorDealId, env, this.route.snapshot.queryParams))
+    ) {
       this.nav.navigate(AppRoutingPath.NOT_FOUND);
       return;
     }
@@ -97,34 +93,14 @@ export class EditDealComponent implements OnInit, OnDestroy {
   private async loadDeal(
     vendorDealId: string,
     env: CountryEnvironmentModel,
+    queryParams: any,
   ): Promise<boolean> {
-    const query: DealsSearchQuery = new DealsSearchQueryImpl();
-    query.body.vendorId = env.vendorId;
-    query.body.vendorDealId = vendorDealId;
+    this.query = DealsSearchQueryImpl.fromEditRouteParams(queryParams);
 
-    switch (this.dealType) {
-      case DealIdType.ACCOUNT:
-        query.body.contractId = (
-          await this.platformIdService.encodeContract({
-            vendorId: env.vendorId,
-            vendorAccountId: this.dealIdValue,
-          })
-        ).platformId;
-        break;
-      case DealIdType.DELIVERY_CENTER:
-        query.body.deliveryCenterId = this.dealIdValue;
-        break;
-      case DealIdType.PRICE_LIST:
-        query.body.priceListId = this.dealIdValue;
-        break;
-      case DealIdType.VENDOR:
-        break;
-      default:
-        alert('Invalid Deal ID Type, please fix!');
-        return false;
-    }
+    this.query.body.vendorId = env.vendorId;
+    this.query.body.vendorDealId = vendorDealId;
 
-    const result = await this.dealService.searchDeals(query, env);
+    const result = await this.dealService.searchDeals(this.query, env);
 
     if (!result.isSuccess || !result.response.response) {
       alert('Could not load or find deal!');

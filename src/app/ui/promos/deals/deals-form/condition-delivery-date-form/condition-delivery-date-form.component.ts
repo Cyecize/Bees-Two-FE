@@ -33,6 +33,7 @@ export class ConditionDeliveryDateFormComponent implements OnInit {
   }
 
   addDeliveryDate(dd?: DeliveryDateCondition): void {
+    this.maybeInitDeliveryDateForm();
     const group = new FormGroup<DeliveryDateForm>({
       startDate: new FormControl<string>('', {
         nonNullable: true,
@@ -44,15 +45,19 @@ export class ConditionDeliveryDateFormComponent implements OnInit {
     if (dd) {
       group.patchValue(dd);
     }
-    this.form.controls.deliveryDate.push(group);
+    this.deliveryDateForms.push(group);
   }
 
-  getDeliveryDateForms(): FormArray {
-    return this.form.controls.deliveryDate;
+  get deliveryDateForms(): FormArray<FormGroup<DeliveryDateForm>> {
+    return this.form.controls.deliveryDate!;
   }
 
   removeDeliveryDate(ind: number): void {
-    this.form.controls.deliveryDate.removeAt(ind);
+    this.maybeInitDeliveryDateForm();
+    this.deliveryDateForms.removeAt(ind);
+    if (this.deliveryDateForms.length < 1) {
+      this.form.removeControl('deliveryDate');
+    }
   }
 
   private applyDeal(deal: Deal): void {
@@ -60,8 +65,23 @@ export class ConditionDeliveryDateFormComponent implements OnInit {
       return;
     }
 
+    this.maybeInitDeliveryDateForm();
+
     deal.conditions.deliveryDate.forEach((dd) => {
       this.addDeliveryDate(dd);
     });
+  }
+
+  private maybeInitDeliveryDateForm(): void {
+    if (!this.form.controls.deliveryDate) {
+      this.form.addControl(
+        'deliveryDate',
+        new FormArray<FormGroup<DeliveryDateForm>>([]),
+      );
+    }
+  }
+
+  hasDeliveryDate(): boolean {
+    return this.form.contains('deliveryDate');
   }
 }

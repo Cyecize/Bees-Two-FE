@@ -1,0 +1,20 @@
+<div [formGroup]="form">
+  <h6>Charge Type
+    (<span (click)="addChargeType()" style="cursor:pointer;">
+                  <i class="fa-solid fa-plus"></i>
+                  </span>)
+  </h6>
+  <div *ngIf="hasChargeType()">
+    <div formArrayName="chargeType" class="d-flex align-items-center">
+      <div *ngFor="let charge of chargeTypes.controls; let chargeInd = index">
+        <div class="m-1 mt-3">
+          <app-select
+            placeholder="Charge Type"
+            [formControlName]="chargeInd + ''"
+            [options]="chargeTypeOptions"></app-select>
+          (<strong style="cursor:pointer;" (click)="removeChargeType(chargeInd)">X</strong>)
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

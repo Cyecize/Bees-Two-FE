@@ -1,0 +1,38 @@
+<div [formGroup]="form">
+  <h6>
+    Manual Discount (Beta)
+    (
+    <span
+      *ngIf="!hasManualDiscount()"
+      (click)="addManualDiscount()"
+      style="cursor:pointer;">
+                  <i class="fa-solid fa-plus"></i></span>
+
+    <span
+      *ngIf="hasManualDiscount()"
+      (click)="removeManualDiscount()"
+      style="cursor:pointer;">
+                  <i class="fa-solid fa-x"></i></span>
+    )
+  </h6>
+  <div *ngIf="hasManualDiscount()" formGroupName="manualDiscount">
+    <div class="mt-1 d-flex justify-content-between">
+      <app-select
+        [options]="types"
+        placeholder="Discount Type"
+        formControlName="type"></app-select>
+
+      <app-select
+        [options]="applyToOptions"
+        placeholder="Apply To"
+        formControlName="applyTo"></app-select>
+
+      <app-input
+        type="number"
+        class="me-2"
+        placeholder="Maximum"
+        formControlName="maximum"></app-input>
+
+    </div>
+  </div>
+</div>

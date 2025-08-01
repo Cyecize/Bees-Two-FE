@@ -8,7 +8,6 @@ import { DealsService } from '../../../../api/deals/deals.service';
 import { DeleteSingleVendorDealIdPayload } from '../../../../api/deals/payloads/delete-deals.payload';
 import { CountryEnvironmentService } from '../../../../api/env/country-environment.service';
 import { CountryEnvironmentModel } from '../../../../api/env/country-environment.model';
-import { DealIdType } from '../../../../api/deals/enums/deal-id-type';
 import { RouteUtils } from '../../../../shared/routing/route-utils';
 import { AppRoutingPath } from '../../../../app-routing.path';
 import { PlatformIdService } from '../../../../api/platformid/platform-id.service';
@@ -26,6 +25,7 @@ export class ShowDealDetailsDialogComponent
 {
   dataJson!: string;
   editRoute!: string;
+  editRouteQueryParams: any = {};
 
   constructor(
     private dialogService: DialogService,
@@ -42,43 +42,15 @@ export class ShowDealDetailsDialogComponent
   }
 
   async setEditRoute(): Promise<void> {
-    let dealIdBundle: { type: DealIdType; value: string };
-    const queryBody = this.payload.query.body;
-
-    if (queryBody.contractId?.trim()) {
-      const contract = await this.platformIdService.decodeContractString(
-        queryBody.contractId,
-      );
-      dealIdBundle = {
-        type: DealIdType.ACCOUNT,
-        value: contract.vendorAccountId,
-      };
-    } else if (queryBody.deliveryCenterId?.trim()) {
-      dealIdBundle = {
-        type: DealIdType.DELIVERY_CENTER,
-        value: queryBody.deliveryCenterId,
-      };
-    } else if (queryBody.priceListId?.trim()) {
-      dealIdBundle = {
-        type: DealIdType.PRICE_LIST,
-        value: queryBody.priceListId,
-      };
-    } else {
-      dealIdBundle = {
-        type: DealIdType.VENDOR,
-        value: queryBody.vendorId || '',
-      };
-    }
-
     this.editRoute = RouteUtils.setPathParams(
       AppRoutingPath.EDIT_DEAL.toString(),
       {
-        idType: dealIdBundle.type,
-        idValue: dealIdBundle.value,
         vendorDealId: this.payload.deal.vendorDealId,
         envId: this.payload.selectedEnv.id,
       },
     );
+
+    this.editRouteQueryParams = this.payload.query.toEditRouteQueryParams();
   }
 
   getIcon(): Observable<string> {

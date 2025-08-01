@@ -17,6 +17,7 @@ export interface DealsSearchQuery {
   ignoreEndDate?: boolean;
   body: DealsSearchQueryBody;
   toBeesQueryParams(): BeesParam[];
+  toEditRouteQueryParams(): { [p: string]: string | number | undefined };
 }
 
 export interface DealsSearchQueryBody {
@@ -30,6 +31,8 @@ export interface DealsSearchQueryBody {
   itemIds: string[];
   orderSubtotal?: number;
   orderTotal?: number;
+  paymentTerm?: number;
+  accountTier?: string;
   paymentMethod?: string;
   priceListId?: string;
   vendorDealId?: string;
@@ -49,6 +52,8 @@ export class DealsSearchQueryBodyImpl implements DealsSearchQueryBody {
   itemIds: string[] = [];
   orderSubtotal?: number;
   orderTotal?: number;
+  paymentTerm?: number;
+  accountTier?: string;
   paymentMethod?: string;
   priceListId?: string;
   vendorDealId?: string;
@@ -92,5 +97,24 @@ export class DealsSearchQueryImpl implements DealsSearchQuery {
     }
 
     return result;
+  }
+
+  toEditRouteQueryParams(): { [p: string]: string | number | undefined } {
+    return {
+      contractId: this.body.contractId,
+      priceListId: this.body.priceListId,
+      deliveryCenterId: this.body.deliveryCenterId,
+      accountTier: this.body.accountTier,
+    };
+  }
+
+  static fromEditRouteParams(params: { [p: string]: any }): DealsSearchQuery {
+    const query = new DealsSearchQueryImpl();
+    query.body.contractId = params['contractId'];
+    query.body.priceListId = params['priceListId'];
+    query.body.deliveryCenterId = params['deliveryCenterId'];
+    query.body.accountTier = params['accountTier'];
+
+    return query;
   }
 }

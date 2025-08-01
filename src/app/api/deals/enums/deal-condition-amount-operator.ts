@@ -1,3 +1,6 @@
+/**
+ * @monaco
+ */
 export enum DealConditionAmountOperator {
   GE = 'GE',
   LE = 'LE',

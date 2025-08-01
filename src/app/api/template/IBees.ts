@@ -76,6 +76,12 @@ import {
   IDeliveryWindowService,
 } from '../accounts/delivery-window/delivery-window.service';
 import { IPriceService, PriceService } from '../price/price.service';
+import { DealConditionAmountScope } from '../deals/enums/deal-condition-amount-scope';
+import { DealConditionAmountOperator } from '../deals/enums/deal-condition-amount-operator';
+import { DealConditionAmountField } from '../deals/enums/deal-condition-amount-field';
+import { DealRangeTriggerType } from '../deals/enums/deal-range-trigger-type';
+import { DealManualDiscountApplyTo } from '../deals/enums/deal-manual-discount-apply-to';
+import { DealChargeType } from '../deals/enums/deal-charge-type';
 
 /**
  * @monaco
@@ -185,4 +191,10 @@ export const publicEnums = {
   ChallengeMode,
   ChallengePaginationModel,
   ChallengeType,
+  DealConditionAmountScope,
+  DealConditionAmountOperator,
+  DealConditionAmountField,
+  DealRangeTriggerType,
+  DealManualDiscountApplyTo,
+  DealChargeType,
 };

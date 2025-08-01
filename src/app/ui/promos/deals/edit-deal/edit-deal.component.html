@@ -5,8 +5,7 @@
 
   <div class="main">
     <app-deals-form [deals]="deals"
-                    [dealIdType]="dealType"
-                    [dealIdValue]="dealIdValue"
+                    [dealContractId]="query.body.contractId"
                     (formSubmitted)="onFormSubmit($event)"></app-deals-form>
   </div>
 </div>

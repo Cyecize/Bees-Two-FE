@@ -16,6 +16,11 @@
     )
   </h6>
   <div *ngIf="hasItemScaledForm()" formGroupName="multipleLineItemScaledDiscount">
+    <app-select
+      class="m-1"
+      [options]="triggerTypes"
+      placeholder="Trigger Type"
+      formControlName="rangeTriggerType"></app-select>
     <div class="mt-1" formArrayName="ranges">
       <div>
         <button (click)="addRange()" type="button" class="btn btn-sm btn-outline-info">Add Range</button>

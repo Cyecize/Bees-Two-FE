@@ -1,0 +1,20 @@
+<div [formGroup]="form">
+  <h6>Payment Terms
+    (<span (click)="addPaymentTerm()" style="cursor:pointer;">
+                  <i class="fa-solid fa-plus"></i>
+                  </span>)
+  </h6>
+  <div *ngIf="hasPaymentTerms()">
+    <div formArrayName="paymentTerms" class="d-flex align-items-center">
+      <div *ngFor="let pt of paymentTerms.controls; let paymentInd = index">
+        <div class="m-1 mt-3">
+          <app-input
+            type="number"
+            placeholder="Payment term"
+            [formControlName]="paymentInd + ''"></app-input>
+          (<strong style="cursor:pointer;" (click)="removePaymentTerm(paymentInd)">X</strong>)
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -7,6 +7,11 @@ import { DealConditionAmountField } from '../../../../api/deals/enums/deal-condi
 import { DealDiscountType } from '../../../../api/deals/enums/deal-discount-type';
 import { DealComboType } from '../../../../api/deals/enums/deal-combo-type';
 import { DealOrderTotalApplyTo } from '../../../../api/deals/enums/deal-order-total-apply-to';
+import { DealType } from '../../../../api/deals/enums/deal-type';
+import { FixedComboCondition } from '../../../../api/deals/deal';
+import { DealRangeTriggerType } from '../../../../api/deals/enums/deal-range-trigger-type';
+import { DealManualDiscountApplyTo } from '../../../../api/deals/enums/deal-manual-discount-apply-to';
+import { DealChargeType } from '../../../../api/deals/enums/deal-charge-type';
 
 export interface SimulationDateTimeForm {
   startDateTime: FormControl<string>;
@@ -21,6 +26,7 @@ export interface DeliveryDateForm {
 export interface LineItemConditionForm {
   vendorItemIds: FormArray<FormControl<string>>;
   minimumQuantity: FormControl<number | null>;
+  minimumAmount: FormControl<number | null>;
   sharedMinimumQuantity: FormControl<boolean | null>;
   crossDiscount: FormControl<boolean | null>;
 }
@@ -115,6 +121,7 @@ export interface LineItemScaledDiscountOutputRangeForm {
 }
 
 export interface MultiLineItemScaledDiscountOutputForm {
+  rangeTriggerType: FormControl<DealRangeTriggerType | null>;
   ranges: FormArray<FormGroup<MultiLineItemScaledDiscountOutputRangeForm>>;
 }
 
@@ -150,6 +157,45 @@ export interface FreeGoodItemVendorItemsForm {
   price: FormControl<number | null>;
 }
 
+export interface FixedComboConditionForm {
+  items: FormArray<FormGroup<FixedComboItemConditionForm>>;
+}
+
+export interface FixedComboItemConditionForm {
+  vendorItemId: FormControl<string>;
+  quantity: FormControl<number>;
+}
+
+export interface ScaledFreeGoodsOutputForm {
+  partial: FormControl<boolean | null>;
+  rangeTriggerType: FormControl<DealRangeTriggerType | null>;
+  ranges: FormArray<FormGroup<ScaledFreeGoodsOutputRangeForm>>;
+}
+
+export interface ScaledFreeGoodsOutputRangeForm {
+  from: FormControl<number>;
+  to: FormControl<number | null>;
+  proportion: FormControl<number | null>;
+  items: FormArray<FormGroup<ScaledFreeGoodOutputRangeItemForm>>;
+}
+
+export interface ScaledFreeGoodOutputRangeItemForm {
+  quantity: FormControl<number | null>;
+  vendorItems: FormArray<FormGroup<FreeGoodItemVendorItemsForm>>;
+}
+
+export interface ChargeDiscountOutputForm {
+  type: FormControl<DealDiscountType>;
+  discountValue: FormControl<number>;
+  discountMaximumOrderValue: FormControl<number>;
+}
+
+export interface ManualDiscountOutputForm {
+  maximum: FormControl<number>;
+  type: FormControl<DealDiscountType>;
+  applyTo: FormControl<DealManualDiscountApplyTo>;
+}
+
 export interface DealsForm {
   ids: FormArray<FormControl<string>>;
   type: FormControl<DealIdType>;
@@ -162,6 +208,9 @@ export interface DealForm {
   accumulationType: FormControl<DealAccumulationType | null>;
   priority: FormControl<number | null>;
   level: FormControl<number | null>;
+  score: FormControl<number | null>;
+  type: FormControl<DealType | null>;
+  personalized: FormControl<boolean | null>;
   enforced: FormControl<boolean | null>;
   enableVariantGroupingAndConversion: FormControl<boolean | null>;
   hiddenOnBrowse: FormControl<boolean | null>;
@@ -171,24 +220,32 @@ export interface DealForm {
 }
 
 export interface ConditionsForm {
-  paymentMethod: FormControl<string | null>;
-  simulationDateTime?: FormGroup<SimulationDateTimeForm>;
-  deliveryDate: FormArray<FormGroup<DeliveryDateForm>>;
   firstOrder: FormControl<boolean | null>;
   couponCode: FormControl<string | null>;
+  amounts?: FormArray<FormGroup<AmountConditionForm>>;
+  simulationDateTime?: FormGroup<SimulationDateTimeForm>;
+  fixedCombo?: FormGroup<FixedComboConditionForm>;
+  paymentTerms?: FormArray<FormControl<number>>;
+  chargeType?: FormArray<FormControl<DealChargeType>>;
+  excludedVendorItemIds?: FormArray<FormControl<string>>;
+  paymentMethod: FormControl<string | null>;
+  deliveryDate?: FormArray<FormGroup<DeliveryDateForm>>;
   lineItem?: FormGroup<LineItemConditionForm>;
   multipleLineItem?: FormGroup<MultipleLineItemConditionForm>;
-  amounts?: FormArray<FormGroup<AmountConditionForm>>;
 }
 
 export interface OutputForm {
-  lineItemDiscount?: FormGroup<LineItemDiscountOutput>;
-  multipleLineItemDiscount?: FormGroup<MultipleLineItemDiscountOutput>;
-  orderTotalScaledDiscount?: FormGroup<OrderTotalScaledDiscountOutputForm>;
-  multipleLineItemScaledDiscountSkuPool?: FormGroup<MultiItemScaledByMinQtyOutputForm>;
   orderTotalDiscount?: FormGroup<OrderTotalDiscountOutputForm>;
+  orderTotalScaledDiscount?: FormGroup<OrderTotalScaledDiscountOutputForm>;
+  lineItemDiscount?: FormGroup<LineItemDiscountOutput>;
   palletDiscount?: FormGroup<PalletDiscountOutputForm>;
   lineItemScaledDiscount?: FormGroup<LineItemScaledDiscountOutputForm>;
-  multipleLineItemScaledDiscount?: FormGroup<MultiLineItemScaledDiscountOutputForm>;
   freeGoods?: FormGroup<FreeGoodOutputForm>;
+  scaledFreeGoods?: FormGroup<ScaledFreeGoodsOutputForm>;
+  multipleLineItemDiscount?: FormGroup<MultipleLineItemDiscountOutput>;
+  // fixedCombo?: any; // Fixed combo output is missing from developer portal
+  multipleLineItemScaledDiscount?: FormGroup<MultiLineItemScaledDiscountOutputForm>;
+  multipleLineItemScaledDiscountSkuPool?: FormGroup<MultiItemScaledByMinQtyOutputForm>;
+  chargeDiscount?: FormGroup<ChargeDiscountOutputForm>;
+  manualDiscount?: FormGroup<ManualDiscountOutputForm>;
 }

@@ -1,0 +1,38 @@
+<div [formGroup]="form">
+  <h6>
+    Charge Discount
+    (
+    <span
+      *ngIf="!hasChargeForm()"
+      (click)="addChargeDiscount()"
+      style="cursor:pointer;">
+                  <i class="fa-solid fa-plus"></i></span>
+
+    <span
+      *ngIf="hasChargeForm()"
+      (click)="removeChargeDiscount()"
+      style="cursor:pointer;">
+                  <i class="fa-solid fa-x"></i></span>
+    )
+  </h6>
+  <div *ngIf="hasChargeForm()" formGroupName="chargeDiscount">
+    <div class="mt-1 d-flex justify-content-between">
+      <app-select
+        [options]="types"
+        placeholder="Discount Type"
+        formControlName="type"></app-select>
+
+      <app-input
+        type="number"
+        class="me-2"
+        placeholder="Discount Value"
+        formControlName="discountValue"></app-input>
+
+      <app-input
+        type="number"
+        class="me-2"
+        placeholder="Discount Max Order Value"
+        formControlName="discountMaximumOrderValue"></app-input>
+    </div>
+  </div>
+</div>
