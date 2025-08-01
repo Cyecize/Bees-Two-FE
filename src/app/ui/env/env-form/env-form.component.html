@@ -1,11 +1,13 @@
 <form [formGroup]="form" class="pe-1" style="overflow-y: auto; max-height: 500px;">
   <div class="mt-2 ps-1 pe-1">
     <app-input
+      [errors]="errors"
       placeholder="Name"
       formControlName="envName"></app-input>
   </div>
   <div class="mt-2 ps-1 pe-1">
     <app-select
+      [errors]="errors"
       [options]="envs"
       placeholder="Env"
       formControlName="env"></app-select>
@@ -13,30 +15,36 @@
   <div class="mt-2 d-flex">
     <app-input
       class="m-1"
+      [errors]="errors"
       placeholder="Country Code"
       formControlName="countryCode"></app-input>
     <app-input
+      [errors]="errors"
       class="m-1"
       placeholder="JDK timezone"
       formControlName="timezone"></app-input>
   </div>
   <div class="mt-2 d-flex">
     <app-input
+      [errors]="errors"
       class="m-1"
       placeholder="Vendor ID"
       formControlName="vendorId"></app-input>
     <app-input
       class="m-1"
+      [errors]="errors"
       placeholder="Store ID"
       formControlName="storeId"></app-input>
   </div>
-  <div class="mt-2 d-flex">
+  <div *ngIf="hasClientAndSecret" class="mt-2 d-flex">
     <app-input
       class="m-1"
+      [errors]="errors"
       placeholder="Client Secret"
       formControlName="clientSecret"></app-input>
     <app-input
       class="m-1"
+      [errors]="errors"
       placeholder="Client ID"
       formControlName="clientId"></app-input>
   </div>

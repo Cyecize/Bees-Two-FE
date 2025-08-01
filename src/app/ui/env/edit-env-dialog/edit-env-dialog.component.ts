@@ -11,13 +11,13 @@ import { ShowLoader } from '../../../shared/loader/show.loader.decorator';
 import { FieldError } from '../../../shared/field-error/field-error';
 
 @Component({
-  selector: 'app-add-env-dialog',
+  selector: 'app-edit-env-dialog',
   standalone: true,
   imports: [NgIf, CopyIconComponent, EnvFormComponent],
-  templateUrl: './add-env-dialog.component.html',
-  styleUrl: './add-env-dialog.component.scss',
+  templateUrl: './edit-env-dialog.component.html',
+  styleUrl: './edit-env-dialog.component.scss',
 })
-export class AddEnvDialogComponent
+export class EditEnvDialogComponent
   extends DialogContentBaseComponent<CountryEnvironmentModel>
   implements OnInit
 {
@@ -37,7 +37,10 @@ export class AddEnvDialogComponent
   async onFormSubmit(
     environmentPayload: CountryEnvironmentPayload,
   ): Promise<void> {
-    const res = await this.envService.createEnv(environmentPayload);
+    const res = await this.envService.update(
+      this.payload.id,
+      environmentPayload,
+    );
 
     this.errors = res.errors;
 

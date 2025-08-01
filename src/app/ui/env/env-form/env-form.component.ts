@@ -17,6 +17,8 @@ import {
 import { InputComponent } from '../../../shared/form-controls/input/input.component';
 import { SelectComponent } from '../../../shared/form-controls/select/select.component';
 import { NgForOf, NgIf } from '@angular/common';
+import { CountryEnvironmentLanguageModel } from '../../../api/env/country-environment-language.model';
+import { FieldError } from '../../../shared/field-error/field-error';
 
 @Component({
   selector: 'app-env-form',
@@ -35,8 +37,13 @@ export class EnvFormComponent implements OnInit {
   form!: FormGroup<EnvForm>;
   envs: SelectOption[] = [];
 
+  hasClientAndSecret = true;
+
   @Input()
-  payload?: CountryEnvironmentModel;
+  payload!: CountryEnvironmentModel;
+
+  @Input()
+  errors: FieldError[] = [];
 
   @Output()
   formSubmitted = new EventEmitter<CountryEnvironmentPayload>();
@@ -81,27 +88,29 @@ export class EnvFormComponent implements OnInit {
         nonNullable: true,
         validators: [Validators.required],
       }),
-      languages: new FormArray<FormGroup<EnvLanguageForm>>(
-        [
-          new FormGroup<EnvLanguageForm>({
-            languageCode: new FormControl<string>(null!, {
-              nonNullable: true,
-              validators: [Validators.required],
-            }),
-            defaultLanguage: new FormControl<boolean>(true, {
-              nonNullable: true,
-            }),
-          }),
-        ],
-        {
-          validators: [Validators.required],
-        },
-      ),
+      languages: new FormArray<FormGroup<EnvLanguageForm>>([], {
+        validators: [Validators.required],
+      }),
     });
 
     if (this.payload) {
-      this.form.patchValue(this.payload);
-      //TODO: Patch the languages too
+      this.applyEnv();
+
+      this.form.removeControl('clientId');
+      this.form.removeControl('clientSecret');
+      this.hasClientAndSecret = false;
+    } else {
+      const defaultLanguageForm = new FormGroup<EnvLanguageForm>({
+        languageCode: new FormControl<string>(null!, {
+          nonNullable: true,
+          validators: [Validators.required],
+        }),
+        defaultLanguage: new FormControl<boolean>(true, {
+          nonNullable: true,
+        }),
+      });
+
+      this.form.controls.languages.push(defaultLanguageForm);
     }
   }
 
@@ -122,19 +131,25 @@ export class EnvFormComponent implements OnInit {
   }
 
   onFormSubmit(): void {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     this.formSubmitted.emit(this.form.getRawValue());
   }
 
-  addNewLanguage(): void {
-    this.languages.push(
-      new FormGroup<EnvLanguageForm>({
-        languageCode: new FormControl<string>(null!, {
-          nonNullable: true,
-          validators: [Validators.required],
-        }),
-        defaultLanguage: new FormControl<boolean>(false, { nonNullable: true }),
+  addNewLanguage(language?: CountryEnvironmentLanguageModel): void {
+    const langForm = new FormGroup<EnvLanguageForm>({
+      languageCode: new FormControl<string>(null!, {
+        nonNullable: true,
+        validators: [Validators.required],
       }),
-    );
+      defaultLanguage: new FormControl<boolean>(false, { nonNullable: true }),
+    });
+
+    if (language) {
+      langForm.patchValue(language);
+    }
+
+    this.languages.push(langForm);
   }
 
   removeLanguage(ind: number): void {
@@ -143,5 +158,12 @@ export class EnvFormComponent implements OnInit {
     }
 
     this.languages.removeAt(ind);
+  }
+
+  applyEnv(): void {
+    this.form.patchValue(this.payload!);
+    this.payload!.languages.forEach((value) => {
+      this.addNewLanguage(value);
+    });
   }
 }

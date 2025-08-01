@@ -8,8 +8,8 @@ export interface EnvForm {
   timezone: FormControl<string>;
   vendorId: FormControl<string>;
   storeId: FormControl<string>;
-  clientId: FormControl<string>;
-  clientSecret: FormControl<string>;
+  clientId?: FormControl<string>;
+  clientSecret?: FormControl<string>;
   languages: FormArray<FormGroup<EnvLanguageForm>>;
 }
 

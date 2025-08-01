@@ -120,6 +120,21 @@ export class CountryEnvironmentService implements ICountryEnvironmentService {
     ).execute();
   }
 
+  public async update(
+    envId: number,
+    env: CountryEnvironmentPayload,
+  ): Promise<WrappedResponseLocal<CountryEnvironmentModel>> {
+    const resp = await new FieldErrorWrapperLocal(() =>
+      this.repository.update(envId, env),
+    ).execute();
+
+    if (resp.isSuccess) {
+      await this.reInit();
+    }
+
+    return resp;
+  }
+
   public async getToken(
     env: CountryEnvironmentModel,
   ): Promise<WrappedResponseLocal<EnvToken>> {

@@ -9,6 +9,7 @@ import { SharedClient } from '../../../api/env/sharedclient/shared-client';
 import { SharedClientService } from '../../../api/env/sharedclient/shared-client.service';
 import { DialogService } from '../../../shared/dialog/dialog.service';
 import { SharedClientDetailsDialogComponent } from '../sharedclient/shared-client-details-dialog/shared-client-details-dialog.component';
+import { EditEnvDialogComponent } from '../edit-env-dialog/edit-env-dialog.component';
 
 @Component({
   selector: 'app-env-viewer-dialog',
@@ -35,6 +36,17 @@ export class EnvViewerDialogComponent
 
   getIcon(): Observable<string> {
     return this.noIcon();
+  }
+
+  openEditEnvDialog(): void {
+    this.dialogService
+      .open(EditEnvDialogComponent, 'Edit Environment', this.payload)
+      .afterClosed()
+      .subscribe(async (refresh): Promise<void> => {
+        if (refresh) {
+          this.payload = (await this.envService.findById(this.payload.id))!;
+        }
+      });
   }
 
   ngOnInit(): void {

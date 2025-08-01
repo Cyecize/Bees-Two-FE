@@ -33,7 +33,8 @@
     <td>Store ID</td>
     <td>
       <app-copy-icon [copyText]="payload.storeId"></app-copy-icon>
-      {{ payload.storeId }}</td>
+      {{ payload.storeId }}
+    </td>
   </tr>
   <tr *ngIf="payload.defaultLanguage">
     <td>Language</td>
@@ -92,6 +93,13 @@
           class="btn btn-outline-primary m-1"
           (click)="selectEnv()">Select this Environment
   </button>
-  <button class="btn btn-outline-warning m-1" (click)="showAssignedClients = !showAssignedClients">Shared Clients</button>
+  <button *ngIf="currentEnv && currentEnv.id !== payload.id"
+          class="btn btn-outline-secondary m-1"
+          (click)="openEditEnvDialog()">Edit
+  </button>
+  <button class="btn btn-outline-warning m-1"
+          (click)="showAssignedClients = !showAssignedClients">
+    Shared Clients
+  </button>
   <button class="btn btn-info m-1" (click)="close(null)">Close</button>
 </div>
