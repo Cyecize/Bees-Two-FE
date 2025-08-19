@@ -31,6 +31,7 @@ import { Subscription } from 'rxjs';
 import { DialogService } from '../../../../shared/dialog/dialog.service';
 import { ShowPromoDetailsDialogComponent } from '../show-promo-details-dialog/show-promo-details-dialog.component';
 import { ShowPromoDetailsDialogPayload } from '../show-promo-details-dialog/show-promo-details-dialog.payload';
+import { PlatformIdService } from '../../../../api/platformid/platform-id.service';
 
 @Component({
   selector: 'app-search-promotions',
@@ -64,6 +65,7 @@ export class SearchPromotionsComponent implements OnInit, OnDestroy {
     private envOverrideService: EnvOverrideService,
     private promoService: PromoService,
     private dialogService: DialogService,
+    private platformIdService: PlatformIdService,
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -156,6 +158,25 @@ export class SearchPromotionsComponent implements OnInit, OnDestroy {
           this.pageChange(0);
         }
       });
+  }
+
+  async generatePromoPlatformId(val: string): Promise<void> {
+    if (!val?.trim()) {
+      return;
+    }
+
+    const platformId = await this.platformIdService.encodePromotionId({
+      vendorId: this.selectedEnv!.vendorId!,
+      vendorPromotionId: val,
+    });
+
+    this.query.promotionPlatformIds.push(platformId.platformId);
+    this.reloadFilters();
+  }
+
+  removePromoId(ind: number): void {
+    this.query.promotionPlatformIds.splice(ind, 1);
+    this.reloadFilters();
   }
 }
 

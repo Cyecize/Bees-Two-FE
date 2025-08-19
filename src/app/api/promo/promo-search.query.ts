@@ -8,6 +8,7 @@ import { ObjectUtils } from '../../shared/util/object-utils';
  */
 export interface PromoSearchQuery {
   vendorIds: string[];
+  promotionPlatformIds: string[];
   page: PageRequest;
   types: PromoType[];
   query?: string;
@@ -21,6 +22,7 @@ export class PromoSearchQueryImpl implements PromoSearchQuery {
   types: PromoType[] = [];
   query?: string;
   ignoreStartDate?: boolean;
+  promotionPlatformIds: string[] = [];
   toBeesParams(): BeesParam[] {
     const result: BeesParam[] = [];
 
@@ -29,6 +31,15 @@ export class PromoSearchQueryImpl implements PromoSearchQuery {
 
     if (this.types.length > 0) {
       result.push(new BeesParamImpl('types', this.types.join(',')));
+    }
+
+    if (this.promotionPlatformIds.length > 0) {
+      result.push(
+        new BeesParamImpl(
+          'promotionPlatformIds',
+          this.promotionPlatformIds.join(','),
+        ),
+      );
     }
 
     if (!ObjectUtils.isNil(this.query)) {
