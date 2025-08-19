@@ -302,7 +302,10 @@ export class DealsFormComponent implements OnInit, OnDestroy {
   }
 
   openRawFormWithFormGroupData(): void {
-    this.rawJson = JSON.stringify(this.form.getRawValue(), null, 2);
+    this.rawJson = this.form
+      .getRawValue()
+      .deals.map((d) => JSON.stringify(d, null, 2))
+      .join(',\n');
     this.raw = true;
   }
 }
