@@ -107,7 +107,7 @@ export class AccountPickerDialogComponent
   @ShowLoader()
   async showBeesAccount(localAccount: LocalAccount): Promise<void> {
     const account = await this.accountV1Service.findOne(
-      this.payload.env,
+      localAccount.env,
       localAccount.vendorAccountId,
     );
 
