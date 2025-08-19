@@ -49,6 +49,8 @@ import { GenericPickerDialogComponent } from './dialogs/generic-picker-dialog/ge
 import { GenericPickerResponse } from './dialogs/generic-picker-dialog/generic-picker-response.impl';
 import { ShowAccountDetailsDialogComponent } from '../../ui/accounts/show-account-details-dialog/show-account-details-dialog.component';
 import { ShowAccountDetailsDialogPayload } from '../../ui/accounts/show-account-details-dialog/show-account-details-dialog.payload';
+import { PromotionPlatformIdDialogComponent } from '../../ui/platformid/promotion-platform-id-dialog/promotion-platform-id-dialog.component';
+import { EnforcementPlatformIdDialogComponent } from '../../ui/platformid/enforcement-platform-id-dialog/enforcement-platform-id-dialog.component';
 
 /**
  * @monaco
@@ -249,6 +251,12 @@ export class DialogService implements IDialogService {
         break;
       case PlatformIdType.INVENTORY:
         this.open(InventoryPlatformIdDialogComponent, '', env);
+        break;
+      case PlatformIdType.PROMOTION:
+        this.open(PromotionPlatformIdDialogComponent, '', env);
+        break;
+      case PlatformIdType.ENFORCEMENT_GENERAL:
+        this.open(EnforcementPlatformIdDialogComponent, '', env);
         break;
       default:
         throw new Error(`Unsupported ${type} type of platform ID!`);

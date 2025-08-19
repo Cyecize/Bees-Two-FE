@@ -5,6 +5,8 @@ import { firstValueFrom } from 'rxjs';
 import { EncodedPlatformId } from './dto/encoded-platform-id';
 import { DeliveryCenterPlatformId } from './dto/delivery-center-platform-id';
 import { InventoryPlatformId } from './dto/inventory-platform-id';
+import { PromotionPlatformId } from './dto/promotion-platform-id';
+import { EnforcementPlatformId } from './dto/enforcement-platform-id';
 
 /**
  * @monaco
@@ -20,6 +22,14 @@ export interface IPlatformIdService {
 
   encodeInventoryId(
     contractPlatformId: InventoryPlatformId,
+  ): Promise<EncodedPlatformId>;
+
+  encodePromotionId(
+    contractPlatformId: PromotionPlatformId,
+  ): Promise<EncodedPlatformId>;
+
+  encodeEnforcementId(
+    contractPlatformId: EnforcementPlatformId,
   ): Promise<EncodedPlatformId>;
 
   decodeContractString(platformId: string): Promise<ContractPlatformId>;
@@ -50,6 +60,22 @@ export class PlatformIdService implements IPlatformIdService {
   ): Promise<EncodedPlatformId> {
     return await firstValueFrom(
       this.repository.encodeInventoryId(contractPlatformId),
+    );
+  }
+
+  public async encodePromotionId(
+    contractPlatformId: PromotionPlatformId,
+  ): Promise<EncodedPlatformId> {
+    return await firstValueFrom(
+      this.repository.encodePromotionId(contractPlatformId),
+    );
+  }
+
+  public async encodeEnforcementId(
+    contractPlatformId: EnforcementPlatformId,
+  ): Promise<EncodedPlatformId> {
+    return await firstValueFrom(
+      this.repository.encodeEnforcementId(contractPlatformId),
     );
   }
 

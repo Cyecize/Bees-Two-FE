@@ -15,25 +15,26 @@ import { NgIf } from '@angular/common';
 import { TooltipSpanComponent } from '../../../shared/components/tooltip-span/tooltip-span.component';
 import { DialogService } from '../../../shared/dialog/dialog.service';
 
-interface InventoryIdForm {
+interface EnforcementIdForm {
   vendorId: FormControl<string>;
   vendorAccountId: FormControl<string | null>;
-  vendorDeliveryCenterId: FormControl<string>;
-  vendorItemId: FormControl<string>;
+  entity: FormControl<string>;
+  entityId: FormControl<string>;
+  vendorDeliveryCenterId: FormControl<string | null>;
 }
 
 @Component({
-  selector: 'app-inventory-platform-id-dialog',
+  selector: 'app-enforcement-platform-id-dialog',
   standalone: true,
   imports: [ReactiveFormsModule, InputComponent, NgIf, TooltipSpanComponent],
-  templateUrl: './inventory-platform-id-dialog.component.html',
-  styleUrl: './inventory-platform-id-dialog.component.scss',
+  templateUrl: './enforcement-platform-id-dialog.component.html',
+  styleUrl: './enforcement-platform-id-dialog.component.scss',
 })
-export class InventoryPlatformIdDialogComponent
+export class EnforcementPlatformIdDialogComponent
   extends DialogContentBaseComponent<CountryEnvironmentModel>
   implements OnInit
 {
-  form!: FormGroup<InventoryIdForm>;
+  form!: FormGroup<EnforcementIdForm>;
   encodedId?: EncodedPlatformId;
 
   constructor(
@@ -48,19 +49,20 @@ export class InventoryPlatformIdDialogComponent
   }
 
   ngOnInit(): void {
-    this.setTitle('Create Inventory Platform ID');
+    this.setTitle('Create Enforcement Platform ID');
 
-    this.form = new FormGroup<InventoryIdForm>({
+    this.form = new FormGroup<EnforcementIdForm>({
       vendorId: new FormControl<string>(this.payload.vendorId, {
         nonNullable: true,
         validators: [Validators.required],
       }),
       vendorAccountId: new FormControl<string | null>(null),
-      vendorDeliveryCenterId: new FormControl<string>(null!, {
+      vendorDeliveryCenterId: new FormControl<string | null>(null!),
+      entity: new FormControl<string>(null!, {
         nonNullable: true,
         validators: [Validators.required],
       }),
-      vendorItemId: new FormControl<string>(null!, {
+      entityId: new FormControl<string>(null!, {
         nonNullable: true,
         validators: [Validators.required],
       }),
@@ -73,7 +75,7 @@ export class InventoryPlatformIdDialogComponent
   }
 
   private async encode(): Promise<EncodedPlatformId> {
-    return await this.platformIdService.encodeInventoryId(
+    return await this.platformIdService.encodeEnforcementId(
       this.form.getRawValue(),
     );
   }

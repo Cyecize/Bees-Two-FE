@@ -15,25 +15,23 @@ import { NgIf } from '@angular/common';
 import { TooltipSpanComponent } from '../../../shared/components/tooltip-span/tooltip-span.component';
 import { DialogService } from '../../../shared/dialog/dialog.service';
 
-interface InventoryIdForm {
+interface PromoIdForm {
   vendorId: FormControl<string>;
-  vendorAccountId: FormControl<string | null>;
-  vendorDeliveryCenterId: FormControl<string>;
-  vendorItemId: FormControl<string>;
+  vendorPromotionId: FormControl<string>;
 }
 
 @Component({
-  selector: 'app-inventory-platform-id-dialog',
+  selector: 'app-promotion-platform-id-dialog',
   standalone: true,
   imports: [ReactiveFormsModule, InputComponent, NgIf, TooltipSpanComponent],
-  templateUrl: './inventory-platform-id-dialog.component.html',
-  styleUrl: './inventory-platform-id-dialog.component.scss',
+  templateUrl: './promotion-platform-id-dialog.component.html',
+  styleUrl: './promotion-platform-id-dialog.component.scss',
 })
-export class InventoryPlatformIdDialogComponent
+export class PromotionPlatformIdDialogComponent
   extends DialogContentBaseComponent<CountryEnvironmentModel>
   implements OnInit
 {
-  form!: FormGroup<InventoryIdForm>;
+  form!: FormGroup<PromoIdForm>;
   encodedId?: EncodedPlatformId;
 
   constructor(
@@ -48,19 +46,14 @@ export class InventoryPlatformIdDialogComponent
   }
 
   ngOnInit(): void {
-    this.setTitle('Create Inventory Platform ID');
+    this.setTitle('Create Promotion Platform ID');
 
-    this.form = new FormGroup<InventoryIdForm>({
+    this.form = new FormGroup<PromoIdForm>({
       vendorId: new FormControl<string>(this.payload.vendorId, {
         nonNullable: true,
         validators: [Validators.required],
       }),
-      vendorAccountId: new FormControl<string | null>(null),
-      vendorDeliveryCenterId: new FormControl<string>(null!, {
-        nonNullable: true,
-        validators: [Validators.required],
-      }),
-      vendorItemId: new FormControl<string>(null!, {
+      vendorPromotionId: new FormControl<string>(null!, {
         nonNullable: true,
         validators: [Validators.required],
       }),
@@ -73,20 +66,8 @@ export class InventoryPlatformIdDialogComponent
   }
 
   private async encode(): Promise<EncodedPlatformId> {
-    return await this.platformIdService.encodeInventoryId(
+    return await this.platformIdService.encodePromotionId(
       this.form.getRawValue(),
     );
-  }
-
-  pickDDCAndAccountId(): void {
-    this.dialogService.openBeesAccountPicker(this.payload).subscribe((acc) => {
-      if (acc) {
-        this.form.patchValue({
-          vendorAccountId: acc.vendorAccountId,
-          vendorDeliveryCenterId: acc.deliveryCenterId,
-          vendorId: acc.vendorId,
-        });
-      }
-    });
   }
 }

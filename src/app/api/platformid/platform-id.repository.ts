@@ -7,6 +7,9 @@ import { RouteUtils } from '../../shared/routing/route-utils';
 import { EncodedPlatformId } from './dto/encoded-platform-id';
 import { DeliveryCenterPlatformId } from './dto/delivery-center-platform-id';
 import { InventoryPlatformId } from './dto/inventory-platform-id';
+import { PromotionPlatformId } from './dto/promotion-platform-id';
+import { Promo } from '../promo/promo';
+import { EnforcementPlatformId } from './dto/enforcement-platform-id';
 
 @Injectable({ providedIn: 'root' })
 export class PlatformIdRepository {
@@ -35,6 +38,24 @@ export class PlatformIdRepository {
   ): Observable<EncodedPlatformId> {
     return this.http.post<InventoryPlatformId, EncodedPlatformId>(
       Endpoints.PLATFORM_ID_ENCODE_INVENTORY,
+      platformId,
+    );
+  }
+
+  public encodePromotionId(
+    platformId: PromotionPlatformId,
+  ): Observable<EncodedPlatformId> {
+    return this.http.post<PromotionPlatformId, EncodedPlatformId>(
+      Endpoints.PLATFORM_ID_ENCODE_PROMOTION,
+      platformId,
+    );
+  }
+
+  public encodeEnforcementId(
+    platformId: EnforcementPlatformId,
+  ): Observable<EncodedPlatformId> {
+    return this.http.post<EnforcementPlatformId, EncodedPlatformId>(
+      Endpoints.PLATFORM_ID_ENCODE_ENFORCEMENT,
       platformId,
     );
   }
