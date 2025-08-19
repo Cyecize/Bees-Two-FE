@@ -71,7 +71,9 @@ export class SearchPromotionsComponent implements OnInit, OnDestroy {
   async ngOnInit(): Promise<void> {
     this.envSub = this.envOverrideService.envOverride$.subscribe((value) => {
       this.selectedEnv = value;
-      this.reloadFilters();
+      if (this.selectedEnv) {
+        this.reloadFilters();
+      }
     });
   }
 
@@ -136,13 +138,6 @@ export class SearchPromotionsComponent implements OnInit, OnDestroy {
         pagination: new EmptyHasNextPagination(),
       };
     }
-  }
-
-  shortenStr(str: any): string {
-    return (
-      str.substring(0, Math.min(str.length, 25)) +
-      (str.length > 25 ? '...' : '')
-    );
   }
 
   openDetailsDialog(promo: Promo): void {

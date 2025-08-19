@@ -91,7 +91,9 @@
           </th>
           <td>
             <app-tooltip-span
-              [displayText]="shortenStr(promo.title)"
+              [trimDisplayTextChars]="25"
+              [enableCopy]="true"
+              [displayText]="promo.title"
               [tooltipText]="promo.title"></app-tooltip-span>
           </td>
           <td>
