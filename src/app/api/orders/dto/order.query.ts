@@ -7,6 +7,7 @@ import { OrderOrderbyType } from '../order.orderby.type';
 import { OrderStatusCondition } from '../order-status-condition';
 import { SortDirection } from '../../../shared/util/sort.query';
 import { BeesParam, BeesParamImpl } from '../../common/bees-param';
+import { BeesQueryParamsHelper } from '../../../shared/util/bees-query-params.helper';
 
 /**
  * @monaco
@@ -59,23 +60,6 @@ export class OrderQueryImpl implements OrderQuery {
 
     result.push(...this.page.toBeesParams());
 
-    // Adds all non null string fields
-    Object.keys(this).forEach((fieldName) => {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      const val = this[fieldName];
-
-      if ((typeof val === 'string' && val.trim()) || typeof val === 'boolean') {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        result.push(new BeesParamImpl(fieldName, this[fieldName]));
-      }
-
-      if (Array.isArray(val) && val.length > 0) {
-        result.push(new BeesParamImpl(fieldName, val.join(',')));
-      }
-    });
-
-    return result;
+    return BeesQueryParamsHelper.toBeesParams(this, result);
   }
 }

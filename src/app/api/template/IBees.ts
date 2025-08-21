@@ -82,6 +82,12 @@ import { DealConditionAmountField } from '../deals/enums/deal-condition-amount-f
 import { DealRangeTriggerType } from '../deals/enums/deal-range-trigger-type';
 import { DealManualDiscountApplyTo } from '../deals/enums/deal-manual-discount-apply-to';
 import { DealChargeType } from '../deals/enums/deal-charge-type';
+import { DeliveryDateDirection } from '../inventory/enums/delivery-date-direction';
+import { InventoryItemType } from '../inventory/enums/inventory-item-type';
+import {
+  IInventoryService,
+  InventoryService,
+} from '../inventory/inventory.service';
 
 /**
  * @monaco
@@ -132,6 +138,7 @@ interface IBees {
   segmentationService: ISegmentationService;
   deliveryWindowService: IDeliveryWindowService;
   priceService: IPriceService;
+  inventoryService: IInventoryService;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -161,6 +168,7 @@ export class Bees implements IBees {
     public segmentationService: SegmentationService,
     public deliveryWindowService: DeliveryWindowService,
     public priceService: PriceService,
+    public inventoryService: InventoryService,
   ) {}
 }
 
@@ -197,4 +205,6 @@ export const publicEnums = {
   DealRangeTriggerType,
   DealManualDiscountApplyTo,
   DealChargeType,
+  DeliveryDateDirection,
+  InventoryItemType,
 };

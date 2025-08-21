@@ -31,6 +31,7 @@ export class Endpoints {
   public static readonly SHARED_CLIENT_TOKEN = '/shared-clients/:id/token';
   public static readonly SHARED_CLIENT_ENVIRONMENTS = '/shared-clients/:id/environments';
   public static readonly SHARED_CLIENT_ENVIRONMENT = '/shared-clients/:id/environments/:envId';
+  public static readonly INVENTORY_V2 = '/inventory/v2/inventories';
 
   // Bees endpoints
   public static readonly DATA_INGESTION = '/api/v1/data-ingestion-relay-service/v1';

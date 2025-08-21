@@ -1,5 +1,9 @@
-import { InventoryItemType } from '../inventory-item-type';
+import { InventoryItemType } from '../enums/inventory-item-type';
 
+/**
+ * @monaco
+ * @monaco_include_deps
+ */
 export interface InventoryPayload {
   deliveryCenterIds: string[];
   inventories: InventoryQuantityPayload[];

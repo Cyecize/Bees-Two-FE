@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Routes } from '@angular/router';
-import { InventoryItemType } from '../../../api/inventory/inventory-item-type';
+import { InventoryItemType } from '../../../api/inventory/enums/inventory-item-type';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { CountryEnvironmentModel } from '../../../api/env/country-environment.model';
 import { Subscription } from 'rxjs';
