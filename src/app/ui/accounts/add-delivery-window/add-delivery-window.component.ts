@@ -159,6 +159,10 @@ export class AddDeliveryWindowComponent implements OnInit, OnDestroy {
             acc.deliveryScheduleId!,
           );
 
+          if (!acc.deliveryScheduleId) {
+            alert('This account has no schedule ID!');
+          }
+
           this.updateDeliveryWindowId();
         }
       });
