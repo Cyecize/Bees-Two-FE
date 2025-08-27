@@ -35,6 +35,11 @@ export interface IPromoService {
     env?: CountryEnvironmentModel,
   ): Promise<WrappedResponse<BeesResponse<any>>>;
 
+  fetchAllPromos(
+    env: CountryEnvironmentModel,
+    limit?: number,
+  ): Promise<Promo[]>;
+
   newQuery(): PromoSearchQuery;
 }
 
@@ -78,6 +83,44 @@ export class PromoService implements IPromoService {
         env?.id,
       ),
     ).execute();
+  }
+
+  async fetchAllPromos(
+    env: CountryEnvironmentModel,
+    limit?: number,
+  ): Promise<Promo[]> {
+    if (!limit) {
+      limit = 0;
+    }
+    const res = [];
+
+    const query = this.newQuery();
+    query.vendorIds = [env.vendorId];
+
+    let page = 0;
+    let hasMore = true;
+
+    while (hasMore) {
+      query.page.page = page;
+
+      const pageRes = await this.searchPromos(query);
+      if (pageRes.statusCode !== 200) {
+        console.error('Error during fetching page ' + page);
+        console.error(pageRes);
+        return [];
+      }
+
+      res.push(...pageRes.response.promotions);
+      hasMore = pageRes.response.pagination.hasNext;
+
+      if (limit > 0 && limit <= res.length) {
+        return res;
+      }
+
+      page++;
+    }
+
+    return res;
   }
 
   public newQuery(): PromoSearchQuery {
