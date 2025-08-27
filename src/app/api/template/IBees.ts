@@ -88,6 +88,7 @@ import {
   IInventoryService,
   InventoryService,
 } from '../inventory/inventory.service';
+import { AccountV2Service, IAccountV2Service } from '../accounts/v2/account-v2.service';
 
 /**
  * @monaco
@@ -122,6 +123,7 @@ interface IBees {
   dialogService: IDialogService;
   localAccountService: ILocalAccountService;
   accountV1Service: IAccountV1Service;
+  accountV2Service: IAccountV2Service;
   beesContractService: IBeesContractService;
   envService: ICountryEnvironmentService;
   orderService: IOrderService;
@@ -169,6 +171,7 @@ export class Bees implements IBees {
     public deliveryWindowService: DeliveryWindowService,
     public priceService: PriceService,
     public inventoryService: InventoryService,
+    public accountV2Service: AccountV2Service,
   ) {}
 }
 

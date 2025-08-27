@@ -10,8 +10,18 @@ import { RequestMethod } from '../../common/request-method';
 import { RelayVersion } from '../../relay/relay.version';
 import { BeesEntity } from '../../common/bees-entity';
 
+/**
+ * @monaco
+ */
+export interface IAccountV2Service {
+  ingest(
+    account: AccountV2Payload,
+    env?: CountryEnvironmentModel,
+  ): Promise<WrappedResponse<any>>;
+}
+
 @Injectable({ providedIn: 'root' })
-export class AccountV2Service {
+export class AccountV2Service implements IAccountV2Service {
   constructor(private relayService: RelayService) {}
 
   public async ingest(

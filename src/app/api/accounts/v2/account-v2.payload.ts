@@ -1,3 +1,6 @@
+/**
+ * @monaco
+ */
 export interface AccountV2Payload {
   vendorAccountId: string;
 }
