@@ -29,7 +29,7 @@ export class EditDealComponent implements OnInit, OnDestroy {
   private envSub!: Subscription;
 
   deals: Deal[] = [];
-  query!: DealsSearchQuery;
+  query?: DealsSearchQuery;
 
   constructor(
     private dealService: DealsService,

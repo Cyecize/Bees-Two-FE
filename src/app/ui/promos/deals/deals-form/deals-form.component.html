@@ -25,7 +25,8 @@
             type="button"
             *ngIf="DealIdType.ACCOUNT === form.controls.type.value"
             (click)="pickAccount()"
-            class="btn btn-sm btn-outline-warning ms-1">Pick</button>
+            class="btn btn-sm btn-outline-warning ms-1">Pick
+          </button>
         </div>
         <div *ngFor="let id of ids.controls; let idInd = index"
              class="ms-4">
@@ -73,9 +74,27 @@
             </div>
             <div class="mt-2">
               <app-input
+                (onChangeEnd)="validatePromoId(formInd, $event)"
                 type="text"
                 placeholder="Vendor Promo ID"
                 formControlName="vendorPromotionId"></app-input>
+              <ng-container *ngIf="promoValidationReady(formInd)">
+                <span *ngIf="promoIdValidationsPerDeal[formInd].promoIdValidationInProgress">
+                  Validating promotion ID
+                </span>
+                <ng-container *ngIf="deal.controls.vendorPromotionId.value
+                && !promoIdValidationsPerDeal[formInd].promoIdValidationInProgress">
+                  <span class="text-success"
+                        *ngIf="promoIdValidationsPerDeal[formInd].promoIdValid">
+                    Valid Promo ID
+                  </span>
+                  <span class="text-warning"
+                        *ngIf="!promoIdValidationsPerDeal[formInd].promoIdValid">
+                  Invalid Promo ID
+                </span>
+                </ng-container>
+
+              </ng-container>
             </div>
             <div class="mt-2">
               <app-input

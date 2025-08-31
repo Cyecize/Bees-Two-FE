@@ -58,6 +58,12 @@ import { ConditionDeliveryDateFormComponent } from './condition-delivery-date-fo
 import { ConditionPaymentTermsFormComponent } from './condition-payment-terms-form/condition-payment-terms-form.component';
 import { OutputManualDiscountFormComponent } from './output-manual-discount-form/output-manual-discount-form.component';
 import { PlatformIdService } from '../../../../api/platformid/platform-id.service';
+import { PromoService } from '../../../../api/promo/promo.service';
+
+class ValidPromoIdDto {
+  promoIdValid = true;
+  promoIdValidationInProgress = false;
+}
 
 @Component({
   selector: 'app-deals-form',
@@ -106,6 +112,8 @@ export class DealsFormComponent implements OnInit, OnDestroy {
   dealTypes: SelectOption[] = [];
   accumulationTypeOptions: SelectOption[] = [];
 
+  promoIdValidationsPerDeal: ValidPromoIdDto[] = [];
+
   @Input()
   set deals(val: Deal[]) {
     this._deals = val;
@@ -130,6 +138,7 @@ export class DealsFormComponent implements OnInit, OnDestroy {
     private envOverrideService: EnvOverrideService,
     private dialogService: DialogService,
     private platformIdService: PlatformIdService,
+    private promotionService: PromoService,
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -246,6 +255,7 @@ export class DealsFormComponent implements OnInit, OnDestroy {
   }
 
   addDeal(deal?: Deal): void {
+    this.promoIdValidationsPerDeal.push(new ValidPromoIdDto());
     const dealForm = new FormGroup<DealForm>({
       accumulationType: new FormControl<DealAccumulationType | null>(
         deal?.accumulationType || null,
@@ -291,10 +301,15 @@ export class DealsFormComponent implements OnInit, OnDestroy {
     });
 
     this.form.controls.deals.push(dealForm);
+    void this.validatePromoId(
+      this.form.controls.deals.length - 1,
+      deal?.vendorDealId,
+    );
   }
 
   removeDeal(dealInd: number): void {
     this.dealForms.removeAt(dealInd);
+    this.promoIdValidationsPerDeal.splice(dealInd, 1);
   }
 
   maybeGetDeal(formInd: number): Deal | undefined {
@@ -307,5 +322,53 @@ export class DealsFormComponent implements OnInit, OnDestroy {
       .deals.map((d) => JSON.stringify(d, null, 2))
       .join(',\n');
     this.raw = true;
+  }
+
+  async validatePromoId(dealInd: number, promoId: any): Promise<void> {
+    if (!promoId) {
+      return;
+    }
+
+    if (!this.promoValidationReady(dealInd)) {
+      console.warn(
+        'Trying to validate promo id for invalid deal ind! ' + dealInd,
+      );
+      return;
+    }
+
+    const promoIdValidation = this.promoIdValidationsPerDeal[dealInd];
+    promoIdValidation.promoIdValidationInProgress = true;
+
+    try {
+      const vendorId = this.envOverride!.vendorId;
+
+      const q = this.promotionService.newQuery();
+      q.vendorIds.push(vendorId);
+
+      const platformId = await this.platformIdService.encodePromotionId({
+        vendorId: vendorId,
+        vendorPromotionId: promoId,
+      });
+
+      q.promotionPlatformIds.push(platformId.platformId);
+
+      const promos = await this.promotionService.searchPromos(
+        q,
+        this.envOverride,
+      );
+
+      if (promos.statusCode !== 200) {
+        console.warn('Error while fetching promo id to validate!');
+        return;
+      }
+
+      promoIdValidation.promoIdValid = promos.response.promotions.length > 0;
+    } finally {
+      promoIdValidation.promoIdValidationInProgress = false;
+    }
+  }
+
+  promoValidationReady(dealInd: number): boolean {
+    return dealInd < this.promoIdValidationsPerDeal.length;
   }
 }
