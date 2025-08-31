@@ -102,6 +102,7 @@ class ValidPromoIdDto {
   styleUrl: './deals-form.component.scss',
 })
 export class DealsFormComponent implements OnInit, OnDestroy {
+  private _dealsContractId?: string;
   private _deals: Deal[] = [];
   protected readonly DealIdType = DealIdType;
   private envOverride?: CountryEnvironmentModel;
@@ -117,7 +118,9 @@ export class DealsFormComponent implements OnInit, OnDestroy {
   @Input()
   set deals(val: Deal[]) {
     this._deals = val;
-    this.patchDeal(val);
+    if (val) {
+      this.patchDeal(val);
+    }
   }
 
   get deals(): Deal[] {
@@ -125,7 +128,14 @@ export class DealsFormComponent implements OnInit, OnDestroy {
   }
 
   @Input()
-  dealContractId?: string;
+  set dealContractId(val: string | undefined) {
+    this._dealsContractId = val;
+    this.initContractId();
+  }
+
+  get dealContractId(): string | undefined {
+    return this._dealsContractId;
+  }
 
   raw = false;
 
@@ -171,6 +181,10 @@ export class DealsFormComponent implements OnInit, OnDestroy {
       this.envOverride = value;
     });
 
+    await this.initContractId();
+  }
+
+  private async initContractId(): Promise<void> {
     // TODO: Investigate if anyway possible to determine the original id type of a deal when it was ingested.
     if (this.dealContractId) {
       const platformId = await this.platformIdService.decodeContractString(
@@ -303,7 +317,7 @@ export class DealsFormComponent implements OnInit, OnDestroy {
     this.form.controls.deals.push(dealForm);
     void this.validatePromoId(
       this.form.controls.deals.length - 1,
-      deal?.vendorDealId,
+      deal?.vendorPromotionId,
     );
   }
 
