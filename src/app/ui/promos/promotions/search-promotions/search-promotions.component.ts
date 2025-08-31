@@ -56,6 +56,7 @@ export class SearchPromotionsComponent implements OnInit, OnDestroy {
   envSub!: Subscription;
 
   query: PromoSearchQuery = new PromoSearchQueryImpl();
+  vendorPromoIds: string[] = [];
   searchResponse: PromoSearchResponse = {
     promotions: [],
     pagination: new EmptyHasNextPagination(),
@@ -166,11 +167,32 @@ export class SearchPromotionsComponent implements OnInit, OnDestroy {
     });
 
     this.query.promotionPlatformIds.push(platformId.platformId);
-    this.reloadFilters();
+    this.vendorPromoIds.push(val);
+    await this.reloadFilters();
   }
 
   removePromoId(ind: number): void {
     this.query.promotionPlatformIds.splice(ind, 1);
+    this.vendorPromoIds.splice(ind, 1);
+    this.reloadFilters();
+  }
+
+  async addPlatformId(platformId: string): Promise<void> {
+    if (!platformId) {
+      return;
+    }
+
+    const decoded =
+      await this.platformIdService.decodePromotionString(platformId);
+
+    if (!decoded.vendorPromotionId) {
+      console.warn('Invalid platform ID! ' + platformId);
+      return;
+    }
+
+    this.query.promotionPlatformIds.push(platformId);
+    this.vendorPromoIds.push(decoded.vendorPromotionId);
+
     this.reloadFilters();
   }
 }

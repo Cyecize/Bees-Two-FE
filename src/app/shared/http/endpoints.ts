@@ -17,6 +17,7 @@ export class Endpoints {
   public static readonly PLATFORM_ID_ENCODE_ENFORCEMENT = '/platform-id/encode/enforcement';
   public static readonly PLATFORM_ID_ENCODE_PROMOTION = '/platform-id/encode/promotion';
   public static readonly PLATFORM_ID_DECODE_CONTRACT = '/platform-id/decode/contract/:id';
+  public static readonly PLATFORM_ID_DECODE_PROMOTION = '/platform-id/decode/promotion/:id';
   public static readonly ACCOUNTS_SEARCH = '/accounts/search';
   public static readonly ACCOUNTS = '/accounts';
   public static readonly ACCOUNT = '/accounts/:id';

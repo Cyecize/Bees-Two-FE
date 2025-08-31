@@ -67,4 +67,14 @@ export class PlatformIdRepository {
       ]),
     );
   }
+
+  public decodePromotionId(
+    platformId: string,
+  ): Observable<PromotionPlatformId> {
+    return this.http.get<PromotionPlatformId>(
+      RouteUtils.setPathParams(Endpoints.PLATFORM_ID_DECODE_PROMOTION, [
+        platformId,
+      ]),
+    );
+  }
 }

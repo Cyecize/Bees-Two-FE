@@ -33,6 +33,8 @@ export interface IPlatformIdService {
   ): Promise<EncodedPlatformId>;
 
   decodeContractString(platformId: string): Promise<ContractPlatformId>;
+
+  decodePromotionString(platformId: string): Promise<PromotionPlatformId>;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -83,5 +85,11 @@ export class PlatformIdService implements IPlatformIdService {
     platformId: string,
   ): Promise<ContractPlatformId> {
     return await firstValueFrom(this.repository.decodeContractId(platformId));
+  }
+
+  public async decodePromotionString(
+    platformId: string,
+  ): Promise<PromotionPlatformId> {
+    return await firstValueFrom(this.repository.decodePromotionId(platformId));
   }
 }

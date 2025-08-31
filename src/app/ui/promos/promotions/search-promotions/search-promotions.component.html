@@ -23,6 +23,30 @@
         </div>
         <div
           class="d-flex justify-content-between align-items-center"
+          *ngFor="let promoId of vendorPromoIds; let ind = index">
+          <span>
+            Vendor Promo ID:
+            <app-tooltip-span
+              [trimDisplayTextChars]="15"
+              [tooltipText]="promoId"
+              [enableCopy]="true"
+              [displayText]="promoId"></app-tooltip-span>
+          </span>
+
+          <strong>
+            <i (click)="removePromoId(ind)" class="fa fa-x"></i>
+          </strong>
+        </div>
+      </div>
+      <div class="filter">
+        <div class="d-flex">
+          <app-input
+            placeholder="Platform ID"
+            [clearOnChangeEnd]="true"
+            (onChangeEnd)="addPlatformId($event)"></app-input>
+        </div>
+        <div
+          class="d-flex justify-content-between align-items-center"
           *ngFor="let platformId of query.promotionPlatformIds; let ind = index">
           <span>
             Platform ID:
