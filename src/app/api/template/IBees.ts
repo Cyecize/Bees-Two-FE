@@ -88,7 +88,15 @@ import {
   IInventoryService,
   InventoryService,
 } from '../inventory/inventory.service';
-import { AccountV2Service, IAccountV2Service } from '../accounts/v2/account-v2.service';
+import {
+  AccountV2Service,
+  IAccountV2Service,
+} from '../accounts/v2/account-v2.service';
+import { CategoryGroupType } from '../categories/category-group.type';
+import {
+  CategoryV3Service,
+  ICategoryV3Service,
+} from '../categories/category-v3.service';
 
 /**
  * @monaco
@@ -141,6 +149,7 @@ interface IBees {
   deliveryWindowService: IDeliveryWindowService;
   priceService: IPriceService;
   inventoryService: IInventoryService;
+  categoryV3Service: ICategoryV3Service;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -172,6 +181,7 @@ export class Bees implements IBees {
     public priceService: PriceService,
     public inventoryService: InventoryService,
     public accountV2Service: AccountV2Service,
+    public categoryV3Service: CategoryV3Service,
   ) {}
 }
 
@@ -210,4 +220,5 @@ export const publicEnums = {
   DealChargeType,
   DeliveryDateDirection,
   InventoryItemType,
+  CategoryGroupType,
 };

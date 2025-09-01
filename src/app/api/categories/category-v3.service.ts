@@ -13,8 +13,48 @@ import { ItemSortOrderPair } from './item-assign/dto/category-item-group';
 import { CategoryItem } from './models/category-item';
 import { CategoryWithParent } from './category-with-parent';
 
+/**
+ * @monaco
+ */
+export interface ICategoryV3Service {
+  searchCategoriesV3(
+    query: CategoryV3Query,
+    env?: CountryEnvironmentModel,
+  ): Promise<WrappedResponse<CategoryV3[]>>;
+
+  getFlatCategories(
+    env: CountryEnvironmentModel,
+  ): Promise<CategoryWithParent[]>;
+
+  patchV3(
+    categoryId: string,
+    val: any,
+    env?: CountryEnvironmentModel,
+  ): Promise<WrappedResponse<any>>;
+
+  assignItems(
+    id: string,
+    items: ItemSortOrderPair[],
+    vendorId: string,
+    env: CountryEnvironmentModel,
+  ): Promise<WrappedResponse<CategoryV3[]>>;
+
+  postV3(
+    storeId: string,
+    payload: CategoryV3Payload[],
+    env?: CountryEnvironmentModel,
+  ): Promise<WrappedResponse<CreatedCategory[]>>;
+
+  deleteV3(
+    categoryIds: string[],
+    env?: CountryEnvironmentModel,
+  ): Promise<WrappedResponse<any>>;
+
+  newQuery(): CategoryV3Query;
+}
+
 @Injectable({ providedIn: 'root' })
-export class CategoryService {
+export class CategoryV3Service implements ICategoryV3Service {
   constructor(private repository: CategoryRepository) {}
 
   public async searchCategoriesV3(
@@ -107,5 +147,9 @@ export class CategoryService {
     return await new FieldErrorWrapper(() =>
       this.repository.deleteCategoryV3(categoryIds, env?.id),
     ).execute();
+  }
+
+  public newQuery(): CategoryV3Query {
+    return new CategoryV3QueryImpl();
   }
 }

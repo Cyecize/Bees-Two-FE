@@ -1,3 +1,6 @@
+/**
+ * @monaco
+ */
 export enum CategoryGroupType {
   MAIN = 'MAIN',
   FEATURED = 'FEATURED',

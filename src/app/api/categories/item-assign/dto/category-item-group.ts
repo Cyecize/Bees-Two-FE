@@ -16,6 +16,9 @@ export class CategoryItemGroup {
   }
 }
 
+/**
+ * @monaco
+ */
 export interface ItemSortOrderPair {
   vendorItemId: string;
   sortOrder: number;

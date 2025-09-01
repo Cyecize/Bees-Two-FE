@@ -24,7 +24,7 @@ import {
 import { CategoryGroupType } from '../../../api/categories/category-group.type';
 import { CategoryTranslation } from '../../../api/categories/models/category-translation';
 import { CategoryV3Payload } from '../../../api/categories/category-v3.payload';
-import { CategoryService } from '../../../api/categories/category.service';
+import { CategoryV3Service } from '../../../api/categories/category-v3.service';
 import { Papa } from 'ngx-papaparse';
 import { BulkCreateCategoriesCsvHeaders } from './bulk-create-categories-csv-headers';
 import { ObjectUtils } from '../../../shared/util/object-utils';
@@ -87,7 +87,7 @@ export class BulkCreateCategoriesComponent implements OnInit, OnDestroy {
   constructor(
     private envOverrideService: EnvOverrideService,
     private dialogService: DialogService,
-    private categoryService: CategoryService,
+    private categoryService: CategoryV3Service,
     private papa: Papa,
   ) {}
 

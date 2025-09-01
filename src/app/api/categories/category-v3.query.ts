@@ -1,6 +1,9 @@
 import { BeesParam, BeesParamImpl } from '../common/bees-param';
 import { CategoryGroupType } from './category-group.type';
 
+/**
+ * @monaco
+ */
 export interface CategoryV3Query {
   ids: string[];
   storeId?: string;

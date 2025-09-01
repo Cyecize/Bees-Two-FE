@@ -1,3 +1,6 @@
+/**
+ * @monaco
+ */
 export interface CategoryItem {
   vendorItemId: string;
   sortOrder: number;

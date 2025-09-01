@@ -22,7 +22,7 @@ import { NgIf } from '@angular/common';
 import { StorageType } from '../../../api/storage/storage.type';
 import { CategoryFilenameMatchType } from '../../../api/categories/images-upload/category-filename-match-type';
 import { CategoryFilenameMatchStrategy } from '../../../api/categories/images-upload/category-filename-match-strategy';
-import { CategoryService } from '../../../api/categories/category.service';
+import { CategoryV3Service } from '../../../api/categories/category-v3.service';
 import { CategoryFilenameMatchService } from '../../../api/categories/images-upload/category-filename-match.service';
 import { CategoryImageUploadService } from '../../../api/categories/images-upload/category-image-upload.service';
 import { CategoryV3 } from '../../../api/categories/category-v3';
@@ -68,7 +68,7 @@ export class UploadCategoryImagesComponent implements OnInit, OnDestroy {
   constructor(
     private zipService: JszipService,
     private envOverrideService: EnvOverrideService,
-    private categoryService: CategoryService,
+    private categoryService: CategoryV3Service,
     private categoryFilenameMatchService: CategoryFilenameMatchService,
     private dialogService: DialogService,
     private categoryImageUploadService: CategoryImageUploadService,

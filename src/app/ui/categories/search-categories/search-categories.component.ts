@@ -17,7 +17,7 @@ import {
   CategoryV3Query,
   CategoryV3QueryImpl,
 } from '../../../api/categories/category-v3.query';
-import { CategoryService } from '../../../api/categories/category.service';
+import { CategoryV3Service } from '../../../api/categories/category-v3.service';
 import { ShowCategoryDetailsDialogComponent } from '../show-category-details-dialog/show-category-details-dialog.component';
 import { ShowCategoryDetailsDialogPayload } from '../show-category-details-dialog/show-category-details-dialog.payload';
 import { CategoryGroupType } from '../../../api/categories/category-group.type';
@@ -68,7 +68,7 @@ export class SearchCategoriesComponent implements OnInit, OnDestroy {
   constructor(
     private dialogService: DialogService,
     private envOverrideService: EnvOverrideService,
-    private categoryService: CategoryService,
+    private categoryService: CategoryV3Service,
     private jsZipService: JszipService,
   ) {}
 

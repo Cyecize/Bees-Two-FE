@@ -4,6 +4,9 @@ import { CategoryTranslation } from './models/category-translation';
 import { Category } from './category';
 import { CategoryGroupType } from './category-group.type';
 
+/**
+ * @monaco
+ */
 export interface CategoryV3 extends Category {
   id: string;
   storeCategoryId?: string;

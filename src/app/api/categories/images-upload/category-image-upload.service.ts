@@ -3,7 +3,7 @@ import { StorageService } from '../../storage/storage.service';
 import { BeesMultipartFile } from '../../proxy/bees-multipart-value.payload';
 import { CountryEnvironmentModel } from '../../env/country-environment.model';
 import { StorageType } from '../../storage/storage.type';
-import { CategoryService } from '../category.service';
+import { CategoryV3Service } from '../category-v3.service';
 import { Category } from '../category';
 import { CategoryImage } from '../models/category-image';
 
@@ -11,7 +11,7 @@ import { CategoryImage } from '../models/category-image';
 export class CategoryImageUploadService {
   constructor(
     private storageService: StorageService,
-    private categoryService: CategoryService,
+    private categoryService: CategoryV3Service,
   ) {}
 
   public async uploadCategoryGroup(

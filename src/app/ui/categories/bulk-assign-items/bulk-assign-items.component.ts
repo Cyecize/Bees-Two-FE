@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Routes } from '@angular/router';
 import { DialogService } from '../../../shared/dialog/dialog.service';
-import { CategoryService } from '../../../api/categories/category.service';
+import { CategoryV3Service } from '../../../api/categories/category-v3.service';
 import { firstValueFrom, Subscription } from 'rxjs';
 import { CountryEnvironmentModel } from '../../../api/env/country-environment.model';
 import { EnvOverrideService } from '../../../api/env/env-override.service';
@@ -101,7 +101,7 @@ export class BulkAssignItemsComponent implements OnInit, OnDestroy {
 
   constructor(
     private dialogService: DialogService,
-    private categoryService: CategoryService,
+    private categoryService: CategoryV3Service,
     private envOverrideService: EnvOverrideService,
     private itemService: ItemService,
     private papa: Papa,

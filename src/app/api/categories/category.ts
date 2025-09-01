@@ -1,5 +1,8 @@
 import { CategoryImage } from './models/category-image';
 
+/**
+ * @monaco
+ */
 export interface Category {
   id: string;
   storeCategoryId?: string;

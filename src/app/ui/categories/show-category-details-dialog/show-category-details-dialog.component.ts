@@ -10,7 +10,7 @@ import { TooltipSpanComponent } from '../../../shared/components/tooltip-span/to
 import { ObjectUtils } from '../../../shared/util/object-utils';
 import { CategoryV3 } from '../../../api/categories/category-v3';
 import { CategoryItem } from '../../../api/categories/models/category-item';
-import { CategoryService } from '../../../api/categories/category.service';
+import { CategoryV3Service } from '../../../api/categories/category-v3.service';
 
 @Component({
   selector: 'app-show-category-details-dialog',
@@ -40,7 +40,7 @@ export class ShowCategoryDetailsDialogComponent
 
   constructor(
     private dialogService: DialogService,
-    private categoryService: CategoryService,
+    private categoryService: CategoryV3Service,
   ) {
     super();
   }
