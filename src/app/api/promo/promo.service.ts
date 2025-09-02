@@ -15,6 +15,7 @@ import {
   WrappedResponse,
 } from '../../shared/util/field-error-wrapper';
 import { Promo } from './promo';
+import { DEFAULT_PAGE_SIZE } from '../../shared/general.constants';
 
 /**
  * @monaco
@@ -38,6 +39,7 @@ export interface IPromoService {
   fetchAllPromos(
     env: CountryEnvironmentModel,
     limit?: number,
+    pageSize?: number,
   ): Promise<Promo[]>;
 
   newQuery(): PromoSearchQuery;
@@ -88,14 +90,23 @@ export class PromoService implements IPromoService {
   async fetchAllPromos(
     env: CountryEnvironmentModel,
     limit?: number,
+    pageSize?: number,
   ): Promise<Promo[]> {
     if (!limit) {
       limit = 0;
     }
+
+    if (!pageSize) {
+      pageSize = 50; // max page size supported by promo api
+    }
+
+    console.log('Fetching all promos!');
+
     const res = [];
 
     const query = this.newQuery();
     query.vendorIds = [env.vendorId];
+    query.page.pageSize = pageSize;
 
     let page = 0;
     let hasMore = true;
@@ -113,7 +124,12 @@ export class PromoService implements IPromoService {
       res.push(...pageRes.response.promotions);
       hasMore = pageRes.response.pagination.hasNext;
 
+      console.log(
+        `Fetched ${pageRes.response.promotions.length} promos (${res.length} total).`,
+      );
+
       if (limit > 0 && limit <= res.length) {
+        console.log(`Reached the limit of ${limit} - ${res.length}`);
         return res;
       }
 
