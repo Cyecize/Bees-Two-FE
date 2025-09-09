@@ -97,6 +97,9 @@ import {
   CategoryV3Service,
   ICategoryV3Service,
 } from '../categories/category-v3.service';
+import { RelayVersion } from '../relay/relay.version';
+import { RequestMethod } from '../common/request-method';
+import { IRelayService, RelayService } from '../relay/relay.service';
 
 /**
  * @monaco
@@ -150,6 +153,7 @@ interface IBees {
   priceService: IPriceService;
   inventoryService: IInventoryService;
   categoryV3Service: ICategoryV3Service;
+  relayService: IRelayService;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -182,6 +186,7 @@ export class Bees implements IBees {
     public inventoryService: InventoryService,
     public accountV2Service: AccountV2Service,
     public categoryV3Service: CategoryV3Service,
+    public relayService: RelayService,
   ) {}
 }
 
@@ -221,4 +226,6 @@ export const publicEnums = {
   DeliveryDateDirection,
   InventoryItemType,
   CategoryGroupType,
+  RelayVersion,
+  RequestMethod,
 };

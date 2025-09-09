@@ -7,8 +7,24 @@ import { BeesResponse } from '../proxy/bees-response';
 import { RelayRepository } from './relay.repository';
 import { BeesEntity } from '../common/bees-entity';
 
+/**
+ * @monaco
+ */
+export interface IRelayService {
+  send<T>(
+    entity: BeesEntity,
+    method: RequestMethod,
+    version: RelayVersion,
+    headers: BeesParam[],
+    data?: string | null,
+    targetEnvId?: number,
+    templateId?: number,
+    saveInHistory?: boolean,
+  ): Observable<BeesResponse<T>>;
+}
+
 @Injectable({ providedIn: 'root' })
-export class RelayService {
+export class RelayService implements IRelayService {
   constructor(private repository: RelayRepository) {}
 
   public send<T>(
