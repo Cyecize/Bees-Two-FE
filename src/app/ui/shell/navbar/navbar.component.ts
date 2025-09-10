@@ -10,6 +10,7 @@ import { RouterLink } from '@angular/router';
 import { AppRoutingPath } from '../../../app-routing.path';
 import { SettingsDialogComponent } from '../settings-dialog/settings-dialog.component';
 import { SharedClientBrowseDialog } from '../../env/sharedclient/shared-client-browse-dialog/shared-client-browse-dialog';
+import { TemplatePlaygroundDialogPayload } from '../../template-history/template/template-payload-playground-dialog/template-playground-dialog.payload';
 
 @Component({
   selector: 'app-navbar',
@@ -38,6 +39,12 @@ export class NavbarComponent implements OnInit {
 
     this.userService.currentUser$.subscribe(
       (user) => (this.currentUser = user),
+    );
+  }
+
+  openPlayground(): void {
+    this.dialogService.openCodePlayground(
+      new TemplatePlaygroundDialogPayload('', [], this.selectedEnv),
     );
   }
 
