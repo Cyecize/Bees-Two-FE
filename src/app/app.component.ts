@@ -5,7 +5,12 @@ import {
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import {
+  ActivatedRoute,
+  NavigationStart,
+  Router,
+  RouterOutlet,
+} from '@angular/router';
 import { DialogService } from './shared/dialog/dialog.service';
 import { LoaderComponent } from './shared/loader/loader.component';
 import { LoaderService } from './shared/loader/loader.service';
@@ -15,6 +20,8 @@ import { NgIf } from '@angular/common';
 import { UserService } from './api/user/user.service';
 import { User } from './api/user/user';
 import { RequestTemplateRunningService } from './api/template/request-template-running.service';
+import { filter } from 'rxjs';
+import { AppRoutingPath } from './app-routing.path';
 
 @Component({
   selector: 'app-root',
@@ -34,6 +41,7 @@ export class AppComponent implements OnInit {
   viewContainerRef!: ViewContainerRef;
 
   private static injector: Injector;
+  showNavbar = true;
 
   constructor(
     private injector: Injector,
@@ -41,6 +49,7 @@ export class AppComponent implements OnInit {
     private loaderService: LoaderService,
     private authService: AuthenticationService,
     private userService: UserService,
+    private router: Router,
     private requestTemplateRunningService: RequestTemplateRunningService,
   ) {
     AppComponent.injector = injector;
@@ -51,7 +60,11 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.authService.init();
+    this.router.events
+      .pipe(filter((event) => event instanceof NavigationStart))
+      .subscribe((event: NavigationStart) => {
+        this.showNavbar = event.url !== AppRoutingPath.LOGIN.toString();
+      });
     this.userService.currentUser$.subscribe((usr) => (this.user = usr));
     this.requestTemplateRunningService.setViewContainerRef(
       this.viewContainerRef,
