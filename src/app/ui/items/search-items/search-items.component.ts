@@ -98,26 +98,19 @@ export class SearchItemsComponent implements OnInit, OnDestroy {
     const oldSize = this.query.page.pageSize;
 
     try {
-      this.query.page.pageSize = 200;
-      const res: Item[] = [];
-      let page = -1;
-      let hasNext = true;
+      const response = await this.itemService.fetchAllItems(
+        this.query,
+        this.envOverride,
+        true,
+        8,
+      );
 
-      while (hasNext) {
-        page++;
-        this.query.page.page = page;
-        console.log(`fetching page ${page}`);
-
-        if (!(await this.fetchData())) {
-          alert('Could not load all pages, stopping on page ' + (page + 1));
-          return [];
-        }
-
-        res.push(...this.items);
-        hasNext = this.fullResponse.response?.response?.pagination?.hasNext;
+      if (response.hasError) {
+        alert('Could not fetch all items since some of the request failed!');
+        return [];
       }
 
-      return res;
+      return response.items;
     } finally {
       this.query.page.pageSize = oldSize;
     }

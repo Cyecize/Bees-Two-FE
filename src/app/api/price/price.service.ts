@@ -31,6 +31,7 @@ export interface IPriceService {
     contractId: string,
     priceListId: string,
     env?: CountryEnvironmentModel,
+    maxConcurrent?: number,
   ): Promise<SearchAllPricesResponse>;
 
   newQuery(
@@ -69,6 +70,7 @@ export class PriceService implements IPriceService {
     contractId: string,
     priceListId: string,
     env?: CountryEnvironmentModel,
+    maxConcurrent = 10,
   ): Promise<SearchAllPricesResponse> {
     let failed = 0;
 
@@ -103,7 +105,7 @@ export class PriceService implements IPriceService {
       {
         itemsToBatch: allItems,
         batchSize: 50,
-        maxConcurrent: 3,
+        maxConcurrent: maxConcurrent,
         abortOnFail: false,
       },
     );
