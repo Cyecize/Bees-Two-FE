@@ -16,6 +16,7 @@ import {
 } from '../../shared/util/field-error-wrapper';
 import { Promo } from './promo';
 import { DEFAULT_PAGE_SIZE } from '../../shared/general.constants';
+import { ConcurrentPaginationService } from '../../shared/util/concurrent-pagination.service';
 
 /**
  * @monaco
@@ -50,6 +51,7 @@ export class PromoService implements IPromoService {
   constructor(
     private promoRepository: PromoRepository,
     private relayService: RelayService,
+    private concurrentPaginationService: ConcurrentPaginationService,
   ) {}
 
   public async searchPromos(
@@ -92,51 +94,42 @@ export class PromoService implements IPromoService {
     limit?: number,
     pageSize?: number,
   ): Promise<Promo[]> {
-    if (!limit) {
-      limit = 0;
-    }
-
     if (!pageSize) {
       pageSize = 50; // max page size supported by promo api
     }
 
     console.log('Fetching all promos!');
 
-    const res = [];
+    const resp = await this.concurrentPaginationService.fetchAll<Promo>(
+      async (pageNum, size) => {
+        const query = this.newQuery();
+        query.vendorIds = [env.vendorId];
+        query.page.pageSize = size;
+        query.page.page = pageNum;
 
-    const query = this.newQuery();
-    query.vendorIds = [env.vendorId];
-    query.page.pageSize = pageSize;
+        const pageRes = await this.searchPromos(query);
+        if (pageRes.statusCode !== 200) {
+          console.error('Error during fetching page ' + pageNum);
+          console.error(pageRes);
+          return {
+            hasNext: false,
+            items: [],
+          };
+        }
 
-    let page = 0;
-    let hasMore = true;
+        return {
+          hasNext: pageRes.response.pagination.hasNext,
+          items: pageRes.response.promotions,
+        };
+      },
+      {
+        limit: limit,
+        maxConcurrent: 10,
+        pageSize,
+      },
+    );
 
-    while (hasMore) {
-      query.page.page = page;
-
-      const pageRes = await this.searchPromos(query);
-      if (pageRes.statusCode !== 200) {
-        console.error('Error during fetching page ' + page);
-        console.error(pageRes);
-        return [];
-      }
-
-      res.push(...pageRes.response.promotions);
-      hasMore = pageRes.response.pagination.hasNext;
-
-      console.log(
-        `Fetched ${pageRes.response.promotions.length} promos (${res.length} total).`,
-      );
-
-      if (limit > 0 && limit <= res.length) {
-        console.log(`Reached the limit of ${limit} - ${res.length}`);
-        return res;
-      }
-
-      page++;
-    }
-
-    return res;
+    return resp.items;
   }
 
   public newQuery(): PromoSearchQuery {

@@ -15,6 +15,7 @@ import { ObjectUtils } from '../../shared/util/object-utils';
 import { Item } from '../items/item';
 import { ArrayUtils } from '../../shared/util/array-utils';
 import { SearchAllPricesResponse } from './search-all-prices.response';
+import { ConcurrentPaginationService } from '../../shared/util/concurrent-pagination.service';
 
 /**
  * @monaco
@@ -41,7 +42,10 @@ export interface IPriceService {
 
 @Injectable({ providedIn: 'root' })
 export class PriceService implements IPriceService {
-  constructor(private repository: PriceRepository) {}
+  constructor(
+    private repository: PriceRepository,
+    private concurrentPaginationService: ConcurrentPaginationService,
+  ) {}
 
   public async searchPrices(
     queries: SingleItemPriceV3Query[],
@@ -66,50 +70,50 @@ export class PriceService implements IPriceService {
     priceListId: string,
     env?: CountryEnvironmentModel,
   ): Promise<SearchAllPricesResponse> {
-    const allPrices: SingleItemPriceV3[] = [];
-
     let failed = 0;
-    let batchNum = 0;
-    const batchSize = 50;
-    for (const itemBatch of ArrayUtils.splitToBatches(allItems, batchSize)) {
-      const queries: SingleItemPriceV3Query[] = itemBatch.map(
-        (item: Item) =>
-          new SingleItemPriceV3QueryImpl(
-            item.itemPlatformId,
-            contractId,
-            priceListId,
-          ),
-      );
 
-      console.log(
-        `Querying prices for ${itemBatch.length} items of batch ${batchNum}`,
-      );
-      const resp = await this.searchPrices(queries, env);
+    const resp = await this.concurrentPaginationService.batchAll<
+      SingleItemPriceV3,
+      Item
+    >(
+      async (batchNumber, batch) => {
+        const queries: SingleItemPriceV3Query[] = batch.map(
+          (item: Item) =>
+            new SingleItemPriceV3QueryImpl(
+              item.itemPlatformId,
+              contractId,
+              priceListId,
+            ),
+        );
 
-      if (!resp.isSuccess) {
-        console.log(resp);
-        failed++;
-      } else {
-        allPrices.push(...resp.response.response);
-      }
+        console.log(
+          `Querying prices for ${batch.length} items for batch ${batchNumber}`,
+        );
+        const resp = await this.searchPrices(queries, env);
 
-      batchNum++;
-    }
+        if (!resp.isSuccess) {
+          console.log(resp);
+          failed++;
+        }
 
-    if (failed > 0) {
-      alert(
-        `Search finished with ${failed} failed batch requests, check the logs!`,
-      );
+        return {
+          items: resp.response.response,
+        };
+      },
+      {
+        itemsToBatch: allItems,
+        batchSize: 50,
+        maxConcurrent: 3,
+        abortOnFail: false,
+      },
+    );
 
-      return {
-        hasErrors: true,
-        prices: allPrices,
-      };
-    }
-
+    console.log(
+      `Finished price fetching with ${resp.pages} requests and ${failed} errors!`,
+    );
     return {
-      hasErrors: false,
-      prices: allPrices,
+      hasErrors: resp.hasError,
+      prices: resp.items,
     };
   }
 

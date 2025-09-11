@@ -97,6 +97,10 @@ import {
   CategoryV3Service,
   ICategoryV3Service,
 } from '../categories/category-v3.service';
+import {
+  ConcurrentPaginationService,
+  IConcurrentPaginationService,
+} from '../../shared/util/concurrent-pagination.service';
 import { RelayVersion } from '../relay/relay.version';
 import { RequestMethod } from '../common/request-method';
 import { IRelayService, RelayService } from '../relay/relay.service';
@@ -153,6 +157,7 @@ interface IBees {
   priceService: IPriceService;
   inventoryService: IInventoryService;
   categoryV3Service: ICategoryV3Service;
+  concurrentPaginationService: IConcurrentPaginationService;
   relayService: IRelayService;
 }
 
@@ -186,6 +191,7 @@ export class Bees implements IBees {
     public inventoryService: InventoryService,
     public accountV2Service: AccountV2Service,
     public categoryV3Service: CategoryV3Service,
+    public concurrentPaginationService: ConcurrentPaginationService,
     public relayService: RelayService,
   ) {}
 }

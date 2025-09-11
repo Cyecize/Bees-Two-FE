@@ -88,6 +88,10 @@ export class SearchItemsComponent implements OnInit, OnDestroy {
     const res = await this.doFetchAllPages();
     alert('Printing JSON in the console!');
     console.log(JSON.stringify(res));
+    this.dialogService.openShowCodeDialog(
+      JSON.stringify(res, null, 2),
+      `Showing ${res.length} items`,
+    );
   }
 
   private async doFetchAllPages(): Promise<Item[]> {
