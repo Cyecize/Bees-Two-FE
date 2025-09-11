@@ -66,6 +66,11 @@ export interface IConcurrentPaginationService {
   ): Promise<ConcurrentPaginationResponse<T>>;
 }
 
+interface PageResults<T> {
+  pageNumber: number;
+  items: T[];
+}
+
 @Injectable({ providedIn: 'root' })
 export class ConcurrentPaginationService
   implements IConcurrentPaginationService
@@ -163,20 +168,30 @@ export class ConcurrentPaginationService
       abortOnFail = true,
     } = options;
 
-    const results: T[] = [];
+    let totalItems = 0;
+    const pageResults: PageResults<T>[] = [];
+
+    const addResult = (pageNumber: number, items: T[]): void => {
+      pageResults.push({
+        items: items,
+        pageNumber: pageNumber,
+      });
+      totalItems += items.length;
+    };
+
     let currentPage = startingPage;
     let highestPage = startingPage;
     let hasNext = true;
     let returnResults = true;
     const pendingPromises: Promise<void>[] = [];
 
-    while (hasNext && (results.length < limit || limit <= 0)) {
+    while (hasNext && (totalItems < limit || limit <= 0)) {
       const pagePromises: Promise<void>[] = [];
 
       // Create a batch of concurrent requests
       for (
         let i = 0;
-        i < maxConcurrent && hasNext && (results.length < limit || limit <= 0);
+        i < maxConcurrent && hasNext && (totalItems < limit || limit <= 0);
         i++
       ) {
         const page = currentPage;
@@ -184,12 +199,10 @@ export class ConcurrentPaginationService
           .then((response) => {
             if (!response.hasError) {
               if (limit > 0) {
-                results.push(
-                  ...response.items.slice(0, limit - results.length),
-                );
-              } else {
-                results.push(...response.items);
+                response.items = response.items.slice(0, limit - totalItems);
               }
+
+              addResult(page, response.items);
 
               highestPage = Math.max(page, highestPage);
               if (!response.hasNext) {
@@ -216,16 +229,16 @@ export class ConcurrentPaginationService
       // Wait for the entire batch to complete
       await Promise.allSettled(pagePromises);
 
-      console.log(
-        `Fetched ${maxConcurrent} pages, total items: ${results.length}`,
-      );
+      console.log(`Fetched ${maxConcurrent} pages, total items: ${totalItems}`);
 
       pendingPromises.push(...pagePromises);
     }
 
     if (returnResults) {
       return {
-        items: results,
+        items: pageResults
+          .sort((a, b) => a.pageNumber - b.pageNumber)
+          .flatMap((val) => val.items),
         hasError: false,
         pages: highestPage,
       };
