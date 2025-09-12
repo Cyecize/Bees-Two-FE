@@ -56,6 +56,7 @@ export class ConditionChargeTypeFormComponent implements OnInit {
   }
 
   addChargeType(chargeType?: DealChargeType): void {
+    this.maybeInitChargeType();
     this.chargeTypes.push(
       new FormControl<DealChargeType>(chargeType || null!, {
         nonNullable: true,
