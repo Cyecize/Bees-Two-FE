@@ -43,7 +43,6 @@ export class CountryEnvironmentService implements ICountryEnvironmentService {
   private allEnvs!: Promise<CountryEnvironmentModel[]>;
 
   constructor(private repository: CountryEnvironmentRepository) {
-    this.allEnvs = firstValueFrom(this.repository.getAllEnvs());
     void this.init();
   }
 
@@ -175,6 +174,7 @@ export class CountryEnvironmentService implements ICountryEnvironmentService {
   }
 
   private async init(): Promise<void> {
+    this.allEnvs = firstValueFrom(this.repository.getAllEnvs());
     const envId = localStorage.getItem(STORAGE_SELECTED_ENV_ID_NAME);
     if (ObjectUtils.isNil(envId)) {
       return;

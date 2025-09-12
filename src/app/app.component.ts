@@ -6,7 +6,7 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import {
-  ActivatedRoute,
+  NavigationEnd,
   NavigationStart,
   Router,
   RouterOutlet,
@@ -62,10 +62,16 @@ export class AppComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     await this.authService.init();
     this.router.events
-      .pipe(filter((event) => event instanceof NavigationStart))
-      .subscribe((event: NavigationStart) => {
+      .pipe(
+        filter(
+          (event) =>
+            event instanceof NavigationStart || event instanceof NavigationEnd,
+        ),
+      )
+      .subscribe((event: NavigationStart | NavigationEnd) => {
         this.showNavbar = event.url !== AppRoutingPath.LOGIN.toString();
       });
+
     this.userService.currentUser$.subscribe((usr) => (this.user = usr));
     this.requestTemplateRunningService.setViewContainerRef(
       this.viewContainerRef,
