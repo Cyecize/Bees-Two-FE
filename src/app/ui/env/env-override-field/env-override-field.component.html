@@ -1,5 +1,16 @@
-<app-select-search
-  placeholder="Override Environment"
-  [payload]="environments"
-  [currentDisplaySelection]="selectedEnv?.envName"
-  (selectionChange)="envSelected($event)"></app-select-search>
+<div class="d-flex">
+  <app-select-search
+    placeholder="Override Environment"
+    [payload]="environments"
+    [currentDisplaySelection]="textToDisplay"
+    (search)="onEnvSearch($event)"
+    (writeStopped)="onChange($event)"
+    (selectionChange)="envSelected($event)"
+    [clearOnSelect]="false"></app-select-search>
+  <!--    (pageChange)="envPageChanged($event)"-->
+
+  <button
+    (click)="openEnvSelector()"
+    class="ms-1 btn btn-sm btn-outline-warning">Pick
+  </button>
+</div>

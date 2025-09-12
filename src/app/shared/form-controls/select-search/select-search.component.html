@@ -1,7 +1,7 @@
 <div class="w-100 select-search-container">
   <div class="form-floating">
     <input (touchend)="inputTouched($event)"
-           (change)="onKeyUp();"
+           (change)="onKeyUp(); onWriteStop($event)"
            (keyup)="onKeyUp(); searchChanged($event)"
            (keydown)="onKeyDown()"
            [value]="currentDisplaySelection"

@@ -74,6 +74,9 @@ export class SelectSearchComponent implements OnInit, ControlValueAccessor {
   @Output()
   readonly pageChange: EventEmitter<number> = new EventEmitter<number>();
 
+  @Output()
+  readonly writeStopped: EventEmitter<number> = new EventEmitter<number>();
+
   interval: any;
 
   inputId!: string;
@@ -154,5 +157,9 @@ export class SelectSearchComponent implements OnInit, ControlValueAccessor {
 
   searchChanged(ev: any): void {
     this.search.next(ev?.target?.value);
+  }
+
+  onWriteStop(ev: any): void {
+    this.writeStopped.emit(ev?.target?.value);
   }
 }
