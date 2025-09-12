@@ -72,41 +72,43 @@
               <strong>Deal# {{ formInd + 1 }} </strong>
               <span style="cursor:pointer;" (click)="removeDeal(formInd)"><i class="fa-solid fa-x"></i></span>
             </div>
-            <div class="mt-2">
-              <app-input
-                (onChangeEnd)="validatePromoId(formInd, $event)"
-                type="text"
-                placeholder="Vendor Promo ID"
-                formControlName="vendorPromotionId"></app-input>
-              <ng-container *ngIf="promoValidationReady(formInd)">
+            <div class="d-flex mt-2">
+              <div class="m-1 ms-0">
+                <app-input
+                  (onChangeEnd)="validatePromoId(formInd, $event)"
+                  type="text"
+                  placeholder="Vendor Promo ID"
+                  formControlName="vendorPromotionId"></app-input>
+                <ng-container *ngIf="promoValidationReady(formInd)">
                 <span *ngIf="promoIdValidationsPerDeal[formInd].promoIdValidationInProgress">
                   Validating promotion ID
                 </span>
-                <ng-container *ngIf="deal.controls.vendorPromotionId.value
+                  <ng-container *ngIf="deal.controls.vendorPromotionId.value
                 && !promoIdValidationsPerDeal[formInd].promoIdValidationInProgress">
                   <span class="text-success"
                         *ngIf="promoIdValidationsPerDeal[formInd].promoIdValid">
                     Valid Promo ID
                   </span>
-                  <span class="text-warning"
-                        *ngIf="!promoIdValidationsPerDeal[formInd].promoIdValid">
+                    <span class="text-warning"
+                          *ngIf="!promoIdValidationsPerDeal[formInd].promoIdValid">
                   Invalid Promo ID
                 </span>
-                </ng-container>
+                  </ng-container>
 
-              </ng-container>
-            </div>
-            <div class="mt-2">
-              <app-input
-                type="text"
-                placeholder="Vendor Deal ID"
-                formControlName="vendorDealId"></app-input>
-            </div>
-            <div class="mt-2">
-              <app-select
-                placeholder="Accumulation Type"
-                [options]="accumulationTypeOptions"
-                formControlName="accumulationType"></app-select>
+                </ng-container>
+              </div>
+              <div class="m-1">
+                <app-input
+                  type="text"
+                  placeholder="Vendor Deal ID"
+                  formControlName="vendorDealId"></app-input>
+              </div>
+              <div class="m-1 ms-0" style="min-width: 200px">
+                <app-select
+                  placeholder="Accumulation Type"
+                  [options]="accumulationTypeOptions"
+                  formControlName="accumulationType"></app-select>
+              </div>
             </div>
             <div class="mt-2 d-flex">
               <app-input
