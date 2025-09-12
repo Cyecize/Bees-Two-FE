@@ -3,6 +3,7 @@ import { DialogContentBaseComponent } from '../dialog-content-base.component';
 import { Observable } from 'rxjs';
 import { WrappedResponse } from '../../../util/field-error-wrapper';
 import { NgIf } from '@angular/common';
+import { TooltipSpanComponent } from '../../../components/tooltip-span/tooltip-span.component';
 
 @Component({
   standalone: true,
@@ -14,7 +15,14 @@ import { NgIf } from '@angular/common';
     <div *ngIf="!payload.isSuccess">
       <p>
         Request trace id:
-        <strong>{{ payload.errorResp?.data?.requestTraceId }}</strong>
+        <strong>
+          <app-tooltip-span
+            [tooltipText]="payload.errorResp?.data?.requestTraceId || ''"
+            [displayText]="payload.errorResp?.data?.requestTraceId || ''"
+            [enableCopy]="true"
+          >
+          </app-tooltip-span>
+        </strong>
       </p>
     </div>
 
@@ -38,7 +46,7 @@ import { NgIf } from '@angular/common';
       </div>
     </div>
   `,
-  imports: [NgIf],
+  imports: [NgIf, TooltipSpanComponent],
 })
 export class RequestResultDialogComponent
   extends DialogContentBaseComponent<WrappedResponse<any>>
