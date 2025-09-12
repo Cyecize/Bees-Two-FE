@@ -59,7 +59,8 @@ export class AppComponent implements OnInit {
     return AppComponent.injector;
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+    await this.authService.init();
     this.router.events
       .pipe(filter((event) => event instanceof NavigationStart))
       .subscribe((event: NavigationStart) => {

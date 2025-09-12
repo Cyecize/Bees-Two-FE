@@ -43,11 +43,17 @@ export class CountryEnvironmentService implements ICountryEnvironmentService {
   private allEnvs!: Promise<CountryEnvironmentModel[]>;
 
   constructor(private repository: CountryEnvironmentRepository) {
-    this.init();
+    this.allEnvs = firstValueFrom(this.repository.getAllEnvs());
+    void this.init();
   }
 
-  public getEnvs(): Promise<CountryEnvironmentModel[]> {
-    return this.allEnvs;
+  public async getEnvs(): Promise<CountryEnvironmentModel[]> {
+    try {
+      return await this.allEnvs;
+    } catch (err) {
+      this.allEnvs = firstValueFrom(this.repository.getAllEnvs());
+      return await this.getEnvs();
+    }
   }
 
   public async searchEnvs(
@@ -169,8 +175,6 @@ export class CountryEnvironmentService implements ICountryEnvironmentService {
   }
 
   private async init(): Promise<void> {
-    this.allEnvs = firstValueFrom(this.repository.getAllEnvs());
-
     const envId = localStorage.getItem(STORAGE_SELECTED_ENV_ID_NAME);
     if (ObjectUtils.isNil(envId)) {
       return;
