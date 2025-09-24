@@ -193,7 +193,7 @@ export class DialogService implements IDialogService {
   ): Observable<BeesToken> {
     return this.open(
       BeesTokenOverrideDialogComponent,
-      'Bees Token Override',
+      'Bees Token Override (Start With Bearer)',
       env,
     ).afterClosed();
   }
