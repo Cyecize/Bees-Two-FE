@@ -10,6 +10,7 @@ import { ShowLoader } from '../../shared/loader/show.loader.decorator';
 import { PlatformIdType } from '../../api/platformid/platform-id.type';
 import { StringReplacerDialog } from '../../shared/dialog/dialogs/string-replacer-dialog/string-replacer-dialog.component';
 import { TemplatePlaygroundDialogPayload } from '../template-history/template/template-payload-playground-dialog/template-playground-dialog.payload';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-home',
@@ -26,6 +27,7 @@ export class HomeComponent implements OnInit {
   constructor(
     private envService: CountryEnvironmentService,
     private dialogService: DialogService,
+    private title: Title,
   ) {}
 
   openEnvDialog(): void {
@@ -38,6 +40,7 @@ export class HomeComponent implements OnInit {
         this.currentEnv = value;
       }
     });
+    this.title.setTitle('');
   }
 
   viewEnvDetails(): void {

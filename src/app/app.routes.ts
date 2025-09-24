@@ -23,6 +23,7 @@ export const promoRoutes: Routes = [
       },
       {
         path: AppRoutingPath.SEARCH_PROMOS_V3.path,
+        title: 'Promo Search',
         loadChildren: () =>
           import(
             './ui/promos/promotions/search-promotions/search-promotions.component'
@@ -30,6 +31,7 @@ export const promoRoutes: Routes = [
       },
       {
         path: AppRoutingPath.CREATE_PROMO.path,
+        title: 'Promo Add',
         loadChildren: () =>
           import(
             './ui/promos/promotions/add-promotion/add-promotion.component'
@@ -37,6 +39,7 @@ export const promoRoutes: Routes = [
       },
       {
         path: AppRoutingPath.SEARCH_DEALS.path,
+        title: 'Deals Search',
         loadChildren: () =>
           import('./ui/promos/deals/search-deals/search-deals.component').then(
             (value) => value.SEARCH_DEALS_ROUTES,
@@ -44,6 +47,7 @@ export const promoRoutes: Routes = [
       },
       {
         path: AppRoutingPath.CREATE_DEAL.path,
+        title: 'Create Deal V3',
         loadChildren: () =>
           import('./ui/promos/deals/add-deal/add-deal.component').then(
             (value) => value.ADD_DEALS_ROUTES,
@@ -51,6 +55,7 @@ export const promoRoutes: Routes = [
       },
       {
         path: AppRoutingPath.EDIT_DEAL.path,
+        title: 'Edit Deal V3',
         loadChildren: () =>
           import('./ui/promos/deals/edit-deal/edit-deal.component').then(
             (value) => value.EDIT_DEALS_ROUTES,
@@ -77,9 +82,11 @@ const rewardsRoutes: Routes = [
   {
     path: AppRoutingPath.REWARDS_SETTINGS.path,
     component: RewardsBaseComponent,
+    title: 'Rewards Settings',
     children: [
       {
         path: AppRoutingPath.SEARCH_REWARDS_SETTINGS.path,
+        title: 'Search Settings',
         loadChildren: () =>
           import(
             './ui/rewards/search-rewards-settings/search-rewards-settings.component'
@@ -87,6 +94,7 @@ const rewardsRoutes: Routes = [
       },
       {
         path: AppRoutingPath.EDIT_REWARDS_SETTINGS.path,
+        title: 'Edit Setting',
         data: {
           raw: false,
         },
@@ -97,6 +105,7 @@ const rewardsRoutes: Routes = [
       },
       {
         path: AppRoutingPath.CREATE_REWARDS_SETTINGS.path,
+        title: 'Create Setting',
         data: {
           raw: false,
         },
@@ -107,6 +116,7 @@ const rewardsRoutes: Routes = [
       },
       {
         path: AppRoutingPath.EDIT_REWARDS_SETTINGS_RAW.path,
+        title: 'Edit Setting',
         data: {
           raw: true,
         },
@@ -117,6 +127,7 @@ const rewardsRoutes: Routes = [
       },
       {
         path: AppRoutingPath.CREATE_REWARDS_SETTINGS_RAW.path,
+        title: 'Create Setting',
         data: {
           raw: true,
         },
@@ -130,9 +141,11 @@ const rewardsRoutes: Routes = [
   {
     path: AppRoutingPath.REWARDS_SEGMENTATION.path,
     component: RewardsBaseComponent,
+    title: 'Segmentation',
     children: [
       {
         path: AppRoutingPath.SEARCH_SEGMENTATION_GROUPS.path,
+        title: 'Search Groups',
         loadChildren: () =>
           import(
             './ui/rewards-segmentation/search-segmentation-groups/search-segmentation-groups.component'
@@ -140,6 +153,7 @@ const rewardsRoutes: Routes = [
       },
       {
         path: AppRoutingPath.SEARCH_SEGMENTATION_GROUPS_BY_ACCOUNT.path,
+        title: 'Search Groups By Acc',
         loadChildren: () =>
           import(
             './ui/rewards-segmentation/search-segmentation-groups-by-account/search-segmentation-groups-by-account.component'
@@ -147,6 +161,7 @@ const rewardsRoutes: Routes = [
       },
       {
         path: AppRoutingPath.CREATE_SEGMENTATION_GROUP.path,
+        title: 'Create Group',
         loadChildren: () =>
           import(
             './ui/rewards-segmentation/create-segment-group/create-segment-group.component'
@@ -157,9 +172,11 @@ const rewardsRoutes: Routes = [
   {
     path: AppRoutingPath.REWARDS_CHALLENGES.path,
     component: RewardsBaseComponent,
+    title: 'Challenges',
     children: [
       {
         path: AppRoutingPath.SEARCH_CHALLENGES.path,
+        title: 'Search Challenges',
         loadChildren: () =>
           import(
             './ui/rewards-challenges/search-challenges/search-challenges.component'
@@ -167,6 +184,7 @@ const rewardsRoutes: Routes = [
       },
       {
         path: AppRoutingPath.CREATE_CHALLENGE.path,
+        title: 'Create Challenge',
         loadChildren: () =>
           import(
             './ui/rewards-challenges/create-challenge/create-challenge.component'
@@ -190,6 +208,7 @@ const accountRoutes: Routes = [
       },
       {
         path: AppRoutingPath.ACCOUNTS_SEARCH_V1.path,
+        title: 'Search Accounts',
         loadChildren: () =>
           import(
             './ui/accounts/search-accounts/search-accounts.component'
@@ -197,6 +216,7 @@ const accountRoutes: Routes = [
       },
       {
         path: AppRoutingPath.ACCOUNTS_ADD_V2_RAW.path,
+        title: 'Add Account V2',
         loadChildren: () =>
           import('./ui/accounts/add-account/add-account.component').then(
             (value) => value.ADD_ACCOUNT_ROUTES,
@@ -204,6 +224,7 @@ const accountRoutes: Routes = [
       },
       {
         path: AppRoutingPath.DELIVERY_WINDOWS_ADD.path,
+        title: 'Add Delivery Windows',
         loadChildren: () =>
           import(
             './ui/accounts/add-delivery-window/add-delivery-window.component'
@@ -227,6 +248,7 @@ const itemRoutes: Routes = [
       },
       {
         path: AppRoutingPath.ITEMS_SEARCH.path,
+        title: 'Search Items',
         loadChildren: () =>
           import('./ui/items/search-items/search-items.component').then(
             (value) => value.SEARCH_ITEMS_ROUTES,
@@ -234,6 +256,7 @@ const itemRoutes: Routes = [
       },
       {
         path: AppRoutingPath.ITEMS_ADD_RAW.path,
+        title: 'Add Items',
         loadChildren: () =>
           import('./ui/items/add-item/add-item.component').then(
             (value) => value.ADD_ITEM_ROUTES,
@@ -241,6 +264,7 @@ const itemRoutes: Routes = [
       },
       {
         path: AppRoutingPath.ITEMS_UPLOAD_IMAGES.path,
+        title: 'Upload Item Images',
         loadChildren: () =>
           import(
             './ui/items/upload-item-images/upload-item-images.component'
@@ -248,6 +272,7 @@ const itemRoutes: Routes = [
       },
       {
         path: AppRoutingPath.ITEMS_ADD_INVENTORY.path,
+        title: 'Add Inventory',
         loadChildren: () =>
           import('./ui/inventory/add-inventory/add-inventory.component').then(
             (value) => value.ADD_INVENTORY_ROUTES,
@@ -255,9 +280,11 @@ const itemRoutes: Routes = [
       },
       {
         path: AppRoutingPath.CATEGORIES.path,
+        title: 'Categories',
         children: [
           {
             path: AppRoutingPath.CATEGORY_SEARCH_V3.path,
+            title: 'Search Categories',
             loadChildren: () =>
               import(
                 './ui/categories/search-categories/search-categories.component'
@@ -265,6 +292,7 @@ const itemRoutes: Routes = [
           },
           {
             path: AppRoutingPath.CATEGORY_UPLOAD_IMAGES.path,
+            title: 'Upload Category Images',
             loadChildren: () =>
               import(
                 './ui/categories/upload-category-images/upload-category-images.component'
@@ -272,6 +300,7 @@ const itemRoutes: Routes = [
           },
           {
             path: AppRoutingPath.CATEGORY_BULK_CREATE.path,
+            title: 'Bulk Create Categories',
             loadChildren: () =>
               import(
                 './ui/categories/bulk-create-categories/bulk-create-categories.component'
@@ -279,6 +308,7 @@ const itemRoutes: Routes = [
           },
           {
             path: AppRoutingPath.CATEGORY_BULK_ASSIGN.path,
+            title: 'Bulk Assign Categories',
             loadChildren: () =>
               import(
                 './ui/categories/bulk-assign-items/bulk-assign-items.component'
@@ -291,6 +321,7 @@ const itemRoutes: Routes = [
         children: [
           {
             path: '',
+            title: 'Assortment',
             loadChildren: () =>
               import(
                 './shared/components/choose-option-alert/choose-option-alert.component'
@@ -298,6 +329,7 @@ const itemRoutes: Routes = [
           },
           {
             path: AppRoutingPath.ASSORTMENT_INCLUSION_V4.path,
+            title: 'Create Assortment V4',
             loadChildren: () =>
               import(
                 './ui/product-assortment/assortment-inclusion/assortment-inclusion.component'
@@ -323,6 +355,7 @@ const orderInvoiceRoutes: Routes = [
       },
       {
         path: AppRoutingPath.ORDERS_AND_INVOICES_SEARCH_ORDERS.path,
+        title: 'Search Orders',
         loadChildren: () =>
           import(
             './ui/orders-invoices/search-orders/search-orders.component'
@@ -346,14 +379,17 @@ const templateRoutes: Routes = [
       },
       {
         path: AppRoutingPath.HISTORY.path,
+        title: 'Request History',
         component: SearchRequestHistory,
       },
       {
         path: AppRoutingPath.TEMPLATES.path,
+        title: 'Templates',
         component: TemplateBaseComponent,
         children: [
           {
             path: AppRoutingPath.SEARCH_TEMPLATES.path,
+            title: 'Search Templates',
             loadChildren: () =>
               import(
                 './ui/template-history/template/search-templates/search-templates.component'
@@ -361,6 +397,7 @@ const templateRoutes: Routes = [
           },
           {
             path: AppRoutingPath.ADD_TEMPLATE.path,
+            title: 'Add Template',
             loadChildren: () =>
               import(
                 './ui/template-history/template/add-template/add-template.component'
@@ -368,6 +405,7 @@ const templateRoutes: Routes = [
           },
           {
             path: AppRoutingPath.EDIT_TEMPLATE.path,
+            title: 'Edit Template',
             loadChildren: () =>
               import(
                 './ui/template-history/template/edit-template/edit-template.component'
@@ -387,35 +425,43 @@ export const routes: Routes = [
   },
   {
     path: AppRoutingPath.LOGIN.path,
+    title: 'Login',
     loadChildren: () =>
       import('./ui/login/login.component').then((value) => value.LOGIN_ROUTES),
   },
   {
     path: AppRoutingPath.PROMOS.path,
+    title: 'Promo Tab',
     children: promoRoutes,
   },
   {
     path: AppRoutingPath.REWARDS.path,
+    title: 'Rewards Tab',
     children: rewardsRoutes,
   },
   {
     path: AppRoutingPath.ACCOUNTS.path,
+    title: 'Accounts Tab',
     children: accountRoutes,
   },
   {
     path: AppRoutingPath.ITEMS.path,
+    title: 'Items Tab',
     children: itemRoutes,
   },
   {
     path: AppRoutingPath.ORDERS_AND_INVOICES.path,
+    title: 'Orders Tab',
     children: orderInvoiceRoutes,
   },
   {
     path: AppRoutingPath.TEMPLATES_AND_HISTORY.path,
+    title: 'Templates & History',
     children: templateRoutes,
   },
   {
     path: '**',
+    title: 'Page Not Found',
     loadChildren: () =>
       import('./ui/not-found/not-found.component').then(
         (m) => m.NOT_FOUND_ROUTES,
