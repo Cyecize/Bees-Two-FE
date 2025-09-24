@@ -420,6 +420,7 @@ const templateRoutes: Routes = [
 export const routes: Routes = [
   {
     path: AppRoutingPath.HOME.path,
+    title: 'Home',
     loadChildren: () =>
       import('./ui/home/home.component').then((value) => value.HOME_ROUTES),
   },

@@ -2,6 +2,7 @@
 import { Injectable } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { RouterStateSnapshot, TitleStrategy } from '@angular/router';
+import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class BasicTitleStrategy extends TitleStrategy {
@@ -13,8 +14,11 @@ export class BasicTitleStrategy extends TitleStrategy {
 
   override updateTitle(routerState: RouterStateSnapshot): void {
     const title = this.buildTitle(routerState);
+    const localSuffix = environment.isLocal ? ' Local' : '';
     if (title !== undefined) {
-      this.title.setTitle(`${title} - ${BasicTitleStrategy.WEBSITE_NAME}`);
+      this.title.setTitle(
+        `${title} - ${BasicTitleStrategy.WEBSITE_NAME}${localSuffix}`,
+      );
     } else {
       this.title.setTitle(BasicTitleStrategy.WEBSITE_NAME);
     }
