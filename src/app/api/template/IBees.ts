@@ -104,6 +104,7 @@ import {
 import { RelayVersion } from '../relay/relay.version';
 import { RequestMethod } from '../common/request-method';
 import { IRelayService, RelayService } from '../relay/relay.service';
+import { OrderOrderbyType } from '../orders/order.orderby.type';
 
 /**
  * @monaco
@@ -234,4 +235,5 @@ export const publicEnums = {
   CategoryGroupType,
   RelayVersion,
   RequestMethod,
+  OrderOrderbyType,
 };
