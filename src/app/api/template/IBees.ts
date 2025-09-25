@@ -105,6 +105,8 @@ import { RelayVersion } from '../relay/relay.version';
 import { RequestMethod } from '../common/request-method';
 import { IRelayService, RelayService } from '../relay/relay.service';
 import { OrderOrderbyType } from '../orders/order.orderby.type';
+import { ContractStatus } from '../accounts/contracts/contract-status';
+import { ContractClassificationType } from '../accounts/contracts/contract-classification-type';
 
 /**
  * @monaco
@@ -236,4 +238,6 @@ export const publicEnums = {
   RelayVersion,
   RequestMethod,
   OrderOrderbyType,
+  ContractStatus,
+  ContractClassificationType,
 };

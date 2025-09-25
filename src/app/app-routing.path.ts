@@ -26,6 +26,7 @@ export class AppRoutingPath {
   public static readonly CREATE_CHALLENGE = new RouteConfig('create', AppRoutingPath.REWARDS_CHALLENGES);
   public static readonly ACCOUNTS = new RouteConfig('accounts', null);
   public static readonly ACCOUNTS_SEARCH_V1 = new RouteConfig('search-v1', AppRoutingPath.ACCOUNTS);
+  public static readonly ACCOUNTS_SEARCH_CONTRACTS = new RouteConfig('search-contracts', AppRoutingPath.ACCOUNTS);
   public static readonly ACCOUNTS_ADD_V2_RAW = new RouteConfig('add-v2-raw', AppRoutingPath.ACCOUNTS);
   public static readonly DELIVERY_WINDOWS_ADD = new RouteConfig('delivery-windows/add', AppRoutingPath.ACCOUNTS);
   public static readonly DELIVERY_WINDOWS_SEARCH = new RouteConfig('delivery-windows/search', AppRoutingPath.ACCOUNTS);

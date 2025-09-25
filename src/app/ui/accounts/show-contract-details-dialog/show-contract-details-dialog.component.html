@@ -1,0 +1,163 @@
+<div>
+  <div style="max-height: 200px; overflow-y: auto;">
+    <table class="table">
+      <thead>
+      </thead>
+      <tbody>
+      <tr>
+        <td>Name</td>
+        <td>
+          <strong>{{ payload.contract.displayName }}</strong>
+        </td>
+      </tr>
+      <tr *ngIf="payload.contract.status">
+        <td>Status</td>
+        <td>
+          {{ payload.contract.status }}
+        </td>
+      </tr>
+      <tr>
+        <td>Id (BEES)</td>
+        <td>
+          <app-tooltip-span
+            [trimDisplayTextChars]="50"
+            [enableCopy]="true"
+            [tooltipText]="payload.contract.accountId"
+            [displayText]="payload.contract.accountId"></app-tooltip-span>
+        </td>
+      </tr>
+      <tr>
+        <td>Id (Customer)</td>
+        <td>
+          <app-tooltip-span
+            [trimDisplayTextChars]="50"
+            [enableCopy]="true"
+            [tooltipText]="payload.contract.customerAccountId"
+            [displayText]="payload.contract.customerAccountId"></app-tooltip-span>
+        </td>
+      </tr>
+      <tr>
+        <td>Id (Vendor)</td>
+        <td>
+          <app-tooltip-span
+            [trimDisplayTextChars]="50"
+            [enableCopy]="true"
+            [tooltipText]="payload.contract.vendorAccountId"
+            [displayText]="payload.contract.vendorAccountId"></app-tooltip-span>
+        </td>
+      </tr>
+      <tr>
+        <td>Vendor ID</td>
+        <td>
+          <app-tooltip-span
+            [trimDisplayTextChars]="50"
+            [enableCopy]="true"
+            [tooltipText]="payload.contract.vendorId"
+            [displayText]="payload.contract.vendorId"></app-tooltip-span>
+        </td>
+      </tr>
+      <tr *ngIf="payload.contract.challengeIds?.length">
+        <td>Challenge Ids</td>
+        <td>
+          <div *ngFor="let id of payload.contract.challengeIds">
+            <app-copy-icon [copyText]="id"></app-copy-icon>
+            {{ id }}
+          </div>
+        </td>
+      </tr>
+      <tr *ngIf="payload.contract.paymentMethods?.length">
+        <td>Payment methods</td>
+        <td>
+          {{ payload.contract.paymentMethods.join(", ") }}
+        </td>
+      </tr>
+      <tr *ngIf="payload.contract.deliveryCenterId">
+        <td>Delivery Center ID</td>
+        <td>
+          <app-tooltip-span
+            [trimDisplayTextChars]="50"
+            [enableCopy]="true"
+            [tooltipText]="payload.contract.deliveryCenterId"
+            [displayText]="payload.contract.deliveryCenterId"></app-tooltip-span>
+        </td>
+      </tr>
+      <tr *ngIf="payload.contract.deliveryScheduleId">
+        <td>Delivery Schedule ID</td>
+        <td>
+          <app-tooltip-span
+            [trimDisplayTextChars]="50"
+            [enableCopy]="true"
+            [tooltipText]="payload.contract.deliveryScheduleId"
+            [displayText]="payload.contract.deliveryScheduleId"></app-tooltip-span>
+        </td>
+      </tr>
+      <tr *ngIf="payload.contract.priceListId">
+        <td>Price list ID</td>
+        <td>
+          <app-tooltip-span
+            [trimDisplayTextChars]="50"
+            [enableCopy]="true"
+            [tooltipText]="payload.contract.priceListId"
+            [displayText]="payload.contract.priceListId"></app-tooltip-span>
+        </td>
+      </tr>
+      <tr *ngIf="payload.contract.taxId">
+        <td>Tax ID</td>
+        <td>
+          <app-tooltip-span
+            [trimDisplayTextChars]="50"
+            [enableCopy]="true"
+            [tooltipText]="payload.contract.taxId"
+            [displayText]="payload.contract.taxId"></app-tooltip-span>
+        </td>
+      </tr>
+      <tr *ngIf="payload.contract.segment">
+        <td>Segment</td>
+        <td>
+          <app-tooltip-span
+            [trimDisplayTextChars]="50"
+            [enableCopy]="true"
+            [tooltipText]="payload.contract.segment"
+            [displayText]="payload.contract.segment"></app-tooltip-span>
+        </td>
+      </tr>
+      <tr *ngIf="payload.contract.channel">
+        <td>Channel</td>
+        <td>
+          <app-tooltip-span
+            [trimDisplayTextChars]="50"
+            [enableCopy]="true"
+            [tooltipText]="payload.contract.channel"
+            [displayText]="payload.contract.channel"></app-tooltip-span>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr *ngIf="showJson">
+  <div *ngIf="showJson" style="overflow-y: auto; max-height: 300px;">
+    <pre>{{ dataJson }}</pre>
+  </div>
+  <hr>
+  <div class="text-end">
+    <button class="btn btn-outline-dark m-1" (click)="close(undefined);">Close</button>
+    <button class="btn btn-outline-success m-1" (click)="copy();">Copy JSON</button>
+    <button class="btn btn-outline-secondary m-1"
+            *ngIf="!showJson"
+            (click)="showJson = true">Show JSON
+    </button>
+    <button class="btn btn-outline-dark m-1"
+            *ngIf="showJson"
+            (click)="showJson = false">Hide JSON
+    </button>
+    <!--    <button class="btn btn-outline-danger m-1" (click)="delete();">Delete</button>-->
+    <button class="btn btn-outline-primary m-1"
+            *ngIf="payload.contract.vendorId === payload.selectedEnv?.vendorId"
+            (click)="saveLocally();">Save
+    </button>
+    <!--    <a class="btn btn-outline-success m-1" [routerLink]="getEditRawRoute()" (click)="close(undefined);">Edit Raw</a>-->
+    <!--    <a class="btn btn-outline-warning m-1" [routerLink]="getEditRoute()" (click)="close(undefined);">Edit</a>-->
+  </div>
+
+</div>

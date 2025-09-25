@@ -6,6 +6,8 @@ import {
   BeesAccountPaymentTerm,
   BeesAccountRepresentative,
 } from '../v1/account-v1';
+import { ContractStatus } from './contract-status';
+import { ContractClassificationType } from './contract-classification-type';
 
 /**
  * @monaco
@@ -39,9 +41,9 @@ export interface BeesContract {
   potential: string;
   representatives: BeesAccountRepresentative[];
   segment: string;
-  status: string;
+  status: ContractStatus;
   timezone: string;
-  classificationType: string;
+  classificationType: ContractClassificationType;
   businessAttributes: any[];
   hasEmptiesLoan: boolean;
   hasOverprice: boolean;

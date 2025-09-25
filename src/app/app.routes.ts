@@ -8,6 +8,7 @@ import { OrdersInvoicesBaseComponent } from './ui/orders-invoices/orders-invoice
 import { SearchRequestHistory } from './ui/template-history/history/search-request-history/search-request-history';
 import { TemplateBaseComponent } from './ui/template-history/template/template-base/template-base.component';
 import { TemplateAndHistoryBaseComponent } from './ui/template-history/template-and-history-base/template-and-history-base.component';
+import { SEARCH_CONTRACTS_ROUTES } from './ui/accounts/search-contracts/search-contracts.component';
 
 export const promoRoutes: Routes = [
   {
@@ -213,6 +214,14 @@ const accountRoutes: Routes = [
           import(
             './ui/accounts/search-accounts/search-accounts.component'
           ).then((value) => value.SEARCH_ACCOUNTS_ROUTES),
+      },
+      {
+        path: AppRoutingPath.ACCOUNTS_SEARCH_CONTRACTS.path,
+        title: 'Search Contracts',
+        loadChildren: () =>
+          import(
+            './ui/accounts/search-contracts/search-contracts.component'
+          ).then((value) => value.SEARCH_CONTRACTS_ROUTES),
       },
       {
         path: AppRoutingPath.ACCOUNTS_ADD_V2_RAW.path,

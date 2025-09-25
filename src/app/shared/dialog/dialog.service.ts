@@ -51,6 +51,9 @@ import { ShowAccountDetailsDialogComponent } from '../../ui/accounts/show-accoun
 import { ShowAccountDetailsDialogPayload } from '../../ui/accounts/show-account-details-dialog/show-account-details-dialog.payload';
 import { PromotionPlatformIdDialogComponent } from '../../ui/platformid/promotion-platform-id-dialog/promotion-platform-id-dialog.component';
 import { EnforcementPlatformIdDialogComponent } from '../../ui/platformid/enforcement-platform-id-dialog/enforcement-platform-id-dialog.component';
+import { BeesContract } from '../../api/accounts/contracts/bees-contract';
+import { ShowContractDetailsDialogComponent } from '../../ui/accounts/show-contract-details-dialog/show-contract-details-dialog.component';
+import { ShowContractDetailsDialogPayload } from '../../ui/accounts/show-contract-details-dialog/show-contract-details-dialog.payload';
 
 /**
  * @monaco
@@ -101,6 +104,11 @@ export interface IDialogService {
 
   openAccountV1Details(
     account: AccountV1,
+    env?: CountryEnvironmentModel,
+  ): Promise<any>;
+
+  openBeesContractDetails(
+    contract: BeesContract,
     env?: CountryEnvironmentModel,
   ): Promise<any>;
 }
@@ -310,6 +318,17 @@ export class DialogService implements IDialogService {
       ShowAccountDetailsDialogComponent,
       '',
       new ShowAccountDetailsDialogPayload(account, env),
+    );
+  }
+
+  public async openBeesContractDetails(
+    contract: BeesContract,
+    env?: CountryEnvironmentModel,
+  ): Promise<any> {
+    this.open(
+      ShowContractDetailsDialogComponent,
+      '',
+      new ShowContractDetailsDialogPayload(contract, env),
     );
   }
 }

@@ -1,6 +1,8 @@
 <div>
   <h2>Save Account</h2>
   <p>You are saving this account for <strong>{{ payload.env.envName }}</strong></p>
+  <h3 *ngIf="payload.account?.vendorId !== payload.env.vendorId"
+      class="alert alert-danger">This account does not belong to this env!</h3>
   <hr>
   <div>
     <form [formGroup]="form">
@@ -40,7 +42,7 @@
   </div>
 
   <div style="overflow-y: auto; max-height: 500px;" class="mt-5" *ngIf="accountsPage.content.length">
-    <h3 class="alert alert-warning">Found the following accounts that could be potential duplicates</h3>
+    <h3 class="alert alert-danger">Found the following accounts that could be potential duplicates</h3>
     <table class="table">
       <thead>
       <tr>

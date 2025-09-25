@@ -3,6 +3,8 @@ import {
   PageRequestImpl,
 } from '../../../shared/util/page-request';
 import { BeesParam, BeesParamImpl } from '../../common/bees-param';
+import { ContractStatus } from './contract-status';
+import { ContractClassificationType } from './contract-classification-type';
 
 /*
 id (The BEES Contract deterministic ID, it is the encoded hash of the vendorAccountId + vendorId)
@@ -25,11 +27,12 @@ export interface BeesContractQuery {
   deliveryCenterId: string[];
   vendorId: string[];
   customerAccountId: string[];
+  vendorAccountId: string[];
   accountId: string[];
-  status: string[];
+  status: ContractStatus[];
   priceListId: string[];
   projection: string[];
-  classificationType: string[];
+  classificationType: ContractClassificationType[];
   page: PageRequest;
   includes: string[];
   toBeesQueryParams(): BeesParam[];
@@ -37,15 +40,16 @@ export interface BeesContractQuery {
 
 export class BeesContractQueryImpl implements BeesContractQuery {
   accountId: string[] = [];
-  classificationType: string[] = [];
+  classificationType: ContractClassificationType[] = [];
   customerAccountId: string[] = [];
+  vendorAccountId: string[] = [];
   deliveryCenterId: string[] = [];
   id: string | null = null;
   includes: string[] = [];
   page: PageRequest = new PageRequestImpl();
   priceListId: string[] = [];
   projection: string[] = [];
-  status: string[] = [];
+  status: ContractStatus[] = [];
   taxId: string[] = [];
   vendorId: string[] = [];
 

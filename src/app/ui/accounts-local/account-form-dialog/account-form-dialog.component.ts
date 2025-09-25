@@ -87,6 +87,9 @@ export class AccountFormDialogComponent
     if (this.payload.account) {
       this.form.patchValue(this.payload.account);
       this.form.controls.beesId.patchValue(this.payload.account.accountId);
+      this.form.controls.name.patchValue(
+        this.payload.account.displayName! || this.payload.account.legalName!,
+      );
       this.reloadFilters();
     }
   }

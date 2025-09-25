@@ -1,0 +1,351 @@
+<div>
+  <div>
+    <h3>Search Contracts</h3>
+  </div>
+
+  <div>
+    <h4>Environment</h4>
+    <div class="filters-header">
+      <div class="filter">
+        <app-env-override-field></app-env-override-field>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="filters">
+    <h4>Filters</h4>
+    <small>Either id, taxId, deliveryCenterId, accountId or vendorId is required</small>
+    <div class="filters-header">
+      <div class="filter">
+        <div class="d-flex">
+          <app-input placeholder="Id (composite)"
+                     (onChangeEnd)="reloadFilters()"
+                     [(ngModel)]="query.id"></app-input>
+        </div>
+      </div>
+      <div class="filter">
+        <div class="d-flex">
+          <app-input
+            placeholder="Tax ID"
+            [clearOnChangeEnd]="true"
+            (onChangeEnd)="addTaxId($event)"></app-input>
+          <button
+            (click)="pickTaxIdFromAccount()"
+            class="btn btn-sm btn-outline-warning ms-1">Pick
+          </button>
+        </div>
+        <div
+          class="d-flex justify-content-between align-items-center"
+          *ngFor="let taxId of query.taxId; let ind = index">
+          <span>
+            <app-tooltip-span
+              [trimDisplayTextChars]="15"
+              [tooltipText]="taxId"
+              [enableCopy]="true"
+              [displayText]="taxId"></app-tooltip-span>
+          </span>
+
+          <strong>
+            <i (click)="removeTaxId(ind)" class="fa fa-x"></i>
+          </strong>
+        </div>
+      </div>
+      <div class="filter">
+        <div class="d-flex">
+          <app-input
+            placeholder="DDC"
+            [clearOnChangeEnd]="true"
+            (onChangeEnd)="addDDC($event)"></app-input>
+          <button
+            (click)="pickDDCFromAccount()"
+            class="btn btn-sm btn-outline-warning ms-1">Pick
+          </button>
+        </div>
+        <div
+          class="d-flex justify-content-between align-items-center"
+          *ngFor="let ddc of query.deliveryCenterId; let ind = index">
+          <span>
+            <app-tooltip-span
+              [trimDisplayTextChars]="15"
+              [tooltipText]="ddc"
+              [enableCopy]="true"
+              [displayText]="ddc"></app-tooltip-span>
+          </span>
+
+          <strong>
+            <i (click)="removeDDC(ind)" class="fa fa-x"></i>
+          </strong>
+        </div>
+      </div>
+      <div class="filter">
+        <div class="d-flex">
+          <app-input
+            placeholder="Vendor ID"
+            [clearOnChangeEnd]="true"
+            (onChangeEnd)="addVendorId($event)"></app-input>
+          <button
+            (click)="pickVendorIdFromEnv()"
+            class="btn btn-sm btn-outline-warning ms-1">Pick
+          </button>
+        </div>
+        <small class="c-pointer" (click)="addCurrentVendorId()">Use current</small>
+        <div
+          class="d-flex justify-content-between align-items-center"
+          *ngFor="let vendorId of query.vendorId; let ind = index">
+          <span>
+            <app-tooltip-span
+              [trimDisplayTextChars]="15"
+              [tooltipText]="vendorId"
+              [enableCopy]="true"
+              [displayText]="vendorId"></app-tooltip-span>
+          </span>
+
+          <strong>
+            <i (click)="removeVendorId(ind)" class="fa fa-x"></i>
+          </strong>
+        </div>
+      </div>
+      <div class="filter">
+        <div class="d-flex">
+          <app-input
+            placeholder="(BEES) Account ID"
+            [clearOnChangeEnd]="true"
+            (onChangeEnd)="addAccountId($event)"></app-input>
+          <button
+            (click)="pickAccountIdFromAccount()"
+            class="btn btn-sm btn-outline-warning ms-1">Pick
+          </button>
+        </div>
+        <div
+          class="d-flex justify-content-between align-items-center"
+          *ngFor="let accId of query.accountId; let ind = index">
+          <span>
+            <app-tooltip-span
+              [trimDisplayTextChars]="15"
+              [tooltipText]="accId"
+              [enableCopy]="true"
+              [displayText]="accId"></app-tooltip-span>
+          </span>
+
+          <strong>
+            <i (click)="removeAccountId(ind)" class="fa fa-x"></i>
+          </strong>
+        </div>
+      </div>
+      <div class="filter">
+        <div class="d-flex">
+          <app-input
+            placeholder="Customer Acc ID"
+            [clearOnChangeEnd]="true"
+            (onChangeEnd)="addCustomerAccountId($event)"></app-input>
+          <button
+            (click)="pickCustomerAccountIdFromAccount()"
+            class="btn btn-sm btn-outline-warning ms-1">Pick
+          </button>
+        </div>
+        <div
+          class="d-flex justify-content-between align-items-center"
+          *ngFor="let accId of query.customerAccountId; let ind = index">
+          <span>
+            <app-tooltip-span
+              [trimDisplayTextChars]="15"
+              [tooltipText]="accId"
+              [enableCopy]="true"
+              [displayText]="accId"></app-tooltip-span>
+          </span>
+
+          <strong>
+            <i (click)="removeCustomerAccountId(ind)" class="fa fa-x"></i>
+          </strong>
+        </div>
+      </div>
+      <div class="filter">
+        <div class="d-flex">
+          <app-input
+            placeholder="Vendor Acc ID"
+            [clearOnChangeEnd]="true"
+            (onChangeEnd)="addVendorAccountId($event)"></app-input>
+          <button
+            (click)="pickVendorAccountIdFromAccount()"
+            class="btn btn-sm btn-outline-warning ms-1">Pick
+          </button>
+        </div>
+        <div
+          class="d-flex justify-content-between align-items-center"
+          *ngFor="let accId of query.vendorAccountId; let ind = index">
+          <span>
+            <app-tooltip-span
+              [trimDisplayTextChars]="15"
+              [tooltipText]="accId"
+              [enableCopy]="true"
+              [displayText]="accId"></app-tooltip-span>
+          </span>
+
+          <strong>
+            <i (click)="removeVendorAccountId(ind)" class="fa fa-x"></i>
+          </strong>
+        </div>
+      </div>
+      <div class="filter">
+        <div>
+          <app-select-search
+            [payload]="contractStatuses"
+            [clearOnSelect]="true"
+            placeholder="Status"
+            (selectionChange)="addStatus($event)"></app-select-search>
+        </div>
+        <div
+          class="d-flex justify-content-between align-items-center"
+          *ngFor="let status of query.status; let ind = index">
+          <span>
+            <app-tooltip-span
+              [trimDisplayTextChars]="15"
+              [tooltipText]="status"
+              [enableCopy]="true"
+              [displayText]="status"></app-tooltip-span>
+          </span>
+
+          <strong>
+            <i (click)="removeStatus(ind)" class="fa fa-x"></i>
+          </strong>
+        </div>
+      </div>
+      <div class="filter">
+        <div>
+          <app-select-search
+            [payload]="classificationTypes"
+            [clearOnSelect]="true"
+            placeholder="Classification"
+            (selectionChange)="addClassificationType($event)"></app-select-search>
+        </div>
+        <div
+          class="d-flex justify-content-between align-items-center"
+          *ngFor="let cType of query.classificationType; let ind = index">
+          <span>
+            <app-tooltip-span
+              [trimDisplayTextChars]="15"
+              [tooltipText]="cType"
+              [enableCopy]="true"
+              [displayText]="cType"></app-tooltip-span>
+          </span>
+
+          <strong>
+            <i (click)="removeClassificationType(ind)" class="fa fa-x"></i>
+          </strong>
+        </div>
+      </div>
+      <div class="filter">
+        <div class="d-flex">
+          <app-input
+            placeholder="Price List"
+            [clearOnChangeEnd]="true"
+            (onChangeEnd)="addPriceList($event)"></app-input>
+          <button
+            (click)="pickPriceListIdFromAccount()"
+            class="btn btn-sm btn-outline-warning ms-1">Pick
+          </button>
+        </div>
+        <div
+          class="d-flex justify-content-between align-items-center"
+          *ngFor="let priceList of query.priceListId; let ind = index">
+          <span>
+            <app-tooltip-span
+              [trimDisplayTextChars]="15"
+              [tooltipText]="priceList"
+              [enableCopy]="true"
+              [displayText]="priceList"></app-tooltip-span>
+          </span>
+
+          <strong>
+            <i (click)="removePriceList(ind)" class="fa fa-x"></i>
+          </strong>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="main">
+    <div *ngIf="fullResponse && !fullResponse.isSuccess">
+      <div class="alert alert-warning d-flex justify-content-between">
+        <p>Request concluded with failure!</p>
+        <button class="btn btn-outline-dark" (click)="openResponseDetailsDialog()">Show Details</button>
+      </div>
+    </div>
+    <app-pagination (pageChange)="pageChange($event)" *ngIf="contracts?.length"
+                    [pagination]="fullResponse.response.response.pagination"></app-pagination>
+    <div>
+      <div class="text-end">
+        <button (click)="fetchAll()" class="btn btn-outline-primary">Fetch All</button>
+      </div>
+      <hr>
+
+      <table class="table table-striped table-hover">
+        <thead>
+        <tr>
+          <th scope="col">Ids</th>
+          <th scope="col">Name / Status / Payment / Vendor</th>
+          <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let contract of contracts">
+          <th scope="row">
+            <div><small>Bees:
+              <app-tooltip-span
+                [enableCopy]="true"
+                [tooltipText]="contract.accountId"
+                [displayText]="contract.accountId"
+                [trimDisplayTextChars]="25"></app-tooltip-span>
+            </small></div>
+            <div><small>Vendor:
+              <app-tooltip-span
+                [enableCopy]="true"
+                [tooltipText]="contract.vendorAccountId"
+                [trimDisplayTextChars]="25"
+                [displayText]="contract.vendorAccountId"></app-tooltip-span>
+            </small></div>
+            <div><small>Customer:
+              <app-tooltip-span
+                [enableCopy]="true"
+                [tooltipText]="contract.customerAccountId"
+                [trimDisplayTextChars]="25"
+                [displayText]="contract.customerAccountId"></app-tooltip-span>
+            </small></div>
+          </th>
+          <td>
+            <div>{{ contract.displayName }}</div>
+            <div>{{ contract.status }}</div>
+            <div>
+              <span>Payment methods:
+                {{ contract.paymentMethods.join(', ') }}
+              </span>
+            </div>
+            <div><small>Vendor
+              <strong
+                class="text-bg-warning"
+                *ngIf="envOverride!.vendorId === contract.vendorId">(This Vendor)</strong>
+              <strong
+                class="text-bg-danger"
+                *ngIf="envOverride!.vendorId !== contract.vendorId">(Different Vendor)</strong>:
+              <app-tooltip-span
+                [enableCopy]="true"
+                [tooltipText]="contract.vendorId"
+                [trimDisplayTextChars]="25"
+                [displayText]="contract.vendorId"></app-tooltip-span>
+            </small></div>
+          </td>
+          <td style="vertical-align: middle">
+            <div class="d-flex justify-content-around align-items-center">
+              <button class="btn btn-outline-success" (click)="openDetailsDialog(contract)">View Details</button>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
