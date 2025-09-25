@@ -106,7 +106,7 @@ export class BeesContractService implements IBeesContractService {
 
             return {
               items: resp.response.response.content,
-              hasNext: pagination.page >= pagination.totalPages - 1,
+              hasNext: pagination.totalPages - 1 > pagination.page,
             };
           },
           {
