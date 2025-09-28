@@ -288,6 +288,14 @@ const itemRoutes: Routes = [
           ),
       },
       {
+        path: AppRoutingPath.ITEMS_GET_INVENTORY.path,
+        title: 'Search Stock',
+        loadChildren: () =>
+          import(
+            './ui/inventory/search-inventory/search-inventory.component'
+          ).then((value) => value.SEARCH_INVENTORY_ROUTES),
+      },
+      {
         path: AppRoutingPath.CATEGORIES.path,
         title: 'Categories',
         children: [

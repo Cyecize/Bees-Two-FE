@@ -9,15 +9,22 @@ import { RequestMethod } from '../common/request-method';
 import { RelayVersion } from '../relay/relay.version';
 import { RelayService } from '../relay/relay.service';
 import { InventoryPayload } from './dto/inventory.payload';
-import { InventoryQuery, InventoryQueryImpl } from './dto/inventory.query';
+import {
+  InventoryV2Query,
+  InventoryV2QueryImpl,
+} from './dto/inventory-v2.query';
 import {
   InventoriesResponse,
   InventoryResponse,
 } from './dto/inventories.response';
 import { InventoryRepository } from './inventory.repository';
-import { Inventory } from './dto/inventory';
 import { AccountV1Service } from '../accounts/v1/account-v1.service';
 import { PlatformIdService } from '../platformid/platform-id.service';
+import {
+  InventoryV1Query,
+  InventoryV1QueryImpl,
+} from './dto/inventory-v1.query';
+import { InventoryItemResponse } from './dto/inventory-item-response';
 
 /**
  * @monaco
@@ -28,12 +35,19 @@ export interface IInventoryService {
     env?: CountryEnvironmentModel,
   ): Promise<WrappedResponse<any>>;
 
-  newQuery(): InventoryQuery;
+  newV2Query(): InventoryV2Query;
 
-  searchStock(
-    query: InventoryQuery,
+  newV1Query(): InventoryV1Query;
+
+  searchStockV2(
+    query: InventoryV2Query,
     env?: CountryEnvironmentModel,
   ): Promise<WrappedResponse<InventoriesResponse>>;
+
+  searchStockV1(
+    query: InventoryV1Query,
+    env?: CountryEnvironmentModel,
+  ): Promise<WrappedResponse<InventoryItemResponse[]>>;
 
   getStockForItem(
     vendorItemId: string,
@@ -67,16 +81,29 @@ export class InventoryService implements IInventoryService {
     ).execute();
   }
 
-  newQuery(): InventoryQuery {
-    return new InventoryQueryImpl();
+  newV2Query(): InventoryV2Query {
+    return new InventoryV2QueryImpl();
   }
 
-  async searchStock(
-    query: InventoryQuery,
+  newV1Query(): InventoryV1Query {
+    return new InventoryV1QueryImpl();
+  }
+
+  async searchStockV2(
+    query: InventoryV2Query,
     env?: CountryEnvironmentModel,
   ): Promise<WrappedResponse<InventoriesResponse>> {
     return await new FieldErrorWrapper(() =>
-      this.repository.searchStock(query, env?.id),
+      this.repository.searchStockV2(query, env?.id),
+    ).execute();
+  }
+
+  async searchStockV1(
+    query: InventoryV1Query,
+    env?: CountryEnvironmentModel,
+  ): Promise<WrappedResponse<InventoryItemResponse[]>> {
+    return await new FieldErrorWrapper(() =>
+      this.repository.searchStockV1(query, env?.id),
     ).execute();
   }
 
@@ -85,7 +112,7 @@ export class InventoryService implements IInventoryService {
     vendorAccountId: string,
     env: CountryEnvironmentModel,
   ): Promise<InventoryResponse | null> {
-    const query = this.newQuery();
+    const query = this.newV2Query();
     const account = await this.accountV1Service.findOne(env, vendorAccountId);
 
     if (!account) {
@@ -102,7 +129,7 @@ export class InventoryService implements IInventoryService {
 
     query.inventoryPlatformIds.push(platformId.platformId);
 
-    const response = await this.searchStock(query, env);
+    const response = await this.searchStockV2(query, env);
 
     if (response.isSuccess) {
       const inventories = response.response.response.inventories;

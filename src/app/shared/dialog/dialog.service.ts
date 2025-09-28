@@ -54,6 +54,9 @@ import { EnforcementPlatformIdDialogComponent } from '../../ui/platformid/enforc
 import { BeesContract } from '../../api/accounts/contracts/bees-contract';
 import { ShowContractDetailsDialogComponent } from '../../ui/accounts/show-contract-details-dialog/show-contract-details-dialog.component';
 import { ShowContractDetailsDialogPayload } from '../../ui/accounts/show-contract-details-dialog/show-contract-details-dialog.payload';
+import { FlattenedInventory } from '../../api/inventory/dto/flattened-inventory';
+import { ShowInventoryDetailsDialogComponent } from '../../ui/inventory/show-inventory-details-dialog/show-inventory-details-dialog.component';
+import { ShowInventoryDetailsDialogPayload } from '../../ui/inventory/show-inventory-details-dialog/show-inventory-details-dialog.payload';
 
 /**
  * @monaco
@@ -329,6 +332,17 @@ export class DialogService implements IDialogService {
       ShowContractDetailsDialogComponent,
       '',
       new ShowContractDetailsDialogPayload(contract, env),
+    );
+  }
+
+  public async openInventoryDetails(
+    inventory: FlattenedInventory,
+    env?: CountryEnvironmentModel,
+  ): Promise<any> {
+    this.open(
+      ShowInventoryDetailsDialogComponent,
+      '',
+      new ShowInventoryDetailsDialogPayload(inventory, env),
     );
   }
 }

@@ -1,0 +1,69 @@
+<div>
+  <div style="max-height: 200px; overflow-y: auto;">
+    <table class="table">
+      <thead>
+      </thead>
+      <tbody>
+      <tr>
+        <td>DDC</td>
+        <td>
+          <app-tooltip-span
+            [trimDisplayTextChars]="50"
+            [enableCopy]="true"
+            [tooltipText]="payload.inventory.ddc"
+            [displayText]="payload.inventory.ddc"></app-tooltip-span>
+        </td>
+      </tr>
+      <tr>
+        <td>Vendor ID</td>
+        <td>
+          <app-tooltip-span
+            [trimDisplayTextChars]="50"
+            [enableCopy]="true"
+            [tooltipText]="payload.inventory.vendorId"
+            [displayText]="payload.inventory.vendorId"></app-tooltip-span>
+        </td>
+      </tr>
+      <tr>
+        <td>Item ID (Vendor OR SKU)</td>
+        <td>
+          <app-tooltip-span
+            [trimDisplayTextChars]="50"
+            [enableCopy]="true"
+            [tooltipText]="payload.inventory.vendorItemId"
+            [displayText]="payload.inventory.vendorItemId"></app-tooltip-span>
+        </td>
+      </tr>
+      <tr>
+        <td>Quantity</td>
+        <td>
+          {{ payload.inventory.quantity }}
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr *ngIf="showJson">
+  <div *ngIf="showJson" style="overflow-y: auto; max-height: 300px;">
+    <pre>{{ dataJson }}</pre>
+  </div>
+  <hr>
+  <div class="text-end">
+    <button class="btn btn-outline-dark m-1" (click)="close(undefined);">Close</button>
+    <button class="btn btn-outline-success m-1" (click)="copy();">Copy JSON</button>
+    <button class="btn btn-outline-info m-1" (click)="fetchV2();">Fetch V2</button>
+    <button class="btn btn-outline-secondary m-1"
+            *ngIf="!showJson"
+            (click)="showJson = true">Show JSON
+    </button>
+    <button class="btn btn-outline-dark m-1"
+            *ngIf="showJson"
+            (click)="showJson = false">Hide JSON
+    </button>
+    <!--    <button class="btn btn-outline-danger m-1" (click)="delete();">Delete</button>-->
+    <!--    <a class="btn btn-outline-success m-1" [routerLink]="getEditRawRoute()" (click)="close(undefined);">Edit Raw</a>-->
+    <!--    <a class="btn btn-outline-warning m-1" [routerLink]="getEditRoute()" (click)="close(undefined);">Edit</a>-->
+  </div>
+
+</div>

@@ -36,7 +36,7 @@ import { PaginationComponent } from '../../../shared/components/pagination/pagin
 import { ShowLoader } from '../../../shared/loader/show.loader.decorator';
 
 @Component({
-  selector: 'app-search-accounts',
+  selector: 'app-search-contracts',
   standalone: true,
   imports: [
     EnvOverrideFieldComponent,
