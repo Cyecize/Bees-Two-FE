@@ -28,6 +28,7 @@ export interface ICountryEnvironmentService {
   ): Promise<WrappedResponseLocal<CountryEnvironmentModel>>;
 
   findByVendorId(vendorId: string): Promise<CountryEnvironmentModel[]>;
+  findByNameContaining(name: string): Promise<CountryEnvironmentModel[]>;
   updateCreds(payload: CountryEnvironmentCredsPayload): Promise<boolean>;
   save(
     env: CountryEnvironmentModel,
@@ -69,6 +70,26 @@ export class CountryEnvironmentService implements ICountryEnvironmentService {
     const query: CountryEnvironmentQuery = new CountryEnvironmentQueryImpl();
     query.vendorId = vendorId;
 
+    // TODO: 100 is a lot, but consider adding a while or
+    query.page.pageSize = 100;
+
+    const envs: CountryEnvironmentModel[] = [];
+
+    const resp = await this.searchEnvs(query);
+
+    if (!resp.isSuccess) {
+      console.log(resp);
+      throw new Error('Could not fetch environments!');
+    }
+
+    envs.push(...resp.response.content);
+
+    return envs;
+  }
+
+  async findByNameContaining(name: string): Promise<CountryEnvironmentModel[]> {
+    const query: CountryEnvironmentQuery = new CountryEnvironmentQueryImpl();
+    query.envName = name;
     // TODO: 100 is a lot, but consider adding a while or
     query.page.pageSize = 100;
 
