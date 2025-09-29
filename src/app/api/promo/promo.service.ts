@@ -41,6 +41,7 @@ export interface IPromoService {
     env: CountryEnvironmentModel,
     limit?: number,
     pageSize?: number,
+    ignoreStartDate?: boolean,
   ): Promise<Promo[]>;
 
   newQuery(): PromoSearchQuery;
@@ -93,6 +94,7 @@ export class PromoService implements IPromoService {
     env: CountryEnvironmentModel,
     limit?: number,
     pageSize?: number,
+    ignoreStartDate = false,
   ): Promise<Promo[]> {
     if (!pageSize) {
       pageSize = 50; // max page size supported by promo api
@@ -106,6 +108,7 @@ export class PromoService implements IPromoService {
         query.vendorIds = [env.vendorId];
         query.page.pageSize = size;
         query.page.page = pageNum;
+        query.ignoreStartDate = ignoreStartDate;
 
         const pageRes = await this.searchPromos(query);
         if (pageRes.statusCode !== 200) {
