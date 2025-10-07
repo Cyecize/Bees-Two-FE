@@ -110,7 +110,7 @@ export class PromoService implements IPromoService {
         query.page.page = pageNum;
         query.ignoreStartDate = ignoreStartDate;
 
-        const pageRes = await this.searchPromos(query);
+        const pageRes = await this.searchPromos(query, env);
         if (pageRes.statusCode !== 200) {
           console.error('Error during fetching page ' + pageNum);
           console.error(pageRes);
