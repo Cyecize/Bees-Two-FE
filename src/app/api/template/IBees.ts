@@ -107,6 +107,7 @@ import { IRelayService, RelayService } from '../relay/relay.service';
 import { OrderOrderbyType } from '../orders/order.orderby.type';
 import { ContractStatus } from '../accounts/contracts/contract-status';
 import { ContractClassificationType } from '../accounts/contracts/contract-classification-type';
+import { IJszipService, JszipService } from '../../shared/util/jszip.service';
 
 /**
  * @monaco
@@ -162,6 +163,7 @@ interface IBees {
   categoryV3Service: ICategoryV3Service;
   concurrentPaginationService: IConcurrentPaginationService;
   relayService: IRelayService;
+  zipService: IJszipService;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -196,6 +198,7 @@ export class Bees implements IBees {
     public categoryV3Service: CategoryV3Service,
     public concurrentPaginationService: ConcurrentPaginationService,
     public relayService: RelayService,
+    public zipService: JszipService,
   ) {}
 }
 

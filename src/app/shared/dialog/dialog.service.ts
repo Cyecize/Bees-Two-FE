@@ -57,6 +57,8 @@ import { ShowContractDetailsDialogPayload } from '../../ui/accounts/show-contrac
 import { FlattenedInventory } from '../../api/inventory/dto/flattened-inventory';
 import { ShowInventoryDetailsDialogComponent } from '../../ui/inventory/show-inventory-details-dialog/show-inventory-details-dialog.component';
 import { ShowInventoryDetailsDialogPayload } from '../../ui/inventory/show-inventory-details-dialog/show-inventory-details-dialog.payload';
+import { ZipFilePickerDialogComponent } from './dialogs/zip-file-picker-dialog/zip-file-picker-dialog.component';
+import { ZipFilePickerResponse } from './dialogs/zip-file-picker-dialog/zip-file-picker.response';
 
 /**
  * @monaco
@@ -114,6 +116,11 @@ export interface IDialogService {
     contract: BeesContract,
     env?: CountryEnvironmentModel,
   ): Promise<any>;
+
+  openZipFilePicker(
+    title?: string,
+    requireNonNull?: boolean,
+  ): Promise<File | null>;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -344,5 +351,28 @@ export class DialogService implements IDialogService {
       '',
       new ShowInventoryDetailsDialogPayload(inventory, env),
     );
+  }
+
+  public async openZipFilePicker(
+    title?: string,
+    requireNonNull = false,
+  ): Promise<File | null> {
+    const res: ZipFilePickerResponse = await firstValueFrom(
+      this.open(
+        ZipFilePickerDialogComponent,
+        title || 'Select Zip File',
+        null,
+      ).afterClosed(),
+    );
+
+    if (!res) {
+      return await this.openZipFilePicker(title, requireNonNull);
+    }
+
+    if (!res.file && requireNonNull) {
+      return await this.openZipFilePicker(title, requireNonNull);
+    }
+
+    return res.file;
   }
 }

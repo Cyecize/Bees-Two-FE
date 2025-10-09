@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { DialogContentBaseComponent } from '../../../../shared/dialog/dialogs/dialog-content-base.component';
 import { FormsModule } from '@angular/forms';
-import { JsonPipe, NgClass, NgForOf, NgIf } from "@angular/common";
+import { JsonPipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 import { DialogService } from '../../../../shared/dialog/dialog.service';
 import { EDITOR_CUSTOM_LIB } from './template-payload-playground-editor.lib';
@@ -22,7 +22,7 @@ declare const monaco: typeof import('monaco-editor');
   standalone: true,
   templateUrl: './template-payload-playground-dialog.html',
   styleUrl: './template-payload-playground-dialog.scss',
-  imports: [FormsModule, NgForOf, MonacoEditorModule, NgIf, JsonPipe, NgClass]
+  imports: [FormsModule, NgForOf, MonacoEditorModule, NgIf, JsonPipe, NgClass],
 })
 export class TemplatePayloadPlaygroundDialog
   extends DialogContentBaseComponent<TemplatePlaygroundDialogPayload>

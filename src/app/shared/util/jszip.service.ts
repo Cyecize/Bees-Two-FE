@@ -1,12 +1,59 @@
 import { Injectable } from '@angular/core';
-import JSZip from 'jszip';
+import JSZip, { JSZipObjectOptions, OnUpdateCallback, OutputType } from 'jszip';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { Endpoints } from '../http/endpoints';
 import { HttpClientSecuredService } from '../http/http-client-secured.service';
 
+/**
+ * @monaco
+ * @monaco_include_deps
+ */
+export interface JSZipObjectMonaco {
+  name: string;
+  unsafeOriginalName?: string;
+  dir: boolean;
+  date: Date;
+  comment: string;
+  unixPermissions: number | string | null;
+  dosPermissions: number | null;
+  options: JSZipObjectOptions;
+  async<T extends OutputType>(
+    type: T,
+    onUpdate?: OnUpdateCallback,
+  ): Promise<OutputByType[T]>;
+  nodeStream(
+    type?: 'nodebuffer',
+    onUpdate?: OnUpdateCallback,
+  ): NodeJS.ReadableStream;
+}
+
+interface OutputByType {
+  base64: string;
+  string: string;
+  text: string;
+  binarystring: string;
+  array: number[];
+  uint8array: Uint8Array;
+  arraybuffer: ArrayBuffer;
+  blob: Blob;
+  nodebuffer: Buffer;
+}
+
+/**
+ * @monaco
+ */
+export interface IJszipService {
+  getFileNames(file: File): Promise<string[]>;
+
+  iterate(
+    file: File,
+    callback: (relativePath: string, file: JSZipObjectMonaco) => Promise<void>,
+  ): Promise<void>;
+}
+
 @Injectable({ providedIn: 'root' })
-export class JszipService {
+export class JszipService implements IJszipService {
   constructor(private http: HttpClientSecuredService) {}
 
   public async getFileNames(file: File): Promise<string[]> {
