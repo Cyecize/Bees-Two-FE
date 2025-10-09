@@ -68,7 +68,10 @@
           [clearOnChangeEnd]="true"
           (onChangeEnd)="addPromoId($event)"></app-input>
         <div *ngFor="let promoId of query.body.vendorPromotionIds" class="d-flex justify-content-between">
-          <span>{{ promoId }}</span>
+          <app-tooltip-span [trimDisplayTextChars]="20"
+                            [enableCopy]="true"
+                            [displayText]="promoId"
+                            [tooltipText]="promoId"></app-tooltip-span>
           <span (click)="removePromoId(promoId)"><i class="fa-solid fa-x"></i></span>
         </div>
       </div>
