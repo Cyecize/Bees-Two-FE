@@ -108,6 +108,11 @@ import { OrderOrderbyType } from '../orders/order.orderby.type';
 import { ContractStatus } from '../accounts/contracts/contract-status';
 import { ContractClassificationType } from '../accounts/contracts/contract-classification-type';
 import { IJszipService, JszipService } from '../../shared/util/jszip.service';
+import {
+  ScriptLogger,
+  ScriptLoggerImpl,
+} from '../../shared/util/script-logger';
+import { retagTsFile } from '@angular/compiler-cli/src/ngtsc/shims';
 
 /**
  * @monaco
@@ -164,6 +169,7 @@ interface IBees {
   concurrentPaginationService: IConcurrentPaginationService;
   relayService: IRelayService;
   zipService: IJszipService;
+  newScriptLogger(startCapturing?: boolean): ScriptLogger;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -200,6 +206,10 @@ export class Bees implements IBees {
     public relayService: RelayService,
     public zipService: JszipService,
   ) {}
+
+  newScriptLogger(startCapturing = true): ScriptLogger {
+    return new ScriptLoggerImpl(startCapturing);
+  }
 }
 
 /**
