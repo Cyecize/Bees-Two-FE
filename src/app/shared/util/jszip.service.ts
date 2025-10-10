@@ -50,6 +50,8 @@ export interface IJszipService {
     file: File,
     callback: (relativePath: string, file: JSZipObjectMonaco) => Promise<void>,
   ): Promise<void>;
+
+  getTextContent(file: JSZipObjectMonaco): Promise<string>;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -86,6 +88,35 @@ export class JszipService implements IJszipService {
     for (const f of files) {
       await callback(f.relativePath, f.file);
     }
+  }
+
+  public async getTextContent(file: JSZip.JSZipObject): Promise<string> {
+    const arrayBuffer = await file.async('arraybuffer');
+    const view = new Uint8Array(arrayBuffer);
+
+    if (view.length >= 2 && view[0] === 0xff && view[1] === 0xfe) {
+      // eslint-disable-next-line n/no-unsupported-features/node-builtins
+      return new TextDecoder('utf-16le').decode(arrayBuffer);
+    }
+
+    if (view.length >= 2 && view[0] === 0xfe && view[1] === 0xff) {
+      // eslint-disable-next-line n/no-unsupported-features/node-builtins
+      return new TextDecoder('utf-16be').decode(arrayBuffer);
+    }
+
+    if (
+      view.length >= 3 &&
+      view[0] === 0xef &&
+      view[1] === 0xbb &&
+      view[2] === 0xbf
+    ) {
+      // eslint-disable-next-line n/no-unsupported-features/node-builtins
+      return new TextDecoder('utf-8').decode(arrayBuffer.slice(3));
+    }
+
+    // Default to UTF-8
+    // eslint-disable-next-line n/no-unsupported-features/node-builtins
+    return new TextDecoder('utf-8').decode(arrayBuffer);
   }
 
   public async downloadAndCompress(files: NameAndUrlPair[]): Promise<Blob> {
