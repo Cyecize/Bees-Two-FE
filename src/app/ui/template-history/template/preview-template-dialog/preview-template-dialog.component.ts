@@ -3,26 +3,22 @@ import { DialogContentBaseComponent } from '../../../../shared/dialog/dialogs/di
 import { RequestTemplateView } from '../../../../api/template/request-template';
 import { Observable } from 'rxjs';
 import { CountryEnvironmentModel } from '../../../../api/env/country-environment.model';
-import { EnvOverrideFieldComponent } from '../../../env/env-override-field/env-override-field.component';
 import { CountryEnvironmentService } from '../../../../api/env/country-environment.service';
-import { JsonPipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { JsonPipe, NgForOf, NgIf } from '@angular/common';
 import { ObjectUtils } from '../../../../shared/util/object-utils';
 import { TooltipSpanComponent } from '../../../../shared/components/tooltip-span/tooltip-span.component';
 import { RequestTemplateRunningService } from '../../../../api/template/request-template-running.service';
 import { LoaderService } from '../../../../shared/loader/loader.service';
+import {
+  ScriptLogger,
+  ScriptLoggerImpl,
+} from '../../../../shared/util/script-logger';
 
 @Component({
   templateUrl: './preview-template-dialog.component.html',
   styleUrl: './preview-template-dialog.component.scss',
   standalone: true,
-  imports: [
-    EnvOverrideFieldComponent,
-    NgClass,
-    NgForOf,
-    TooltipSpanComponent,
-    NgIf,
-    JsonPipe,
-  ],
+  imports: [NgForOf, TooltipSpanComponent, NgIf, JsonPipe],
 })
 export class PreviewTemplateDialogComponent
   extends DialogContentBaseComponent<RequestTemplateView>
@@ -32,6 +28,7 @@ export class PreviewTemplateDialogComponent
   template!: RequestTemplateView;
   private context: Map<string, any> = new Map<string, any>();
   protected readonly ObjectUtils = ObjectUtils;
+  protected readonly scriptLogger: ScriptLogger = new ScriptLoggerImpl(false);
 
   constructor(
     private envService: CountryEnvironmentService,
@@ -54,9 +51,7 @@ export class PreviewTemplateDialogComponent
         this.currentEnv,
         this.payload,
         this.context,
-        (message) => {
-          console.log(message);
-        },
+        this.scriptLogger,
       )
       .then((value) => {
         if (value.errors.length) {
@@ -64,6 +59,9 @@ export class PreviewTemplateDialogComponent
         } else {
           this.template = value.template;
         }
+      })
+      .finally(() => {
+        this.scriptLogger.stopCapturing();
       });
   }
 
@@ -82,7 +80,10 @@ export class PreviewTemplateDialogComponent
         this.currentEnv,
         this.template,
         this.context,
+        this.scriptLogger,
       );
+
+      this.scriptLogger.startCapturing();
 
       console.log(
         `Post request result from Template ${this.template.id}`,
@@ -96,6 +97,11 @@ export class PreviewTemplateDialogComponent
       console.log(resp);
     } finally {
       this.loaderService.hide();
+      this.scriptLogger.startCapturing();
     }
+  }
+
+  downloadLogs(): void {
+    this.scriptLogger.downloadLogFile(`template_${this.template.id}_logs.txt`);
   }
 }

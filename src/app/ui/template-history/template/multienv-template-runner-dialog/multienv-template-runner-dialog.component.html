@@ -43,8 +43,8 @@
         <hr class="d-sm d-md-none d-lg-none" />
         <p><strong>Logs:</strong></p>
         <div class="output">
-          <div *ngFor="let message of logs">
-            {{ envs[runningEnvInd].envName }}: {{ message }}
+          <div *ngFor="let log of scriptLogger.getLogs()">
+            {{ envs[runningEnvInd].envName }}: {{ log.message }}
           </div>
         </div>
 

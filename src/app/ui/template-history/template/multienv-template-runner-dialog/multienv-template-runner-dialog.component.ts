@@ -3,19 +3,22 @@ import { DialogContentBaseComponent } from '../../../../shared/dialog/dialogs/di
 import { Observable } from 'rxjs';
 import { MultienvTemplateRunnerDialogPayload } from './multienv-template-runner-dialog.payload';
 import { CountryEnvironmentModel } from '../../../../api/env/country-environment.model';
-import { JsonPipe, NgForOf, NgIf } from '@angular/common';
+import { NgForOf, NgIf } from '@angular/common';
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 import { ObjectUtils } from '../../../../shared/util/object-utils';
 import { DialogService } from '../../../../shared/dialog/dialog.service';
 import { RequestTemplateRunningService } from '../../../../api/template/request-template-running.service';
 import { RequestTemplateView } from '../../../../api/template/request-template';
-import { TooltipSpanComponent } from '../../../../shared/components/tooltip-span/tooltip-span.component';
 import { EnvViewerDialogComponent } from '../../../env/env-viewer-dialog/env-viewer-dialog.component';
+import {
+  ScriptLogger,
+  ScriptLoggerImpl,
+} from '../../../../shared/util/script-logger';
 
 @Component({
   selector: 'app-multienv-template-runner-dialog',
   standalone: true,
-  imports: [JsonPipe, MonacoEditorModule, NgForOf, NgIf, TooltipSpanComponent],
+  imports: [MonacoEditorModule, NgForOf, NgIf],
   templateUrl: './multienv-template-runner-dialog.component.html',
   styleUrl: './multienv-template-runner-dialog.component.scss',
 })
@@ -24,7 +27,7 @@ export class MultienvTemplateRunnerDialogComponent
   implements OnInit
 {
   envs: CountryEnvironmentModel[] = [];
-  logs: string[] = [];
+  scriptLogger: ScriptLogger = new ScriptLoggerImpl(false);
   running = false;
   runningEnvInd = 0;
 
@@ -36,7 +39,7 @@ export class MultienvTemplateRunnerDialogComponent
   }
 
   ngOnInit(): void {
-    this.selectEnvs();
+    void this.selectEnvs();
     this.setTitle(`Run ${this.payload.template.name}`);
   }
 
@@ -54,22 +57,22 @@ export class MultienvTemplateRunnerDialogComponent
 
   async execute(): Promise<void> {
     this.running = true;
-    this.logs = [];
+    this.scriptLogger.startCapturing();
     try {
       for (const env of this.envs) {
         let template: RequestTemplateView = this.payload.template;
-        this.logs.push('Staring execution');
+        console.log('Starting execution');
         const ctx = new Map<string, any>();
         const resp = await this.templateRunningService.prepareTemplate(
           env,
           template,
           ctx,
-          (msg) => this.logs.push(msg),
+          this.scriptLogger,
         );
 
         // TODO: Improve this to have better logging and logic to terminate execution
         if (resp.errors?.length) {
-          this.logs.push(...resp.errors);
+          console.log(resp.errors);
           continue;
         }
 
@@ -80,15 +83,17 @@ export class MultienvTemplateRunnerDialogComponent
           env,
           template,
           ctx,
+          this.scriptLogger,
         );
 
-        this.logs.push('Finished execution');
+        console.log('Finished execution');
 
         this.runningEnvInd++;
       }
     } finally {
       this.running = false;
       this.runningEnvInd = 0;
+      this.scriptLogger.stopCapturing();
     }
   }
 

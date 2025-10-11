@@ -31,6 +31,7 @@ import { AsyncPipe, NgFor, NgIf } from '@angular/common';
 import { RequestTemplatePayloadType } from './request-template-payload.type';
 import * as angularCompiler from '@angular/compiler';
 import { RequestTemplateUtil } from './request-template.util';
+import { ScriptLogger } from '../../shared/util/script-logger';
 
 // This is required in order to retain the angular compiler import as production build removes unneeded imports
 // The import is needed to be present in order to dynamically compile, but not actually used in this component
@@ -59,6 +60,7 @@ export class RequestTemplateRunningService {
     env: CountryEnvironmentModel,
     template: RequestTemplateView,
     context: Map<string, any>,
+    scriptLogger: ScriptLogger,
   ): Promise<{
     response: WrappedResponse<BeesResponse<any>> | null;
     postRequestResult: JsEvalResult | null;
@@ -107,6 +109,7 @@ export class RequestTemplateRunningService {
       (response?.isSuccess || !template.makeRequest) &&
       template.postRequestScript?.trim()
     ) {
+      scriptLogger.startCapturing();
       console.log(`Executing Post-Request script for template ${template.id}`);
 
       postRequestResult = await this.jsEvalService.eval(
@@ -118,8 +121,8 @@ export class RequestTemplateRunningService {
             template.arguments,
           ),
           env: env,
-          onLog: (str) =>
-            console.log(`Template ${template.id} Post-Request: ${str}`),
+          onLog: (str) => scriptLogger.log(str, 'POST_REQUEST'),
+          scriptLogger,
         },
       );
     }
@@ -134,13 +137,13 @@ export class RequestTemplateRunningService {
     env: CountryEnvironmentModel,
     template: RequestTemplateView,
     context: Map<string, any>,
-    onLog: (message: string) => void,
+    scriptLogger: ScriptLogger,
   ): Promise<{
     template: RequestTemplateView;
     errors: string[];
   }> {
     const logEmitter = new EventEmitter<string>();
-    logEmitter.subscribe(onLog);
+    logEmitter.subscribe((val) => scriptLogger.logAndPrint(val, 'SCRIPT_LOG'));
     // Deep cloning the object
     template = JSON.parse(JSON.stringify(template));
 
@@ -152,14 +155,17 @@ export class RequestTemplateRunningService {
     const errors: string[] = [];
 
     if (template.preRequestScript?.trim()) {
+      scriptLogger.startCapturing();
       logEmitter.emit(`Running Pre-Request script for template ${template.id}`);
       const res = await this.jsEvalService.eval(template.preRequestScript, {
         context: context,
         env: env,
         run: true,
         arguments: args,
-        onLog: (msg) => logEmitter.emit(`Pre Request: ${msg}`),
+        onLog: (msg) => logEmitter.emit(`PRE_REQUEST: ${msg}`),
+        scriptLogger,
       });
+      scriptLogger.stopCapturing();
 
       errors.push(...res.errors);
 
@@ -182,15 +188,16 @@ export class RequestTemplateRunningService {
       'wJson({value: `' + template.endpoint + '`})',
       {
         run: true,
-        onLog: (msg) => logEmitter.emit(`Endpoint: ${msg}`),
+        onLog: (msg) => logEmitter.emit(`ENDPOINT: ${msg}`),
         arguments: args,
         env: env,
         context: context,
+        scriptLogger,
       },
     );
 
     promises.push(endpointPromise);
-    endpointPromise.then((value) => {
+    void endpointPromise.then((value) => {
       if (!value.success) {
         logEmitter.emit('Error while setting endpoint!');
       } else {
@@ -210,6 +217,7 @@ export class RequestTemplateRunningService {
       promises,
       errors,
       logEmitter,
+      scriptLogger,
     );
     this.evalAndSetParams(
       env,
@@ -220,6 +228,7 @@ export class RequestTemplateRunningService {
       promises,
       errors,
       logEmitter,
+      scriptLogger,
     );
 
     // eslint-disable-next-line n/no-unsupported-features/es-builtins
@@ -242,6 +251,7 @@ export class RequestTemplateRunningService {
         );
         break;
       case RequestTemplatePayloadType.JAVASCRIPT:
+        scriptLogger.startCapturing();
         template.payloadTemplate = await this.compileJsTemplate(
           template,
           args,
@@ -249,7 +259,9 @@ export class RequestTemplateRunningService {
           env,
           errors,
           logEmitter,
+          scriptLogger,
         );
+        scriptLogger.stopCapturing();
         break;
       case RequestTemplatePayloadType.PLAIN_TEXT:
         // Do nothing
@@ -275,6 +287,7 @@ export class RequestTemplateRunningService {
     promises: Promise<any>[],
     errors: string[],
     logEmitter: EventEmitter<string>,
+    scriptLogger: ScriptLogger,
   ): void {
     for (const param of params) {
       const paramPromise = this.jsEvalService.eval(
@@ -288,11 +301,12 @@ export class RequestTemplateRunningService {
           arguments: args,
           env: env,
           context: context,
+          scriptLogger,
         },
       );
 
       promises.push(paramPromise);
-      paramPromise.then((value) => {
+      void paramPromise.then((value) => {
         if (!value.success) {
           logEmitter.emit(
             `Failed to set value for param ${param.name} for template ${template.id}!`,
@@ -336,6 +350,7 @@ export class RequestTemplateRunningService {
     env: CountryEnvironmentModel,
     errors: string[],
     logEmitter: EventEmitter<string>,
+    scriptLogger: ScriptLogger,
   ): Promise<string | null> {
     this.viewContainerRef.clear();
     logEmitter.emit(`Running Template script for template ${template.id}`);
@@ -345,7 +360,8 @@ export class RequestTemplateRunningService {
       run: true,
       stringifyJson: true,
       arguments: args,
-      onLog: (msg) => logEmitter.emit(`Template: ${msg}`),
+      onLog: (msg) => logEmitter.emit(`TEMPLATE: ${msg}`),
+      scriptLogger,
     });
 
     errors.push(...res.errors);

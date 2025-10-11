@@ -15,6 +15,10 @@ import { ObjectUtils } from '../../../../shared/util/object-utils';
 import { TemplatePlaygroundDialogResponse } from './template-playground-dialog.response';
 import { RequestTemplateArgUtil } from '../../../../api/template/arg/request-template-arg.util';
 import { GENERATED_EDITOR_LIB } from './generated-editor-lib';
+import {
+  ScriptLogger,
+  ScriptLoggerImpl,
+} from '../../../../shared/util/script-logger';
 
 declare const monaco: typeof import('monaco-editor');
 
@@ -95,18 +99,24 @@ export class TemplatePayloadPlaygroundDialog
     this.output = [];
     this.result = null;
 
-    const resp = await this.jsEvalService.eval(this.userCode, {
-      arguments: RequestTemplateArgUtil.convertArgumentsToObj(
-        this.payload.args,
-      ),
-      env: this.payload.env,
-      context: new Map<string, any>(),
-      run: run || false,
-      onLog: (str) => this.output.push(str),
-    });
+    const scriptLogger: ScriptLogger = new ScriptLoggerImpl(true);
+    try {
+      const resp = await this.jsEvalService.eval(this.userCode, {
+        arguments: RequestTemplateArgUtil.convertArgumentsToObj(
+          this.payload.args,
+        ),
+        env: this.payload.env,
+        context: new Map<string, any>(),
+        run: run || false,
+        onLog: (str) => this.output.push(str),
+        scriptLogger,
+      });
 
-    this.output.push(...resp.errors);
-    this.result = resp;
+      this.output.push(...resp.errors);
+      this.result = resp;
+    } finally {
+      scriptLogger.stopCapturing();
+    }
   }
 
   protected readonly ObjectUtils = ObjectUtils;

@@ -9,24 +9,32 @@ export interface ScriptLogEntry {
  * @monaco_include_deps
  */
 export interface ScriptLogger {
-  startCapturing(): void;
-  stopCapturing(): void;
+  startCapturing(): boolean;
+  log(message: string, type?: string): void;
+  logAndPrint(message: string, type?: string): void;
+  stopCapturing(): boolean;
   getLogs(): ScriptLogEntry[];
   generateLogFile(): Blob;
   downloadLogFile(filename?: string): void;
 }
 
 export class ScriptLoggerImpl implements ScriptLogger {
+  // TODO: Support multiple instances of this class by fixing this tiny mess
   private readonly originalConsoleLog = console.log;
   private readonly originalAlert = window.alert;
   private readonly logs: ScriptLogEntry[] = [];
+  private isCapturing = false;
+
   constructor(startCapturing?: boolean) {
     if (startCapturing) {
       this.startCapturing();
     }
   }
 
-  startCapturing(): void {
+  startCapturing(): boolean {
+    if (this.isCapturing) {
+      return false;
+    }
     // Override console.log
     console.log = (...args) => {
       this.logs.push({
@@ -52,12 +60,38 @@ export class ScriptLoggerImpl implements ScriptLogger {
       // Call original function
       this.originalAlert(message);
     };
+
+    this.isCapturing = true;
+    return true;
   }
 
-  stopCapturing(): void {
+  log(message: string, type = 'CUSTOM'): void {
+    this.logs.push({
+      type: type,
+      message: message,
+      timestamp: new Date().toISOString(),
+    });
+  }
+
+  logAndPrint(message: string, type?: string): void {
+    this.log(message, type);
+    const wasRunning = this.stopCapturing();
+    console.log(message);
+    if (wasRunning) {
+      this.startCapturing();
+    }
+  }
+
+  stopCapturing(): boolean {
+    if (!this.isCapturing) {
+      return false;
+    }
     // Restore original functions
     console.log = this.originalConsoleLog;
     window.alert = this.originalAlert;
+
+    this.isCapturing = false;
+    return true;
   }
 
   getLogs(): ScriptLogEntry[] {

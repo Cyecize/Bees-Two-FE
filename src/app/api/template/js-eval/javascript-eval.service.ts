@@ -4,6 +4,7 @@ import { ObjectUtils } from '../../../shared/util/object-utils';
 import { RequestTemplateArg } from '../arg/request-template-arg';
 import { CountryEnvironmentModel } from '../../env/country-environment.model';
 import { Bees, publicEnums } from '../IBees';
+import { ScriptLogger } from '../../../shared/util/script-logger';
 
 export interface JsEvalOptions {
   run: boolean;
@@ -13,6 +14,7 @@ export interface JsEvalOptions {
   context: Map<string, any>;
   stringifyJson?: boolean;
   onLog?: (str: string) => void;
+  scriptLogger: ScriptLogger;
 }
 
 export interface JsEvalResult {
@@ -55,6 +57,7 @@ export class JavascriptEvalService {
         'args',
         'context',
         'bees',
+        'scriptLogger',
         ...Object.keys(publicEnums),
         `return (async () => {
           ${code}
@@ -74,7 +77,6 @@ export class JavascriptEvalService {
       };
       const wJsonHandler = (data: any): void => (objValue = data);
       const logHandler = (msg: string): void => {
-        console.log(`User JS: ${msg}`);
         logsOutput.emit(msg);
       };
 
@@ -93,6 +95,7 @@ export class JavascriptEvalService {
         options.arguments,
         options.context,
         this.bees,
+        options.scriptLogger,
         ...Object.values(publicEnums),
       );
 
@@ -114,6 +117,7 @@ export class JavascriptEvalService {
       result.success = true;
     } catch (error: any) {
       result.errors.push(`❌ Error: ${error.message}`);
+      console.error(error);
     }
 
     return result;

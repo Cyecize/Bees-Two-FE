@@ -4,6 +4,7 @@ export const EDITOR_CUSTOM_LIB = `
       declare const wJson: (data: any) => void;
       declare const log: (message: string) => void;
       declare const wait: async (timeMs: number) => Promise<void>;
+      declare const scriptLogger: ScriptLogger;
 
       interface Observable<T> {
         subscribe(next?: (value: T) => void, error?: (error: any) => void, complete?: () => void): { unsubscribe: () => void };
