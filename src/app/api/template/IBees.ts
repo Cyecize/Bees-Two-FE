@@ -114,6 +114,10 @@ import {
 } from '../../shared/util/script-logger';
 
 import { FileUtils, IFileUtils } from '../../shared/util/file-utils';
+import {
+  IObjectDiffService,
+  NgxObjectDiffService,
+} from '../../shared/components/ngx-obj-diff/ngx-obj-diff.service';
 
 /**
  * @monaco
@@ -171,6 +175,7 @@ interface IBees {
   relayService: IRelayService;
   zipService: IJszipService;
   files: IFileUtils;
+  objDiffService: IObjectDiffService;
   newScriptLogger(startCapturing?: boolean): ScriptLogger;
 }
 
@@ -208,6 +213,7 @@ export class Bees implements IBees {
     public concurrentPaginationService: ConcurrentPaginationService,
     public relayService: RelayService,
     public zipService: JszipService,
+    public objDiffService: NgxObjectDiffService,
   ) {}
 
   newScriptLogger(startCapturing = true): ScriptLogger {

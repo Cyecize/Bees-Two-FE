@@ -34,6 +34,12 @@ export abstract class DialogContentBaseComponent<TData> {
     );
   }
 
+  compareIcon(): Observable<string> {
+    return new Observable<string>((subscriber) =>
+      subscriber.next('fa-solid fa-code-compare'),
+    );
+  }
+
   warningTriangleIcon(): Observable<string> {
     return new Observable<string>((subscriber) =>
       subscriber.next('fa fa-exclamation-triangle'),

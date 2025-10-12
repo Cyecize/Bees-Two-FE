@@ -59,6 +59,8 @@ import { ShowInventoryDetailsDialogComponent } from '../../ui/inventory/show-inv
 import { ShowInventoryDetailsDialogPayload } from '../../ui/inventory/show-inventory-details-dialog/show-inventory-details-dialog.payload';
 import { ZipFilePickerDialogComponent } from './dialogs/zip-file-picker-dialog/zip-file-picker-dialog.component';
 import { ZipFilePickerResponse } from './dialogs/zip-file-picker-dialog/zip-file-picker.response';
+import { ObjDiffDialogComponent } from './dialogs/obj-diff-dialog/obj-diff-dialog.component';
+import { ObjDiffDialogPayload } from './dialogs/obj-diff-dialog/obj-diff-dialog-payload.model';
 
 /**
  * @monaco
@@ -121,6 +123,8 @@ export interface IDialogService {
     title?: string,
     requireNonNull?: boolean,
   ): Promise<File | null>;
+
+  openObjDiff(obj1: any, obj2: any, title?: string): Promise<void>;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -374,5 +378,19 @@ export class DialogService implements IDialogService {
     }
 
     return res.file;
+  }
+
+  public async openObjDiff(
+    obj1: any,
+    obj2: any,
+    title?: string,
+  ): Promise<void> {
+    return await firstValueFrom(
+      this.open(
+        ObjDiffDialogComponent,
+        title || 'View difference',
+        new ObjDiffDialogPayload(obj1, obj2),
+      ).afterClosed(),
+    );
   }
 }
