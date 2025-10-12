@@ -21,23 +21,19 @@ export interface JSZipObjectMonaco {
   async<T extends OutputType>(
     type: T,
     onUpdate?: OnUpdateCallback,
-  ): Promise<OutputByType[T]>;
+  ): Promise<any>;
   nodeStream(
     type?: 'nodebuffer',
     onUpdate?: OnUpdateCallback,
   ): NodeJS.ReadableStream;
 }
 
-interface OutputByType {
-  base64: string;
-  string: string;
-  text: string;
-  binarystring: string;
-  array: number[];
-  uint8array: Uint8Array;
-  arraybuffer: ArrayBuffer;
-  blob: Blob;
-  nodebuffer: Buffer;
+/**
+ * @monaco
+ */
+export interface ZipFileItem {
+  fileName: string;
+  content: any;
 }
 
 /**
@@ -52,6 +48,8 @@ export interface IJszipService {
   ): Promise<void>;
 
   getTextContent(file: JSZipObjectMonaco): Promise<string>;
+
+  compress(items: ZipFileItem[]): Promise<Blob>;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -155,6 +153,16 @@ export class JszipService implements IJszipService {
     await Promise.all(imagePromises);
 
     return await zip.generateAsync({ type: 'blob' });
+  }
+
+  public async compress(items: ZipFileItem[]): Promise<Blob> {
+    const zip = new JSZip();
+
+    for (const item of items) {
+      zip.file(item.fileName, item.content);
+    }
+
+    return zip.generateAsync({ type: 'blob' });
   }
 
   private getFileExtension(contentType: string | null): string {

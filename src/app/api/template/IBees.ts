@@ -112,7 +112,8 @@ import {
   ScriptLogger,
   ScriptLoggerImpl,
 } from '../../shared/util/script-logger';
-import { retagTsFile } from '@angular/compiler-cli/src/ngtsc/shims';
+
+import { FileUtils, IFileUtils } from '../../shared/util/file-utils';
 
 /**
  * @monaco
@@ -169,6 +170,7 @@ interface IBees {
   concurrentPaginationService: IConcurrentPaginationService;
   relayService: IRelayService;
   zipService: IJszipService;
+  files: IFileUtils;
   newScriptLogger(startCapturing?: boolean): ScriptLogger;
 }
 
@@ -178,6 +180,7 @@ export class Bees implements IBees {
     Observable,
     firstValueFrom,
   };
+  files = new FileUtils();
 
   constructor(
     public dialogService: DialogService,
