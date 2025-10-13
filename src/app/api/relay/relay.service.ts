@@ -20,6 +20,7 @@ export interface IRelayService {
     targetEnvId?: number,
     templateId?: number,
     saveInHistory?: boolean,
+    requestTraceId?: string,
   ): Observable<BeesResponse<T>>;
 }
 
@@ -36,6 +37,7 @@ export class RelayService implements IRelayService {
     targetEnvId?: number,
     templateId?: number,
     saveInHistory?: boolean,
+    requestTraceId?: string,
   ): Observable<BeesResponse<T>> {
     return this.repository.call<T>(
       method,
@@ -48,6 +50,7 @@ export class RelayService implements IRelayService {
       targetEnvId,
       templateId,
       saveInHistory,
+      requestTraceId,
     );
   }
 }

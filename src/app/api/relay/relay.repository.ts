@@ -18,6 +18,7 @@ export class RelayRepository {
     targetEnvId?: number,
     templateId?: number,
     saveInHistory?: boolean,
+    requestTraceId?: string,
   ): Observable<BeesResponse<T>> {
     return this.proxyService.makeRequest<T>({
       endpoint: Endpoints.DATA_INGESTION,
@@ -28,6 +29,7 @@ export class RelayRepository {
       headers: headers,
       templateId: templateId,
       saveInHistory: saveInHistory,
+      requestTraceId: requestTraceId,
     });
   }
 }
