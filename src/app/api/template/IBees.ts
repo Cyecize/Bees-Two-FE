@@ -118,6 +118,10 @@ import {
   IObjectDiffService,
   NgxObjectDiffService,
 } from '../../shared/components/ngx-obj-diff/ngx-obj-diff.service';
+import {
+  IRandomGeneratorUtils,
+  RandomGeneratorUtils,
+} from '../../shared/util/random-generator-utils';
 
 /**
  * @monaco
@@ -176,6 +180,7 @@ interface IBees {
   zipService: IJszipService;
   files: IFileUtils;
   objDiffService: IObjectDiffService;
+  randomGeneratorUtils: IRandomGeneratorUtils;
   newScriptLogger(startCapturing?: boolean): ScriptLogger;
 }
 
@@ -214,6 +219,7 @@ export class Bees implements IBees {
     public relayService: RelayService,
     public zipService: JszipService,
     public objDiffService: NgxObjectDiffService,
+    public randomGeneratorUtils: RandomGeneratorUtils,
   ) {}
 
   newScriptLogger(startCapturing = true): ScriptLogger {
