@@ -61,6 +61,9 @@ import { ZipFilePickerDialogComponent } from './dialogs/zip-file-picker-dialog/z
 import { ZipFilePickerResponse } from './dialogs/zip-file-picker-dialog/zip-file-picker.response';
 import { ObjDiffDialogComponent } from './dialogs/obj-diff-dialog/obj-diff-dialog.component';
 import { ObjDiffDialogPayload } from './dialogs/obj-diff-dialog/obj-diff-dialog-payload.model';
+import { TextareaDialogResponse } from './dialogs/textarea-dialog/textarea-dialog.response';
+import { TextareaDialogComponent } from './dialogs/textarea-dialog/textarea-dialog.component';
+import { TextareaDialogPayload } from './dialogs/textarea-dialog/textarea-dialog.payload';
 
 /**
  * @monaco
@@ -95,6 +98,8 @@ export interface IDialogService {
     env: CountryEnvironmentModel,
     arg: RequestTemplateArgView,
     textarea?: boolean,
+    prefillExistingValue?: boolean,
+    updateArg?: boolean,
   ): Promise<string | null>;
 
   openPlatformIdDialog(
@@ -108,6 +113,11 @@ export interface IDialogService {
     options: GenericPickerOption<T>[],
     title?: string,
   ): Promise<T[]>;
+
+  openTextarea(
+    existingText: string | null,
+    title?: string,
+  ): Promise<string | null>;
 
   openAccountV1Details(
     account: AccountV1,
@@ -243,18 +253,33 @@ export class DialogService implements IDialogService {
   public async openTemplateArgPrompt(
     env: CountryEnvironmentModel,
     arg: RequestTemplateArgView,
+    //TODO: Deprecated field, rely on arg's enum
     textarea?: boolean,
+    prefillExistingValue?: boolean,
+    updateArg?: boolean,
   ): Promise<string | null> {
     const resp: TemplateArgsPromptDialogResponse = await firstValueFrom(
       this.open(
         TemplateArgPromptDialogComponent,
         '',
-        new TemplateArgPromptDialogPayload(env, arg, textarea || false),
+        new TemplateArgPromptDialogPayload(
+          env,
+          arg,
+          textarea || null,
+          prefillExistingValue || false,
+          updateArg || false,
+        ),
       ).afterClosed(),
     );
 
     if (!resp) {
-      return await this.openTemplateArgPrompt(env, arg, textarea);
+      return await this.openTemplateArgPrompt(
+        env,
+        arg,
+        textarea,
+        prefillExistingValue,
+        updateArg,
+      );
     }
 
     return resp.value;
@@ -322,6 +347,25 @@ export class DialogService implements IDialogService {
     }
 
     return res.items;
+  }
+
+  public async openTextarea(
+    existingText: string | null,
+    title?: string,
+  ): Promise<string | null> {
+    const res: TextareaDialogResponse = await firstValueFrom(
+      this.open(
+        TextareaDialogComponent,
+        title || 'Provide value',
+        new TextareaDialogPayload(existingText),
+      ).afterClosed(),
+    );
+
+    if (!res) {
+      return await this.openTextarea(existingText, title);
+    }
+
+    return res.value;
   }
 
   public async openAccountV1Details(

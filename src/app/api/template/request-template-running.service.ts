@@ -14,7 +14,6 @@ import {
   FieldErrorWrapper,
   WrappedResponse,
 } from '../../shared/util/field-error-wrapper';
-import { RequestTemplateArgType } from './arg/request-template-arg.type';
 import {
   RequestTemplateArg,
   RequestTemplateArgView,
@@ -32,6 +31,7 @@ import { RequestTemplatePayloadType } from './request-template-payload.type';
 import * as angularCompiler from '@angular/compiler';
 import { RequestTemplateUtil } from './request-template.util';
 import { ScriptLogger } from '../../shared/util/script-logger';
+import { TemplateArgPromptType } from './arg/template-arg-prompt.type';
 
 // This is required in order to retain the angular compiler import as production build removes unneeded imports
 // The import is needed to be present in order to dynamically compile, but not actually used in this component
@@ -328,7 +328,12 @@ export class RequestTemplateRunningService {
     args: RequestTemplateArgView[],
   ): Promise<{ [key: string]: RequestTemplateArg }> {
     for (const arg of args) {
-      if (arg.type === RequestTemplateArgType.PROMPT) {
+      if (
+        arg.promptType === TemplateArgPromptType.ALWAYS ||
+        (arg.promptType === TemplateArgPromptType.IF_EMPTY &&
+          !arg.value &&
+          arg.required)
+      ) {
         arg.value = await this.promptArg(env, arg);
       }
     }
@@ -340,7 +345,12 @@ export class RequestTemplateRunningService {
     env: CountryEnvironmentModel,
     arg: RequestTemplateArgView,
   ): Promise<string | null> {
-    return await this.dialogService.openTemplateArgPrompt(env, arg);
+    return await this.dialogService.openTemplateArgPrompt(
+      env,
+      arg,
+      undefined,
+      true,
+    );
   }
 
   private async compileJsTemplate(

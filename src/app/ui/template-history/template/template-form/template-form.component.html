@@ -108,27 +108,77 @@
     <div formArrayName="arguments">
       <div *ngFor="let ctrl of form.controls.arguments.controls; let i = index"
            [formGroupName]="i"
-           class="mt-1">
-        <div class="d-flex justify-content-between align-items-center">
-          <app-input
-            formControlName="name"
-            class="m-1"
-            placeholder="Name"></app-input>
-          <app-select
-            placeholder="Type"
-            (onChange)="onArgTypeChange(i, $event)"
-            formControlName="type"
-            [options]="argTypeOptions"></app-select>
-          <app-input
-            formControlName="keyName"
-            class="m-1"
-            placeholder="Key"></app-input>
-          <app-input
-            [disabled]="isValueFieldDisabled(i)"
-            formControlName="value"
-            class="m-1"
-            placeholder="Value"></app-input>
-          <i class="fa fa-close c-pointer" (click)="form.controls.arguments.removeAt(i)"></i>
+           class="mt-4">
+        <div class="d-flex justify-content-start align-items-center">
+          <div class="ms-1">
+            <app-input
+              formControlName="name"
+              placeholder="Name"></app-input>
+            <app-field-error [errors]="errors"
+                             fieldName="arguments[{{i}}].name"></app-field-error>
+          </div>
+          <div class="ms-1">
+            <app-select
+              placeholder="Data Type"
+              formControlName="dataType"
+              [options]="dataTypeOptions"></app-select>
+            <app-field-error [errors]="errors"
+                             fieldName="arguments[{{i}}].dataType"></app-field-error>
+          </div>
+          <div class="ms-1">
+            <app-select
+              placeholder="Prompt Type"
+              formControlName="promptType"
+              [options]="promptTypeOptions"></app-select>
+            <app-field-error [errors]="errors"
+                             fieldName="arguments[{{i}}].promptType"></app-field-error>
+          </div>
+          <div class="ms-1">
+            <app-checkbox formControlName="arrayType" label="Array"></app-checkbox>
+            <app-field-error [errors]="errors"
+                             fieldName="arguments[{{i}}].arrayType"></app-field-error>
+            <app-checkbox formControlName="required" label="Required"></app-checkbox>
+            <app-field-error [errors]="errors"
+                             fieldName="arguments[{{i}}].required"></app-field-error>
+          </div>
+          <div class="ms-1"
+               *ngIf="ctrl.controls.dataType.value === TemplateArgDataType.CUSTOM">
+            <button
+              (click)="openCustomTypeTextarea(ctrl)"
+              class="btn btn-sm btn-outline-dark">Define Type
+            </button>
+            <app-field-error [errors]="errors"
+                             fieldName="arguments[{{i}}].customType"></app-field-error>
+          </div>
+        </div>
+        <div class="mt-1 d-flex justify-content-start align-items-center">
+          <div class="ms-1">
+            <app-input
+              formControlName="keyName"
+              placeholder="Key"></app-input>
+            <app-field-error [errors]="errors"
+                             fieldName="arguments[{{i}}].keyName"></app-field-error>
+          </div>
+          <div class="ms-1">
+            <app-select
+              placeholder="Input type"
+              formControlName="inputType"
+              [options]="inputTypeOptions"></app-select>
+            <app-field-error [errors]="errors"
+                             fieldName="arguments[{{i}}].keyName"></app-field-error>
+          </div>
+          <div class="ms-1">
+            <app-input
+              (click)="valueFieldClicked(ctrl)"
+              formControlName="value"
+              placeholder="Value"></app-input>
+            <app-field-error [errors]="errors"
+                             fieldName="arguments[{{i}}].keyName"></app-field-error>
+          </div>
+
+          <div class="ms-1">
+            <i class="fa fa-close c-pointer" (click)="form.controls.arguments.removeAt(i)"></i>
+          </div>
         </div>
       </div>
     </div>
@@ -193,7 +243,7 @@
             type="submit"
             [disabled]="!form.valid"
             class="btn btn-success"
-           >
+    >
       Save
     </button>
   </div>

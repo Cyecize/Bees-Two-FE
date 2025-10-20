@@ -6,6 +6,7 @@ import { InputComponent } from '../../../../shared/form-controls/input/input.com
 import { FormsModule } from '@angular/forms';
 import { TemplateArgsPromptDialogResponse } from './template-args-prompt-dialog.response';
 import { NgIf } from '@angular/common';
+import { TemplateArgInputType } from '../../../../api/template/arg/template-arg-input.type';
 
 @Component({
   standalone: true,
@@ -20,6 +21,14 @@ export class TemplateArgPromptDialogComponent
 
   ngOnInit(): void {
     this.setTitle('Provide value');
+    if (this.payload.prefillExistingValue) {
+      this.value = this.payload.arg.value;
+    }
+
+    if (this.payload.textarea === null) {
+      this.payload.textarea =
+        this.payload.arg.inputType === TemplateArgInputType.TEXTAREA;
+    }
   }
 
   override getIcon(): Observable<string> {
@@ -27,10 +36,17 @@ export class TemplateArgPromptDialogComponent
   }
 
   saveAndClose(): void {
-    super.close(new TemplateArgsPromptDialogResponse(this.value));
+    this.finalSaveAndClose(this.value);
   }
 
   saveAsNull(): void {
-    super.close(new TemplateArgsPromptDialogResponse(null));
+    this.finalSaveAndClose(null);
+  }
+
+  private finalSaveAndClose(value: any): void {
+    if (this.payload.updateArg) {
+      this.payload.arg.value = value;
+    }
+    super.close(new TemplateArgsPromptDialogResponse(value));
   }
 }

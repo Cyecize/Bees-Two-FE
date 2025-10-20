@@ -12,6 +12,7 @@
 
   <div *ngIf="payload.textarea" class="mt-2">
     <textarea
+      rows="10"
       class="form-control"
       [(ngModel)]="value"
       placeholder="Value for {{ payload.arg.keyName }}"></textarea>

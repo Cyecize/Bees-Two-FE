@@ -38,7 +38,7 @@ export class ShowSegmentGroupDetailsDialogComponent
   }
 
   copy(): void {
-    navigator.clipboard.writeText(this.dataJson);
+    void navigator.clipboard.writeText(this.dataJson);
   }
 
   delete(): void {

@@ -15,7 +15,6 @@ import { SelectOption } from '../../../../shared/form-controls/select/select.opt
 import { ErrorMessageComponent } from '../../../../shared/field-error/error-message/error-message.component';
 import { FieldError } from '../../../../shared/field-error/field-error';
 import { CheckboxComponent } from '../../../../shared/form-controls/checkbox/checkbox.component';
-import { EnvOverrideFieldComponent } from '../../../env/env-override-field/env-override-field.component';
 import { ObjectUtils } from '../../../../shared/util/object-utils';
 import { Endpoints } from '../../../../shared/http/endpoints';
 import { NgForOf, NgIf } from '@angular/common';
@@ -24,12 +23,14 @@ import {
   RequestTemplateView,
 } from '../../../../api/template/request-template';
 import { SelectOptions } from '../../../../api/common/select-options';
-import { RequestTemplateArgType } from '../../../../api/template/arg/request-template-arg.type';
+import { TemplateArgDataType } from '../../../../api/template/arg/template-arg-data.type';
 import { RequestTemplatePayloadType } from '../../../../api/template/request-template-payload.type';
 import { DialogService } from '../../../../shared/dialog/dialog.service';
 import { TemplatePlaygroundDialogPayload } from '../template-payload-playground-dialog/template-playground-dialog.payload';
 import { CountryEnvironmentService } from '../../../../api/env/country-environment.service';
 import { StringUtils } from '../../../../shared/util/string-utils';
+import { TemplateArgPromptType } from '../../../../api/template/arg/template-arg-prompt.type';
+import { TemplateArgInputType } from '../../../../api/template/arg/template-arg-input.type';
 
 interface TemplateForm {
   name: FormControl<string>;
@@ -55,7 +56,12 @@ interface BeesParamForm {
 
 interface TemplateArgForm {
   id: FormControl<number | null>;
-  type: FormControl<RequestTemplateArgType>;
+  dataType: FormControl<TemplateArgDataType>;
+  arrayType: FormControl<boolean>;
+  customType: FormControl<string | null>;
+  required: FormControl<boolean>;
+  promptType: FormControl<TemplateArgPromptType>;
+  inputType: FormControl<TemplateArgInputType>;
   keyName: FormControl<string>;
   value: FormControl<string | null>;
   name: FormControl<string>;
@@ -70,7 +76,6 @@ interface TemplateArgForm {
     SelectComponent,
     ErrorMessageComponent,
     CheckboxComponent,
-    EnvOverrideFieldComponent,
     NgIf,
     NgForOf,
   ],
@@ -79,6 +84,8 @@ interface TemplateArgForm {
 })
 export class TemplateFormComponent implements OnInit {
   private _template!: RequestTemplateView;
+  protected readonly TemplateArgDataType = TemplateArgDataType;
+
   form!: FormGroup<TemplateForm>;
 
   @Input()
@@ -96,18 +103,13 @@ export class TemplateFormComponent implements OnInit {
     return this._template;
   }
 
-  isValueFieldDisabled(ind: number): boolean {
-    return (
-      this.form.controls.arguments.at(ind).controls.type.value ===
-      RequestTemplateArgType.PROMPT
-    );
-  }
-
   entityOptions: SelectOption[] = SelectOptions.beesEntityOptions();
   dataIngestionVersions: SelectOption[] =
     SelectOptions.dataIngestionVersionOptions();
   methodOptions: SelectOption[] = SelectOptions.methodOptions();
-  argTypeOptions = SelectOptions.templateArgTypes();
+  dataTypeOptions = SelectOptions.templateArgDataTypes();
+  promptTypeOptions = SelectOptions.templatePromptTypes();
+  inputTypeOptions = SelectOptions.templateValueInputTypes();
   templatePayloadTypes = SelectOptions.templatePayloadTypes();
 
   @Output()
@@ -208,8 +210,27 @@ export class TemplateFormComponent implements OnInit {
         validators: [Validators.required],
         nonNullable: true,
       }),
-      type: new FormControl<RequestTemplateArgType>(
-        RequestTemplateArgType.STATIC,
+      dataType: new FormControl<TemplateArgDataType>(
+        TemplateArgDataType.STRING,
+        {
+          validators: [Validators.required],
+          nonNullable: true,
+        },
+      ),
+      customType: new FormControl<string | null>(null),
+      inputType: new FormControl<TemplateArgInputType>(
+        TemplateArgInputType.INPUT,
+        {
+          validators: [Validators.required],
+          nonNullable: true,
+        },
+      ),
+      arrayType: new FormControl<boolean>(false, {
+        nonNullable: true,
+        validators: [Validators.required],
+      }),
+      promptType: new FormControl<TemplateArgPromptType>(
+        TemplateArgPromptType.IF_EMPTY,
         {
           validators: [Validators.required],
           nonNullable: true,
@@ -221,6 +242,10 @@ export class TemplateFormComponent implements OnInit {
       }),
       id: new FormControl<number | null>(null),
       value: new FormControl<string | null>(null),
+      required: new FormControl<boolean>(false, {
+        nonNullable: true,
+        validators: [Validators.required],
+      }),
     });
   }
 
@@ -260,9 +285,6 @@ export class TemplateFormComponent implements OnInit {
         const form = this.createTemplateArgFormGroup();
         form.patchValue(arg);
         this.form.controls.arguments.push(form);
-        if (form.controls.type.value === RequestTemplateArgType.PROMPT) {
-          form.controls.value.disable();
-        }
       });
     }
   }
@@ -270,14 +292,13 @@ export class TemplateFormComponent implements OnInit {
   async onFormSubmit(): Promise<void> {
     const template: RequestTemplate = this.form.getRawValue();
     template.endpoint = StringUtils.trimToNull(template.endpoint);
+    template.arguments?.forEach((arg) => {
+      if (arg.dataType !== TemplateArgDataType.CUSTOM) {
+        // arg.customType = null;
+      }
+    });
 
     this.formSubmitted.emit(template);
-  }
-
-  onArgTypeChange(i: number, val: RequestTemplateArgType): void {
-    if (val === RequestTemplateArgType.PROMPT) {
-      this.form.controls.arguments.at(i).controls.value.setValue(null);
-    }
   }
 
   openTemplateContentPlayground(): void {
@@ -351,5 +372,35 @@ export class TemplateFormComponent implements OnInit {
       this.form.controls.dataIngestionVersion.setValue(null);
       this.form.controls.entity.setValue(BeesEntity.NON_REQUEST_TEMPLATE);
     }
+  }
+
+  async valueFieldClicked(argForm: FormGroup<TemplateArgForm>): Promise<void> {
+    if (argForm.controls.inputType.value !== TemplateArgInputType.TEXTAREA) {
+      return;
+    }
+
+    const value = await this.dialogService.openTemplateArgPrompt(
+      this.envService.getCurrentEnv()!,
+      {
+        ...argForm.getRawValue(),
+        templateId: null!,
+        id: null!,
+      },
+      false,
+      true,
+    );
+
+    argForm.controls.value.patchValue(value);
+  }
+
+  async openCustomTypeTextarea(
+    argForm: FormGroup<TemplateArgForm>,
+  ): Promise<void> {
+    const value = await this.dialogService.openTextarea(
+      argForm.controls.customType.value,
+      `Define type for arg: ${argForm.controls.name.value}`,
+    );
+
+    argForm.controls.customType.patchValue(value);
   }
 }

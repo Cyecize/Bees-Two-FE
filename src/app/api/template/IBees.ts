@@ -122,6 +122,9 @@ import {
   IRandomGeneratorUtils,
   RandomGeneratorUtils,
 } from '../../shared/util/random-generator-utils';
+import { TemplateArgDataType } from './arg/template-arg-data.type';
+import { TemplateArgPromptType } from './arg/template-arg-prompt.type';
+import { TemplateArgInputType } from './arg/template-arg-input.type';
 
 /**
  * @monaco
@@ -268,4 +271,7 @@ export const publicEnums = {
   OrderOrderbyType,
   ContractStatus,
   ContractClassificationType,
+  TemplateArgDataType,
+  TemplateArgPromptType,
+  TemplateArgInputType,
 };

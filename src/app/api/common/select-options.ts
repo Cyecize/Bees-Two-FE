@@ -6,10 +6,12 @@ import {
 import { BeesEntity } from './bees-entity';
 import { RelayVersion } from '../relay/relay.version';
 import { RequestMethod } from './request-method';
-import { RequestTemplateArgType } from '../template/arg/request-template-arg.type';
+import { TemplateArgDataType } from '../template/arg/template-arg-data.type';
 import { RequestTemplatePayloadType } from '../template/request-template-payload.type';
 import { Env } from '../env/env';
 import { SharedClientSupportedMethod } from '../env/sharedclient/shared-client-supported-method';
+import { TemplateArgPromptType } from '../template/arg/template-arg-prompt.type';
+import { TemplateArgInputType } from '../template/arg/template-arg-input.type';
 
 export class SelectOptions {
   public static beesEntityOptions(): SelectOption[] {
@@ -46,9 +48,25 @@ export class SelectOptions {
     );
   }
 
-  public static templateArgTypes(): SelectOption[] {
+  public static templateArgDataTypes(): SelectOption[] {
     return [new SelectOptionKvp('Choose one', null)].concat(
-      ...Object.keys(RequestTemplateArgType).map(
+      ...Object.keys(TemplateArgDataType).map(
+        (method) => new SelectOptionKey(method),
+      ),
+    );
+  }
+
+  public static templatePromptTypes(): SelectOption[] {
+    return [new SelectOptionKvp('Choose one', null)].concat(
+      ...Object.keys(TemplateArgPromptType).map(
+        (method) => new SelectOptionKey(method),
+      ),
+    );
+  }
+
+  public static templateValueInputTypes(): SelectOption[] {
+    return [new SelectOptionKvp('Choose one', null)].concat(
+      ...Object.keys(TemplateArgInputType).map(
         (method) => new SelectOptionKey(method),
       ),
     );

@@ -68,24 +68,30 @@ export class TemplatePayloadPlaygroundDialog
   private async configureMonaco(): Promise<void> {
     const monaco = (window as any).monaco;
 
-    monaco.languages.typescript.javascriptDefaults.addExtraLib(
-      GENERATED_EDITOR_LIB,
-    );
-
-    monaco.languages.typescript.javascriptDefaults.addExtraLib(
-      EDITOR_CUSTOM_LIB,
-    );
-
-    monaco.languages.typescript.javascriptDefaults.addExtraLib(
-      `
+    const extraLib = `
       interface Args {
-        ${this.payload.args.map((a) => `${a.keyName}: RequestTemplateArg`)}
+        ${this.payload.args.map(
+          (a) =>
+            `${a.keyName}: TypedRequestTemplateArg<${RequestTemplateArgUtil.generateType(a)}>`,
+        )}
       }
 
       /** Function arguments */
       declare const args: Args;
-      `,
-    );
+      `;
+
+    // Use setExtraLibs instead of addExtraLib to avoid adding same lib on every call!
+    monaco.languages.typescript.javascriptDefaults.setExtraLibs([
+      {
+        content: GENERATED_EDITOR_LIB,
+      },
+      {
+        content: EDITOR_CUSTOM_LIB,
+      },
+      {
+        content: extraLib,
+      },
+    ]);
 
     monaco.languages.typescript.javascriptDefaults.setCompilerOptions({
       target: monaco.languages.typescript.ScriptTarget.ES2020,

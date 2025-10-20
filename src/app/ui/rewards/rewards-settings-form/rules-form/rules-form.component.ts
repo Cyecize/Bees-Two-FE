@@ -71,7 +71,7 @@ export class RulesFormComponent implements OnInit, OnDestroy {
     private envOverrideService: EnvOverrideService,
   ) {}
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.envSub.unsubscribe();
   }
 

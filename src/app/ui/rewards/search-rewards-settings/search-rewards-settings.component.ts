@@ -85,7 +85,7 @@ export class SearchRewardsSettingsComponent implements OnInit, OnDestroy {
       async (value) => {
         if (value) {
           this.selectedEnv = value;
-          this.reloadFilters();
+          void this.reloadFilters();
         }
       },
     );
@@ -101,13 +101,13 @@ export class SearchRewardsSettingsComponent implements OnInit, OnDestroy {
       !this.query.levels.includes(levelSelection.objRef)
     ) {
       this.query.levels.push(levelSelection.objRef);
-      this.reloadFilters();
+      void this.reloadFilters();
     }
   }
 
   removeLevel(level: RewardsSettingLevel): void {
     this.query.levels.splice(this.query.levels.indexOf(level), 1);
-    this.reloadFilters();
+    void this.reloadFilters();
   }
 
   tierSelected(tierSelection: SelectSearchItem<RewardsTierLevel>): void {
@@ -116,13 +116,13 @@ export class SearchRewardsSettingsComponent implements OnInit, OnDestroy {
       !this.query.tiers.includes(tierSelection.objRef)
     ) {
       this.query.tiers.push(tierSelection.objRef);
-      this.reloadFilters();
+      void this.reloadFilters();
     }
   }
 
   removeTier(tier: RewardsTierLevel): void {
     this.query.tiers.splice(this.query.tiers.indexOf(tier), 1);
-    this.reloadFilters();
+    void this.reloadFilters();
   }
 
   typeSelected(typeSelection: SelectSearchItem<RewardsSettingType>): void {
@@ -131,13 +131,13 @@ export class SearchRewardsSettingsComponent implements OnInit, OnDestroy {
       !this.query.types.includes(typeSelection.objRef)
     ) {
       this.query.types.push(typeSelection.objRef);
-      this.reloadFilters();
+      void this.reloadFilters();
     }
   }
 
   removeType(settingType: RewardsSettingType): void {
     this.query.types.splice(this.query.types.indexOf(settingType), 1);
-    this.reloadFilters();
+    void this.reloadFilters();
   }
 
   shortenStr(str: string): string {

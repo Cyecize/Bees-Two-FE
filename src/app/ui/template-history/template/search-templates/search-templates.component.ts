@@ -32,7 +32,7 @@ export class SearchTemplatesComponent implements OnInit {
 
   onPageChange(page: number): void {
     this.query.page.pageNumber = page;
-    this.fetch();
+    void this.fetch();
   }
 
   @ShowLoader()

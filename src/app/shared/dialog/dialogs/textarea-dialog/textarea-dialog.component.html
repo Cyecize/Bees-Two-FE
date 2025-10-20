@@ -1,0 +1,14 @@
+<div class="dialog-content-container">
+  <div class="mt-2">
+    <textarea
+      rows="10"
+      class="form-control"
+      [(ngModel)]="value"
+      placeholder="Provide value"></textarea>
+  </div>
+
+  <div class="mt-2 text-end">
+    <button (click)="saveAsNull()" class="btn btn-outline-danger">Save as Null</button>
+    <button (click)="saveAndClose()" class="ms-1 btn btn-outline-success">Save</button>
+  </div>
+</div>
