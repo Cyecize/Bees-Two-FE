@@ -123,6 +123,11 @@ export class PreviewTemplateDialogComponent
   }
 
   async initialize(retainArgs?: boolean): Promise<void> {
+    if (this.isRunning) {
+      alert('Another process is running!');
+      return;
+    }
+
     const argsClone = JSON.parse(JSON.stringify(this.templateFull.arguments));
 
     if (this.templateFull.isInitialized) {
@@ -133,6 +138,7 @@ export class PreviewTemplateDialogComponent
       this.templateFull.arguments = argsClone;
     }
 
+    this.isRunning = true;
     this.templateRunningService
       .prepareTemplate(
         this.currentEnv,
@@ -148,6 +154,7 @@ export class PreviewTemplateDialogComponent
         }
       })
       .finally(() => {
+        this.isRunning = false;
         this.scriptLogger.stopCapturing();
       });
   }
@@ -213,7 +220,10 @@ export class PreviewTemplateDialogComponent
   }
 
   async run(): Promise<void> {
-    // this.loaderService.show();
+    if (this.isRunning) {
+      alert('Another process is running!');
+      return;
+    }
     try {
       if (!this.templateFull) {
         return;
@@ -247,7 +257,6 @@ export class PreviewTemplateDialogComponent
 
       console.log(resp);
     } finally {
-      // this.loaderService.hide();
       this.scriptLogger.startCapturing();
       this.isRunning = false;
     }
