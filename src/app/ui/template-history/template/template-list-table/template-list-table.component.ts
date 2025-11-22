@@ -1,7 +1,10 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { RequestTemplateService } from '../../../../api/template/request-template.service';
 import { Page, PageImpl, pageToPagination } from '../../../../shared/util/page';
-import { RequestTemplateView } from '../../../../api/template/request-template';
+import {
+  RequestTemplateDtoForSearch,
+  RequestTemplateFull,
+} from '../../../../api/template/request-template';
 import { NgForOf } from '@angular/common';
 import { PaginationComponent } from '../../../../shared/components/pagination/pagination.component';
 import { DialogService } from '../../../../shared/dialog/dialog.service';
@@ -20,7 +23,7 @@ export class TemplateListTableComponent {
   protected readonly pageToPagination = pageToPagination;
 
   @Input()
-  templates: Page<RequestTemplateView> = new PageImpl([]);
+  templates: Page<RequestTemplateDtoForSearch> = new PageImpl([]);
 
   @Output()
   pageChanged: EventEmitter<number> = new EventEmitter<number>();
@@ -34,11 +37,11 @@ export class TemplateListTableComponent {
     this.pageChanged.emit(page);
   }
 
-  openPreview(template: RequestTemplateView): void {
+  openPreview(template: RequestTemplateDtoForSearch): void {
     this.dialogService.openTemplatePreviewDialog(template);
   }
 
-  openDetailsDialog(template: RequestTemplateView): void {
+  openDetailsDialog(template: RequestTemplateDtoForSearch): void {
     this.dialogService
       .open(
         TemplateDetailsDialogComponent,
@@ -53,11 +56,11 @@ export class TemplateListTableComponent {
       });
   }
 
-  openMultiRunner(template: RequestTemplateView): void {
-    this.dialogService.open(
-      MultienvTemplateRunnerDialogComponent,
-      '',
-      new MultienvTemplateRunnerDialogPayload(template),
-    );
+  openMultiRunner(template: RequestTemplateDtoForSearch): void {
+    // this.dialogService.open(
+    //   MultienvTemplateRunnerDialogComponent,
+    //   '',
+    //   new MultienvTemplateRunnerDialogPayload(template),
+    // );
   }
 }

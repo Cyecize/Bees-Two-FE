@@ -12,7 +12,12 @@ import { NgForOf } from '@angular/common';
 export class ErrorMessageComponent {
   @Input() errors!: FieldError[];
 
-  @Input() fieldName!: string;
+  @Input()
+  set fieldName(name: string) {
+    this.fieldNames.push(name);
+  }
+
+  @Input() fieldNames: string[] = [];
 
   constructor() {}
 }

@@ -6,7 +6,10 @@ import { RequestTemplateService } from '../../../../api/template/request-templat
 import { ShowLoader } from '../../../../shared/loader/show.loader.decorator';
 import { TemplateListTableComponent } from '../template-list-table/template-list-table.component';
 import { Page, PageImpl } from '../../../../shared/util/page';
-import { RequestTemplateView } from '../../../../api/template/request-template';
+import {
+  RequestTemplateDtoForSearch,
+  RequestTemplateFull,
+} from '../../../../api/template/request-template';
 import { FieldError } from '../../../../shared/field-error/field-error';
 
 @Component({
@@ -17,7 +20,7 @@ import { FieldError } from '../../../../shared/field-error/field-error';
   styleUrl: './search-templates.component.scss',
 })
 export class SearchTemplatesComponent implements OnInit {
-  templates: Page<RequestTemplateView> = new PageImpl([]);
+  templates: Page<RequestTemplateDtoForSearch> = new PageImpl([]);
   errors: FieldError[] = [];
   query!: RequestTemplateQuery;
 

@@ -1,0 +1,45 @@
+<table class="table">
+  <thead>
+  </thead>
+  <tbody>
+  <tr>
+    <td>Id</td>
+    <td>{{ template.id }}</td>
+  </tr>
+  <tr>
+    <td>Name</td>
+    <td>{{ template.name }}</td>
+  </tr>
+  <tr>
+    <td>Entity</td>
+    <td>{{ template.entity }}</td>
+  </tr>
+  <tr *ngIf="template.dataIngestionVersion">
+    <td>Data Ingestion Version</td>
+    <td>{{ template.dataIngestionVersion }}</td>
+  </tr>
+  <tr>
+    <td>Method</td>
+    <td>{{ template.method }}</td>
+  </tr>
+  <tr>
+    <td>Endpoint</td>
+    <td>{{ template.endpoint }}</td>
+  </tr>
+  <tr>
+    <td>Owner (User ID)</td>
+    <td>{{ template.userId }}</td>
+  </tr>
+  <tr>
+    <td>Save in history</td>
+    <td>{{ ObjectUtils.boolToYesNo(template.saveInHistory) }}</td>
+  </tr>
+  <tr>
+    <td>Auto Init
+      <small>(Automatically execute pre-request script on preview)</small>
+    </td>
+    <td>{{ ObjectUtils.boolToYesNo(template.autoInit) }}</td>
+  </tr>
+
+  </tbody>
+</table>

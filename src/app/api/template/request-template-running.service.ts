@@ -7,7 +7,7 @@ import {
 import { ProxyService } from '../proxy/proxy.service';
 import { RelayService } from '../relay/relay.service';
 import { CountryEnvironmentModel } from '../env/country-environment.model';
-import { RequestTemplateView } from './request-template';
+import { RequestTemplateFull } from './request-template';
 import { firstValueFrom, Observable } from 'rxjs';
 import { BeesResponse } from '../proxy/bees-response';
 import {
@@ -58,7 +58,7 @@ export class RequestTemplateRunningService {
 
   public async runOnce(
     env: CountryEnvironmentModel,
-    template: RequestTemplateView,
+    template: RequestTemplateFull,
     context: Map<string, any>,
     scriptLogger: ScriptLogger,
   ): Promise<{
@@ -133,19 +133,30 @@ export class RequestTemplateRunningService {
     };
   }
 
+  /**
+   *
+   * @param env
+   * @param template - argument is deep-cloned, so original object is untouched
+   * @param context
+   * @param scriptLogger
+   */
   public async prepareTemplate(
     env: CountryEnvironmentModel,
-    template: RequestTemplateView,
+    template: RequestTemplateFull,
     context: Map<string, any>,
     scriptLogger: ScriptLogger,
   ): Promise<{
-    template: RequestTemplateView;
+    template: RequestTemplateFull;
     errors: string[];
   }> {
+    if (template.isInitialized) {
+      throw new Error('Template is already initialized');
+    }
     const logEmitter = new EventEmitter<string>();
     logEmitter.subscribe((val) => scriptLogger.logAndPrint(val, 'SCRIPT_LOG'));
     // Deep cloning the object
     template = JSON.parse(JSON.stringify(template));
+    template.isInitialized = true;
 
     const args = await this.retrieveArguments(env, template.arguments);
     logEmitter.emit('Retrieved args');
@@ -280,7 +291,7 @@ export class RequestTemplateRunningService {
 
   private evalAndSetParams(
     env: CountryEnvironmentModel,
-    template: RequestTemplateView,
+    template: RequestTemplateFull,
     args: { [key: string]: RequestTemplateArg },
     context: Map<string, any>,
     params: BeesParam[],
@@ -354,7 +365,7 @@ export class RequestTemplateRunningService {
   }
 
   private async compileJsTemplate(
-    template: RequestTemplateView,
+    template: RequestTemplateFull,
     args: { [key: string]: RequestTemplateArg },
     context: Map<string, any>,
     env: CountryEnvironmentModel,

@@ -1,23 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import { DialogContentBaseComponent } from '../../../../shared/dialog/dialogs/dialog-content-base.component';
-import { RequestTemplateView } from '../../../../api/template/request-template';
+import { RequestTemplateFull } from '../../../../api/template/request-template';
 import { firstValueFrom, Observable } from 'rxjs';
-import { NgIf } from '@angular/common';
-import { CopyIconComponent } from '../../../../shared/components/copy-icon/copy-icon.component';
 import { ObjectUtils } from '../../../../shared/util/object-utils';
 import { RouteUtils } from '../../../../shared/routing/route-utils';
 import { AppRoutingPath } from '../../../../app-routing.path';
 import { DialogService } from '../../../../shared/dialog/dialog.service';
 import { RequestTemplateService } from '../../../../api/template/request-template.service';
 import { RouterLink } from '@angular/router';
+import { TemplateDetailsComponentComponent } from '../template-details-component/template-details-component.component';
 
 @Component({
   templateUrl: './template-details-dialog.component.html',
   standalone: true,
-  imports: [NgIf, CopyIconComponent, RouterLink],
+  imports: [RouterLink, TemplateDetailsComponentComponent],
 })
 export class TemplateDetailsDialogComponent
-  extends DialogContentBaseComponent<RequestTemplateView>
+  extends DialogContentBaseComponent<RequestTemplateFull>
   implements OnInit
 {
   protected readonly ObjectUtils = ObjectUtils;

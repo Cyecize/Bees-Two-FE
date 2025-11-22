@@ -8,7 +8,7 @@ import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 import { ObjectUtils } from '../../../../shared/util/object-utils';
 import { DialogService } from '../../../../shared/dialog/dialog.service';
 import { RequestTemplateRunningService } from '../../../../api/template/request-template-running.service';
-import { RequestTemplateView } from '../../../../api/template/request-template';
+import { RequestTemplateFull } from '../../../../api/template/request-template';
 import { EnvViewerDialogComponent } from '../../../env/env-viewer-dialog/env-viewer-dialog.component';
 import {
   ScriptLogger,
@@ -60,7 +60,7 @@ export class MultienvTemplateRunnerDialogComponent
     this.scriptLogger.startCapturing();
     try {
       for (const env of this.envs) {
-        let template: RequestTemplateView = this.payload.template;
+        let template: RequestTemplateFull = this.payload.template;
         console.log('Starting execution');
         const ctx = new Map<string, any>();
         const resp = await this.templateRunningService.prepareTemplate(

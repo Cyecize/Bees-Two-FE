@@ -23,16 +23,13 @@ import { PlatformIdType } from '../../api/platformid/platform-id.type';
 import { ContractIdDialogComponent } from '../../ui/platformid/contract-id-dialog/contract-id-dialog.component';
 import { DeliveryCenterIdDialogComponent } from '../../ui/platformid/delivery-center-id-dialog/delivery-center-id-dialog.component';
 import { InventoryPlatformIdDialogComponent } from '../../ui/platformid/inventory-platform-id-dialog/inventory-platform-id-dialog.component';
-import {
-  IItemsPickerDialogPayload,
-  ItemsPickerDialogPayload,
-} from '../../ui/items/items-picker-dialog/items-picker-dialog.payload';
+import { IItemsPickerDialogPayload } from '../../ui/items/items-picker-dialog/items-picker-dialog.payload';
 import { ItemsPickerDialogComponent } from '../../ui/items/items-picker-dialog/items-picker-dialog.component';
 import { Item } from '../../api/items/item';
 import { ShowCodePayload } from './dialogs/confirm-dialog/show-code-payload.model';
 import { ConfirmDialogPayload } from './dialogs/show-code-dialog/confirm-dialog-payload.model';
 import { ConfirmDialogComponent } from './dialogs/show-code-dialog/confirm-dialog.component';
-import { RequestTemplateView } from '../../api/template/request-template';
+import { RequestTemplateDtoForSearch } from '../../api/template/request-template';
 import { PreviewTemplateDialogComponent } from '../../ui/template-history/template/preview-template-dialog/preview-template-dialog.component';
 import { TemplatePlaygroundDialogResponse } from '../../ui/template-history/template/template-payload-playground-dialog/template-playground-dialog.response';
 import { TemplatePlaygroundDialogPayload } from '../../ui/template-history/template/template-payload-playground-dialog/template-playground-dialog.payload';
@@ -64,6 +61,11 @@ import { ObjDiffDialogPayload } from './dialogs/obj-diff-dialog/obj-diff-dialog-
 import { TextareaDialogResponse } from './dialogs/textarea-dialog/textarea-dialog.response';
 import { TextareaDialogComponent } from './dialogs/textarea-dialog/textarea-dialog.component';
 import { TextareaDialogPayload } from './dialogs/textarea-dialog/textarea-dialog.payload';
+import { PreviewTemplateDialogPayload } from '../../ui/template-history/template/preview-template-dialog/preview-template-dialog.payload';
+import { PreviewTemplateTab } from '../../ui/template-history/template/preview-template-dialog/preview-template-tab';
+import { RequestTemplatePreset } from '../../api/template/arg/preset/request-template-preset';
+import { PresetDetailsDialogComponent } from '../../ui/template-history/template-presets/preset-details-dialog/preset-details-dialog.component';
+import { PresetDetailsDialogPayload } from '../../ui/template-history/template-presets/preset-details-dialog/preset-details-dialog.payload';
 
 /**
  * @monaco
@@ -231,13 +233,31 @@ export class DialogService implements IDialogService {
   }
 
   public openTemplatePreviewDialog(
-    template: RequestTemplateView,
+    template: RequestTemplateDtoForSearch,
   ): Observable<any> {
     return this.open(
       PreviewTemplateDialogComponent,
       `Preview ${template.name}`,
-      template,
+      new PreviewTemplateDialogPayload(
+        template,
+        PreviewTemplateTab.REQUEST_DETAILS,
+      ),
     ).afterClosed();
+  }
+
+  public async openTemplatePresetDetails(
+    preset: RequestTemplatePreset,
+    argValues: RequestTemplateArgView[],
+  ): Promise<boolean> {
+    return await firstValueFrom(
+      this.open(
+        PresetDetailsDialogComponent,
+        `Details for preset: ${preset.name}`,
+        new PresetDetailsDialogPayload(preset, argValues),
+      )
+        .afterClosed()
+        .pipe(map((val) => val === true)),
+    );
   }
 
   public openCodePlayground(

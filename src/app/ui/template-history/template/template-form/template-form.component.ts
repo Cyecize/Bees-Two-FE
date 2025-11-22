@@ -20,7 +20,7 @@ import { Endpoints } from '../../../../shared/http/endpoints';
 import { NgForOf, NgIf } from '@angular/common';
 import {
   RequestTemplate,
-  RequestTemplateView,
+  RequestTemplateFull,
 } from '../../../../api/template/request-template';
 import { SelectOptions } from '../../../../api/common/select-options';
 import { TemplateArgDataType } from '../../../../api/template/arg/template-arg-data.type';
@@ -46,6 +46,7 @@ interface TemplateForm {
   preRequestScript: FormControl<string | null>;
   postRequestScript: FormControl<string | null>;
   saveInHistory: FormControl<boolean>;
+  autoInit: FormControl<boolean>;
   arguments: FormArray<FormGroup<TemplateArgForm>>;
 }
 
@@ -83,7 +84,7 @@ interface TemplateArgForm {
   styleUrl: './template-form.component.scss',
 })
 export class TemplateFormComponent implements OnInit {
-  private _template!: RequestTemplateView;
+  private _template!: RequestTemplateFull;
   protected readonly TemplateArgDataType = TemplateArgDataType;
 
   form!: FormGroup<TemplateForm>;
@@ -92,14 +93,14 @@ export class TemplateFormComponent implements OnInit {
   errors: FieldError[] = [];
 
   @Input({ required: false })
-  set template(template: RequestTemplateView) {
+  set template(template: RequestTemplateFull) {
     this._template = template;
     if (this.form) {
       this.populateTemplate(template);
     }
   }
 
-  get template(): RequestTemplateView {
+  get template(): RequestTemplateFull {
     return this._template;
   }
 
@@ -155,6 +156,10 @@ export class TemplateFormComponent implements OnInit {
         nonNullable: true,
       }),
       arguments: new FormArray<FormGroup<TemplateArgForm>>([]),
+      autoInit: new FormControl<boolean>(true, {
+        validators: Validators.required,
+        nonNullable: true,
+      }),
     });
 
     if (this.template) {
@@ -249,7 +254,7 @@ export class TemplateFormComponent implements OnInit {
     });
   }
 
-  private populateTemplate(template: RequestTemplateView): void {
+  private populateTemplate(template: RequestTemplateFull): void {
     this.form.patchValue({
       endpoint: template.endpoint,
       entity: template.entity,
@@ -262,6 +267,7 @@ export class TemplateFormComponent implements OnInit {
       postRequestScript: template.postRequestScript,
       payloadType: template.payloadType,
       makeRequest: template.makeRequest,
+      autoInit: template.autoInit,
     });
 
     if (template.headers?.length) {

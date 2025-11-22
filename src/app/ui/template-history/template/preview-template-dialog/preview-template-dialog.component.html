@@ -1,61 +1,200 @@
+<ul class="nav nav-tabs">
+  <li class="nav-item">
+    <span
+      [ngClass]="{'active': TABS.TEMPLATE_DETAILS === activeTab}"
+      (click)="activeTab = TABS.TEMPLATE_DETAILS"
+      class="nav-link c-pointer">
+      Template Details
+    </span>
+  </li>
+  <li class="nav-item">
+    <span
+      [ngClass]="{'active': TABS.REQUEST_DETAILS === activeTab}"
+      (click)="activeTab = TABS.REQUEST_DETAILS"
+      class="nav-link c-pointer">
+      Request Details
+    </span>
+  </li>
+  <li class="nav-item">
+    <span
+      [ngClass]="{'active': TABS.PRESETS === activeTab}"
+      (click)="activeTab = TABS.PRESETS"
+      class="nav-link c-pointer">
+      Presets
+    </span>
+  </li>
+  <li class="nav-item">
+    <span
+      [ngClass]="{'active': TABS.ARGS === activeTab}"
+      (click)="activeTab = TABS.ARGS"
+      class="nav-link c-pointer">
+      Args
+    </span>
+  </li>
+  <li class="nav-item">
+    <span
+      [ngClass]="{'active': TABS.LOGS === activeTab}"
+      (click)="activeTab = TABS.LOGS"
+      class="nav-link c-pointer">
+      Logs ({{ numberOfLogsObs | async }})
+    </span>
+  </li>
+
+</ul>
+
 <div class="card dialog-content-container">
   <div class="card-body">
-    <div class="mt-2">
-      <h6>Request Details</h6>
-      <p>
-        <strong class="p-1 {{payload.method}}">{{ payload.method }}:
-        </strong>
-        <span *ngIf="!template">Loading...</span>
-        <code *ngIf="template"> {{ template.endpoint }}</code>
+    <div *ngIf="activeTab === TABS.REQUEST_DETAILS">
+      <h6>
+        Selected preset:
+        <span *ngIf="selectedPreset">{{ selectedPreset.name }}</span>
+        <span *ngIf="!selectedPreset">NONE</span>
+      </h6>
+      <h6
+        *ngIf="payload.template.makeRequest"
+        class="c-pointer"
+        (click)="beesRequestDetailsVisible = !beesRequestDetailsVisible">
+        Request Details
+        <small *ngIf="beesRequestDetailsVisible">(Collapse)</small>
+        <small *ngIf="!beesRequestDetailsVisible">(Expand)</small>
+      </h6>
+      <div class="mt-2"
+           *ngIf="beesRequestDetailsVisible && payload.template.makeRequest">
+        <div *ngIf="payload.template.makeRequest">
+          <p class="m-0">
+            <strong class="p-1 {{payload.template.method}}">{{ payload.template.method }}:
+            </strong>
+            <span *ngIf="!templateFull">Loading...</span>
+            <code *ngIf="templateFull"> {{ templateFull.endpoint }}</code>
+          </p>
+          <p class="m-0">Save In History:
+            <strong>
+              {{ ObjectUtils.boolToYesNo(payload.template.saveInHistory) }}
+            </strong>
+          </p>
+          <p class="m-0"><strong>Entity:</strong> {{ payload.template.entity }}</p>
+
+          <div class="mt-2">
+            <h6>Query Parameters</h6>
+            <span *ngIf="!templateFull">Loading...</span>
+            <ul class="list-group" *ngIf="templateFull">
+              <li class="list-group-item" *ngFor="let param of templateFull.queryParams">
+                <div class="d-flex justify-content-between">
+                  <strong>{{ param.name }}:</strong>
+                  <div class="ps-2 text-start flex-grow-1">
+                    <app-tooltip-span
+                      [displayText]="param.value"
+                      [tooltipText]="param.value"
+                      [trimDisplayTextChars]="60"></app-tooltip-span>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <div class="mt-2">
+            <h6>Headers</h6>
+            <span *ngIf="!templateFull">Loading...</span>
+            <ul class="list-group" *ngIf="templateFull">
+              <li class="list-group-item" *ngFor="let header of templateFull.headers">
+                <div class="d-flex justify-content-between">
+                  <strong>{{ header.name }}:</strong>
+                  <div class="ps-2 text-start flex-grow-1">
+                    <app-tooltip-span
+                      [displayText]="header.value"
+                      [tooltipText]="header.value"
+                      [trimDisplayTextChars]="60"></app-tooltip-span>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+        </div>
+        <span *ngIf="!payload.template.makeRequest" class="text-info">Non-request template!</span>
+      </div>
+
+      <div class="mt-2">
+        <h6>JSON Payload</h6>
+        <div>
+          <button
+            (click)="openTemplatePayloadDialog()"
+            class="btn btn-sm btn-outline-info">View Full
+          </button>
+        </div>
+        <pre *ngIf="templateFull">{{ templateFull.payloadTemplate | json }}</pre>
+      </div>
+    </div>
+
+    <div *ngIf="TABS.TEMPLATE_DETAILS === activeTab">
+      <app-template-details-component [template]="payload.template"></app-template-details-component>
+    </div>
+
+    <div *ngIf="TABS.PRESETS === activeTab">
+      <app-preset-search
+        (presetSelected)="onPresetSelected($event)"
+        [argValues]="templateFull.arguments"
+        [selectedPreset]="selectedPreset"
+        [templateId]="payload.template.id"></app-preset-search>
+    </div>
+    <div *ngIf="TABS.ARGS === activeTab">
+      <p *ngIf="selectedPreset">
+        Applied preset: <strong>{{ selectedPreset.name }}</strong>
       </p>
-      <p>Save In History: <strong>{{ ObjectUtils.boolToYesNo(payload.saveInHistory) }}</strong></p>
-      <p><strong>Entity:</strong> {{ payload.entity }}</p>
+      <app-template-arg-preview
+        [enableEdits]="true"
+        (argsUpdated)="onArgsUpdate($event)"
+        [args]="templateFull.arguments"></app-template-arg-preview>
     </div>
-
-    <div class="mt-2">
-      <h6>Query Parameters</h6>
-      <span *ngIf="!template">Loading...</span>
-      <ul class="list-group" *ngIf="template">
-        <li class="list-group-item" *ngFor="let param of template.queryParams">
-          <div class="d-flex justify-content-between">
-            <strong>{{ param.name }}:</strong>
-            <div class="ps-2 text-start flex-grow-1">
-              <app-tooltip-span
-                [displayText]="param.value"
-                [tooltipText]="param.value"
-                [trimDisplayTextChars]="60"></app-tooltip-span>
-            </div>
-          </div>
-        </li>
-      </ul>
+    <div *ngIf="activeTab === TABS.LOGS">
+      <app-template-preview-logger
+        (logsCleared)="numberOfLogsSubject.next(0)"
+        [scriptLogger]="scriptLogger"></app-template-preview-logger>
     </div>
-
-    <div class="mt-2">
-      <h6>Headers</h6>
-      <span *ngIf="!template">Loading...</span>
-      <ul class="list-group" *ngIf="template">
-        <li class="list-group-item" *ngFor="let header of template.headers">
-          <div class="d-flex justify-content-between">
-            <strong>{{ header.name }}:</strong>
-            <div class="ps-2 text-start flex-grow-1">
-              <app-tooltip-span
-                [displayText]="header.value"
-                [tooltipText]="header.value"
-                [trimDisplayTextChars]="60"></app-tooltip-span>
-            </div>
-          </div>
-        </li>
-      </ul>
+    <div *ngIf="!isRunning" class="mt-2 text-end">
+      <button
+        (click)="applyArgsAndInitialize()"
+        *ngIf="templateFull && argsToOverride.length"
+        class="ms-1 btn btn-outline-dark">
+        Apply args & Initialize
+      </button>
+      <button
+        (click)="resetArgs()"
+        *ngIf="templateFull && argsToOverride.length"
+        class="ms-1 btn btn-outline-dark">
+        Reset Args
+      </button>
+      <button
+        (click)="initialize()"
+        *ngIf="templateFull && !templateFull.isInitialized && !argsToOverride.length"
+        class="ms-1 btn btn-outline-success">
+        Initialize
+      </button>
+      <button
+        (click)="initialize()"
+        *ngIf="templateFull && templateFull.isInitialized && !argsToOverride.length"
+        class="ms-1 btn btn-outline-dark">
+        Re-Initialize
+      </button>
+      <button
+        *ngIf="TABS.LOGS !== activeTab"
+        (click)="showLogs()"
+        class="ms-1 btn btn-outline-warning">Show Logs
+      </button>
+      <button
+        *ngIf="activeTab === TABS.LOGS"
+        (click)="downloadLogs()"
+        class="ms-1 btn btn-outline-secondary">Download Logs
+      </button>
+      <button
+        *ngIf="templateFull && templateFull.isInitialized"
+        (click)="run()"
+        class="ms-1 btn btn-outline-primary">
+        Run
+      </button>
     </div>
-
-    <div class="mt-2">
-      <h6>JSON Payload</h6>
-              <pre *ngIf="template">{{ template.payloadTemplate | json }}</pre>
-    </div>
-
-    <div class="mt-2 text-end">
-      <button (click)="downloadLogs()" class="btn btn-outline-success">Save Logs</button>
-      <button (click)="sendRequest()" class="ms-1 btn btn-secondary">Send Request</button>
+    <div *ngIf="isRunning" class="mt-2 text-end">
+      <app-inline-loader></app-inline-loader>
     </div>
   </div>
 </div>

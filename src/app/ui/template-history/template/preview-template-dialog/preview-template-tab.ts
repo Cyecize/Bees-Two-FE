@@ -1,0 +1,7 @@
+export enum PreviewTemplateTab {
+  TEMPLATE_DETAILS = 'TEMPLATE_DETAILS',
+  REQUEST_DETAILS = 'REQUEST_DETAILS',
+  PRESETS = 'PRESETS',
+  ARGS = 'ARGS',
+  LOGS = 'LOGS',
+}

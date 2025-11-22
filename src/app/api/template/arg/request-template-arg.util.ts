@@ -1,8 +1,11 @@
 import {
   RequestTemplateArg,
+  RequestTemplateArgView,
   TypedRequestTemplateArg,
 } from './request-template-arg';
 import { TemplateArgDataType } from './template-arg-data.type';
+import { RequestTemplatePresetWithValues } from './preset/request-template-preset';
+import { ObjectUtils } from '../../../shared/util/object-utils';
 
 export class RequestTemplateArgUtil {
   public static convertArgumentsToObj(args: RequestTemplateArg[]): {
@@ -72,5 +75,31 @@ export class RequestTemplateArgUtil {
     }
 
     return type;
+  }
+
+  public static applyPreset(
+    args: RequestTemplateArgView[],
+    preset: RequestTemplatePresetWithValues,
+    filterMissingArgs = true,
+  ): RequestTemplateArgView[] {
+    // Deep clone
+    args = args.map((a) => JSON.parse(JSON.stringify(a)));
+    if (filterMissingArgs) {
+      args = args.filter(
+        (arg: RequestTemplateArg) =>
+          !ObjectUtils.isNil(
+            preset.argValues.find((val) => val.argId === arg.id),
+          ),
+      );
+    }
+
+    args.forEach((arg: RequestTemplateArg) => {
+      const argOverride = preset.argValues.find((val) => val.argId === arg.id);
+      if (argOverride) {
+        arg.value = argOverride.value;
+      }
+    });
+
+    return args;
   }
 }

@@ -10,6 +10,9 @@
                   (onChange)="onMakeRequestChange($event)"
                   formControlName="makeRequest"></app-checkbox>
     <app-field-error [fieldName]="'makeRequest'" [errors]="errors"></app-field-error>
+    <app-checkbox label="Auto Init (Run pre-request script on preview)"
+                  formControlName="autoInit"></app-checkbox>
+    <app-field-error [fieldName]="'autoInit'" [errors]="errors"></app-field-error>
   </div>
   <ng-container *ngIf="form.controls.makeRequest.value">
     <div class="mt-2">

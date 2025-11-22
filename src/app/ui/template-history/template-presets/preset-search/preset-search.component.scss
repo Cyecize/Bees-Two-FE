@@ -1,0 +1,9 @@
+.filters-header {
+  display: flex;
+  flex-wrap: wrap;
+
+  .filter {
+    width: 200px;
+    margin: 3px;
+  }
+}

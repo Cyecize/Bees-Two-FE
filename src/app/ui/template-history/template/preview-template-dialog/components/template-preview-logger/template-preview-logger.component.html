@@ -1,0 +1,29 @@
+<div>
+  <div class="d-flex">
+    <div class="m-1">
+      <button (click)="clearLogs()" class="btn btn-sm btn-outline-danger">Clear Logs</button>
+    </div>
+    <div class="m-1">
+      <app-checkbox
+        label="Auto Scroll"
+        [(ngModel)]="autoScrollLogs"></app-checkbox>
+    </div>
+    <div class="m-1">
+      <app-checkbox
+        (onChangeEnd)="refreshLogs();"
+        label="Show Log Type"
+        [(ngModel)]="formatOptions.showType"></app-checkbox>
+    </div>
+    <div class="m-1">
+      <app-checkbox
+        (onChangeEnd)="refreshLogs();"
+        label="Show Timestamp"
+        [(ngModel)]="formatOptions.showTimestamp"></app-checkbox>
+    </div>
+  </div>
+  <div #logContainer
+       (scroll)="onLogScroll()"
+       style="overflow-y:  auto; max-height: 350px;">
+    <pre>{{ logStream | async }}</pre>
+  </div>
+</div>

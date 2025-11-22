@@ -7,11 +7,11 @@ import { ObjectUtils } from '../util/object-utils';
   standalone: true,
 })
 export class FilterFieldErrorPipe implements PipeTransform {
-  transform(errors: FieldError[], fieldName: string): FieldError[] {
+  transform(errors: FieldError[], fieldNames: string[]): FieldError[] {
     if (ObjectUtils.isNil(errors)) {
       errors = [];
     }
 
-    return errors.filter((e) => e.field === fieldName);
+    return errors.filter((e) => fieldNames.includes(e.field));
   }
 }

@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
 import { RequestTemplateRepository } from './request-template.repository';
-import { RequestTemplate, RequestTemplateView } from './request-template';
+import {
+  RequestTemplate,
+  RequestTemplateDtoForSearch,
+  RequestTemplateFull,
+} from './request-template';
 import {
   FieldErrorWrapperLocal,
   WrappedResponseLocal,
@@ -14,7 +18,7 @@ export class RequestTemplateService {
 
   public async createTemplate(
     template: RequestTemplate,
-  ): Promise<WrappedResponseLocal<RequestTemplateView>> {
+  ): Promise<WrappedResponseLocal<RequestTemplateFull>> {
     return await new FieldErrorWrapperLocal(() =>
       this.repository.create(template),
     ).execute();
@@ -23,7 +27,7 @@ export class RequestTemplateService {
   public async saveTemplate(
     templateId: number,
     template: RequestTemplate,
-  ): Promise<WrappedResponseLocal<RequestTemplateView>> {
+  ): Promise<WrappedResponseLocal<RequestTemplateFull>> {
     return await new FieldErrorWrapperLocal(() =>
       this.repository.update(templateId, template),
     ).execute();
@@ -31,7 +35,7 @@ export class RequestTemplateService {
 
   async searchTemplates(
     query: RequestTemplateQuery,
-  ): Promise<WrappedResponseLocal<Page<RequestTemplateView>>> {
+  ): Promise<WrappedResponseLocal<Page<RequestTemplateDtoForSearch>>> {
     return await new FieldErrorWrapperLocal(() =>
       this.repository.search(query),
     ).execute();
@@ -45,9 +49,10 @@ export class RequestTemplateService {
 
   async getTemplate(
     id: number,
-  ): Promise<WrappedResponseLocal<RequestTemplateView>> {
+    presetId?: number,
+  ): Promise<WrappedResponseLocal<RequestTemplateFull>> {
     return await new FieldErrorWrapperLocal(() =>
-      this.repository.get(id),
+      this.repository.get(id, presetId),
     ).execute();
   }
 }

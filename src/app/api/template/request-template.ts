@@ -22,12 +22,28 @@ export interface RequestTemplate {
   preRequestScript: string | null;
   postRequestScript: string | null;
   saveInHistory: boolean;
+  autoInit: boolean;
   arguments: RequestTemplateArg[];
 }
 
 // @ts-ignore
-export interface RequestTemplateView extends RequestTemplate {
+export interface RequestTemplateFull extends RequestTemplate {
   id: number;
   userId: number;
+  isInitialized?: boolean; // Transient field
   arguments: RequestTemplateArgView[];
+}
+
+export interface RequestTemplateDtoForSearch {
+  id: number;
+  userId: number;
+  name: string;
+  entity: BeesEntity;
+  makeRequest: boolean;
+  dataIngestionVersion: RelayVersion | null;
+  endpoint: string | null;
+  method: RequestMethod | null;
+  payloadType: RequestTemplatePayloadType;
+  saveInHistory: boolean;
+  autoInit: boolean;
 }

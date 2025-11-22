@@ -1,0 +1,20 @@
+<div class="dialog-content-container">
+  <h6>Arguments</h6>
+  <app-checkbox
+    label="Show only overridden values"
+    (onChange)="filterOnlyPresetArgs = $event; updateAppliedArgs();"></app-checkbox>
+  <div *ngIf="preset">
+    <app-template-arg-preview [args]="appliedArgs"></app-template-arg-preview>
+  </div>
+
+  <hr>
+  <div class="text-end">
+    <button
+      *ngIf="preset"
+      class="btn btn-outline-success m-1"
+      (click)="selectAndClose();">
+      Select & Close
+    </button>
+    <button class="btn btn-outline-dark m-1" (click)="close(undefined);">Close</button>
+  </div>
+</div>

@@ -4,7 +4,7 @@ import { TemplateFormComponent } from '../template-form/template-form.component'
 import { ShowLoader } from '../../../../shared/loader/show.loader.decorator';
 import {
   RequestTemplate,
-  RequestTemplateView,
+  RequestTemplateFull,
 } from '../../../../api/template/request-template';
 import { FieldError } from '../../../../shared/field-error/field-error';
 import { RequestTemplateService } from '../../../../api/template/request-template.service';
@@ -24,7 +24,7 @@ import { DialogService } from '../../../../shared/dialog/dialog.service';
 })
 export class EditTemplateComponent implements OnInit, OnDestroy {
   errors: FieldError[] = [];
-  template!: RequestTemplateView;
+  template!: RequestTemplateFull;
   currentUser!: User;
   private subs: Subscription[] = [];
 

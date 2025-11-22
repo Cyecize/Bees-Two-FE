@@ -24,6 +24,10 @@ export class Endpoints {
   public static readonly REQUEST_TEMPLATES_SEARCH = '/request-templates/search';
   public static readonly REQUEST_TEMPLATES = '/request-templates';
   public static readonly REQUEST_TEMPLATE = '/request-templates/:id';
+  public static readonly REQUEST_TEMPLATE_PRESET = '/request-templates/presets/:id';
+  public static readonly REQUEST_TEMPLATE_PRESET_VALUES = '/request-templates/presets/:id/values';
+  public static readonly REQUEST_TEMPLATE_PRESETS = '/request-templates/presets';
+  public static readonly REQUEST_TEMPLATE_PRESETS_SEARCH = '/request-templates/presets/search';
   public static readonly REQUEST_HISTORY_SEARCH = '/request-history/search';
   public static readonly REQUEST_HISTORY = '/request-history/:id';
   public static readonly SHARED_CLIENTS = '/shared-clients';

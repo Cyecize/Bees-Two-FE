@@ -5,7 +5,11 @@ import { Page } from '../../shared/util/page';
 import { Endpoints } from '../../shared/http/endpoints';
 import { RouteUtils } from '../../shared/routing/route-utils';
 import { RequestTemplateQuery } from './request-template.query';
-import { RequestTemplate, RequestTemplateView } from './request-template';
+import {
+  RequestTemplate,
+  RequestTemplateDtoForSearch,
+  RequestTemplateFull,
+} from './request-template';
 
 @Injectable({ providedIn: 'root' })
 export class RequestTemplateRepository {
@@ -13,15 +17,15 @@ export class RequestTemplateRepository {
 
   public search(
     query: RequestTemplateQuery,
-  ): Observable<Page<RequestTemplateView>> {
-    return this.http.post<RequestTemplateQuery, Page<RequestTemplateView>>(
-      Endpoints.REQUEST_TEMPLATES_SEARCH,
-      query,
-    );
+  ): Observable<Page<RequestTemplateDtoForSearch>> {
+    return this.http.post<
+      RequestTemplateQuery,
+      Page<RequestTemplateDtoForSearch>
+    >(Endpoints.REQUEST_TEMPLATES_SEARCH, query);
   }
 
-  public create(payload: RequestTemplate): Observable<RequestTemplateView> {
-    return this.http.post<RequestTemplate, RequestTemplateView>(
+  public create(payload: RequestTemplate): Observable<RequestTemplateFull> {
+    return this.http.post<RequestTemplate, RequestTemplateFull>(
       Endpoints.REQUEST_TEMPLATES,
       payload,
     );
@@ -30,16 +34,25 @@ export class RequestTemplateRepository {
   public update(
     templateId: number,
     payload: RequestTemplate,
-  ): Observable<RequestTemplateView> {
-    return this.http.put<RequestTemplate, RequestTemplateView>(
+  ): Observable<RequestTemplateFull> {
+    return this.http.put<RequestTemplate, RequestTemplateFull>(
       RouteUtils.setPathParams(Endpoints.REQUEST_TEMPLATE, [templateId]),
       payload,
     );
   }
 
-  public get(templateId: number): Observable<RequestTemplateView> {
-    return this.http.get<RequestTemplateView>(
+  public get(
+    templateId: number,
+    presetId?: number,
+  ): Observable<RequestTemplateFull> {
+    const params: any = {};
+    if (presetId) {
+      params['presetId'] = presetId;
+    }
+
+    return this.http.get<RequestTemplateFull>(
       RouteUtils.setPathParams(Endpoints.REQUEST_TEMPLATE, [templateId]),
+      { params },
     );
   }
 
