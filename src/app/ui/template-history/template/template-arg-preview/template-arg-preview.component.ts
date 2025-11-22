@@ -54,12 +54,19 @@ export class TemplateArgPreviewComponent implements OnInit {
 
   protected async openEditPrompt(arg: RequestTemplateArgView): Promise<void> {
     arg = JSON.parse(JSON.stringify(arg));
-    arg.value = await this.dialogService.openTemplateArgPrompt(
+
+    const val = await this.dialogService.openTemplateArgPrompt(
       this.environmentService.getCurrentEnv()!,
       arg,
       undefined,
       true,
     );
+
+    if (val === arg.value) {
+      return;
+    }
+
+    arg.value = val;
 
     this.updatedArgs = this.updatedArgs.filter((a) => a.id !== arg.id);
     this.updatedArgs.push(arg);
