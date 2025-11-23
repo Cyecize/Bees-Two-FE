@@ -5,5 +5,6 @@ export class PreviewTemplateDialogPayload {
   constructor(
     public template: RequestTemplateDtoForSearch,
     public tab: PreviewTemplateTab,
+    public isMultiEnvRun: boolean,
   ) {}
 }

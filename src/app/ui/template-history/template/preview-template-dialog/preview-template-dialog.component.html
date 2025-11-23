@@ -31,6 +31,14 @@
       Args
     </span>
   </li>
+  <li class="nav-item" *ngIf="isMultiEnvRun">
+    <span
+      [ngClass]="{'active': TABS.ENVS === activeTab}"
+      (click)="activeTab = TABS.ENVS"
+      class="nav-link c-pointer">
+      Envs (<span>{{ envsToRun.length }}</span>)
+    </span>
+  </li>
   <li class="nav-item">
     <span
       [ngClass]="{'active': TABS.LOGS === activeTab}"
@@ -45,6 +53,9 @@
 <div class="card dialog-content-container">
   <div class="card-body">
     <div *ngIf="activeTab === TABS.REQUEST_DETAILS">
+      <h6 *ngIf="!isMultiEnvRun">
+        Current env: <strong>{{ currentEnv.envName }}</strong>
+      </h6>
       <h6>
         Selected preset:
         <span *ngIf="selectedPreset">{{ selectedPreset.name }}</span>
@@ -146,12 +157,18 @@
         (argsUpdated)="onArgsUpdate($event)"
         [args]="templateFull.arguments"></app-template-arg-preview>
     </div>
+    <div *ngIf="TABS.ENVS === activeTab">
+      <app-multienv-picker
+        [envs]="envsToRun"
+        (envsChange)="envsToRun = $event"></app-multienv-picker>
+    </div>
     <div *ngIf="activeTab === TABS.LOGS">
       <app-template-preview-logger
         (logsCleared)="numberOfLogsSubject.next(0)"
         [scriptLogger]="scriptLogger"></app-template-preview-logger>
     </div>
-    <div *ngIf="!isRunning" class="mt-2 text-end">
+
+    <div *ngIf="!isRunning && !isMultiEnvRun" class="mt-2 text-end">
       <button
         (click)="applyArgsAndInitialize()"
         *ngIf="templateFull && argsToOverride.length"
@@ -193,8 +210,33 @@
         Run
       </button>
     </div>
-    <div *ngIf="isRunning" class="mt-2 text-end">
+    <div *ngIf="isRunning && !isMultiEnvRun" class="mt-2 text-end">
       <app-inline-loader></app-inline-loader>
+    </div>
+    <div *ngIf="!isRunning && isMultiEnvRun" class="mt-2 text-end">
+      <button
+        *ngIf="activeTab === TABS.LOGS"
+        (click)="downloadLogs()"
+        class="ms-1 btn btn-outline-secondary">Download Logs
+      </button>
+      <button
+        (click)="openEnvPicker()"
+        *ngIf="activeTab === TABS.ENVS"
+        class="ms-1 btn btn-outline-dark">
+        Add more envs
+      </button>
+      <button
+        (click)="runAllEnvs()"
+        [disabled]="!envsToRun.length"
+        class="ms-1 btn btn-outline-dark">
+        Run All Envs
+      </button>
+    </div>
+    <div *ngIf="isRunning && isMultiEnvRun" class="mt-2 text-end">
+      <app-inline-loader></app-inline-loader>
+      <span>
+        Running for env {{ runningEnvIndex }} out of {{ envsToRun.length }}
+      </span>
     </div>
   </div>
 </div>

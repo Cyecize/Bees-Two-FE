@@ -234,6 +234,7 @@ export class DialogService implements IDialogService {
 
   public openTemplatePreviewDialog(
     template: RequestTemplateDtoForSearch,
+    isMultiEnvRun: boolean,
   ): Observable<any> {
     return this.open(
       PreviewTemplateDialogComponent,
@@ -241,6 +242,7 @@ export class DialogService implements IDialogService {
       new PreviewTemplateDialogPayload(
         template,
         PreviewTemplateTab.REQUEST_DETAILS,
+        isMultiEnvRun,
       ),
     ).afterClosed();
   }

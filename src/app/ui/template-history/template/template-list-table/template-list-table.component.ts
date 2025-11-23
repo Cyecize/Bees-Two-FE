@@ -1,16 +1,11 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { RequestTemplateService } from '../../../../api/template/request-template.service';
 import { Page, PageImpl, pageToPagination } from '../../../../shared/util/page';
-import {
-  RequestTemplateDtoForSearch,
-  RequestTemplateFull,
-} from '../../../../api/template/request-template';
+import { RequestTemplateDtoForSearch } from '../../../../api/template/request-template';
 import { NgForOf } from '@angular/common';
 import { PaginationComponent } from '../../../../shared/components/pagination/pagination.component';
 import { DialogService } from '../../../../shared/dialog/dialog.service';
 import { TemplateDetailsDialogComponent } from '../template-details-dialog/template-details-dialog.component';
-import { MultienvTemplateRunnerDialogComponent } from '../multienv-template-runner-dialog/multienv-template-runner-dialog.component';
-import { MultienvTemplateRunnerDialogPayload } from '../multienv-template-runner-dialog/multienv-template-runner-dialog.payload';
 
 @Component({
   selector: 'app-template-list-table',
@@ -38,7 +33,7 @@ export class TemplateListTableComponent {
   }
 
   openPreview(template: RequestTemplateDtoForSearch): void {
-    this.dialogService.openTemplatePreviewDialog(template);
+    this.dialogService.openTemplatePreviewDialog(template, false);
   }
 
   openDetailsDialog(template: RequestTemplateDtoForSearch): void {
@@ -57,10 +52,6 @@ export class TemplateListTableComponent {
   }
 
   openMultiRunner(template: RequestTemplateDtoForSearch): void {
-    // this.dialogService.open(
-    //   MultienvTemplateRunnerDialogComponent,
-    //   '',
-    //   new MultienvTemplateRunnerDialogPayload(template),
-    // );
+    this.dialogService.openTemplatePreviewDialog(template, true);
   }
 }

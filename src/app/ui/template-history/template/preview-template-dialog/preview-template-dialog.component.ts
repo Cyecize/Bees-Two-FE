@@ -1,14 +1,18 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DialogContentBaseComponent } from '../../../../shared/dialog/dialogs/dialog-content-base.component';
 import { RequestTemplateFull } from '../../../../api/template/request-template';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import {
+  BehaviorSubject,
+  firstValueFrom,
+  Observable,
+  Subscription,
+} from 'rxjs';
 import { CountryEnvironmentModel } from '../../../../api/env/country-environment.model';
 import { CountryEnvironmentService } from '../../../../api/env/country-environment.service';
 import { AsyncPipe, JsonPipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { ObjectUtils } from '../../../../shared/util/object-utils';
 import { TooltipSpanComponent } from '../../../../shared/components/tooltip-span/tooltip-span.component';
 import { RequestTemplateRunningService } from '../../../../api/template/request-template-running.service';
-import { LoaderService } from '../../../../shared/loader/loader.service';
 import {
   ScriptLogger,
   ScriptLoggerImpl,
@@ -24,6 +28,7 @@ import { RequestTemplatePreset } from '../../../../api/template/arg/preset/reque
 import { TemplateArgPreviewComponent } from '../template-arg-preview/template-arg-preview.component';
 import { RequestTemplateArgView } from '../../../../api/template/arg/request-template-arg';
 import { InlineLoaderComponent } from '../../../../shared/components/inline-loader/inline-loader.component';
+import { MultienvPickerComponent } from './components/multienv-picker/multienv-picker.component';
 
 @Component({
   templateUrl: './preview-template-dialog.component.html',
@@ -41,6 +46,7 @@ import { InlineLoaderComponent } from '../../../../shared/components/inline-load
     AsyncPipe,
     TemplateArgPreviewComponent,
     InlineLoaderComponent,
+    MultienvPickerComponent,
   ],
 })
 export class PreviewTemplateDialogComponent
@@ -58,6 +64,10 @@ export class PreviewTemplateDialogComponent
   beesRequestDetailsVisible = true;
   isRunning = false;
 
+  isMultiEnvRun = false;
+  envsToRun: CountryEnvironmentModel[] = [];
+  runningEnvIndex?: number;
+
   numberOfLogsSubject: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   numberOfLogsObs = this.numberOfLogsSubject.asObservable();
 
@@ -68,7 +78,6 @@ export class PreviewTemplateDialogComponent
   constructor(
     private envService: CountryEnvironmentService,
     private templateRunningService: RequestTemplateRunningService,
-    private loaderService: LoaderService,
     private templateService: RequestTemplateService,
     private dialogService: DialogService,
   ) {
@@ -76,6 +85,7 @@ export class PreviewTemplateDialogComponent
   }
 
   async ngOnInit(): Promise<void> {
+    this.isMultiEnvRun = this.payload.isMultiEnvRun;
     this.activeTab = this.payload.tab;
     this.currentEnv = this.envService.getCurrentEnv()!;
 
@@ -90,6 +100,9 @@ export class PreviewTemplateDialogComponent
     });
     this.subscriptions.push(logSub);
 
+    if (this.isMultiEnvRun) {
+      await this.openEnvPicker();
+    }
     await this.fetchTemplate(this.payload.template.autoInit);
   }
 
@@ -113,7 +126,7 @@ export class PreviewTemplateDialogComponent
     this.templateFull = JSON.parse(JSON.stringify(resp.response));
     this.templateFullBackup = resp.response;
 
-    if (initialize) {
+    if (initialize && !this.isMultiEnvRun) {
       await this.initialize();
     }
   }
@@ -128,6 +141,33 @@ export class PreviewTemplateDialogComponent
       return;
     }
 
+    if (this.isMultiEnvRun) {
+      alert('This function does not support multi env run, please fix!');
+      return;
+    }
+
+    this.context = new Map<string, any>();
+    this.isRunning = true;
+
+    try {
+      const resp = await this.initializeForEnv(
+        this.currentEnv!,
+        this.context,
+        retainArgs,
+      );
+      if (resp) {
+        this.templateFull = resp;
+      }
+    } finally {
+      this.isRunning = false;
+    }
+  }
+
+  private async initializeForEnv(
+    env: CountryEnvironmentModel,
+    ctx: Map<string, any>,
+    retainArgs?: boolean,
+  ): Promise<RequestTemplateFull | null> {
     const argsClone = JSON.parse(JSON.stringify(this.templateFull.arguments));
 
     if (this.templateFull.isInitialized) {
@@ -138,25 +178,25 @@ export class PreviewTemplateDialogComponent
       this.templateFull.arguments = argsClone;
     }
 
-    this.isRunning = true;
-    this.templateRunningService
-      .prepareTemplate(
-        this.currentEnv,
+    try {
+      const res = await this.templateRunningService.prepareTemplate(
+        env,
         this.templateFull,
-        this.context,
+        ctx,
         this.scriptLogger,
-      )
-      .then((value) => {
-        if (value.errors.length) {
-          console.log(value.errors);
-        } else {
-          this.templateFull = value.template;
-        }
-      })
-      .finally(() => {
-        this.isRunning = false;
-        this.scriptLogger.stopCapturing();
-      });
+      );
+
+      this.scriptLogger.startCapturing();
+      if (res.errors.length) {
+        console.log(res.errors);
+      } else {
+        return res.template;
+      }
+    } finally {
+      this.scriptLogger.stopCapturing();
+    }
+
+    return null;
   }
 
   getIcon(): Observable<string> {
@@ -224,27 +264,40 @@ export class PreviewTemplateDialogComponent
       alert('Another process is running!');
       return;
     }
-    try {
-      if (!this.templateFull) {
-        return;
-      }
 
-      if (!this.templateFull.isInitialized) {
+    if (!this.templateFull) {
+      return;
+    }
+
+    try {
+      this.activeTab = PreviewTemplateTab.LOGS;
+      this.isRunning = true;
+
+      await this.runForEnv(this.currentEnv, this.templateFull, this.context);
+    } finally {
+      this.isRunning = false;
+    }
+  }
+
+  private async runForEnv(
+    env: CountryEnvironmentModel,
+    template: RequestTemplateFull,
+    ctx: Map<string, any>,
+  ): Promise<void> {
+    try {
+      if (!template.isInitialized) {
         alert('Initialize first!');
         return;
       }
 
-      this.activeTab = PreviewTemplateTab.LOGS;
-      this.isRunning = true;
-
       const resp = await this.templateRunningService.runOnce(
-        this.currentEnv,
+        env,
         this.templateFull,
-        this.context,
+        ctx,
         this.scriptLogger,
       );
 
-      this.scriptLogger.startCapturing();
+      this.scriptLogger.stopCapturing();
 
       console.log(
         `Post request result from Template ${this.templateFull.id}`,
@@ -257,8 +310,57 @@ export class PreviewTemplateDialogComponent
 
       console.log(resp);
     } finally {
-      this.scriptLogger.startCapturing();
+      this.scriptLogger.stopCapturing();
+    }
+  }
+
+  async runAllEnvs(): Promise<void> {
+    if (!this.envsToRun.length) {
+      alert('No selected envs!');
+    }
+
+    this.activeTab = PreviewTemplateTab.LOGS;
+
+    try {
+      this.isRunning = true;
+
+      this.runningEnvIndex = 0;
+      for (const env of this.envsToRun) {
+        this.runningEnvIndex++;
+        const ctx = new Map<string, any>();
+
+        const initializedTemplate = await this.initializeForEnv(env, ctx, true);
+
+        if (!initializedTemplate) {
+          alert(`Failed to initialize template for env ${env.envName}`);
+          const proceed = await firstValueFrom(
+            this.dialogService.openConfirmDialog(
+              'Proceed with other envs?',
+              'Confirm',
+              'Proceed',
+            ),
+          );
+
+          if (!proceed) {
+            return;
+          }
+
+          continue;
+        }
+
+        await this.runForEnv(env, initializedTemplate, ctx);
+      }
+    } finally {
+      this.runningEnvIndex = undefined;
       this.isRunning = false;
     }
+  }
+
+  async openEnvPicker(): Promise<void> {
+    const envs = await this.dialogService.openEnvPickerMultiselect();
+    const newEnvs = envs.filter(
+      (e) => !this.envsToRun.find((e2) => e2.id === e.id),
+    );
+    this.envsToRun.push(...newEnvs);
   }
 }

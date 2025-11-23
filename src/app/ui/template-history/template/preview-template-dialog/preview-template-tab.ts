@@ -3,5 +3,6 @@ export enum PreviewTemplateTab {
   REQUEST_DETAILS = 'REQUEST_DETAILS',
   PRESETS = 'PRESETS',
   ARGS = 'ARGS',
+  ENVS = 'ENVS',
   LOGS = 'LOGS',
 }

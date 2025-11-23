@@ -60,7 +60,7 @@ export class TemplateDetailsDialogComponent
   }
 
   openPreview(): void {
-    this.dialogService.openTemplatePreviewDialog(this.payload);
+    this.dialogService.openTemplatePreviewDialog(this.payload, false);
   }
 
   getEditRoute(): string {
