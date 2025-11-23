@@ -297,7 +297,7 @@ export class PreviewTemplateDialogComponent
         this.scriptLogger,
       );
 
-      this.scriptLogger.stopCapturing();
+      this.scriptLogger.startCapturing();
 
       console.log(
         `Post request result from Template ${this.templateFull.id}`,
