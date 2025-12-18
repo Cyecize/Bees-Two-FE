@@ -25,7 +25,7 @@ export class RequestTemplatePresetService {
     ).execute();
   }
 
-  async createTemplate(
+  async createPreset(
     payload: CreateRequestTemplatePreset,
   ): Promise<WrappedResponseLocal<RequestTemplatePresetWithValues>> {
     return await new FieldErrorWrapperLocal(() =>
@@ -33,7 +33,7 @@ export class RequestTemplatePresetService {
     ).execute();
   }
 
-  async editTemplate(
+  async editPreset(
     presetId: number,
     payload: CreateRequestTemplatePreset,
   ): Promise<WrappedResponseLocal<RequestTemplatePresetWithValues>> {

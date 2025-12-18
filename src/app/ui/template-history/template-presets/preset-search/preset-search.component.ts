@@ -25,9 +25,11 @@ import { TooltipSpanComponent } from '../../../../shared/components/tooltip-span
 import { PaginationComponent } from '../../../../shared/components/pagination/pagination.component';
 import { DialogService } from '../../../../shared/dialog/dialog.service';
 import {
-  RequestTemplateArg,
   RequestTemplateArgView,
 } from '../../../../api/template/arg/request-template-arg';
+import { CreatePresetDialogComponent } from "../create-preset-dialog/create-preset-dialog.component";
+import { CreatePresetDialogPayload } from "../create-preset-dialog/create-preset-dialog.payload";
+import { RequestTemplateService } from "../../../../api/template/request-template.service";
 
 interface SearchPresetForm {
   templateId: FormControl<number>;
@@ -78,6 +80,7 @@ export class PresetSearchComponent implements OnInit {
 
   constructor(
     private presetService: RequestTemplatePresetService,
+    private requestTemplateService: RequestTemplateService,
     private dialogService: DialogService,
   ) {}
 
@@ -151,9 +154,33 @@ export class PresetSearchComponent implements OnInit {
     if (selected) {
       this.selectPreset(preset);
     }
+
+    void this.reloadFilters();
   }
 
   selectPreset(preset: RequestTemplatePreset | null): void {
     this.presetSelected.next(preset);
+  }
+
+  async openCreatePresetDialog(): Promise<void> {
+    const template = await this.requestTemplateService.getTemplate(
+      this.templateId
+    );
+
+    if (!template.isSuccess) {
+      alert('Could not fetch template!');
+      console.error(template);
+      return;
+    }
+
+    this.dialogService.open(
+      CreatePresetDialogComponent,
+      'Create Preset',
+      new CreatePresetDialogPayload(template.response)
+    ).afterClosed().subscribe((refresh) => {
+      if (refresh) {
+        void this.reloadFilters();
+      }
+    });
   }
 }

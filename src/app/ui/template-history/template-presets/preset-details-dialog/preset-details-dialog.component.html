@@ -10,6 +10,11 @@
   <hr>
   <div class="text-end">
     <button
+      class="btn btn-outline-danger m-1"
+      (click)="removeAndClose();">
+      Delete
+    </button>
+    <button
       *ngIf="preset"
       class="btn btn-outline-success m-1"
       (click)="selectAndClose();">

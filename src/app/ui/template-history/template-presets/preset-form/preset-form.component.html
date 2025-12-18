@@ -1,0 +1,94 @@
+<form [formGroup]="form">
+  <div class="mt-2">
+    <app-input formControlName="name" placeholder="Name"></app-input>
+  </div>
+
+  <hr>
+  <div class="d-flex justify-content-between">
+    <p>Arguments</p>
+    <i
+      (click)="openNewArgPicker()"
+      *ngIf="args.length > argsForm.controls.length"
+      class="fa fa-plus c-pointer"
+      aria-hidden="true"></i>
+  </div>
+
+  <div>
+    <app-checkbox
+      label="Remove empty arguments"
+      [value]="removeEmptyArgs"
+      (onChange)="removeEmptyArgs = $event"></app-checkbox>
+  </div>
+
+  <table class="table table-striped table-hover">
+    <thead>
+    <tr>
+      <th scope="col">Name</th>
+      <th scope="col">Type (* = required)</th>
+      <th scope="col">Original Value</th>
+      <th scope="col">Value</th>
+      <th scope="col">Action</th>
+    </tr>
+    </thead>
+    <tbody formArrayName="argValues">
+    <ng-container *ngFor="let ctrl of argsForm.controls; let i = index"
+                  [formGroupName]="i">
+      @let arg = getArg(ctrl.controls.argId.value);
+      <tr>
+        <th scope="row">
+          <strong>{{ arg.name }}</strong>
+        </th>
+        <td>
+          <div>{{ arg.dataType }}<span *ngIf="arg.arrayType">[]</span>
+            <strong *ngIf="arg.required"> *</strong>
+          </div>
+          <strong
+            class="c-pointer"
+            (click)="viewArgType(arg)"
+            *ngIf="arg.dataType === TemplateArgDataType.CUSTOM">
+            <small>Click to view</small>
+          </strong>
+        </td>
+        <td>
+          <button class="btn btn-sm btn-outline-info" (click)="showOriginalValue(arg)">
+            View
+          </button>
+        </td>
+        <td>
+          <app-tooltip-span
+            *ngIf="ctrl.controls.value.value"
+            [tooltipText]="ctrl.controls.value.value"
+            [displayText]="ctrl.controls.value.value"
+            [trimDisplayTextChars]="40"></app-tooltip-span>
+          <strong *ngIf="!ctrl.controls.value.value">EMPTY</strong>
+        </td>
+        <td>
+          <button class="btn btn-sm btn-outline-info" (click)="showCurrentValue(i)">
+            <i class="fa fa-info" aria-hidden="true"></i>
+          </button>
+          <button
+            (click)="openEditPrompt(i)"
+            class="btn btn-sm btn-outline-dark m-1">
+            <i class="fa fa-edit"></i>
+          </button>
+          <button class="btn btn-sm btn-outline-danger" (click)="argsForm.removeAt(i)">
+            <i class="fa fa-close"></i>
+          </button>
+        </td>
+      </tr>
+    </ng-container>
+
+    </tbody>
+  </table>
+
+  <hr>
+
+  <div class="mt-2 text-end">
+    <button
+      (click)="onFormSubmit()"
+      [disabled]="!form.valid"
+      type="submit"
+      class="btn btn-outline-dark">Save
+    </button>
+  </div>
+</form>

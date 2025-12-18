@@ -66,6 +66,7 @@ import { PreviewTemplateTab } from '../../ui/template-history/template/preview-t
 import { RequestTemplatePreset } from '../../api/template/arg/preset/request-template-preset';
 import { PresetDetailsDialogComponent } from '../../ui/template-history/template-presets/preset-details-dialog/preset-details-dialog.component';
 import { PresetDetailsDialogPayload } from '../../ui/template-history/template-presets/preset-details-dialog/preset-details-dialog.payload';
+import { ObjectUtils } from "../util/object-utils";
 
 /**
  * @monaco
@@ -89,6 +90,8 @@ export interface IDialogService {
   ): Observable<Item | undefined>;
 
   openShowCodeDialog(code: string, title?: string): Observable<void>;
+
+  showFormattedContent(data: any, title?: string): Observable<void>;
 
   openRequestResultDialog(response: WrappedResponse<any>): Observable<boolean>;
 
@@ -178,6 +181,11 @@ export class DialogService implements IDialogService {
     );
 
     return dialogComponentMatDialogRef.afterClosed();
+  }
+
+  public showFormattedContent(data: any, title?: string): Observable<void> {
+    data = ObjectUtils.formatIfJson(data);
+    return this.openShowCodeDialog(data, title || 'Content');
   }
 
   public openRequestResultDialog(

@@ -2,6 +2,6 @@ import { CreateRequestTemplatePresetArgval } from './value/create-request-templa
 
 export interface CreateRequestTemplatePreset {
   templateId: number;
-  name: number;
+  name: string;
   argValues: CreateRequestTemplatePresetArgval[];
 }

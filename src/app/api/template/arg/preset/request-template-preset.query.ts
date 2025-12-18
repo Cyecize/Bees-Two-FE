@@ -3,6 +3,7 @@ import {
   LocalPageRequestImpl,
 } from '../../../../shared/util/page-request';
 import { SortDirection, SortQuery } from '../../../../shared/util/sort.query';
+import { DEFAULT_PAGE_SIZE } from "../../../../shared/general.constants";
 
 export interface RequestTemplatePresetQuery {
   page: LocalPageRequest;
@@ -14,7 +15,7 @@ export interface RequestTemplatePresetQuery {
 export class RequestTemplatePresetQueryImpl
   implements RequestTemplatePresetQuery
 {
-  page: LocalPageRequest = new LocalPageRequestImpl(0, 2);
+  page: LocalPageRequest = new LocalPageRequestImpl(0, DEFAULT_PAGE_SIZE);
   sort: SortQuery = {
     field: 'id',
     direction: SortDirection.DESC,

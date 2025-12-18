@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DialogContentBaseComponent } from '../../../../shared/dialog/dialogs/dialog-content-base.component';
-import { Observable } from 'rxjs';
+import { firstValueFrom, Observable } from "rxjs";
 import { ObjectUtils } from '../../../../shared/util/object-utils';
 import { DialogService } from '../../../../shared/dialog/dialog.service';
 import { PresetDetailsDialogPayload } from './preset-details-dialog.payload';
@@ -62,5 +62,18 @@ export class PresetDetailsDialogComponent
 
   selectAndClose(): void {
     this.close(true);
+  }
+
+  protected async removeAndClose(): Promise<void> {
+    const conf = await firstValueFrom(this.dialogService.openConfirmDialog(
+      `Remove preset ${this.payload.preset.name}?`,
+      'Confirm remove preset',
+      'Remove'
+    ));
+
+    if (conf) {
+      await this.presetService.deletePreset(this.payload.preset.id);
+      this.close(false);
+    }
   }
 }

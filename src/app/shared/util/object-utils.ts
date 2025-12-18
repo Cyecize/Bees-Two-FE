@@ -36,9 +36,12 @@ export class ObjectUtils {
     return 'No';
   }
 
-  public static formatIfJson(val?: string | null): string {
+  public static formatIfJson(val?: any | null): string {
     try {
-      return JSON.stringify(JSON.parse(val!), null, 2);
+      if (typeof val === 'string') {
+        val = JSON.parse(val);
+      }
+      return JSON.stringify(val, null, 2);
     } catch (err) {
       return val || '';
     }

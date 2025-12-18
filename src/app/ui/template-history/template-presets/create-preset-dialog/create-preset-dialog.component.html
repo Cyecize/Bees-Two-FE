@@ -1,0 +1,13 @@
+<div class="p-1">
+  <h6>Template #{{payload.template.id}}: <small>{{ payload.template.name }}</small></h6>
+  <hr>
+
+  <div style="max-height: 80vh; overflow-y: auto">
+    <app-preset-form
+      [errors]="errors"
+      (formSubmitted)="onFormSubmit($event)"
+      [templateId]="payload.template.id"
+      [args]="payload.template.arguments"></app-preset-form>
+  </div>
+
+</div>
