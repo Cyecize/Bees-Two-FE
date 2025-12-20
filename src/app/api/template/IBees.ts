@@ -184,6 +184,7 @@ interface IBees {
   files: IFileUtils;
   objDiffService: IObjectDiffService;
   randomGeneratorUtils: IRandomGeneratorUtils;
+  clone<T>(source: T): T;
   newScriptLogger(startCapturing?: boolean): ScriptLogger;
 }
 
@@ -224,6 +225,10 @@ export class Bees implements IBees {
     public objDiffService: NgxObjectDiffService,
     public randomGeneratorUtils: RandomGeneratorUtils,
   ) {}
+
+  clone<T>(source: T): T {
+    return JSON.parse(JSON.stringify(source))
+  }
 
   newScriptLogger(startCapturing = true): ScriptLogger {
     return new ScriptLoggerImpl(startCapturing);
