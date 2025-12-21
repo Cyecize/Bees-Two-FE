@@ -125,6 +125,8 @@ import {
 import { TemplateArgDataType } from './arg/template-arg-data.type';
 import { TemplateArgPromptType } from './arg/template-arg-prompt.type';
 import { TemplateArgInputType } from './arg/template-arg-input.type';
+import { ProductAssortmentDeliveryMethod } from "../product-assortment/product-assortment-delivery-method";
+import { IProductAssortmentService, ProductAssortmentService } from "../product-assortment/product-assortment.service";
 
 /**
  * @monaco
@@ -184,6 +186,7 @@ interface IBees {
   files: IFileUtils;
   objDiffService: IObjectDiffService;
   randomGeneratorUtils: IRandomGeneratorUtils;
+  productAssortmentService: IProductAssortmentService;
   clone<T>(source: T): T;
   newScriptLogger(startCapturing?: boolean): ScriptLogger;
 }
@@ -224,6 +227,7 @@ export class Bees implements IBees {
     public zipService: JszipService,
     public objDiffService: NgxObjectDiffService,
     public randomGeneratorUtils: RandomGeneratorUtils,
+    public productAssortmentService: ProductAssortmentService,
   ) {}
 
   clone<T>(source: T): T {
@@ -279,4 +283,5 @@ export const publicEnums = {
   TemplateArgDataType,
   TemplateArgPromptType,
   TemplateArgInputType,
+  ProductAssortmentDeliveryMethod,
 };

@@ -61,6 +61,7 @@ export class Endpoints {
   public static readonly ITEMS_V2 = '/api/items/items/v2';
   public static readonly ITEMS_V2_RELAY = '/api/item-relay/v2/items';
   public static readonly PRODUCT_ASSORTMENT_INCLUSION_V4 = '/api/product-assortment-relay/v4/delivery-centers/assortments';
+  public static readonly PRODUCT_ASSORTMENT_INCLUSIONS_V2 = '/product-assortment/v2/assortments/inclusions';
   public static readonly FILES_UPLOAD = '/api/v1/files/upload';
   public static readonly CMS_FILES_UPLOAD = '/api/v1';
   public static readonly ORDER_SERVICE_ORDERS_V3 = '/v1/order-service/v3/orders';
