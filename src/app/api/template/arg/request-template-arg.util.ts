@@ -36,8 +36,7 @@ export class RequestTemplateArgUtil {
         }
       } catch (error) {
         console.log(
-          `Could not convert argument ${arg.name} to ${arg.dataType}!`,
-          error,
+          `Could not convert argument ${arg.name} to ${arg.dataType}! ${error}`,
         );
         throw error;
       }

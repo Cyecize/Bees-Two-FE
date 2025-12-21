@@ -158,9 +158,12 @@ export class RequestTemplateRunningService {
     template = JSON.parse(JSON.stringify(template));
     template.isInitialized = true;
 
+    scriptLogger.startCapturing();
+    logEmitter.emit('Retrieving args')
     const args = await this.retrieveArguments(env, template.arguments);
     logEmitter.emit('Retrieved args');
     console.info('Using arguments', args);
+    scriptLogger.stopCapturing();
 
     const promises: Promise<any>[] = [];
     const errors: string[] = [];

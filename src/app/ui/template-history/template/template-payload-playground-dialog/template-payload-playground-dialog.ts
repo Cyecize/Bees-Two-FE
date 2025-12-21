@@ -106,6 +106,8 @@ export class TemplatePayloadPlaygroundDialog
     this.result = null;
 
     const scriptLogger: ScriptLogger = new ScriptLoggerImpl(true);
+    scriptLogger.logStream.subscribe(log => this.output.push(log.message))
+
     try {
       const resp = await this.jsEvalService.eval(this.userCode, {
         arguments: RequestTemplateArgUtil.convertArgumentsToObj(
@@ -114,12 +116,14 @@ export class TemplatePayloadPlaygroundDialog
         env: this.payload.env,
         context: new Map<string, any>(),
         run: run || false,
-        onLog: (str) => this.output.push(str),
+        onLog: (str) => scriptLogger.log(str, 'EVAL'),
         scriptLogger,
       });
 
       this.output.push(...resp.errors);
       this.result = resp;
+    } catch (err) {
+      console.log(err);
     } finally {
       scriptLogger.stopCapturing();
     }
