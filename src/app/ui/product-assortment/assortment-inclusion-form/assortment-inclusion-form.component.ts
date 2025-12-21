@@ -16,7 +16,6 @@ import {
 import { InputComponent } from '../../../shared/form-controls/input/input.component';
 import { NgForOf } from '@angular/common';
 import { EnvOverrideFieldComponent } from '../../env/env-override-field/env-override-field.component';
-import { BeesDeliveryMethod } from '../../../api/common/bees.delivery.method';
 import { AssortmentInclusionFormResult } from './assortment-inclusion-form.result';
 import { ObjectUtils } from '../../../shared/util/object-utils';
 import { CountryEnvironmentModel } from '../../../api/env/country-environment.model';
@@ -25,9 +24,10 @@ import { EnvOverrideService } from '../../../api/env/env-override.service';
 import { SelectComponent } from '../../../shared/form-controls/select/select.component';
 import {
   SelectOption,
-  SelectOptionKey,
 } from '../../../shared/form-controls/select/select.option';
 import { DialogService } from '../../../shared/dialog/dialog.service';
+import { SelectOptions } from "../../../api/common/select-options";
+import { ProductAssortmentDeliveryMethod } from "../../../api/product-assortment/product-assortment-delivery-method";
 
 interface AssortmentInclusionForm {
   deliveryCenterIds: FormArray<FormControl<string>>;
@@ -35,7 +35,7 @@ interface AssortmentInclusionForm {
 }
 
 interface AssortmentForm {
-  deliveryMethods: FormArray<FormControl<BeesDeliveryMethod>>;
+  deliveryMethods: FormArray<FormControl<ProductAssortmentDeliveryMethod>>;
   quantityMultiplier: FormControl<number | null>;
   rank: FormControl<number | null>;
   vendorItemId: FormControl<string>;
@@ -62,7 +62,7 @@ export class AssortmentInclusionFormComponent implements OnInit, OnDestroy {
   form!: FormGroup<AssortmentInclusionForm>;
   deliveryMethodOptions: SelectOption[] = [];
 
-  selectedDeliveryMethodsForTemplate: BeesDeliveryMethod[] = [];
+  selectedDeliveryMethodsForTemplate: ProductAssortmentDeliveryMethod[] = [];
 
   @Output()
   formSubmitted = new EventEmitter<AssortmentInclusionFormResult>();
@@ -80,11 +80,7 @@ export class AssortmentInclusionFormComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.deliveryMethodOptions = [
-      new SelectOptionKey('Choose one', true),
-    ].concat(
-      Object.keys(BeesDeliveryMethod).map((val) => new SelectOptionKey(val)),
-    );
+    this.deliveryMethodOptions = SelectOptions.productAssortmentDeliveryMethods();
 
     this.form = new FormGroup<AssortmentInclusionForm>({
       deliveryCenterIds: new FormArray<FormControl<string>>([], {
@@ -125,7 +121,7 @@ export class AssortmentInclusionFormComponent implements OnInit, OnDestroy {
     this.deliveryCenterIds.removeAt(index);
   }
 
-  addDeliveryMethodTemplate(method: BeesDeliveryMethod): void {
+  addDeliveryMethodTemplate(method: ProductAssortmentDeliveryMethod): void {
     if (
       !ObjectUtils.isNil(method) &&
       !this.selectedDeliveryMethodsForTemplate.includes(method)
@@ -142,7 +138,7 @@ export class AssortmentInclusionFormComponent implements OnInit, OnDestroy {
     vendorItemId: string;
     multiplier?: number;
     rank?: number;
-    deliveryMethods: BeesDeliveryMethod[];
+    deliveryMethods: ProductAssortmentDeliveryMethod[];
   }): void {
     this.assortments.push(
       new FormGroup({

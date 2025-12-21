@@ -1,4 +1,4 @@
-import { BeesDeliveryMethod } from '../common/bees.delivery.method';
+import { ProductAssortmentDeliveryMethod } from "./product-assortment-delivery-method";
 
 /**
  * @monaco
@@ -10,7 +10,7 @@ export interface InclusionPayload {
 }
 
 export interface AssortmentPayload {
-  deliveryMethods: BeesDeliveryMethod[];
+  deliveryMethods: ProductAssortmentDeliveryMethod[];
   quantityMultiplier: number | null;
   rank: number | null;
   vendorItemId: string;
