@@ -210,8 +210,11 @@
         Run
       </button>
     </div>
-    <div *ngIf="isRunning && !isMultiEnvRun" class="mt-2 text-end">
-      <app-inline-loader></app-inline-loader>
+    <div *ngIf="isRunning && !isMultiEnvRun" class="mt-2">
+      <div class="d-flex justify-content-between">
+        <p>{{ currentLog }}</p>
+        <app-inline-loader></app-inline-loader>
+      </div>
     </div>
     <div *ngIf="!isRunning && isMultiEnvRun" class="mt-2 text-end">
       <button

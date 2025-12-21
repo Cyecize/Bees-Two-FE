@@ -70,6 +70,7 @@ export class PreviewTemplateDialogComponent
 
   numberOfLogsSubject: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   numberOfLogsObs = this.numberOfLogsSubject.asObservable();
+  currentLog?: string;
 
   private context: Map<string, any> = new Map<string, any>();
   protected readonly ObjectUtils = ObjectUtils;
@@ -97,6 +98,7 @@ export class PreviewTemplateDialogComponent
 
     const logSub = this.scriptLogger.logStream.subscribe((logSub) => {
       this.numberOfLogsSubject.next(this.scriptLogger.getLogs().length);
+      this.currentLog = logSub.formatted();
     });
     this.subscriptions.push(logSub);
 
@@ -147,7 +149,7 @@ export class PreviewTemplateDialogComponent
     }
 
     this.context = new Map<string, any>();
-    this.isRunning = true;
+    this.setRunning();
 
     try {
       const resp = await this.initializeForEnv(
@@ -271,7 +273,7 @@ export class PreviewTemplateDialogComponent
 
     try {
       this.activeTab = PreviewTemplateTab.LOGS;
-      this.isRunning = true;
+      this.setRunning();
 
       await this.runForEnv(this.currentEnv, this.templateFull, this.context);
     } finally {
@@ -322,7 +324,7 @@ export class PreviewTemplateDialogComponent
     this.activeTab = PreviewTemplateTab.LOGS;
 
     try {
-      this.isRunning = true;
+      this.setRunning();
 
       this.runningEnvIndex = 0;
       for (const env of this.envsToRun) {
@@ -354,6 +356,11 @@ export class PreviewTemplateDialogComponent
       this.runningEnvIndex = undefined;
       this.isRunning = false;
     }
+  }
+
+  private setRunning(): void {
+    this.isRunning = true;
+    this.currentLog = '';
   }
 
   async openEnvPicker(): Promise<void> {
