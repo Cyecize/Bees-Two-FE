@@ -125,8 +125,11 @@ import {
 import { TemplateArgDataType } from './arg/template-arg-data.type';
 import { TemplateArgPromptType } from './arg/template-arg-prompt.type';
 import { TemplateArgInputType } from './arg/template-arg-input.type';
-import { ProductAssortmentDeliveryMethod } from "../product-assortment/product-assortment-delivery-method";
-import { IProductAssortmentService, ProductAssortmentService } from "../product-assortment/product-assortment.service";
+import { ProductAssortmentDeliveryMethod } from '../product-assortment/product-assortment-delivery-method';
+import {
+  IProductAssortmentService,
+  ProductAssortmentService,
+} from '../product-assortment/product-assortment.service';
 
 /**
  * @monaco
@@ -231,7 +234,7 @@ export class Bees implements IBees {
   ) {}
 
   clone<T>(source: T): T {
-    return JSON.parse(JSON.stringify(source))
+    return JSON.parse(JSON.stringify(source));
   }
 
   newScriptLogger(startCapturing = true): ScriptLogger {

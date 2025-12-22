@@ -12,7 +12,7 @@ import { Env } from '../env/env';
 import { SharedClientSupportedMethod } from '../env/sharedclient/shared-client-supported-method';
 import { TemplateArgPromptType } from '../template/arg/template-arg-prompt.type';
 import { TemplateArgInputType } from '../template/arg/template-arg-input.type';
-import { ProductAssortmentDeliveryMethod } from "../product-assortment/product-assortment-delivery-method";
+import { ProductAssortmentDeliveryMethod } from '../product-assortment/product-assortment-delivery-method';
 
 export class SelectOptions {
   public static beesEntityOptions(): SelectOption[] {

@@ -22,12 +22,10 @@ import { CountryEnvironmentModel } from '../../../api/env/country-environment.mo
 import { Subscription } from 'rxjs';
 import { EnvOverrideService } from '../../../api/env/env-override.service';
 import { SelectComponent } from '../../../shared/form-controls/select/select.component';
-import {
-  SelectOption,
-} from '../../../shared/form-controls/select/select.option';
+import { SelectOption } from '../../../shared/form-controls/select/select.option';
 import { DialogService } from '../../../shared/dialog/dialog.service';
-import { SelectOptions } from "../../../api/common/select-options";
-import { ProductAssortmentDeliveryMethod } from "../../../api/product-assortment/product-assortment-delivery-method";
+import { SelectOptions } from '../../../api/common/select-options';
+import { ProductAssortmentDeliveryMethod } from '../../../api/product-assortment/product-assortment-delivery-method';
 
 interface AssortmentInclusionForm {
   deliveryCenterIds: FormArray<FormControl<string>>;
@@ -80,7 +78,8 @@ export class AssortmentInclusionFormComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.deliveryMethodOptions = SelectOptions.productAssortmentDeliveryMethods();
+    this.deliveryMethodOptions =
+      SelectOptions.productAssortmentDeliveryMethods();
 
     this.form = new FormGroup<AssortmentInclusionForm>({
       deliveryCenterIds: new FormArray<FormControl<string>>([], {

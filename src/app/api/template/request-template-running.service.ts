@@ -159,7 +159,7 @@ export class RequestTemplateRunningService {
     template.isInitialized = true;
 
     scriptLogger.startCapturing();
-    logEmitter.emit('Retrieving args')
+    logEmitter.emit('Retrieving args');
     const args = await this.retrieveArguments(env, template.arguments);
     logEmitter.emit('Retrieved args');
     console.info('Using arguments', args);

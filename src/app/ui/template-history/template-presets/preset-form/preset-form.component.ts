@@ -1,16 +1,26 @@
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
-import { FormArray, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
-import { InputComponent } from "../../../../shared/form-controls/input/input.component";
-import { RequestTemplateArg, RequestTemplateArgView } from "../../../../api/template/arg/request-template-arg";
-import { CreateRequestTemplatePreset } from "../../../../api/template/arg/preset/create-request-template-preset";
-import { NgForOf, NgIf } from "@angular/common";
-import { TemplateArgDataType } from "../../../../api/template/arg/template-arg-data.type";
-import { FieldError } from "../../../../shared/field-error/field-error";
-import { TooltipSpanComponent } from "../../../../shared/components/tooltip-span/tooltip-span.component";
-import { DialogService } from "../../../../shared/dialog/dialog.service";
-import { ObjectUtils } from "../../../../shared/util/object-utils";
-import { CountryEnvironmentService } from "../../../../api/env/country-environment.service";
-import { CheckboxComponent } from "../../../../shared/form-controls/checkbox/checkbox.component";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  FormArray,
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { InputComponent } from '../../../../shared/form-controls/input/input.component';
+import {
+  RequestTemplateArg,
+  RequestTemplateArgView,
+} from '../../../../api/template/arg/request-template-arg';
+import { CreateRequestTemplatePreset } from '../../../../api/template/arg/preset/create-request-template-preset';
+import { NgForOf, NgIf } from '@angular/common';
+import { TemplateArgDataType } from '../../../../api/template/arg/template-arg-data.type';
+import { FieldError } from '../../../../shared/field-error/field-error';
+import { TooltipSpanComponent } from '../../../../shared/components/tooltip-span/tooltip-span.component';
+import { DialogService } from '../../../../shared/dialog/dialog.service';
+import { ObjectUtils } from '../../../../shared/util/object-utils';
+import { CountryEnvironmentService } from '../../../../api/env/country-environment.service';
+import { CheckboxComponent } from '../../../../shared/form-controls/checkbox/checkbox.component';
 
 interface CreatePresetForm {
   templateId: FormControl<number>;
@@ -21,7 +31,7 @@ interface CreatePresetForm {
 interface PresetArgvalForm {
   id: FormControl<number | null>;
   argId: FormControl<number>;
-  value: FormControl<string | null>
+  value: FormControl<string | null>;
 }
 
 @Component({
@@ -34,13 +44,12 @@ interface PresetArgvalForm {
     NgIf,
     TooltipSpanComponent,
     CheckboxComponent,
-    FormsModule
+    FormsModule,
   ],
   templateUrl: './preset-form.component.html',
-  styleUrl: './preset-form.component.scss'
+  styleUrl: './preset-form.component.scss',
 })
 export class PresetFormComponent implements OnInit {
-
   form!: FormGroup<CreatePresetForm>;
 
   @Input()
@@ -54,27 +63,31 @@ export class PresetFormComponent implements OnInit {
 
   removeEmptyArgs = true;
 
-  constructor(private dialogService: DialogService,
-              private environmentService: CountryEnvironmentService,) {
-  }
+  constructor(
+    private dialogService: DialogService,
+    private environmentService: CountryEnvironmentService,
+  ) {}
 
   @Output()
-  formSubmitted: EventEmitter<CreateRequestTemplatePreset> = new EventEmitter<CreateRequestTemplatePreset>();
+  formSubmitted: EventEmitter<CreateRequestTemplatePreset> =
+    new EventEmitter<CreateRequestTemplatePreset>();
 
   ngOnInit(): void {
     this.form = new FormGroup({
       templateId: new FormControl<number>(this.templateId, {
-        nonNullable: true, validators: [Validators.required]
+        nonNullable: true,
+        validators: [Validators.required],
       }),
       name: new FormControl<string>(null!, {
-        nonNullable: true, validators: [Validators.required]
+        nonNullable: true,
+        validators: [Validators.required],
       }),
       argValues: new FormArray<FormGroup<PresetArgvalForm>>([]),
     });
 
     this.args.forEach((arg) => {
       this.addArg(arg);
-    })
+    });
   }
 
   get argsForm(): FormArray<FormGroup<PresetArgvalForm>> {
@@ -84,18 +97,25 @@ export class PresetFormComponent implements OnInit {
   onFormSubmit(): void {
     const val = this.form.getRawValue();
     if (this.removeEmptyArgs) {
-      val.argValues = val.argValues.filter((val) => !ObjectUtils.isNil(val.value))
+      val.argValues = val.argValues.filter(
+        (val) => !ObjectUtils.isNil(val.value),
+      );
     }
 
-    this.formSubmitted.emit(val)
+    this.formSubmitted.emit(val);
   }
 
   private addArg(arg: RequestTemplateArg): void {
-    this.argsForm.push(new FormGroup({
-      argId: new FormControl<number>(arg.id!, {nonNullable: true, validators: [Validators.required]}),
-      value: new FormControl<string | null>(null),
-      id: new FormControl<number | null>(null),
-    }))
+    this.argsForm.push(
+      new FormGroup({
+        argId: new FormControl<number>(arg.id!, {
+          nonNullable: true,
+          validators: [Validators.required],
+        }),
+        value: new FormControl<string | null>(null),
+        id: new FormControl<number | null>(null),
+      }),
+    );
   }
 
   protected readonly TemplateArgDataType = TemplateArgDataType;
@@ -121,15 +141,16 @@ export class PresetFormComponent implements OnInit {
   protected showCurrentValue(argFormInd: number): void {
     this.dialogService.showFormattedContent(
       this.argsForm.at(argFormInd).value.value,
-      `Arg Value`,
+      'Arg Value',
     );
   }
 
   protected async openNewArgPicker(): Promise<void> {
-    const possibleArgs = this.args
-      .filter((arg) => ObjectUtils.isNil(
-        this.argsForm.controls.find((val) => val.value.argId === arg.id)
-      ));
+    const possibleArgs = this.args.filter((arg) =>
+      ObjectUtils.isNil(
+        this.argsForm.controls.find((val) => val.value.argId === arg.id),
+      ),
+    );
 
     if (!possibleArgs.length) {
       console.warn('No args to add!');
@@ -137,12 +158,12 @@ export class PresetFormComponent implements OnInit {
     }
 
     const selected = await this.dialogService.openGenericMultiselect(
-      possibleArgs.map(arg => {
+      possibleArgs.map((arg) => {
         return {
           obj: arg,
-          displayName: arg.name
-        }
-      })
+          displayName: arg.name,
+        };
+      }),
     );
 
     selected.forEach((arg) => this.addArg(arg));
@@ -150,7 +171,11 @@ export class PresetFormComponent implements OnInit {
 
   protected async openEditPrompt(argFormInd: number): Promise<void> {
     const argForm = this.argsForm.at(argFormInd);
-    const arg: RequestTemplateArgView = JSON.parse(JSON.stringify(this.args.find((a) => a.id === argForm.controls.argId.value)));
+    const arg: RequestTemplateArgView = JSON.parse(
+      JSON.stringify(
+        this.args.find((a) => a.id === argForm.controls.argId.value),
+      ),
+    );
     arg.value = argForm.value.value!;
 
     const val = await this.dialogService.openTemplateArgPrompt(
@@ -161,7 +186,7 @@ export class PresetFormComponent implements OnInit {
     );
 
     argForm.patchValue({
-      value: val
+      value: val,
     });
   }
 

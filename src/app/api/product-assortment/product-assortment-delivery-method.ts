@@ -1,9 +1,9 @@
 /**
  * @monaco
  */
-export enum  ProductAssortmentDeliveryMethod {
+export enum ProductAssortmentDeliveryMethod {
   EXPRESS = 'EXPRESS',
   PICKUP = 'PICKUP',
   SPONSORED = 'SPONSORED',
-  STANDARD = 'STANDARD'
+  STANDARD = 'STANDARD',
 }

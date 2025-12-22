@@ -1,7 +1,7 @@
-import { PageRequest, PageRequestImpl } from "../../shared/util/page-request";
-import { ProductAssortmentDeliveryMethod } from "./product-assortment-delivery-method";
-import { BeesParam } from "../common/bees-param";
-import { BeesQueryParamsHelper } from "../../shared/util/bees-query-params.helper";
+import { PageRequest, PageRequestImpl } from '../../shared/util/page-request';
+import { ProductAssortmentDeliveryMethod } from './product-assortment-delivery-method';
+import { BeesParam } from '../common/bees-param';
+import { BeesQueryParamsHelper } from '../../shared/util/bees-query-params.helper';
 
 /**
  * @monaco

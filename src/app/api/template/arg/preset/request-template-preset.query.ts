@@ -3,7 +3,7 @@ import {
   LocalPageRequestImpl,
 } from '../../../../shared/util/page-request';
 import { SortDirection, SortQuery } from '../../../../shared/util/sort.query';
-import { DEFAULT_PAGE_SIZE } from "../../../../shared/general.constants";
+import { DEFAULT_PAGE_SIZE } from '../../../../shared/general.constants';
 
 export interface RequestTemplatePresetQuery {
   page: LocalPageRequest;

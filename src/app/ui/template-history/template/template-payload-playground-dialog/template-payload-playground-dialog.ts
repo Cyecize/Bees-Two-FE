@@ -106,7 +106,7 @@ export class TemplatePayloadPlaygroundDialog
     this.result = null;
 
     const scriptLogger: ScriptLogger = new ScriptLoggerImpl(true);
-    scriptLogger.logStream.subscribe(log => this.output.push(log.message))
+    scriptLogger.logStream.subscribe((log) => this.output.push(log.message));
 
     try {
       const resp = await this.jsEvalService.eval(this.userCode, {

@@ -1,4 +1,4 @@
-import { ProductAssortmentDeliveryMethod } from "./product-assortment-delivery-method";
+import { ProductAssortmentDeliveryMethod } from './product-assortment-delivery-method';
 
 /**
  * @monaco

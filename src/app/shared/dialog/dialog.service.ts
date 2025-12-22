@@ -66,7 +66,7 @@ import { PreviewTemplateTab } from '../../ui/template-history/template/preview-t
 import { RequestTemplatePreset } from '../../api/template/arg/preset/request-template-preset';
 import { PresetDetailsDialogComponent } from '../../ui/template-history/template-presets/preset-details-dialog/preset-details-dialog.component';
 import { PresetDetailsDialogPayload } from '../../ui/template-history/template-presets/preset-details-dialog/preset-details-dialog.payload';
-import { ObjectUtils } from "../util/object-utils";
+import { ObjectUtils } from '../util/object-utils';
 
 /**
  * @monaco
