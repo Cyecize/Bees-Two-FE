@@ -273,11 +273,16 @@ export class DialogService implements IDialogService {
   public openCodePlayground(
     payload: TemplatePlaygroundDialogPayload,
   ): Observable<TemplatePlaygroundDialogResponse> {
-    return this.open(
-      TemplatePayloadPlaygroundDialog,
-      'Playground',
-      payload,
-    ).afterClosed();
+    return this.matService
+      .open(DialogComponent, {
+        data: new DialogComponentPayload(
+          'Playground',
+          TemplatePayloadPlaygroundDialog,
+          payload,
+        ),
+        panelClass: ['custom-dialog-container', 'playground-dialog-panel'],
+      })
+      .afterClosed();
   }
 
   public async openTemplateArgPrompt(

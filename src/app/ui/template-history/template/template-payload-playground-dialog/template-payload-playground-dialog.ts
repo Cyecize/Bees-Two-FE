@@ -42,6 +42,7 @@ export class TemplatePayloadPlaygroundDialog
     minimap: { enabled: false },
     fontSize: 14,
     automaticLayout: true,
+    fixedOverflowWidgets: true,
   };
 
   constructor(

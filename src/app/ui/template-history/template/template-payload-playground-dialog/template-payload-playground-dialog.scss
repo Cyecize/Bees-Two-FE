@@ -1,24 +1,96 @@
-ngx-monaco-editor {
+:host {
+  display: block;
+  height: 100%;
   width: 100%;
-  height: 400px;
-  margin: 0;
 }
 
-.sidebar {
-  max-height: 470px;
-  overflow-y: auto;
+.playground-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
 
-  .output, .output-logs {
-    max-height: 200px;
-    overflow-y: auto;
-  }
+.playground-body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
 
-  .output-logs {
-    max-height: 100px;
+  // Mobile Layout: Stack vertically
+  @media (max-width: 768px) {
+    flex-direction: column;
   }
 }
 
-.code-container {
-  max-height: 480px;
+.editor-column {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #ddd;
+
+  &.full-width {
+    border-right: none;
+  }
+}
+
+.monaco-host {
+  flex: 1;
+  display: block;
+  height: 100% !important;
+  width: 100%;
+}
+
+.sidebar-column {
+  width: 350px;
+  min-width: 300px;
+  display: flex;
+  flex-direction: column;
+  background-color: #f8f9fa;
+  border-left: 1px solid #dee2e6;
+
+  @media (max-width: 768px) {
+    width: 100%;
+    height: 200px;
+    border-left: none;
+    border-top: 1px solid #dee2e6;
+  }
+}
+
+.sidebar-header {
+  padding: 10px;
+  background: #eee;
+  border-bottom: 1px solid #ddd;
+}
+
+.output-container {
+  flex: 1;
   overflow-y: auto;
+  padding: 10px;
+  font-family: monospace;
+  font-size: 0.85rem;
+}
+
+.result-container {
+  padding: 10px;
+  border-top: 1px solid #ccc;
+  background: #fff;
+  max-height: 30%;
+  overflow-y: auto;
+}
+
+.json-preview {
+  max-height: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 0.75rem;
+  margin-top: 5px;
+}
+
+.playground-footer {
+  padding: 10px 15px;
+  background-color: #fff;
+  border-top: 1px solid #dee2e6;
+  flex-shrink: 0;
 }
