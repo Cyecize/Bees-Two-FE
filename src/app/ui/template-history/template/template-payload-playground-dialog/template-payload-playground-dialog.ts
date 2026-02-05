@@ -62,8 +62,56 @@ export class TemplatePayloadPlaygroundDialog
     return super.noIcon();
   }
 
-  async onEditorInit(): Promise<void> {
+  async onEditorInit(editor: any): Promise<void> {
     await this.configureMonaco();
+
+    // Disable CTRL + W in your browser for this to work!
+    editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyW, () => {
+      editor.trigger('keyboard', 'editor.action.smartSelect.expand', {});
+    });
+
+    editor.addCommand(
+      monaco.KeyMod.CtrlCmd | monaco.KeyMod.Shift | monaco.KeyCode.KeyW,
+      () => {
+        editor.trigger('keyboard', 'editor.action.smartSelect.shrink', {});
+      },
+    );
+
+    // CTRL + D
+    editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyD, () => {
+      editor.trigger('keyboard', 'editor.action.copyLinesDownAction', {});
+    });
+
+    // Ctrl + Y: Delete Line
+    editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyY, () => {
+      editor.trigger('keyboard', 'editor.action.deleteLines', {});
+    });
+
+    // Ctrl + Shift + Z: Redo
+    editor.addCommand(
+      monaco.KeyMod.CtrlCmd | monaco.KeyMod.Shift | monaco.KeyCode.KeyZ,
+      () => {
+        editor.trigger('keyboard', 'redo', {});
+      },
+    );
+
+    // Ctrl + Alt + L: Reformat Code
+    editor.addCommand(
+      monaco.KeyMod.CtrlCmd | monaco.KeyMod.Alt | monaco.KeyCode.KeyL,
+      () => {
+        editor.trigger('keyboard', 'editor.action.formatDocument', {});
+      },
+    );
+
+    // Alt + Enter: Show Intentions / Quick Fix
+    editor.addCommand(monaco.KeyMod.Alt | monaco.KeyCode.Enter, () => {
+      editor.trigger('keyboard', 'editor.action.quickFix', {});
+    });
+
+    // Ctrl + B: Go to Declaration/Definition
+    editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyB, () => {
+      editor.trigger('keyboard', 'editor.action.revealDefinition', {});
+    });
   }
 
   private async configureMonaco(): Promise<void> {

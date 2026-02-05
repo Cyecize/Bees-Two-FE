@@ -6,7 +6,7 @@
         class="monaco-host"
         [options]="editorOptions"
         [(ngModel)]="userCode"
-        (onInit)="onEditorInit()"
+        (onInit)="onEditorInit($event)"
       ></ngx-monaco-editor>
     </div>
 
