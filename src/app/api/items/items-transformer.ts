@@ -3,6 +3,7 @@ import { Item, ItemTranslation, ItemTranslationImpl } from './item';
 import { BeesResponsePerLanguage } from '../proxy/bees-response-per-language';
 import { BeesResponse } from '../proxy/bees-response';
 import { ItemsSearchResponse } from './items-search.response';
+import { ObjectUtils } from "../../shared/util/object-utils";
 
 export class ItemsTransformer extends BeesMultilanguageTransformerBase<ItemsSearchResponse> {
   doTransform(
@@ -51,8 +52,10 @@ export class ItemsTransformer extends BeesMultilanguageTransformerBase<ItemsSear
         mfrShortCode: undefined, // This field is not present in V2 Item Response
       };
 
-      item.package.id = item.package.packageId;
-      item.package.count = item.package.unitCount;
+      if (!ObjectUtils.isNil(item.package)) {
+        item.package.id = item.package.packageId;
+        item.package.count = item.package.unitCount;
+      }
     }
   }
 

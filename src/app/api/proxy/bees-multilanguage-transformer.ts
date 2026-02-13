@@ -28,7 +28,12 @@ export abstract class BeesMultilanguageTransformerBase<T>
       }
 
       const response = multilanguageResponse[0]?.beesResponse;
-      this.finalize(response);
+      try {
+        this.finalize(response);
+      } catch (err) {
+        console.error(err);
+        throw err;
+      }
       return response;
     }
 
@@ -47,9 +52,17 @@ export abstract class BeesMultilanguageTransformerBase<T>
       (r) => r.languageCode !== mainBeesResponse?.languageCode,
     );
 
-    const response = this.doTransform(mainBeesResponse, multilanguageResponse);
-    this.finalize(response);
-    return response;
+    try {
+      const response = this.doTransform(
+        mainBeesResponse,
+        multilanguageResponse,
+      );
+      this.finalize(response);
+      return response;
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
   }
 
   abstract doTransform(
