@@ -7,8 +7,11 @@ import {
   RequestTemplateArgView,
 } from './arg/request-template-arg';
 import { RequestTemplatePayloadType } from './request-template-payload.type';
-import { RequestTemplatePrivacy, RequestTemplatePrivacyType } from "./request-template-privacy";
-import { User } from "../user/user";
+import {
+  RequestTemplatePrivacy,
+  RequestTemplatePrivacyType,
+} from './request-template-privacy';
+import { User } from '../user/user';
 
 export interface RequestTemplateBase {
   name: string;
@@ -33,6 +36,7 @@ export interface RequestTemplateBase {
 
 export interface RequestTemplateRequest extends RequestTemplateBase {
   privacy: RequestTemplatePrivacyType;
+  collaboratorIds: number[];
 }
 
 export interface RequestTemplate extends RequestTemplateBase {
@@ -45,6 +49,7 @@ export interface RequestTemplate extends RequestTemplateBase {
 export interface RequestTemplateFull extends RequestTemplate {
   id: number;
   userId: number;
+  user: User;
   isInitialized?: boolean; // Transient field
   arguments: RequestTemplateArgView[];
   collaborators: User[];
@@ -53,6 +58,7 @@ export interface RequestTemplateFull extends RequestTemplate {
 export interface RequestTemplateDtoForSearch {
   id: number;
   userId: number;
+  user: User;
   name: string;
   entity: BeesEntity;
   makeRequest: boolean;

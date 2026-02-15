@@ -27,8 +27,20 @@
     <td>{{ template.endpoint }}</td>
   </tr>
   <tr>
-    <td>Owner (User ID)</td>
-    <td>{{ template.userId }}</td>
+    <td>Forced preset selection</td>
+    <td>{{ ObjectUtils.boolToYesNo(template.forcePresetSelection) }}</td>
+  </tr>
+  <tr>
+    <td>Owner</td>
+    <td>{{ template.user.username || template.user.email }}</td>
+  </tr>
+  <tr>
+    <td>Collaborators</td>
+    <td>TODO</td>
+  </tr>
+  <tr>
+    <td>Treat collaborators as owners</td>
+    <td>{{ ObjectUtils.boolToYesNo(template.collaboratorsEqualOwner) }}</td>
   </tr>
   <tr>
     <td>Save in history</td>
@@ -40,6 +52,31 @@
     </td>
     <td>{{ ObjectUtils.boolToYesNo(template.autoInit) }}</td>
   </tr>
+  <tr>
+    <td>Privacy</td>
+    <td>Level {{ template.privacy.level }} ({{ template.privacy.type }}) - {{ template.privacy.description }}</td>
+  </tr>
+  <tr>
+    <td>Create Date</td>
+    <td>{{ template.createDate }}</td>
+  </tr>
+  <tr>
+    <td>Last Updated</td>
+    <td>{{ template.updateDate }}</td>
+  </tr>
 
   </tbody>
 </table>
+
+@if (template.description?.trim()) {
+  <div class="d-flex justify-content-between">
+    <h3>
+      Description
+    </h3>
+    <div>
+      (<small class="c-pointer" (click)="showDescriptionInDialog()"><strong>Show in dialog</strong></small>)
+    </div>
+  </div>
+
+  <pre style="max-height: 150px; overflow-y: auto">{{ template.description }}</pre>
+}

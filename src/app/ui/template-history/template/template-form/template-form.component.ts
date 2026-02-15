@@ -54,6 +54,7 @@ interface TemplateForm {
   description: FormControl<string>;
   collaboratorsEqualOwner: FormControl<boolean>;
   privacy: FormControl<RequestTemplatePrivacyType>;
+  collaboratorIds: FormArray<FormControl<number>>;
 }
 
 interface BeesParamForm {
@@ -181,6 +182,7 @@ export class TemplateFormComponent implements OnInit {
         validators: [Validators.required],
         nonNullable: true,
       }),
+      collaboratorIds: new FormArray<FormControl<number>>([]),
     });
 
     if (this.template) {
@@ -294,6 +296,10 @@ export class TemplateFormComponent implements OnInit {
       payloadType: template.payloadType,
       makeRequest: template.makeRequest,
       autoInit: template.autoInit,
+      description: template.description,
+      collaboratorsEqualOwner: template.collaboratorsEqualOwner,
+      privacy: template.privacy.type,
+      forcePresetSelection: template.forcePresetSelection,
     });
 
     if (template.headers?.length) {
@@ -318,6 +324,10 @@ export class TemplateFormComponent implements OnInit {
         form.patchValue(arg);
         this.form.controls.arguments.push(form);
       });
+    }
+
+    if (template.collaborators?.length) {
+      // TODO: populate collaborators
     }
   }
 

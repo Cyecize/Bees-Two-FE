@@ -4,6 +4,7 @@
     <th scope="col">Name</th>
     <th scope="col">Entity</th>
     <th scope="col">Method</th>
+    <th scope="col">By</th>
     <th scope="col">Actions</th>
   </tr>
   </thead>
@@ -17,6 +18,9 @@
     </td>
     <td>
       {{ template.method }}
+    </td>
+    <td>
+      {{ template.user.username || template.user.email }}
     </td>
     <td>
       <div class="d-flex justify-content-around">
