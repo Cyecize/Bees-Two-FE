@@ -22,6 +22,7 @@ export class Endpoints {
   public static readonly ACCOUNTS = '/accounts';
   public static readonly ACCOUNT = '/accounts/:id';
   public static readonly REQUEST_TEMPLATES_SEARCH = '/request-templates/search';
+  public static readonly REQUEST_TEMPLATES_PRIVACY_OPTIONS= '/request-templates/privacy-options';
   public static readonly REQUEST_TEMPLATES = '/request-templates';
   public static readonly REQUEST_TEMPLATE = '/request-templates/:id';
   public static readonly REQUEST_TEMPLATE_PRESET = '/request-templates/presets/:id';

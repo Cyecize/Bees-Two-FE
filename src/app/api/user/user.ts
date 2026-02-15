@@ -1,5 +1,7 @@
 export interface User {
   id: number;
   email: string;
-  dateRegistered: string;
+  username: string;
+  createDate: string;
+  updateDate: string;
 }

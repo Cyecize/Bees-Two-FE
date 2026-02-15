@@ -16,6 +16,8 @@ export interface RequestTemplateArg {
   keyName: string;
   value: string | null;
   name: string;
+  description: string | null;
+  orderNumber: number;
 }
 
 /**
@@ -40,4 +42,6 @@ export interface TypedRequestTemplateArg<T> {
   keyName: string;
   value: T | null;
   name: string;
+  description: string | null;
+  orderNumber: number;
 }

@@ -13,4 +13,6 @@ export interface SharedClient {
   vendorId: string | null;
   targetEntities: BeesEntity[];
   requestMethods: SharedClientSupportedMethod[];
+  createDate: string;
+  updateDate: string;
 }

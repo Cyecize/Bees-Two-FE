@@ -7,6 +7,8 @@ export interface RequestTemplatePreset {
   id: number;
   templateId: number;
   name: string;
+  createDate: string;
+  updateDate: string;
 }
 
 /**
@@ -17,4 +19,6 @@ export interface RequestTemplatePresetWithValues {
   templateId: number;
   name: string;
   argValues: RequestTemplatePresetArgval[];
+  createDate: string;
+  updateDate: string;
 }

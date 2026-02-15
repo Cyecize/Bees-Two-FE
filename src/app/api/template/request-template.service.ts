@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { RequestTemplateRepository } from './request-template.repository';
 import {
-  RequestTemplate,
+  RequestTemplateBase,
   RequestTemplateDtoForSearch,
   RequestTemplateFull,
+  RequestTemplateRequest,
 } from './request-template';
 import {
   FieldErrorWrapperLocal,
@@ -11,13 +12,28 @@ import {
 } from '../../shared/util/field-error-wrapper-local';
 import { RequestTemplateQuery } from './request-template.query';
 import { Page } from '../../shared/util/page';
+import { BehaviorSubject, filter } from 'rxjs';
+import { RequestTemplatePrivacy } from './request-template-privacy';
+import { ObjectUtils } from '../../shared/util/object-utils';
 
 @Injectable({ providedIn: 'root' })
 export class RequestTemplateService {
-  constructor(private repository: RequestTemplateRepository) {}
+  private readonly privacyOptions: BehaviorSubject<
+    RequestTemplatePrivacy[] | undefined
+  > = new BehaviorSubject<RequestTemplatePrivacy[] | undefined>(undefined);
+
+  public readonly privacyOptions$ = this.privacyOptions
+    .asObservable()
+    .pipe(filter((val) => !ObjectUtils.isNil(val)));
+
+  constructor(private repository: RequestTemplateRepository) {
+    this.repository
+      .getPrivacyOptions()
+      .subscribe((val) => this.privacyOptions.next(val));
+  }
 
   public async createTemplate(
-    template: RequestTemplate,
+    template: RequestTemplateRequest,
   ): Promise<WrappedResponseLocal<RequestTemplateFull>> {
     return await new FieldErrorWrapperLocal(() =>
       this.repository.create(template),
@@ -26,7 +42,7 @@ export class RequestTemplateService {
 
   public async saveTemplate(
     templateId: number,
-    template: RequestTemplate,
+    template: RequestTemplateBase,
   ): Promise<WrappedResponseLocal<RequestTemplateFull>> {
     return await new FieldErrorWrapperLocal(() =>
       this.repository.update(templateId, template),

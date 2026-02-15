@@ -3,9 +3,9 @@ import { ActivatedRoute, Routes } from '@angular/router';
 import { TemplateFormComponent } from '../template-form/template-form.component';
 import { ShowLoader } from '../../../../shared/loader/show.loader.decorator';
 import {
-  RequestTemplate,
-  RequestTemplateFull,
-} from '../../../../api/template/request-template';
+  RequestTemplateBase,
+  RequestTemplateFull
+} from "../../../../api/template/request-template";
 import { FieldError } from '../../../../shared/field-error/field-error';
 import { RequestTemplateService } from '../../../../api/template/request-template.service';
 import { RouteNavigator } from '../../../../shared/routing/route-navigator.service';
@@ -55,7 +55,7 @@ export class EditTemplateComponent implements OnInit, OnDestroy {
     );
   }
 
-  async formSubmitted(template: RequestTemplate): Promise<void> {
+  async formSubmitted(template: RequestTemplateBase): Promise<void> {
     if (this.template.userId !== this.currentUser.id) {
       const conf = await firstValueFrom(
         this.dialogService.openConfirmDialog(
@@ -72,7 +72,7 @@ export class EditTemplateComponent implements OnInit, OnDestroy {
   }
 
   @ShowLoader()
-  private async proceedToSave(template: RequestTemplate): Promise<void> {
+  private async proceedToSave(template: RequestTemplateBase): Promise<void> {
     const resp = await this.templateService.saveTemplate(
       this.template.id,
       template,

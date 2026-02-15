@@ -15,4 +15,6 @@ export interface CountryEnvironmentModel {
   defaultLanguage: CountryEnvironmentLanguageModel;
   languages: CountryEnvironmentLanguageModel[];
   singleLanguage: boolean;
+  createDate: string;
+  updateDate: string;
 }

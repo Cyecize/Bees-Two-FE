@@ -19,8 +19,9 @@ import { ObjectUtils } from '../../../../shared/util/object-utils';
 import { Endpoints } from '../../../../shared/http/endpoints';
 import { NgForOf, NgIf } from '@angular/common';
 import {
-  RequestTemplate,
+  RequestTemplateBase,
   RequestTemplateFull,
+  RequestTemplateRequest,
 } from '../../../../api/template/request-template';
 import { SelectOptions } from '../../../../api/common/select-options';
 import { TemplateArgDataType } from '../../../../api/template/arg/template-arg-data.type';
@@ -31,6 +32,7 @@ import { CountryEnvironmentService } from '../../../../api/env/country-environme
 import { StringUtils } from '../../../../shared/util/string-utils';
 import { TemplateArgPromptType } from '../../../../api/template/arg/template-arg-prompt.type';
 import { TemplateArgInputType } from '../../../../api/template/arg/template-arg-input.type';
+import { RequestTemplatePrivacyType } from '../../../../api/template/request-template-privacy';
 
 interface TemplateForm {
   name: FormControl<string>;
@@ -48,6 +50,10 @@ interface TemplateForm {
   saveInHistory: FormControl<boolean>;
   autoInit: FormControl<boolean>;
   arguments: FormArray<FormGroup<TemplateArgForm>>;
+  forcePresetSelection: FormControl<boolean>;
+  description: FormControl<string>;
+  collaboratorsEqualOwner: FormControl<boolean>;
+  privacy: FormControl<RequestTemplatePrivacyType>;
 }
 
 interface BeesParamForm {
@@ -66,6 +72,8 @@ interface TemplateArgForm {
   keyName: FormControl<string>;
   value: FormControl<string | null>;
   name: FormControl<string>;
+  orderNumber: FormControl<number>;
+  description: FormControl<string | null>;
 }
 
 @Component({
@@ -114,8 +122,8 @@ export class TemplateFormComponent implements OnInit {
   templatePayloadTypes = SelectOptions.templatePayloadTypes();
 
   @Output()
-  formSubmitted: EventEmitter<RequestTemplate> =
-    new EventEmitter<RequestTemplate>();
+  formSubmitted: EventEmitter<RequestTemplateRequest> =
+    new EventEmitter<RequestTemplateRequest>();
 
   constructor(
     private dialogService: DialogService,
@@ -158,6 +166,19 @@ export class TemplateFormComponent implements OnInit {
       arguments: new FormArray<FormGroup<TemplateArgForm>>([]),
       autoInit: new FormControl<boolean>(true, {
         validators: Validators.required,
+        nonNullable: true,
+      }),
+      collaboratorsEqualOwner: new FormControl(true, {
+        validators: [Validators.required],
+        nonNullable: true,
+      }),
+      description: new FormControl(),
+      forcePresetSelection: new FormControl(false, {
+        validators: [Validators.required],
+        nonNullable: true,
+      }),
+      privacy: new FormControl(RequestTemplatePrivacyType.PUBLIC, {
+        validators: [Validators.required],
         nonNullable: true,
       }),
     });
@@ -251,6 +272,11 @@ export class TemplateFormComponent implements OnInit {
         nonNullable: true,
         validators: [Validators.required],
       }),
+      orderNumber: new FormControl<number>(1, {
+        nonNullable: true,
+        validators: [Validators.required],
+      }),
+      description: new FormControl<string | null>(null),
     });
   }
 
@@ -296,7 +322,7 @@ export class TemplateFormComponent implements OnInit {
   }
 
   async onFormSubmit(): Promise<void> {
-    const template: RequestTemplate = this.form.getRawValue();
+    const template: RequestTemplateRequest = this.form.getRawValue();
     template.endpoint = StringUtils.trimToNull(template.endpoint);
     template.arguments?.forEach((arg) => {
       if (arg.dataType !== TemplateArgDataType.CUSTOM) {

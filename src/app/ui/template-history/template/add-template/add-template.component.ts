@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Routes } from '@angular/router';
 import { TemplateFormComponent } from '../template-form/template-form.component';
 import { ShowLoader } from '../../../../shared/loader/show.loader.decorator';
-import { RequestTemplate } from '../../../../api/template/request-template';
+import { RequestTemplateRequest } from "../../../../api/template/request-template";
 import { FieldError } from '../../../../shared/field-error/field-error';
 import { RequestTemplateService } from '../../../../api/template/request-template.service';
 import { RouteNavigator } from '../../../../shared/routing/route-navigator.service';
@@ -24,7 +24,7 @@ export class AddTemplateComponent {
   ) {}
 
   @ShowLoader()
-  async formSubmitted(template: RequestTemplate): Promise<void> {
+  async formSubmitted(template: RequestTemplateRequest): Promise<void> {
     const resp = await this.templateService.createTemplate(template);
     this.errors = resp.errors;
 
