@@ -15,7 +15,10 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                  <button (click)="openPlayground()" class="btn btn-outline-info">
+                  <button
+                    title="Open Playground"
+                    (click)="openPlayground()"
+                    class="btn btn-outline-info">
                     <i class="fa-solid fa-gamepad"></i>
                   </button>
                 </li>
@@ -48,35 +51,46 @@
         </li>
         <li class="nav-item">
           <div class="nav-link p-1">
-            <button (click)="openSettingsDialog()" class="btn btn-outline-secondary">
+            <button
+              title="Settings"
+              (click)="openSettingsDialog()"
+              class="btn btn-outline-secondary">
               <i class="fa-solid fa-gear"></i>
             </button>
           </div>
         </li>
         <li class="nav-item">
           <div class="nav-link p-1">
-            <span (click)="openAccountPicker()" class="btn btn-outline-warning">
+            <button
+              title="Saved Accounts"
+              (click)="openAccountPicker()" class="btn btn-outline-warning">
               <i class="fa-solid fa-star"></i>
-            </span>
+            </button>
           </div>
         </li>
         <li *ngIf="selectedEnv" class="nav-item">
           <div class="nav-link p-1">
-            <button (click)="showCurrentEnv()" class="btn btn-outline-info">
+            <button
+              title="Show Environment Details"
+              (click)="showCurrentEnv()" class="btn btn-outline-info">
               {{ selectedEnv.envName }} ({{ selectedEnv.env }})
             </button>
           </div>
         </li>
         <li class="nav-item">
           <div class="nav-link p-1">
-            <button (click)="openSharedClientBrowser()" class="btn btn-outline-danger">
+            <button
+              title="Shared Clients"
+              (click)="openSharedClientBrowser()" class="btn btn-outline-danger">
               <i class="fa-solid fa-key"></i>
             </button>
           </div>
         </li>
         <li class="nav-item">
           <div class="nav-link p-1">
-            <button (click)="selectEnv()" class="btn btn-outline-success">
+            <button
+              title="Choose Environment"
+              (click)="selectEnv()" class="btn btn-outline-success">
               <i class="fa-solid fa-repeat"></i>
             </button>
           </div>

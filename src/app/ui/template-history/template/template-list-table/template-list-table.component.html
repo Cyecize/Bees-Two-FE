@@ -24,13 +24,22 @@
     </td>
     <td>
       <div class="d-flex justify-content-around">
-        <button class="btn btn-outline-success" (click)="openPreview(template)">
+        <button
+          title="Preview & Run"
+          class="btn btn-outline-success"
+          (click)="openPreview(template)">
           <i class="fa fa-play"></i>
         </button>
-        <button class="btn btn-outline-dark" (click)="openMultiRunner(template)">
+        <button
+          title="Run in MultiEnv Mode"
+          class="btn btn-outline-dark"
+          (click)="openMultiRunner(template)">
           <i class="fa fa-forward"></i>
         </button>
-        <button class="btn btn-outline-info" (click)="openDetailsDialog(template)">
+        <button
+          title="Show Template Details"
+          class="btn btn-outline-info"
+          (click)="openDetailsDialog(template)">
           <i class="fa fa-info"></i>
         </button>
       </div>

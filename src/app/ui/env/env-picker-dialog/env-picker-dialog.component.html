@@ -91,6 +91,7 @@
           <div class="d-flex">
             <div *ngIf="!payload.multiselect" class="m-1">
               <button
+                title="Select This Environment"
                 *ngIf="!currentEnv || (currentEnv && currentEnv.id !== env.id)"
                 class="btn btn-outline-success"
                 (click)="selectEnv(env)">
@@ -104,7 +105,10 @@
               </button>
             </div>
             <div class="m-1">
-              <button class="btn btn-outline-info" (click)="viewEnvDetails(env)">
+              <button
+                title="Show Details"
+                class="btn btn-outline-info"
+                (click)="viewEnvDetails(env)">
                 <i class="fa fa-info"></i>
               </button>
             </div>

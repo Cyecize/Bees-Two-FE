@@ -69,7 +69,10 @@
         </td>
         <td *ngIf="payload.showDetailsButton">
           <div class="m-1">
-            <button class="btn btn-outline-info" (click)="showBeesAccount(acc)">
+            <button
+              title="Show Account Details"
+              class="btn btn-outline-info"
+              (click)="showBeesAccount(acc)">
               <i class="fa fa-info"></i>
             </button>
           </div>
