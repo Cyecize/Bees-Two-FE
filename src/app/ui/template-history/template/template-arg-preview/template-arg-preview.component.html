@@ -33,11 +33,19 @@
           </td>
           <td>
             <button
+              title="Show Value"
               (click)="showFull(arg)"
+              class="btn btn-sm btn-outline-warning m-1">
+              <i class="fa fa-eye"></i>
+            </button>
+            <button
+              title="Description"
+              (click)="showDescription(arg)"
               class="btn btn-sm btn-outline-info m-1">
-              <i class="fa fa-info"></i>
+              <i class="fa fa-question-circle"></i>
             </button>
             <button *ngIf="enableEdits"
+                    title="Edit"
               (click)="openEditPrompt(arg)"
               class="btn btn-sm btn-outline-dark m-1">
               <i class="fa fa-edit"></i>

@@ -45,6 +45,13 @@ export class TemplateArgPreviewComponent implements OnInit {
     );
   }
 
+  protected showDescription(arg: RequestTemplateArg): void {
+    this.dialogService.showFormattedContent(
+      arg.description,
+      `Description for arg: ${arg.name}`,
+    );
+  }
+
   protected viewArgType(arg: RequestTemplateArg): void {
     this.dialogService.openShowCodeDialog(
       ObjectUtils.formatIfJson(arg.customType),
