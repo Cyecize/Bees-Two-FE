@@ -20,17 +20,26 @@
                   (onChange)="onMakeRequestChange($event)"
                   formControlName="makeRequest"></app-checkbox>
     <app-field-error [fieldName]="'makeRequest'" [errors]="errors"></app-field-error>
+
     <div>
       <app-checkbox
         label="Auto Init (Run pre-request script on preview)"
         formControlName="autoInit"></app-checkbox>
       <small>* Does not apply to multienv runs where there is no auto init.</small>
       <br>
-      <small>* Auto init will ignore presets (you can always choose a preset and re-init).</small>
+      <small>* Auto init will ignore presets (you can always choose a preset and re-init, or enable "Force Preset Selection").</small>
     </div>
-
     <app-field-error [fieldName]="'autoInit'" [errors]="errors"></app-field-error>
+
+    <div>
+      <app-checkbox
+        label="Force Preset Selection on preview"
+        formControlName="forcePresetSelection"></app-checkbox>
+      <small>* Does not apply to multienv runs</small>
+    </div>
+    <app-field-error [fieldName]="'forcePresetSelection'" [errors]="errors"></app-field-error>
   </div>
+
   <ng-container *ngIf="form.controls.makeRequest.value">
     <div class="mt-2">
       <app-select formControlName="entity"
