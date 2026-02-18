@@ -34,12 +34,14 @@
           <td>
             <button
               title="Show Value"
+              [disabled]="!arg.value"
               (click)="showFull(arg)"
               class="btn btn-sm btn-outline-warning m-1">
               <i class="fa fa-eye"></i>
             </button>
             <button
               title="Description"
+              [disabled]="!arg.description"
               (click)="showDescription(arg)"
               class="btn btn-sm btn-outline-info m-1">
               <i class="fa fa-question-circle"></i>
