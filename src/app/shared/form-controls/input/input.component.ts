@@ -108,6 +108,14 @@ export class InputComponent implements OnInit, ControlValueAccessor {
     this.disabled = isDisabled;
   }
 
+  processValue(value: any): string {
+    if (ObjectUtils.isNil(value)) {
+      return '';
+    }
+
+    return value;
+  }
+
   private setValue(val: any): void {
     if (
       this.type === 'number' &&

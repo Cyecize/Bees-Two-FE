@@ -2,7 +2,7 @@
   <input (touchend)="inputTouched($event)"
          (change)="inputChanged($event); changeEnded($event);"
          (keyup)="inputChanged($event)"
-         [value]="value || ''"
+         [value]="processValue(value)"
          [disabled]="disabled"
          [name]="formControlName"
          [type]="type" class="form-control"
