@@ -7,3 +7,33 @@ textarea {
   font-family: monospace;
   line-height: 1.5;
 }
+
+.argument-card {
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  background-color: #fafafa;
+
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border-color: #cdd2d6;
+    background-color: #ffffff;
+  }
+
+  .d-flex.justify-content-start {
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .btn-outline-danger {
+    align-self: center;
+    border-radius: 6px;
+
+    opacity: 0.8;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+}

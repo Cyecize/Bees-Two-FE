@@ -445,4 +445,14 @@ export class TemplateFormComponent implements OnInit {
 
     argForm.controls.customType.patchValue(value);
   }
+
+  async setDescription(argInd: number): Promise<void> {
+    const ctrl = this.form.controls.arguments.at(argInd);
+    const resp = await this.dialogService.openTextarea(
+      ctrl.controls.description.value || '',
+      'Set description',
+    );
+
+    ctrl.controls.description.setValue(resp);
+  }
 }
