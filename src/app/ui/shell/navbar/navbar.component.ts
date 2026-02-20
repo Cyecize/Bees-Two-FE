@@ -38,9 +38,16 @@ export class NavbarComponent implements OnInit {
       }
     });
 
-    this.userService.currentUser$.subscribe(
-      (user) => (this.currentUser = user),
-    );
+    this.userService.currentUser$.subscribe((user): void => {
+      this.currentUser = user;
+      if (user?.pendingPasswordReset) {
+        void this.dialogService.openNotifyDialog(
+          'You should change your password!',
+          'Change password',
+          'Understood',
+        );
+      }
+    });
   }
 
   openPlayground(): void {

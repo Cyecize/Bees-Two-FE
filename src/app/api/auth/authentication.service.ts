@@ -39,6 +39,12 @@ export class AuthenticationService {
     return res;
   }
 
+  public logout(): void {
+    this.userService.clearUser();
+    this.accessTokenStorage.clearToken();
+    localStorage.setItem(STORAGE_LOGGED_IN_FLAG_NAME, false + '');
+  }
+
   public async init(): Promise<void> {
     if (typeof window === 'undefined') {
       // console.log('Not initializing auth service on the server side.');

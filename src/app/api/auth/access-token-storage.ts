@@ -19,6 +19,10 @@ export class AccessTokenStorage {
     // this.tokenSubject.next(`${token}`);
   }
 
+  public clearToken(): void {
+    localStorage.setItem(STORAGE_AUTH_TOKEN_NAME, '');
+  }
+
   public getToken(): Observable<string> {
     return new Observable<string>((subscriber) =>
       subscriber.next(localStorage.getItem(STORAGE_AUTH_TOKEN_NAME) || ''),

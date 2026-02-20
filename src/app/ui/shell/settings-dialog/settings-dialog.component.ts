@@ -11,6 +11,9 @@ import { ObjectUtils } from '../../../shared/util/object-utils';
 import { CheckboxComponent } from '../../../shared/form-controls/checkbox/checkbox.component';
 import { ProxyService } from '../../../api/proxy/proxy.service';
 import { ChangePasswordDialog } from '../../user/change-password/change-password.dialog';
+import { RouteNavigator } from '../../../shared/routing/route-navigator.service';
+import { AuthenticationService } from '../../../api/auth/authentication.service';
+import { AppRoutingPath } from '../../../app-routing.path';
 
 @Component({
   selector: 'app-settings-dialog',
@@ -37,6 +40,8 @@ export class SettingsDialogComponent
     private dialogService: DialogService,
     private tokenOverrideService: BeesTokenOverrideService,
     private proxyService: ProxyService,
+    private authenticationService: AuthenticationService,
+    private routeService: RouteNavigator,
   ) {
     super();
   }
@@ -70,5 +75,11 @@ export class SettingsDialogComponent
 
   protected openChangePasswordDialog(): void {
     this.dialogService.open(ChangePasswordDialog, 'Change Password', null);
+  }
+
+  protected logout(): void {
+    this.authenticationService.logout();
+    this.routeService.navigate(AppRoutingPath.LOGIN);
+    this.close(undefined);
   }
 }

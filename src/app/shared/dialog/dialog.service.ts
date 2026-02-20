@@ -67,6 +67,8 @@ import { RequestTemplatePreset } from '../../api/template/arg/preset/request-tem
 import { PresetDetailsDialogComponent } from '../../ui/template-history/template-presets/preset-details-dialog/preset-details-dialog.component';
 import { PresetDetailsDialogPayload } from '../../ui/template-history/template-presets/preset-details-dialog/preset-details-dialog.payload';
 import { ObjectUtils } from '../util/object-utils';
+import { NotifyDialogComponent } from './dialogs/notify-dialog/notify-dialog.component';
+import { NotifyDialogPayloadModel } from './dialogs/notify-dialog/notify-dialog-payload.model';
 
 /**
  * @monaco
@@ -77,6 +79,12 @@ export interface IDialogService {
     title?: string,
     confirmMessage?: string,
   ): Observable<boolean>;
+
+  openNotifyDialog(
+    message: string,
+    title?: string,
+    closeMessage?: string,
+  ): Promise<void>;
 
   openAccountPicker(
     env: CountryEnvironmentModel,
@@ -171,6 +179,20 @@ export class DialogService implements IDialogService {
     return dialogComponentMatDialogRef
       .afterClosed()
       .pipe(map((value) => value || false));
+  }
+
+  public async openNotifyDialog(
+    message: string,
+    title?: string,
+    closeMessage?: string,
+  ): Promise<void> {
+    const dialogComponentMatDialogRef = this.open(
+      NotifyDialogComponent,
+      title || 'Info',
+      new NotifyDialogPayloadModel(message, closeMessage),
+    );
+
+    return firstValueFrom(dialogComponentMatDialogRef.afterClosed());
   }
 
   public openShowCodeDialog(code: string, title?: string): Observable<void> {

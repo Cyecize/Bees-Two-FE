@@ -40,6 +40,12 @@ export abstract class DialogContentBaseComponent<TData> {
     );
   }
 
+  exclamationMarkIcon(): Observable<string> {
+    return new Observable<string>((subscriber) =>
+      subscriber.next('fa-solid fa-exclamation'),
+    );
+  }
+
   warningTriangleIcon(): Observable<string> {
     return new Observable<string>((subscriber) =>
       subscriber.next('fa fa-exclamation-triangle'),
