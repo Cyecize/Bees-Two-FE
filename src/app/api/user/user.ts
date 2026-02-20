@@ -4,4 +4,5 @@ export interface User {
   username: string;
   createDate: string;
   updateDate: string;
+  pendingPasswordReset: boolean;
 }

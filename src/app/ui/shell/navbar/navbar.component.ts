@@ -11,6 +11,7 @@ import { AppRoutingPath } from '../../../app-routing.path';
 import { SettingsDialogComponent } from '../settings-dialog/settings-dialog.component';
 import { SharedClientBrowseDialog } from '../../env/sharedclient/shared-client-browse-dialog/shared-client-browse-dialog';
 import { TemplatePlaygroundDialogPayload } from '../../template-history/template/template-payload-playground-dialog/template-playground-dialog.payload';
+import { ChangePasswordDialog } from '../../user/change-password/change-password.dialog';
 
 @Component({
   selector: 'app-navbar',
@@ -70,5 +71,9 @@ export class NavbarComponent implements OnInit {
       'Settings',
       this.selectedEnv,
     );
+  }
+
+  openChangePasswordDialog(): void {
+    this.dialogService.open(ChangePasswordDialog, 'Change Password', null);
   }
 }

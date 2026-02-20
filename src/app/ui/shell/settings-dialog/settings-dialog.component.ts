@@ -10,6 +10,7 @@ import { BeesTokenOverrideService } from '../../../api/env/token/bees-token-over
 import { ObjectUtils } from '../../../shared/util/object-utils';
 import { CheckboxComponent } from '../../../shared/form-controls/checkbox/checkbox.component';
 import { ProxyService } from '../../../api/proxy/proxy.service';
+import { ChangePasswordDialog } from '../../user/change-password/change-password.dialog';
 
 @Component({
   selector: 'app-settings-dialog',
@@ -65,5 +66,9 @@ export class SettingsDialogComponent
 
   onSaveNextRequestClick(val: boolean): void {
     this.proxyService.setSaveNextRequest(val);
+  }
+
+  protected openChangePasswordDialog(): void {
+    this.dialogService.open(ChangePasswordDialog, 'Change Password', null);
   }
 }
