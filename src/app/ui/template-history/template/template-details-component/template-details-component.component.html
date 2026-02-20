@@ -31,6 +31,10 @@
     <td>{{ ObjectUtils.boolToYesNo(template.forcePresetSelection) }}</td>
   </tr>
   <tr>
+    <td>Privacy</td>
+    <td>Level {{ template.privacy.level }} ({{ template.privacy.type }}) - {{ template.privacy.description }}</td>
+  </tr>
+  <tr>
     <td>Owner</td>
     <td>{{ template.user.username || template.user.email }}</td>
   </tr>
@@ -51,10 +55,6 @@
       <small>(Automatically execute pre-request script on preview)</small>
     </td>
     <td>{{ ObjectUtils.boolToYesNo(template.autoInit) }}</td>
-  </tr>
-  <tr>
-    <td>Privacy</td>
-    <td>Level {{ template.privacy.level }} ({{ template.privacy.type }}) - {{ template.privacy.description }}</td>
   </tr>
   <tr>
     <td>Create Date</td>

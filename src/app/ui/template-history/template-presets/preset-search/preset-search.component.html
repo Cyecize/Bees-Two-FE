@@ -41,6 +41,7 @@
         <tr>
           <th scope="col">#</th>
           <th scope="col">Name</th>
+          <th scope="col">Create/Update</th>
           <th scope="col" class="text-end">Actions</th>
         </tr>
         </thead>
@@ -58,6 +59,11 @@
               [displayText]="preset.name"
               [tooltipText]="preset.name"></app-tooltip-span>
             <span *ngIf="selectedPreset?.id === preset.id">(Selected)</span>
+          </td>
+          <td>
+            {{ preset.createDate }}
+            <br>
+            {{ preset.updateDate }}
           </td>
           <td>
             <div class="d-flex justify-content-end">
