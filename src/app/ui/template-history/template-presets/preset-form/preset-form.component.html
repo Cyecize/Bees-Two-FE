@@ -63,15 +63,25 @@
           <strong *ngIf="!ctrl.controls.value.value">EMPTY</strong>
         </td>
         <td>
-          <button class="btn btn-sm btn-outline-info" (click)="showCurrentValue(i)">
-            <i class="fa fa-info" aria-hidden="true"></i>
+          <button
+            title="Show Full Value"
+            class="btn btn-sm btn-outline-warning" (click)="showCurrentValue(i)">
+            <i class="fa fa-eye" aria-hidden="true"></i>
           </button>
           <button
+            title="Show Description"
+            class="btn btn-sm btn-outline-info ms-1" (click)="showDescription(i)">
+            <i class="fa fa-question-circle" aria-hidden="true"></i>
+          </button>
+          <button
+            title="Edit"
             (click)="openEditPrompt(i)"
-            class="btn btn-sm btn-outline-dark m-1">
+            class="btn btn-sm btn-outline-dark ms-1">
             <i class="fa fa-edit"></i>
           </button>
-          <button class="btn btn-sm btn-outline-danger" (click)="argsForm.removeAt(i)">
+          <button
+            title="Remove from preset"
+            class="btn btn-sm btn-outline-danger ms-1" (click)="argsForm.removeAt(i)">
             <i class="fa fa-close"></i>
           </button>
         </td>

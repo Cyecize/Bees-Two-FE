@@ -145,6 +145,15 @@ export class PresetFormComponent implements OnInit {
     );
   }
 
+  protected showDescription(argFormInd: number): void {
+    this.dialogService.showFormattedContent(
+      this.args.find(
+        (arg) => arg.id === this.argsForm.at(argFormInd).controls.argId.value,
+      )?.description,
+      'Description',
+    );
+  }
+
   protected async openNewArgPicker(): Promise<void> {
     const possibleArgs = this.args.filter((arg) =>
       ObjectUtils.isNil(
